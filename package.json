@@ -1,0 +1,15 @@
+{
+          "name": "swarmtunes",
+          "version": "1.0.0",
+          "description": "A music player for Neuro-sama and Evil Neuro covers of songs",
+          "license": "ISC",
+          "author": "Ace",
+          "type": "commonjs",
+          "main": "src/scripts/electron.js",
+          "scripts": {
+                    "start": "electron ."
+          },
+          "devDependencies": {
+                    "electron": "^37.2.6"
+          }
+}

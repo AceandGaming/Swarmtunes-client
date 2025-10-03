@@ -1,0 +1,42 @@
+#search {
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  height: inherit;
+  padding-right: 20px;
+  width: inherit;
+}
+#search-bar {
+  flex: 0 1 auto;
+  display: block;
+  min-height: 40px;
+  width: 60vw;
+  background-color: #000000;
+  margin: 20px auto;
+  border-radius: 20px;
+  border: 2px solid #202020;
+  cursor: text;
+  color: var(--text-colour);
+  padding-right: 15px;
+  padding-left: 15px;
+}
+#search-bar:focus {
+  outline: none;
+  border: 2px solid #707070;
+}
+#search-results {
+  padding-left: 50px;
+}
+#search-results > :last-child {
+  margin-bottom: 50px;
+}
+
+@media (max-width: 550px) {
+  #search-bar {
+    width: 80vw;
+    font-size: 16px;
+  }
+  #search-results {
+    padding-left: 15px;
+  }
+}

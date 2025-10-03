@@ -1,0 +1,40 @@
+#now-playing {
+  flex: 0 0 20vw;
+  max-width: 250px;
+  min-width: 165px;
+  min-height: 100%;
+  background-color: #1c1c1c;
+  display: flex;
+  flex-direction: column;
+  
+}
+#now-playing > span {
+  position: relative;
+  top: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--subtext-colour);
+  margin-bottom: 10px;
+}
+#now-playing > .song-list {
+  padding-left: 10px;
+  height: calc(100vh - 170px);
+  overflow-y: auto;
+}
+#now-playing .song-list-item > .title-artist :nth-child(1) {
+  font-size: 14px;
+}
+#now-playing .song-list-item > .title-artist :nth-child(2) {
+  font-size: 11px;
+}
+#now-playing .loading {
+  display: none;
+}
+
+@media (max-width: 550px) {
+  #now-playing {
+    display: none;
+  }
+}

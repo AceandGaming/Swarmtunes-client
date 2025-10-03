@@ -1,0 +1,20 @@
+.error-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: x-large;
+  font-weight: bold;
+  pointer-events: none;
+}
+.error-screen button {
+  pointer-events: all;
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 5px 12px;
+  font-size: medium;
+  cursor: pointer;
+}

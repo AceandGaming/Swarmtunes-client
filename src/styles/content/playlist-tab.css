@@ -1,0 +1,23 @@
+#playlists-tab {
+    display: none;
+    flex-direction: column;
+    margin-left: 20px;
+    overflow-y: auto;
+    height: inherit;
+}
+#new-playlist-button {
+    border-radius: 20px;
+    font-size: medium;
+    padding: 3px 8px;
+    width: 140px;
+}
+
+@media (max-width: 550px) {
+    #playlists-tab {
+        margin-left: 0px;
+        align-items: center;
+    }
+    #playlists-tab .display {
+        justify-content: center;
+    }
+}
