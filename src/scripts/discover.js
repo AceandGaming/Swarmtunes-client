@@ -6,12 +6,13 @@ function AddCategoryToDiscover(catagory) {
 
 async function PopulateDiscover() {
     LoadingText.Attach(discoverPage)
-    let albums, orginalSongs = []
+    let albums, orginalSongs, mashupSongs = []
     let atempts = 0
     while (true) {
         try {
             albums = await Network.GetAllAlbums()
             orginalSongs = await Network.GetAllSongs({filters: ["original=true"]})
+            mashupSongs = await Network.GetAllSongs({filters: ["type=mashup"]})
             break
         }
         catch (e) {
@@ -28,9 +29,11 @@ async function PopulateDiscover() {
     }
     albums.sort((a, b) => b.jsDate - a.jsDate)
     orginalSongs.sort((a, b) => b.jsDate - a.jsDate)
+    mashupSongs.sort((a, b) => b.jsDate - a.jsDate)
 
     AddCategoryToDiscover(new AlbumCatagory("Recent Streams", albums))
     AddCategoryToDiscover(new SongCatagory("Original Songs", orginalSongs))
+    AddCategoryToDiscover(new SongCatagory("Mashups", mashupSongs))
 
     LoadingText.Detach(discoverPage)
 }

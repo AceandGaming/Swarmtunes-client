@@ -219,4 +219,7 @@ class Network {
     static async RemoveSongFromPlaylist(playlistUuid, songUuids) {
         await this.Post(`playlists/${playlistUuid}/remove`, {songs: EnsureArray(songUuids)})
     }
+    static async RenamePlaylist(playlistUuid, name) {
+        await this.Post(`playlists/${playlistUuid}/rename`, {name: name})
+    }
 }

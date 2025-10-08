@@ -36,7 +36,7 @@ class Song {
         return this.#uuid
     }
     get coverArtist() {
-        return {"neuro": "Neuro-sama", "evil": "Evil Neuro", "duet": "Neuro-sama, Evil Neuro"}[this.type] ?? this.type
+        return {"neuro": "Neuro-sama", "evil": "Evil Neuro", "duet": "Neuro-sama, Evil Neuro", "mashup": "Neuro-sama, Evil Neuro"}[this.type] ?? this.type
     }
     get jsDate() {
         const [day, month, year] = this.date.split('/').map(Number);

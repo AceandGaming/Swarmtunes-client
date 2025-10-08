@@ -9,9 +9,9 @@ function AttachAudioControls() {
         navigator.mediaSession.setActionHandler('pause', OnPauseButtonClick)
         navigator.mediaSession.setActionHandler('nexttrack', OnNextButtonClick)
         navigator.mediaSession.setActionHandler('previoustrack', OnPreviousButtonClick)
-        navigator.mediaSession.setActionHandler('seekto', (details) => SeekToTime(details.seekTime))
-        navigator.mediaSession.setActionHandler("seekforward", (details) => SeekOffset(details.seekOffset))
-        navigator.mediaSession.setActionHandler("seekbackward", (details) => SeekOffset(-details.seekOffset))
+        navigator.mediaSession.setActionHandler('seekto', (details) => {Audio.SeekToTime(details.seekTime)})
+        navigator.mediaSession.setActionHandler("seekforward", (details) => {Audio.SeekOffset(details.seekOffset)})
+        navigator.mediaSession.setActionHandler("seekbackward", (details) => {Audio.SeekOffset(-details.seekOffset)})
     }
     const slider = document.querySelector("#volume-controls input")
     slider.addEventListener('blur', () => slider.style.display = "none")

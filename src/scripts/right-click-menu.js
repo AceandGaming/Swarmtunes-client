@@ -133,6 +133,10 @@ function OnDeletePlaylistClick(event, uiEvent) {
 function OnNewPlaylistClick(event, uiEvent) {
     CreatePlaylistPopup.Show()
 }
+async function OnRenamePlaylistClick(event, uiEvent) {
+    const uuid = event.target.dataset.uuid
+    RenamePlaylistPopup.Show(uuid)
+}
 
 //fill options
 menuItems["song"] = new MenuItem([
@@ -153,5 +157,6 @@ menuItems["swarmfm"] = new MenuItem([
 
 menuItems["playlist"] = new MenuItem([
     new RightClickOption("New Playlist", OnNewPlaylistClick, "playlist", "src/art/plus.svg"),
-    new RightClickOption("Delete Playlist", OnDeletePlaylistClick, "playlist", "src/art/bin.svg")
+    new RightClickOption("Delete Playlist", OnDeletePlaylistClick, "playlist", "src/art/bin.svg"),
+    new RightClickOption("Rename Playlist", OnRenamePlaylistClick, "playlist", "src/art/edit.svg")
 ])

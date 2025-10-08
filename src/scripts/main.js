@@ -8,6 +8,7 @@ AttachAudioControls()
 AttachButtons()
 LoginPopup.AttachInputs()
 CreatePlaylistPopup.AttachInputs()
+RenamePlaylistPopup.AttachInputs()
 
 PopulateDiscover()
 function OnLogin() {

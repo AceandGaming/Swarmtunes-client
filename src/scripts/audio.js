@@ -35,13 +35,13 @@ class Audio {
         }
     }
     static SeekToTime(time) {
-        if (audio.readyState === 0) {
+        if (this.audio.readyState === 0) {
             return
         }
-        Seek(time / audio.duration)
+        this.Seek(time / this.audio.duration)
     }
     static SeekOffset(offset) {
-        SeekToTime((audio.currentTime || 0) + (offset || 10))
+        this.SeekToTime((this.audio.currentTime || 0) + (offset || 10))
     }
 }
 

@@ -6,7 +6,7 @@ function ValidatePlaylistName(name) {
             message: "Invalid playlist name"
         }
     }
-    if (!/^[A-Za-z_-\s]+$/.test(name)) {
+    if (!/^[0-9A-Za-z_ ]+$/.test(name)) {
         return {
             error: true,
             message: "Name contains invalid characters"

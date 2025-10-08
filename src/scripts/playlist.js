@@ -20,11 +20,21 @@ class Playlist {
         }
         return this.type
     }
+    get title() {
+        return this.#name
+    }
+    get name() {
+        return this.#name
+    }
+    set name(name) {
+        this.#RenamePlaylist(name)
+    }
 
     #uuid
     #songs
     #songsLoaded
     #type
+    #name
 
     static CreatePlaylistFromJson(json, songsAreUuids = false) {
         if (!HasValues(json, "uuid", "title", "songs")) {
@@ -44,9 +54,13 @@ class Playlist {
     }
     constructor(uuid, name, songs, songsLoaded = false) {
         this.#uuid = uuid
-        this.name = name
+        this.#name = name
         this.#songs = songs
         this.#songsLoaded = songsLoaded
+    }
+    #RenamePlaylist(name) {
+        this.#name = name
+        Network.RenamePlaylist(this.uuid, name)
     }
     AddSong(song) {
         if (this.#songs.find(s => s.uuid === song.uuid)) {
@@ -127,8 +141,9 @@ class PlaylistManager {
     }
     static GetPlaylist(uuid) {
         const playlist = this.#playlists[uuid]
-        if (!playlist.songsLoaded) {
-            console.warn("Playlist not loaded")
+        if (playlist === undefined) {
+            console.error("Playlist not found")
+            return
         }
         return playlist
     }
