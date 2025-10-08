@@ -86,7 +86,6 @@ document.addEventListener("contextmenu", OnRightClick)
 
 function OnSongExportClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid
-    console.log(uuid)
     Network.GetMP3(uuid, true)
 }
 function OnPlayNextClick(event, uiEvent) {

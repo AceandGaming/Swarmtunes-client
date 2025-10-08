@@ -86,6 +86,9 @@ class SwarmFM {
             audio.playbackRate = 1
             audio.load()
         }
+        if (audio.paused && !SwarmFM.paused) {
+            audio.play()
+        }
     }
     static Initalise() {
         const audio = new window.Audio()
@@ -95,11 +98,9 @@ class SwarmFM {
         audio.load()
         audio.addEventListener("pause", () => {
             if (!SwarmFM.paused) {
-                audio.play()
+                SwarmFM.audio.play()
             }
         })
-
-
         this.audio = audio
     }
     static Pause() {

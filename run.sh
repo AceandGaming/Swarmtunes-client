@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /home/ace/Desktop/swarmtunes/
+cd /home/github/swarmtunes/
 npm run start

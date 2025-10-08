@@ -9,7 +9,7 @@ class SwarmFMInfo {
 
 class Network {
     static get serverURL() {
-        return "https://swarmtunes.com"
+        return "https://dev-api.swarmtunes.com"
     }
     static get userToken() {
         return sessionStorage.getItem("userToken") //bad but I don't care

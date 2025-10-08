@@ -61,6 +61,9 @@ class CreatePlaylistPopup {
         })
     }
     static Show() {
+        if (!Network.IsLoggedIn()) {
+            return
+        }
         this.background.style.display = "flex"
         this.input.value = ""
         this.error.textContent = ""

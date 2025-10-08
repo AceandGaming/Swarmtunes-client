@@ -26,7 +26,7 @@ function OnNowPlayingItemClick(event) {
 }
 
 function DisplaySong(song) {
-    const url = Network.serverURL + "/covers/" + song.uuid
+    const url = Network.GetCoverUrl(song.uuid, 256)
     document.getElementById("current-song-title").textContent = song.title
     document.getElementById("current-song-artist").textContent = song.artist
     document.querySelector("#current-song-bar > .cover").src = url

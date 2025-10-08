@@ -26,7 +26,7 @@ function AttachAudioControls() {
 function OnNextButtonClick() {
     const song = SongQueue.GetNextSong()
     if (song === null) {
-        PauseAudio()
+        Audio.Pause()
         return
     }
     Audio.Play(song)
