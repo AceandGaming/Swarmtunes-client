@@ -2,6 +2,10 @@ const print = console.log.bind(console)
 
 colourThief = new ColorThief()
 
+PlaylistTab.ShowLoggedOutScreen()
+PopulateSearch("")
+ShowContentWindow(document.getElementById("discover"))
+
 SwarmFM.Initalise()
 CssColours.InitaliseColours()
 AttachAudioControls()
@@ -25,3 +29,21 @@ LoginPopup.AddLoginCallback(OnLogin)
 if (Network.IsLoggedIn()) {
     LoginPopup.CallLoginCallbacks()
 }
+
+function LoadUrlBar() {
+    const queryString = window.location.search;
+    print(queryString)
+    const urlParams = new URLSearchParams(queryString);
+    const songId = urlParams.get('song');
+
+    if (songId !== null) {
+        Network.GetSong(songId).then((song) => {
+            SongQueue.LoadSingleSong(song)
+            Audio.Play(song)
+        })
+    }
+
+    const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    window.history.replaceState({}, document.title, cleanUrl);
+}
+LoadUrlBar()

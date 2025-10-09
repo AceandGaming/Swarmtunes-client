@@ -4,5 +4,6 @@
     "module": "commonjs",
     "checkJs": false
   },
-  "include": ["**/*.js"]
+  "include": ["**/*.js"],
+  "exclude": ["node_modules", "mini"]
 }

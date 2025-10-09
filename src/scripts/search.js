@@ -22,4 +22,3 @@ function PopulateSearch(searchTerm) {
 function OnSearchValueChange(event) {
     PopulateSearch(event.target.value)
 }
-PopulateSearch("")

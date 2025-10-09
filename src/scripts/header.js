@@ -39,5 +39,3 @@ function OnLoginButtonClick() {
 function OnLogoutButtonClick() {
     Network.LogOut()
 }
-
-ShowContentWindow(document.getElementById("discover"))

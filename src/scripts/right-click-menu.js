@@ -137,12 +137,18 @@ async function OnRenamePlaylistClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid
     RenamePlaylistPopup.Show(uuid)
 }
+function OnSongShareClick(event, uiEvent) {
+    const uuid = event.target.dataset.uuid
+    const url = "https://share.swarmtunes.com/?song=" + uuid
+    navigator.clipboard.writeText(url)
+}
 
 //fill options
 menuItems["song"] = new MenuItem([
     new RightClickOption("Play Now", OnPlayNextClick, "queue", "src/art/Play.svg"),
     new RightClickOption("Add To Playlist", OnAddToPlaylistClick, "playlist", null, true),
-    new RightClickOption("Export", OnSongExportClick, "share", "src/art/export.svg")
+    new RightClickOption("Export", OnSongExportClick, "share", "src/art/export.svg"),
+    new RightClickOption("Share", OnSongShareClick, "share", "src/art/export.svg")
 ])
 menuItems["now-playing-item"] = new MenuItem([
     new RightClickOption("Remove", RemoveFromQueue, "queue", "src/art/x.svg")

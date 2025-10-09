@@ -23,4 +23,3 @@ class PlaylistTab {
         this.Populate()
     }
 }
-PlaylistTab.ShowLoggedOutScreen()

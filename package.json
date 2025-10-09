@@ -5,11 +5,14 @@
           "license": "ISC",
           "author": "Ace",
           "type": "commonjs",
-          "main": "src/scripts/electron.js",
+          "main": "src/electron.js",
           "scripts": {
                     "start": "electron ."
           },
           "devDependencies": {
                     "electron": "^37.2.6"
+          },
+          "dependencies": {
+                    "vite": "^7.1.9"
           }
 }
