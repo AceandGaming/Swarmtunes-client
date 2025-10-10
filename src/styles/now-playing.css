@@ -8,15 +8,29 @@
   flex-direction: column;
   
 }
-#now-playing > span {
+#now-playing > .title {
   position: relative;
   top: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--subtext-colour);
   margin-bottom: 10px;
+}
+#now-playing > .title > img {
+  width: 30px;
+  height: auto;
+}
+#now-playing > .title > span {
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+}
+#now-playing > .title > :first-child {
+  scale: -1 1;
 }
 #now-playing > .song-list {
   padding-left: 10px;

@@ -7,6 +7,11 @@
 }
 .tab {
   flex: 0 1 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   background-color: var(--header-tab-default);
   height: 30px;
   margin: 0 5px;
@@ -17,6 +22,9 @@
   border-top-right-radius: 8px;
   color: var(--text-colour);
   font-weight: bold;
+}
+.tab * {
+  pointer-events: none;
 }
 #header-login-button {
   position: absolute;
@@ -37,5 +45,8 @@
     flex: 1 1 auto;
     font-size: medium;
     height: 35px;
+  }
+  .tab span {
+    display: none;
   }
 }

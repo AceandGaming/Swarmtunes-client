@@ -1,7 +1,7 @@
 function AddLoadingImage(element, wrapper, source) {
     const placeholder = document.createElement("img")
     placeholder.classList.add("cover")
-    placeholder.src = "src/art/no_song.png"
+    placeholder.src = "src/art/no-song.png"
     wrapper.appendChild(placeholder)
 
     const image = document.createElement("img")

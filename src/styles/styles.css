@@ -110,6 +110,15 @@ button:active {
   -ms-user-select: none;
   user-select: none;
 }
+svg {
+  color: var(--icon-default);
+}
+svg:hover {
+  color: var(--icon-hover);
+}
+svg:active {
+  color: var(--icon-active);
+}
 
 
 ::-webkit-scrollbar {

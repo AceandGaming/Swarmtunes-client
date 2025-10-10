@@ -16,6 +16,7 @@ function AttachAudioControls() {
     const slider = document.querySelector("#volume-controls input")
     slider.addEventListener('blur', () => slider.style.display = "none")
     slider.value = Audio.audio.volume
+    OnVolumeSliderChange({target: slider})
     Audio.audio.addEventListener("play", () => UpdatePlayPauseIcon())
     Audio.audio.addEventListener("pause", () => UpdatePlayPauseIcon())
     SwarmFM.audio.addEventListener("play", () => UpdatePlayPauseIcon())
@@ -62,19 +63,19 @@ function OnShuffleButtonClick() {
 function UpdatePlayPauseIcon() {
     const playPause = document.getElementById("play-pause")
     if (IsPaused()) {
-        playPause.src = "src/art/Play.svg"
+        playPause.src = "src/art/icons/play.svg"
     }
     else {
-        playPause.src = "src/art/Pause.svg"
+        playPause.src = "src/art/icons/pause.svg"
     }
 }
 function UpdateShuffleButton() {
     const image = document.getElementById("shuffle-button")
     if (SongQueue.suffleSongs) {
-        image.src = "src/art/ShuffleOn.svg"
+        image.src = "src/art/icons/active/shuffle.svg"
     }
     else {
-        image.src = "src/art/ShuffleOff.svg"
+        image.src = "src/art/icons/shuffle.svg"
     }
 }
 function UpdateSeekBar(audio) {
@@ -148,6 +149,17 @@ function OnVolumeButtonClick() {
 function OnVolumeSliderChange(event) {
     Audio.audio.volume = event.target.value
     SwarmFM.audio.volume = event.target.value
+
+    const icon = document.querySelector("#volume-controls img")
+    if (Audio.audio.volume === 0) {
+        icon.src = "src/art/icons/volume-off.svg"
+    }
+    else if (Audio.audio.volume < 0.5) {
+        icon.src = "src/art/icons/volume-2.svg"
+    }
+    else {
+        icon.src = "src/art/icons/volume.svg"
+    }
 }
 function OnAudioFinish() {
     OnNextButtonClick()

@@ -32,7 +32,6 @@ if (Network.IsLoggedIn()) {
 
 function LoadUrlBar() {
     const queryString = window.location.search;
-    print(queryString)
     const urlParams = new URLSearchParams(queryString);
     const songId = urlParams.get('song');
 

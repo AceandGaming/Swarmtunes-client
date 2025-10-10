@@ -1,6 +1,5 @@
 #playlist-view {
   display: none;
-  position: relative;
   margin-top: 20px;
   padding-left: 20px;
   overflow-y: auto;
@@ -48,9 +47,15 @@
 #playlist-close-button {
   width: 30px;
   height: 30px;
-  margin-bottom: 10px;
-  border-radius: 50%;
-  color: var(--text-colour);
+  pointer-events: all;
+  cursor: pointer;
+  background-color: var(--background-colour);
+}
+#playlist-close-button:hover {
+  background-color: var(--default-button-hover);
+}
+#playlist-close-button:active {
+  background-color: var(--default-button-active);
 }
 
 @media (max-width: 550px) {

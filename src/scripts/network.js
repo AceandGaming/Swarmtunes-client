@@ -90,7 +90,7 @@ class Network {
     }
     static GetCoverUrl(name, size = 128) {
         if (name == "unknown" || name == null || name == undefined) {
-            return "src/art/no_song.png"
+            return "src/art/no-song.png"
         }
         return `${this.serverURL}/covers/${name}?size=${size}`
     }

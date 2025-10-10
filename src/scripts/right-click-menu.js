@@ -145,24 +145,24 @@ function OnSongShareClick(event, uiEvent) {
 
 //fill options
 menuItems["song"] = new MenuItem([
-    new RightClickOption("Play Now", OnPlayNextClick, "queue", "src/art/Play.svg"),
-    new RightClickOption("Add To Playlist", OnAddToPlaylistClick, "playlist", null, true),
-    new RightClickOption("Export", OnSongExportClick, "share", "src/art/export.svg"),
-    new RightClickOption("Share", OnSongShareClick, "share", "src/art/export.svg")
+    new RightClickOption("Play Now", OnPlayNextClick, "queue", "src/art/icons/play.svg"),
+    new RightClickOption("Add To Playlist", OnAddToPlaylistClick, "playlist", "src/art/icons/playlist-add.svg", true),
+    new RightClickOption("Share", OnSongShareClick, "share", "src/art/icons/share.svg"),
+    new RightClickOption("Export", OnSongExportClick, "share", "src/art/icons/file-export.svg")
 ])
 menuItems["now-playing-item"] = new MenuItem([
-    new RightClickOption("Remove", RemoveFromQueue, "queue", "src/art/x.svg")
+    new RightClickOption("Remove", RemoveFromQueue, "queue", "src/art/icons/x.svg")
 ], "song")
 menuItems["playlist-item"] = new MenuItem([
-    new RightClickOption("Remove From Playlist", OnRemoveFromPlaylistClick, "playlist", "src/art/x.svg")
+    new RightClickOption("Remove From Playlist", OnRemoveFromPlaylistClick, "playlist", "src/art/icons/playlist-remove.svg")
 ], "song")
 
 menuItems["swarmfm"] = new MenuItem([
-    new RightClickOption("Play Now", SwarmFMPlayNext, "queue", "src/art/Play.svg")
+    new RightClickOption("Play Now", SwarmFMPlayNext, "queue", "src/art/icons/play.svg")
 ])
 
 menuItems["playlist"] = new MenuItem([
-    new RightClickOption("New Playlist", OnNewPlaylistClick, "playlist", "src/art/plus.svg"),
-    new RightClickOption("Delete Playlist", OnDeletePlaylistClick, "playlist", "src/art/bin.svg"),
-    new RightClickOption("Rename Playlist", OnRenamePlaylistClick, "playlist", "src/art/edit.svg")
+    new RightClickOption("New Playlist", OnNewPlaylistClick, "playlist", "src/art/icons/plus.svg"),
+    new RightClickOption("Delete Playlist", OnDeletePlaylistClick, "playlist", "src/art/icons/trash.svg"),
+    new RightClickOption("Rename Playlist", OnRenamePlaylistClick, "playlist", "src/art/icons/edit.svg")
 ])
