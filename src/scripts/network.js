@@ -10,6 +10,7 @@ class SwarmFMInfo {
 class Network {
     static get serverURL() {
         return "https://dev-api.swarmtunes.com"
+        //return "https://api.swarmtunes.com"
     }
     static get userToken() {
         return sessionStorage.getItem("userToken") //bad but I don't care
@@ -99,6 +100,16 @@ class Network {
         params.append("filters", filters.join(","));
         params.append("maxResults", maxResults);
         const response = await this.Get(`songs?${params.toString()}`)
+        const songs = []
+        for (const dict of await response.json()) {
+            songs.push(Song.CreateSongFromJson(dict))
+        }
+        return songs
+    }
+    static async Search(query) {
+        const params = new URLSearchParams();
+        params.append("query", query);
+        const response = await this.Get(`search?${params.toString()}`)
         const songs = []
         for (const dict of await response.json()) {
             songs.push(Song.CreateSongFromJson(dict))

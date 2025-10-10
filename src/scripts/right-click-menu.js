@@ -1,4 +1,6 @@
 rightClickMenu = document.getElementById("right-click-menu")
+let timer;
+
 
 class RightClickOption {
     constructor(name, action, category = "none", icon = null, requiresAccount = false) {
@@ -59,6 +61,7 @@ function PopulateRightClickMenu(options, eventObject) {
 }
 function OnRightClick(event) {
     event.preventDefault()
+    event.stopPropagation()
     const catagory = event.target.dataset.rightclickcategory
     if (catagory === undefined || menuItems[catagory] === undefined) {
         return
@@ -76,13 +79,32 @@ function OnRightClickMenuOptionClick(event, eventObject, callback) {
     rightClickMenu.style.display = "none"
     callback(eventObject, event)
 }
-document.addEventListener("mousedown", (event) => {
-  if (!rightClickMenu.contains(event.target)) {
-    rightClickMenu.style.display = "none";
-  }
-});
 
+function PreventScroll(event) {
+  event.preventDefault();
+}
+
+function OnStartPress(event) {
+    document.addEventListener('touchmove', PreventScroll, {passive: false});
+    timer = setTimeout(() => {
+        const touch = event.touches[event.touches.length - 1]
+        event.clientX = touch.clientX - 50
+        event.clientY = touch.clientY - 20
+        OnRightClick(event)
+    }, 500)
+}
+function OnStopPress() {
+    document.removeEventListener('touchmove', PreventScroll);
+    clearTimeout(timer)
+}
+document.addEventListener("touchstart", OnStartPress);
+document.addEventListener("touchend", OnStopPress);
 document.addEventListener("contextmenu", OnRightClick)
+document.addEventListener("mousedown", (event) => {
+    if (!rightClickMenu.contains(event.target)) {
+        rightClickMenu.style.display = "none";
+    }
+});
 
 function OnSongExportClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid

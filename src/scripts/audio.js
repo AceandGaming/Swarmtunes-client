@@ -9,17 +9,20 @@ class Audio {
         this.audio.pause()
     }
     static Play(song) {
+        if (this.#audioLoaded) {
+            this.audio.play()
+        }
         if (song !== undefined) {
             if (song.uuid === "swarmfm") {
                 SwarmFM.Play()
                 return
             }
+            this.audio.addEventListener("canplay", () => {
+                this.audio.play()
+            })
             this.audio.src = Network.serverURL + "/files/" + song.uuid
             this.#audioLoaded = true
             DisplaySong(song)
-        }
-        if (this.#audioLoaded) {
-            this.audio.play()
         }
         SwarmFM.Stop()
     }
@@ -138,4 +141,3 @@ function PauseAudio() {
 function IsPaused() {
     return Audio.audio.paused && SwarmFM.audio.paused
 }
-

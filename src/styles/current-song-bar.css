@@ -151,12 +151,13 @@
     display: none;
   }
   #title-and-seek {
+    margin-left: 25px;
     max-width: 150px;
   }
   #seek-container {
     min-width: 50px;
   }
-  #media-controls img {
+  #media-controls img:not(:first-child) {
     margin: auto 8px;
   }
 }

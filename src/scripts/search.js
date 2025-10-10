@@ -2,9 +2,6 @@
 function PopulateSearch(searchTerm) {
     function NetworkReturnPromise(songs) {
         const songlist = new SongList(songs)
-        if (searchTerm !== "") {
-            songlist.SortByTitleDifference(searchTerm)
-        }
         const element = songlist.CreateElement(true)
         element.id = "search-results"
         document.getElementById("search-results").replaceWith(element)
@@ -15,7 +12,13 @@ function PopulateSearch(searchTerm) {
         element.id = "search-results"
         document.getElementById("search-results").replaceWith(element)
     }
-    const async = Network.GetAllSongs({filters: [`title*=${searchTerm}`], maxResults: 20})
+    let async
+    if (searchTerm) {
+        async = Network.Search(searchTerm)
+    }
+    else {
+        async = Network.GetAllSongs({maxResults: 30})
+    }
     async.catch(OnNetworkFailed)
     async.then(NetworkReturnPromise)
 }

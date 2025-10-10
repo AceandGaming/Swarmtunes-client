@@ -4,7 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Swarmtunes</title>
-  <link rel="icon" type="image/png" href="api.serverland.com/covers/neuro?size=32">
+  <link rel="icon" type="image/webp" href="https://api.swarmtunes.com/covers/neuro?size=32">
+
+  <meta property="og:title" content="Swarmtunes" />
+  <meta property="og:description" content="The Neuro-sama music app" />
+  <meta property="og:image" content="https://api.swarmtunes.com/covers/neuro?size=256" />
+  <meta property="og:type" content="music.song">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Swarmtunes" />
+  <meta name="twitter:description" content="The Neuro-sama music app" />
+  <meta name="twitter:image" content="https://api.swarmtunes.com/covers/neuro?size=256" />
+      
+  
   <link rel="stylesheet" href="src/styles/styles.css"/>
   <link rel="stylesheet" href="src/styles/content/discover.css"/>
   <link rel="stylesheet" href="src/styles/content/playlist-view.css"/>
@@ -110,9 +122,9 @@
       <img src="src/art/icons/track-prev.svg" id="previous-button" onclick="OnPreviousButtonClick()">
       <img src="src/art/icons/play.svg" id="play-pause" onclick="OnPauseButtonClick()">
       <img src="src/art/icons/track-next.svg" id="next-button" onclick="OnNextButtonClick()">
-      <div id="volume-controls">
-        <input oninput="OnVolumeSliderChange(event)" type="range" min="0" max="1" step="0.01" value="0.5" id="volume-slider">
-        <img src="src/art/icons/volume.svg" onclick="OnVolumeButtonClick()"></img>
+      <div id="volume-controls" tabindex="0">
+        <input type="range" min="0" max="1" step="0.01" value="0.5" id="volume-slider">
+        <img src="src/art/icons/volume.svg"></img>
       </div>
     </div>
   </div>

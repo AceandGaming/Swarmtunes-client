@@ -1,3 +1,55 @@
+class VolumeButton {
+    static #volumeButton
+    static #volumeButtonImage
+    static #volumeSlider 
+    
+    static #sliderFocus = false
+
+    static AttachInputs() {
+        this.#volumeButton = document.getElementById("volume-controls")
+        this.#volumeButton.addEventListener("click", this.OnButtonClick.bind(this))
+        this.#volumeButton.addEventListener("blur", this.OnButtonLooseFocus.bind(this))
+        this.#volumeSlider = document.querySelector("#volume-controls input")
+        this.#volumeSlider.addEventListener("input", this.OnSliderChange.bind(this))
+        this.#volumeSlider.addEventListener("blur", this.OnSliderLooseFocus.bind(this))
+    }
+    static OnButtonClick() {
+        this.Show()
+    }
+    static OnButtonLooseFocus() {
+        if (!this.#sliderFocus) {
+            this.Hide()
+        }
+    }
+    static OnSliderChange(event) {
+        this.#sliderFocus = true
+        Audio.audio.volume = event.target.value
+        SwarmFM.audio.volume = event.target.value
+
+        const icon = document.querySelector("#volume-controls img")
+        if (Audio.audio.volume === 0) {
+            icon.src = "src/art/icons/volume-off.svg"
+        }
+        else if (Audio.audio.volume < 0.5) {
+            icon.src = "src/art/icons/volume-2.svg"
+        }
+        else {
+            icon.src = "src/art/icons/volume.svg"
+        }
+    }
+    static OnSliderLooseFocus() {
+        this.#sliderFocus = false
+        this.Hide()
+    }
+    static Show() {
+        VolumeButton.#volumeSlider.style.display = "flex"
+    }
+    static Hide() {
+        VolumeButton.#volumeSlider.style.display = "none"
+    }
+}
+
+
 const SeekBar = document.getElementById("seek-progress");
 function AttachAudioControls() {
     Audio.audio.addEventListener("timeupdate", () => UpdateSeekBar(Audio.audio))
@@ -13,10 +65,7 @@ function AttachAudioControls() {
         navigator.mediaSession.setActionHandler("seekforward", (details) => {Audio.SeekOffset(details.seekOffset)})
         navigator.mediaSession.setActionHandler("seekbackward", (details) => {Audio.SeekOffset(-details.seekOffset)})
     }
-    const slider = document.querySelector("#volume-controls input")
-    slider.addEventListener('blur', () => slider.style.display = "none")
-    slider.value = Audio.audio.volume
-    OnVolumeSliderChange({target: slider})
+    VolumeButton.AttachInputs()
     Audio.audio.addEventListener("play", () => UpdatePlayPauseIcon())
     Audio.audio.addEventListener("pause", () => UpdatePlayPauseIcon())
     SwarmFM.audio.addEventListener("play", () => UpdatePlayPauseIcon())
@@ -136,30 +185,6 @@ function OnSeekBarMouseDown(event) {
 function OnSeekBarMouseUp(event) {
     document.removeEventListener("mousemove", OnSeek);
     document.removeEventListener("mouseup", OnSeekBarMouseUp);
-}
-function OnVolumeButtonClick() {
-    const slider = document.querySelector("#volume-controls input")
-    if (slider.style.display === "none") {
-        slider.style.display = "block"
-    }
-    else {
-        slider.style.display = "none"
-    }
-}
-function OnVolumeSliderChange(event) {
-    Audio.audio.volume = event.target.value
-    SwarmFM.audio.volume = event.target.value
-
-    const icon = document.querySelector("#volume-controls img")
-    if (Audio.audio.volume === 0) {
-        icon.src = "src/art/icons/volume-off.svg"
-    }
-    else if (Audio.audio.volume < 0.5) {
-        icon.src = "src/art/icons/volume-2.svg"
-    }
-    else {
-        icon.src = "src/art/icons/volume.svg"
-    }
 }
 function OnAudioFinish() {
     OnNextButtonClick()
