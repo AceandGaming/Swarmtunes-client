@@ -1,12 +1,11 @@
 #now-playing {
-  flex: 0 0 20vw;
+  flex: 0 0 22vw;
   max-width: 250px;
   min-width: 165px;
   min-height: 100%;
   background-color: #1c1c1c;
   display: flex;
   flex-direction: column;
-  
 }
 #now-playing > .title {
   position: relative;
@@ -19,6 +18,7 @@
   padding-bottom: 10px;
   border-bottom: 1px solid var(--subtext-colour);
   margin-bottom: 10px;
+  overflow: hidden;
 }
 #now-playing > .title > img {
   width: 30px;
@@ -46,7 +46,16 @@
 #now-playing .loading {
   display: none;
 }
-
+@media (max-width: 1000px) {
+  #now-playing > .title > span {
+    font-size: 20px;
+  }
+}
+@media (max-width: 850px) {
+  #now-playing > .title > img {
+    display: none;
+  }
+}
 @media (max-width: 550px) {
   #now-playing {
     display: none;
