@@ -1,10 +1,4 @@
-#discover {
-  display: none;
-  flex-direction: column;
-  padding-left: 20px;
-  overflow-y: auto;
-  height: inherit;
-}
+
 #swarmfm-button {
   width: 50px; 
   height: auto;

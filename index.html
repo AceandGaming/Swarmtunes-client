@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="src/styles/error-screen.css"/>
   <link rel="stylesheet" href="src/styles/content/playlist-tab.css"/>
   <link rel="stylesheet" href="src/styles/create-playlist-popup.css"/>
+  <link rel="stylesheet" href="src/styles/content/admin-panel.css"/>
   <link rel="stylesheet" href="src/styles/select-playlist.css"/>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,6 +60,10 @@
             <span>Search</span>
             <img src="src/art/icons/search.svg">
           </button>
+          <button class="tab require-admin" data-window="admin-panel">
+            <span>Admin</span>
+            <img src="src/art/icons/tool.svg">
+          </button>
         </div>
         <button id="header-login-button" onclick="OnLoginButtonClick()">Log In</button>
       </header>
@@ -78,19 +83,21 @@
             <input id="search-bar" type="text" placeholder="search for a song!" oninput=OnSearchValueChange(event)>
             <ol id="search-results"></ol>
           </div>
+          <div id="admin-panel" class="require-admin">
+            <h2>Server Control</h2>
+            <button onclick="OnServerResyncButtonClick()">Resync Songs</button>
+          </div>
         </div>
         <div id="playlist-view">
           <img id="playlist-close-button" src="src/art/icons/x.svg" onclick=OnPlaylistCloseButtonClick()></img>
           <div class="title-cover">
             <img class="cover" src="src/art/no-song.png">
-              <div>
-                <span class="title">PLAYLIST</span>
-                <span class="sub-text subtitle"></span>
-              </div>
+            <div>
+              <span class="title">PLAYLIST</span>
+              <span class="sub-text subtitle"></span>
+            </div>
           </div>
           <ul class="song-list">
-          
-          </div>
         </div>
       </div>
     </div>
@@ -180,7 +187,7 @@
   <!-- Now that's a lot of scripts -->
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="src/scripts/render/catagories.js"></script>
-  <script src="src/scripts/render/misc.js"></script>
+  <script src="src/scripts/misc.js"></script>
   <script src="src/scripts/render/now-playing.js"></script>
   <script src="src/scripts/render/song-list.js"></script>
   <script src="src/scripts/render/playlist-view.js"></script>

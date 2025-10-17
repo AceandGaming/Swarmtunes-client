@@ -42,8 +42,9 @@ class LoginPopup {
         this.callbacks.push(callback)
     }
     static CallLoginCallbacks() {
+        const isAdmin = Network.IsAdmin()
         for (const callback of this.callbacks) {
-            callback()
+            callback(isAdmin)
         }
     }
     static AttachInputs() {
@@ -96,9 +97,9 @@ class LoginPopup {
         const password = this.passwordInput.value
         const cor = Network.Login(username, password)
         cor.catch(() => this.error.textContent = "An unknown error occurred")
-        cor.then(errorText => {
-            if (errorText) {
-                this.error.textContent = errorText
+        cor.then(output => {
+            if (output instanceof String) {
+                this.error.textContent = output
                 return
             }
             this.Hide()
@@ -110,9 +111,9 @@ class LoginPopup {
         const password = this.passwordInput.value
         const cor = Network.Register(username, password)
         cor.catch(() => this.error.textContent = "An unknown error occurred")
-        cor.then(errorText => {
-            if (errorText) {
-                this.error.textContent = errorText
+        cor.then(output => {
+            if (output instanceof String) {
+                this.error.textContent = output
                 return
             }
             this.Hide()

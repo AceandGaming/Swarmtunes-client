@@ -35,17 +35,7 @@
   width: 60%;
   max-height: 30px;
   margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--popup-input-border);
-  background-color: var(--popup-input-colour);
-  color: var(--text-colour);
-  padding-left: 10px;
-}
-#login > input::placeholder {
-  color: var(--subtext-colour);
-}
-#login > input:focus {
-  outline: none;
+  max-height: 30px;
 }
 #login .buttons {
   display: flex;

@@ -18,20 +18,39 @@ class Network {
     static IsLoggedIn() {
         return this.userToken !== null
     }
+    static IsAdmin() {
+        return sessionStorage.getItem("isAdmin") == "true"
+    }
 
-    static async Get(url) {
-        const response = await fetch(`${this.serverURL}/${url}`, {
-            method: 'GET',
+    static async SafeFetch(url, method, body) {
+            const response = await fetch(`${this.serverURL}/${url}`, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${this.userToken}`
-            }
+            },
+            body: JSON.stringify(body)
         })
         if (!response.ok && response.status == 401 && response.headers.get("token-expired") == "true") {
             sessionStorage.removeItem("userToken")
             window.location.reload()
         }
         return response
+    }
+    static async Get(url) {
+        return await this.SafeFetch(url, 'GET')
+    }
+    static async Post(url, data) {
+        return await this.SafeFetch(url, 'POST', data)
+    }
+    static async Delete(url) {
+        return await this.SafeFetch(url, 'DELETE')
+    }
+    static async Put(url, data) {
+        return await this.SafeFetch(url, 'PUT', data)
+    }
+    static async Patch(url, data) {
+        return await this.SafeFetch(url, 'PATCH', data)
     }
 
     static async GetSwarmFMStream() {
@@ -151,26 +170,12 @@ class Network {
         return EnsureValue(response.json()) //just a list of urls. no class
     }
 
-    static async Post(url, data) {
-        const response = await fetch(`${this.serverURL}/${url}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.userToken}`
-            },
-            body: JSON.stringify(data)
-        })
-        if (!response.ok && response.status == 401 && response.headers.get("token-expired") == "true") {
-            sessionStorage.removeItem("userToken")
-            window.location.reload()
-        }
-        return response
-    }
     static async Login(username, password) {
         const response = await this.Post(`users/login`, {username: username, password: password})
         const json = await response.json()
         if (json["token"]) {
             sessionStorage.setItem("userToken", json["token"])
+            sessionStorage.setItem("isAdmin", json["isAdmin"])
         }
         else {
             return json["detail"]
@@ -181,13 +186,14 @@ class Network {
         const json = await response.json()
         if (json["token"]) {
             sessionStorage.setItem("userToken", json["token"])
+            sessionStorage.setItem("isAdmin", json["isAdmin"])
         }
         else {
             return json["detail"]
         }
     }
     static async LogOut() {
-        await this.Post(`users/logout`)
+        await this.Post(`me/logout`)
         sessionStorage.removeItem("userToken")
         window.location.reload()
     }
@@ -214,7 +220,7 @@ class Network {
         return playlists
     }
     static async CreatePlaylist(name) {
-        const response = await this.Post(`playlists/new`, {name: name})
+        const response = await this.Post(`playlists`, {name: name})
         const json = await response.json()
         if (!response.ok) {
             return {error: json["detail"]}
@@ -222,15 +228,20 @@ class Network {
         return Playlist.CreatePlaylistFromJson(json)
     }
     static async DeletePlaylist(playlistUuid) {
-        await this.Post(`playlists/delete`, {uuid: playlistUuid})
+        await this.Delete(`playlists${playlistUuid}`)
     }
     static async AddSongToPlaylist(playlistUuid, songUuids) {
-        await this.Post(`playlists/${playlistUuid}/add`, {songs: EnsureArray(songUuids)})
+        await this.Patch(`playlists/${playlistUuid}/add`, {songs: EnsureArray(songUuids)})
     }
     static async RemoveSongFromPlaylist(playlistUuid, songUuids) {
-        await this.Post(`playlists/${playlistUuid}/remove`, {songs: EnsureArray(songUuids)})
+        await this.Patch(`playlists/${playlistUuid}/remove`, {songs: EnsureArray(songUuids)})
     }
     static async RenamePlaylist(playlistUuid, name) {
-        await this.Post(`playlists/${playlistUuid}/rename`, {name: name})
+        await this.Patch(`playlists/${playlistUuid}`, {name: name})
+    }
+
+    static async ServerResync() {
+        RequireAdmin()
+        await this.Post("resync")
     }
 }

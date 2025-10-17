@@ -33,3 +33,8 @@ function HasValues(dict, ...args) {
     }
     return true
 }
+function RequireAdmin() {
+    if (!Network.IsAdmin()) {
+        console.error("User is not admin")
+    }
+}

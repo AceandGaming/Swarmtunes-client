@@ -1,0 +1,7 @@
+#admin-panel {
+    justify-content: left;
+    align-items: flex-start;
+}
+#admin-panel button {
+    border-radius: 10px;
+}

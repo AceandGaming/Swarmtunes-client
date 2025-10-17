@@ -1,0 +1,3 @@
+function OnServerResyncButtonClick() {
+    Network.ServerResync()
+}

@@ -185,6 +185,6 @@ menuItems["swarmfm"] = new MenuItem([
 
 menuItems["playlist"] = new MenuItem([
     new RightClickOption("New Playlist", OnNewPlaylistClick, "playlist", "src/art/icons/plus.svg"),
-    new RightClickOption("Delete Playlist", OnDeletePlaylistClick, "playlist", "src/art/icons/trash.svg"),
-    new RightClickOption("Rename Playlist", OnRenamePlaylistClick, "playlist", "src/art/icons/edit.svg")
+    new RightClickOption("Rename Playlist", OnRenamePlaylistClick, "playlist", "src/art/icons/edit.svg"),
+    new RightClickOption("Delete Playlist", OnDeletePlaylistClick, "playlist", "src/art/icons/trash.svg")
 ])

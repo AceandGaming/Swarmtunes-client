@@ -1,10 +1,3 @@
-#playlists-tab {
-    display: none;
-    flex-direction: column;
-    margin-left: 20px;
-    overflow-y: auto;
-    height: inherit;
-}
 #new-playlist-button {
     border-radius: 20px;
     font-size: medium;

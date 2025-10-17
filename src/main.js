@@ -15,13 +15,20 @@ CreatePlaylistPopup.AttachInputs()
 RenamePlaylistPopup.AttachInputs()
 
 PopulateDiscover()
-function OnLogin() {
+function OnLogin(isAdmin) {
     document.getElementById("header-login-button").textContent = "Log Out"
     document.getElementById("header-login-button").setAttribute("onclick", "OnLogoutButtonClick()")
     PlaylistManager.GetPlaylists().then(PlaylistTab.Populate)
 
-    for (let element of document.getElementsByClassName("require-auth")) {
+    const authElements = Array.from(document.getElementsByClassName("require-auth"))
+    for (let element of authElements) {
         element.classList.remove("require-auth")
+    }
+    if (isAdmin) {
+        const adminElements = Array.from(document.getElementsByClassName("require-admin"))
+        for (let element of adminElements) {
+            element.classList.remove("require-admin")
+        }
     }
 }
 LoginPopup.AddLoginCallback(OnLogin)

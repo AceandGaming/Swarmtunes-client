@@ -14,8 +14,9 @@
   --default-button-colour: #252525;
   --default-button-hover: #303030;
   --default-button-active: #404040;
-  --popup-input-colour: #303030;
-  --popup-input-border: #404040;
+  --input-colour: #252525;
+  --input-colour-hover: #303030;
+  --input-border: #404040;
   --popup-input-boarder-error: #ff0000;
   --song-item-hover: #202020;
   overflow: hidden;
@@ -53,8 +54,13 @@ main {
   overflow: hidden;
   height: calc(100vh - 150px);
   margin-top: 20px;
+  margin-left: 20px;
 }
-#content-tabs {
+#content > *,
+#content-tabs > * {
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
   height: inherit;
 }
 img {
@@ -69,6 +75,7 @@ button {
   border: none;
   background-color: var(--default-button-colour);
   color: var(--text-colour);
+  padding: 6px;
 }
 button:hover {
   background-color: var(--default-button-hover);
@@ -100,7 +107,10 @@ button:active {
   display: none;
 }
 .require-auth {
-  display: none;
+  display: none !important;
+}
+.require-admin {
+  display: none !important;
 }
 .noselect {
   -webkit-touch-callout: none;
@@ -119,7 +129,23 @@ svg:hover {
 svg:active {
   color: var(--icon-active);
 }
-
+input {
+  border-radius:  10px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-colour);
+  color: var(--text-colour);
+  padding: 5px 10px;
+}
+input::placeholder {
+  color: var(--subtext-colour);
+}
+input:hover {
+  background-color: var(--input-colour-hover);
+}
+input:focus {
+  outline: none;
+  background-color: var(--input-colour-hover);
+}
 
 ::-webkit-scrollbar {
   background-color: var(--background-colour);
