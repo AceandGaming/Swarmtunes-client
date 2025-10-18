@@ -1,5 +1,6 @@
 rightClickMenu = document.getElementById("right-click-menu")
-let timer;
+let time;
+let touchPosition;
 
 
 class RightClickOption {
@@ -77,6 +78,7 @@ function OnRightClick(event) {
 }
 function OnRightClickMenuOptionClick(event, eventObject, callback) {
     rightClickMenu.style.display = "none"
+    document.removeEventListener('touchmove', PreventScroll);
     callback(eventObject, event)
 }
 
@@ -85,17 +87,24 @@ function PreventScroll(event) {
 }
 
 function OnStartPress(event) {
-    document.addEventListener('touchmove', PreventScroll, {passive: false});
-    timer = setTimeout(() => {
-        const touch = event.touches[event.touches.length - 1]
-        event.clientX = touch.clientX - 50
-        event.clientY = touch.clientY - 20
-        OnRightClick(event)
-    }, 500)
+    time = new Date().getTime()
+    touchPosition = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY
+    }
 }
-function OnStopPress() {
-    document.removeEventListener('touchmove', PreventScroll);
-    clearTimeout(timer)
+function OnStopPress(event) {
+    if (new Date().getTime() - time < 500) {
+        return
+    }
+    const touch = event.changedTouches[0]
+    if (Math.abs(touch.clientX - touchPosition.x) > 50 || Math.abs(touch.clientY - touchPosition.y) > 50) {
+        return
+    }
+    event.clientX = touch.clientX - 50
+    event.clientY = touch.clientY - 20
+    document.addEventListener('touchmove', PreventScroll, {passive: false});
+    OnRightClick(event)
 }
 document.addEventListener("touchstart", OnStartPress);
 document.addEventListener("touchend", OnStopPress);
@@ -103,6 +112,7 @@ document.addEventListener("contextmenu", OnRightClick)
 document.addEventListener("mousedown", (event) => {
     if (!rightClickMenu.contains(event.target)) {
         rightClickMenu.style.display = "none";
+        document.removeEventListener('touchmove', PreventScroll);
     }
 });
 

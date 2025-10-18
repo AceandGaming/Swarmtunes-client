@@ -12,6 +12,7 @@ class VolumeButton {
         this.#volumeSlider = document.querySelector("#volume-controls input")
         this.#volumeSlider.addEventListener("input", this.OnSliderChange.bind(this))
         this.#volumeSlider.addEventListener("blur", this.OnSliderLooseFocus.bind(this))
+        this.#volumeSlider.value = Audio.audio.volume
     }
     static OnButtonClick() {
         this.Show()
@@ -72,6 +73,7 @@ function AttachAudioControls() {
     SwarmFM.audio.addEventListener("pause", () => UpdatePlayPauseIcon())
     
     SeekBar.addEventListener("mousedown", OnSeekBarMouseDown);
+    SeekBar.addEventListener("touchstart", OnSeekBarMouseDown);
 }
 function OnNextButtonClick() {
     const song = SongQueue.GetNextSong()
@@ -177,14 +179,24 @@ function OnSeek(event) {
     fraction = Math.min(1, Math.max(0, fraction));
     Audio.Seek(fraction);
 }
+function OnSeekMobile(event) {
+    const rect = SeekBar.getBoundingClientRect();
+    let fraction = (event.touches[0].clientX - rect.left) / rect.width
+    fraction = Math.min(1, Math.max(0, fraction));
+    Audio.Seek(fraction);
+}
 function OnSeekBarMouseDown(event) {
     document.addEventListener("mousemove", OnSeek);
+    document.addEventListener("touchmove", OnSeekMobile);
     document.addEventListener("mouseup", OnSeekBarMouseUp);
+    document.addEventListener("touchend", OnSeekBarMouseUp);
     OnSeek(event);
 }
 function OnSeekBarMouseUp(event) {
     document.removeEventListener("mousemove", OnSeek);
     document.removeEventListener("mouseup", OnSeekBarMouseUp);
+    document.removeEventListener("touchmove", OnSeekMobile);
+    document.removeEventListener("touchend", OnSeekBarMouseUp);
 }
 function OnAudioFinish() {
     OnNextButtonClick()
