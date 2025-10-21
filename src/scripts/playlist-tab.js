@@ -3,12 +3,12 @@ class PlaylistTab {
     static playlists = []
 
     static ShowLoggedOutScreen() {
-        const errorScreen = new LoginRequired()
-        const element = errorScreen.CreateElement()
-        this.playlistTab.append(element)
         for (let child of this.playlistTab.children) {
             child.classList.add("require-auth")
         }
+        const errorScreen = new LoginRequired()
+        const element = errorScreen.CreateElement()
+        this.playlistTab.append(element)
     }
     static Populate() {
         const playlists = PlaylistManager.playlists

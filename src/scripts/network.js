@@ -34,6 +34,7 @@ class Network {
         if (!response.ok && response.status == 401 && response.headers.get("token-expired") == "true") {
             sessionStorage.removeItem("userToken")
             window.location.reload()
+            throw new Error("token expired")
         }
         return response
     }
@@ -228,7 +229,7 @@ class Network {
         return Playlist.CreatePlaylistFromJson(json)
     }
     static async DeletePlaylist(playlistUuid) {
-        await this.Delete(`playlists${playlistUuid}`)
+        await this.Delete(`playlists/${playlistUuid}`)
     }
     static async AddSongToPlaylist(playlistUuid, songUuids) {
         await this.Patch(`playlists/${playlistUuid}/add`, {songs: EnsureArray(songUuids)})

@@ -3,7 +3,7 @@ function ValidatePlaylistName(name) {
     if (name.length > 32 || name.length <= 0) {
         return {
             error: true,
-            message: "Invalid playlist name"
+            message: "Invalid playlist length"
         }
     }
     if (!/^[0-9A-Za-z_ ]+$/.test(name)) {
@@ -17,24 +17,30 @@ function ValidatePlaylistName(name) {
         message: ""
     }
 }
-class CreatePlaylistPopup {
-    static AttachInputs() {
-        this.background = document.getElementById("create-playlist-background")
-        this.error = document.getElementById("create-playlist-error")
+class CreatePlaylistPopup extends PopupWindow {
+    static instance
 
-        this.input = document.getElementById("playlist-name-input")
+    constructor() {
+        super("Create a playlist")
+        this.input = document.createElement("input")
+        this.input.type = "text"
+        this.input.placeholder = "Playlist Name"
+        this.content.appendChild(this.input)
+
+        this.error = document.createElement("p")
+        this.error.style.color = "red"
+        this.error.style.fontSize = "12px"
+        this.content.appendChild(this.error)
+
         this.input.addEventListener("input", this.#OnInput.bind(this))
+        this.CreateButton("Create", this.#OnButtonClick.bind(this), false)
 
-        this.boarderColour = CssColours.GetColour("popup-input-boarder")
-        this.errorColour = CssColours.GetColour("popup-input-boarder-error")
+        this.boarderColour = CssColours.GetColour("input-boarder")
+        this.errorColour = "red"
 
-        const loginButton = document.getElementById("create-playlist-button")
-        loginButton.addEventListener("click", this.#OnButtonClick.bind(this))
-
-        const closeButton = document.getElementById("create-playlist-close-button")
-        closeButton.addEventListener("click", this.Hide.bind(this))
+        CreatePlaylistPopup.instance = this
     }
-    static #OnInput() {
+    #OnInput() {
         const name = this.input.value
         const result = ValidatePlaylistName(name)
         if (result.error) {
@@ -46,7 +52,7 @@ class CreatePlaylistPopup {
             this.input.style.borderColor = this.boarderColour
         }
     }
-    static #OnButtonClick() {
+    #OnButtonClick() {
         const name = this.input.value
         const cor = Network.CreatePlaylist(name)
         cor.catch(() => this.error.textContent = "An unknown error occurred")
@@ -60,7 +66,7 @@ class CreatePlaylistPopup {
             this.Hide()
         })
     }
-    static Show() {
+    Show() {
         if (!Network.IsLoggedIn()) {
             return
         }
@@ -68,11 +74,8 @@ class CreatePlaylistPopup {
         this.input.value = ""
         this.error.textContent = ""
     }
-    static Hide() {
-        this.background.style.display = "none"
-    }
 }
 
-OnCreatePlaylistButtonClick = () => {
-    CreatePlaylistPopup.Show()
+function OnCreatePlaylistButtonClick() {
+    CreatePlaylistPopup.instance.Show()
 }

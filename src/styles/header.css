@@ -16,7 +16,7 @@
   height: 30px;
   margin: 0 5px;
   margin-top: auto;
-  border: 3px solid #404040;
+  border: 3px solid var(--header-tab-border);
   border-bottom: none;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;

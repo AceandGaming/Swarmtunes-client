@@ -3,7 +3,7 @@
   max-width: 250px;
   min-width: 165px;
   min-height: 100%;
-  background-color: #1c1c1c;
+  background-color: var(--now-playing);
   display: flex;
   flex-direction: column;
 }

@@ -167,7 +167,7 @@ function OnNewPlaylistClick(event, uiEvent) {
 }
 async function OnRenamePlaylistClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid
-    RenamePlaylistPopup.Show(uuid)
+    RenamePlaylistPopup.instance.Show(uuid)
 }
 function OnSongShareClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid

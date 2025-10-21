@@ -20,6 +20,7 @@
   flex: 0 0 22vw;
   max-width: 180px;
   min-width: 80px;
+  height: fit-content;
   margin: 10px;
   display: flex;
   flex-direction: column;
@@ -46,6 +47,7 @@
   max-width: inherit;
   text-wrap: wrap;
   text-align: center;
+  color: white;
 }
 
 @media (max-width: 400px) {

@@ -1,23 +1,27 @@
-//TODO: Replace with proper system
+class RenamePlaylistPopup extends PopupWindow {
+    static instance
 
-class RenamePlaylistPopup {
-    static AttachInputs() {
-        this.background = document.getElementById("rename-playlist-background")
-        this.error = document.getElementById("rename-playlist-error")
+    constructor() {
+        super("Rename playlist")
+        this.input = document.createElement("input")
+        this.input.type = "text"
+        this.input.placeholder = "Playlist Name"
+        this.content.appendChild(this.input)
 
-        this.input = document.getElementById("replaylist-name-input")
+        this.error = document.createElement("p")
+        this.error.style.color = "red"
+        this.error.style.fontSize = "12px"
+        this.content.appendChild(this.error)
+
         this.input.addEventListener("input", this.#OnInput.bind(this))
+        this.CreateButton("Rename", this.#OnButtonClick.bind(this), false)
 
-        this.boarderColour = CssColours.GetColour("popup-input-boarder")
-        this.errorColour = CssColours.GetColour("popup-input-boarder-error")
+        this.boarderColour = CssColours.GetColour("input-boarder")
+        this.errorColour = "red"
 
-        const loginButton = document.getElementById("rename-playlist-button")
-        loginButton.addEventListener("click", this.#OnButtonClick.bind(this))
-
-        const closeButton = document.getElementById("rename-playlist-close-button")
-        closeButton.addEventListener("click", this.Hide.bind(this))
+        RenamePlaylistPopup.instance = this
     }
-    static #OnInput() {
+    #OnInput() {
         const name = this.input.value
         const result = ValidatePlaylistName(name)
         if (result.error) {
@@ -29,7 +33,7 @@ class RenamePlaylistPopup {
             this.input.style.borderColor = this.boarderColour
         }
     }
-    static #OnButtonClick() {
+    #OnButtonClick() {
         const name = this.input.value
         if (ValidatePlaylistName(name).error) {
             return
@@ -38,7 +42,7 @@ class RenamePlaylistPopup {
         this.playlist.name = name
         PlaylistTab.Populate()
     }
-    static Show(uuid) {
+    Show(uuid) {
         if (!Network.IsLoggedIn()) {
             return
         }
@@ -49,8 +53,5 @@ class RenamePlaylistPopup {
         this.error.textContent = ""
 
         this.playlist = playlist
-    }
-    static Hide() {
-        this.background.style.display = "none"
     }
 }

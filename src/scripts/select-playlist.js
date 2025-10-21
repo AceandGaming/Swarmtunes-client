@@ -8,16 +8,13 @@ function CreatePlaylistListItemElement(playlist, onClickEvent) {
     `
     return element
 }
-class SelectPlaylist {
+class SelectPlaylist extends PopupWindow{
+    static instance
     static AskUser() {
         return new Promise((resolve, reject) => {
-            document.getElementById("select-playlist-close-button").addEventListener("click", () => {
-                this.Hide()
-                resolve(null)
-            })
             function OnPlaylistClick(event) {
                 const uuid = event.target.dataset.uuid
-                this.Hide()
+                SelectPlaylist.instance.Hide()
                 if (uuid) {
                     resolve(uuid)
                 }
@@ -25,25 +22,26 @@ class SelectPlaylist {
                     reject()
                 }
             }
-            this.#LoadPlaylists(OnPlaylistClick.bind(this))
+            new SelectPlaylist(OnPlaylistClick)
+            this.instance.window.querySelector(".close-button").addEventListener("click", () => {
+                this.instance.Hide()
+                resolve(null)
+            })
+            this.instance.Show()
         })
     }
-    static #LoadPlaylists(onClickEvent) {
+    constructor(onClickEvent) {
+        super("Select a playlist")
         const playlists = PlaylistManager.playlists
         const list = document.createElement("ol")
+        list.id = "select-playlist"
 
         for (const playlist of playlists) {
             list.appendChild(CreatePlaylistListItemElement(playlist, onClickEvent))
         }
 
-        document.querySelector("#select-playlist > ol").replaceWith(list)
+        this.content.appendChild(list)
 
-        this.Show()
-    }
-    static Show() {
-        document.getElementById("select-playlist-background").style.display = "flex"
-    }
-    static Hide() {
-        document.getElementById("select-playlist-background").style.display = "none"
+        SelectPlaylist.instance = this
     }
 }

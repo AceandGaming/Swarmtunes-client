@@ -50,12 +50,13 @@ class Playlist {
                 songs.push(Song.CreateSongFromJson(song))
             }
         }
-        return new Playlist(json["uuid"], json["title"], songs)
+        return new Playlist(json["uuid"], json["title"], songs, json["type"] || "unknown", !songsAreUuids)
     }
-    constructor(uuid, name, songs, songsLoaded = false) {
+    constructor(uuid, name, songs, type = "unknown", songsLoaded = false) {
         this.#uuid = uuid
         this.#name = name
         this.#songs = songs
+        this.#type = type
         this.#songsLoaded = songsLoaded
     }
     #RenamePlaylist(name) {

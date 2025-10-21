@@ -34,7 +34,7 @@ function OnTabClick(event) {
     tab.style.backgroundColor = CssColours.GetColour("header-tab-active")
 }
 function OnLoginButtonClick() {
-    LoginPopup.Show()
+    Login.Show()
 }
 function OnLogoutButtonClick() {
     Network.LogOut()

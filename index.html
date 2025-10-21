@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -24,15 +24,14 @@
   <link rel="stylesheet" href="src/styles/catagories.css"/>
   <link rel="stylesheet" href="src/styles/current-song-bar.css"/>
   <link rel="stylesheet" href="src/styles/header.css"/>
-  <link rel="stylesheet" href="src/styles/login-popup.css"/>
   <link rel="stylesheet" href="src/styles/now-playing.css"/>
   <link rel="stylesheet" href="src/styles/right-click-menu.css"/>
   <link rel="stylesheet" href="src/styles/song-list.css"/>
   <link rel="stylesheet" href="src/styles/error-screen.css"/>
   <link rel="stylesheet" href="src/styles/content/playlist-tab.css"/>
-  <link rel="stylesheet" href="src/styles/create-playlist-popup.css"/>
   <link rel="stylesheet" href="src/styles/content/admin-panel.css"/>
   <link rel="stylesheet" href="src/styles/select-playlist.css"/>
+  <link rel="stylesheet" href="src/styles/popup.css"/>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
@@ -77,7 +76,7 @@
             </div>
           </div>
           <div id="discover">
-            <button id="swarmfm-button" onclick=OnSwarmFMButtonClick() data-rightclickcategory="swarmfm"></button>
+            <!-- <button id="swarmfm-button" onclick=OnSwarmFMButtonClick() data-rightclickcategory="swarmfm"></button> -->
           </div>
           <div id="search"> 
             <input id="search-bar" type="text" placeholder="search for a song!" oninput=OnSearchValueChange(event)>
@@ -135,45 +134,6 @@
       </div>
     </div>
   </div>
-  <div id="login-background">
-    <div id="login"> <!--TODO: Switch to form so browsers can do their autocomplete magic crap-->
-      <img id="login-close-button" src="src/art/icons/x.svg">
-      <span class="title">Log In</span>
-
-      <input type="text" id="username-input" placeholder="Username" autocomplete="username">
-      <input type="password" id="password-input" placeholder="Password" autocomplete="current-password">
-
-      <span class="error" id="login-error"></span>
-      <div class="buttons">
-        <button id="signup-button">Sign Up</button>
-        <button id="login-button">Log In</button>
-      </div>
-    </div>
-  </div>
-  <div id="create-playlist-background">
-    <div id="create-playlist">
-      <img id="create-playlist-close-button" src="src/art/icons/x.svg">
-      <span class="title">Create Playlist</span>
-
-      <input type="text" id="playlist-name-input" placeholder="Playlist Name">
-      <span class="error" id="create-playlist-error"></span>
-      <div class="buttons">
-        <button id="create-playlist-button">Create</button>
-      </div>
-    </div>
-  </div>
-  <div id="rename-playlist-background">
-    <div id="rename-playlist">
-      <img id="rename-playlist-close-button" src="src/art/icons/x.svg">
-      <span class="title">Rename Playlist</span>
-
-      <input type="text" id="replaylist-name-input" placeholder="Playlist Name">
-      <span class="error" id="rename-playlist-error"></span>
-      <div class="buttons">
-        <button id="rename-playlist-button">Rename</button>
-      </div>
-    </div>
-  </div>
   <div id="select-playlist-background">
     <div id="select-playlist">
       <img id="select-playlist-close-button" src="src/art/icons/x.svg"></img>
@@ -188,6 +148,7 @@
    
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="src/scripts/render/catagories.js"></script>
+  <script src="src/scripts/render/popup.js"></script>
   <script src="src/scripts/misc.js"></script>
   <script src="src/scripts/render/now-playing.js"></script>
   <script src="src/scripts/render/song-list.js"></script>
@@ -206,7 +167,7 @@
   <script src="src/scripts/header.js"></script>
   <script src="src/scripts/css-colours.js"></script>
   <script src="src/scripts/search.js"></script>
-  <script src="src/scripts/login-popup.js"></script>
+  <script src="src/scripts/login.js"></script>
   <script src="src/scripts/playlist-tab.js"></script>
   <script src="src/scripts/playlist.js"></script>
   <script src="src/scripts/create-playlist-popup.js"></script>

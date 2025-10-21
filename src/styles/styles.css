@@ -4,12 +4,13 @@
   --subtext-colour: #8b8b8b;
   --cover-background: #202020;
   --current-song-bar: #202020;
+  --now-playing: #1c1c1c;
   --seek-bar-background: #171717;
   --seek-bar-played: #ffffff;
   --seek-bar-loaded: #5b5b5b;
-  --song-item-hover: #000000;
   --header-tab-default: #000000;
   --header-tab-active: #171717;
+  --header-tab-border: #404040;
   --header-colour: #000000;
   --default-button-colour: #252525;
   --default-button-hover: #303030;
@@ -17,10 +18,32 @@
   --input-colour: #252525;
   --input-colour-hover: #303030;
   --input-border: #404040;
-  --popup-input-boarder-error: #ff0000;
   --song-item-hover: #202020;
   overflow: hidden;
 }
+:root[data-theme="light"] {
+  --background-colour: #fff;
+  --text-colour: #000;
+  --subtext-colour: #646464;
+  --cover-background: #ececec;
+  --current-song-bar: #e5e5e5;
+  --now-playing: #eee;
+  --seek-bar-background: #a6a6a6;
+  --seek-bar-played: #feffff;
+  --seek-bar-loaded: #d0d0d0;
+  --header-tab-default: #eee;
+  --header-tab-active: #fff;
+  --header-tab-border: #ffffff;
+  --header-colour: #d5d5d5;
+  --default-button-colour: #e6e6e6;
+  --default-button-hover: #d6d6d6;
+  --default-button-active: #ddd;
+  --input-colour: #eee;
+  --input-colour-hover: #ddd;
+  --input-border: #646464;
+  --song-item-hover: #eee;
+}
+
 body {
   overflow: hidden;
   background-color: var(--background-colour);
@@ -76,6 +99,7 @@ button {
   background-color: var(--default-button-colour);
   color: var(--text-colour);
   padding: 6px;
+  pointer-events: all;
 }
 button:hover {
   background-color: var(--default-button-hover);
@@ -145,6 +169,9 @@ input:hover {
 input:focus {
   outline: none;
   background-color: var(--input-colour-hover);
+}
+p {
+  user-select: text;
 }
 
 ::-webkit-scrollbar {

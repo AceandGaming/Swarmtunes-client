@@ -2,6 +2,8 @@ const print = console.log.bind(console)
 
 colourThief = new ColorThief()
 
+
+
 PlaylistTab.ShowLoggedOutScreen()
 PopulateSearch("")
 ShowContentWindow(document.getElementById("discover"))
@@ -10,9 +12,9 @@ SwarmFM.Initalise()
 CssColours.InitaliseColours()
 AttachAudioControls()
 AttachButtons()
-LoginPopup.AttachInputs()
-CreatePlaylistPopup.AttachInputs()
-RenamePlaylistPopup.AttachInputs()
+Login.CreateWindow()
+new CreatePlaylistPopup()
+new RenamePlaylistPopup()
 
 PopulateDiscover()
 function OnLogin(isAdmin) {
@@ -31,10 +33,10 @@ function OnLogin(isAdmin) {
         }
     }
 }
-LoginPopup.AddLoginCallback(OnLogin)
+Login.AddLoginCallback(OnLogin)
 
 if (Network.IsLoggedIn()) {
-    LoginPopup.CallLoginCallbacks()
+    Login.CallLoginCallbacks()
 }
 
 function LoadUrlBar() {

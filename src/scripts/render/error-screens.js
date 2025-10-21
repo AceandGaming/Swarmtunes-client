@@ -34,10 +34,10 @@ class ErrorScreen {
 class LoginRequired extends ErrorScreen {
     constructor(imagePath = "") {
         super("Login required", () => {}, imagePath, "Login")
-        LoginPopup.AddLoginCallback(this.OnLogin.bind(this))
+        Login.AddLoginCallback(this.OnLogin.bind(this))
     }
     OnRetryButtonClick() {
-        LoginPopup.Show()
+        Login.Show()
     }
     OnLogin() {
         this.element.remove()
