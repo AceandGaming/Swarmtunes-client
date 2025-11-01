@@ -160,6 +160,13 @@ class Network {
         }
         return albums
     }
+    static async GetAlbumMP3s(uuid) {
+        const a = document.createElement('a');
+        a.href = `${this.serverURL}/files/album/${uuid}`
+        a.download = uuid + ".zip"
+        a.click()
+        a.remove()
+    }
 
     static async GetEmote(nameOrNames) {
         const params = new URLSearchParams();

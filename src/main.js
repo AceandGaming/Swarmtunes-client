@@ -1,8 +1,6 @@
 const print = console.log.bind(console)
 
-colourThief = new ColorThief()
-
-
+const colourThief = new ColorThief()
 
 PlaylistTab.ShowLoggedOutScreen()
 PopulateSearch("")

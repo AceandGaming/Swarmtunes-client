@@ -174,6 +174,10 @@ function OnSongShareClick(event, uiEvent) {
     const url = "https://share.swarmtunes.com/?song=" + uuid
     navigator.clipboard.writeText(url)
 }
+function OnAlbumExportClick(event, uiEvent) {
+    const uuid = event.target.dataset.uuid
+    Network.GetAlbumMP3s(uuid)
+}
 
 //fill options
 menuItems["song"] = new MenuItem([
@@ -197,4 +201,8 @@ menuItems["playlist"] = new MenuItem([
     new RightClickOption("New Playlist", OnNewPlaylistClick, "playlist", "src/art/icons/plus.svg"),
     new RightClickOption("Rename Playlist", OnRenamePlaylistClick, "playlist", "src/art/icons/edit.svg"),
     new RightClickOption("Delete Playlist", OnDeletePlaylistClick, "playlist", "src/art/icons/trash.svg")
+])
+
+menuItems["album"] = new MenuItem ([
+    new RightClickOption("Export", OnAlbumExportClick, "share", "src/art/icons/file-export.svg")
 ])
