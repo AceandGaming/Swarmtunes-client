@@ -4,7 +4,7 @@ rm -r mini/*
 find src/scripts/ -name '*.js' -type f -exec sh -c 'cat {}; echo ";"' \; > mini/all.js
 cat src/main.js >> mini/all.js
 esbuild mini/all.js --minify --outfile=mini/src/main.js
-rm mini/all.js
+#rm mini/all.js
 
 find src/styles/ -name '*.css' -type f -exec cat {} + > mini/src/styles.css
 

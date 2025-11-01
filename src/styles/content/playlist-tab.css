@@ -3,6 +3,7 @@
     font-size: medium;
     padding: 3px 8px;
     width: 140px;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 550px) {

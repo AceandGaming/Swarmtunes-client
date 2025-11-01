@@ -64,6 +64,9 @@
             <img src="src/art/icons/tool.svg">
           </button>
         </div>
+        <button title="Change Theme" id="change-theme-button" onclick="OnChangeThemeClick()">
+          <img src="src/art/icons/moon.svg"/>
+        </button>
         <button id="header-login-button" onclick="OnLoginButtonClick()">Log In</button>
       </header>
       
@@ -76,7 +79,7 @@
             </div>
           </div>
           <div id="discover">
-            <!-- <button id="swarmfm-button" onclick=OnSwarmFMButtonClick() data-rightclickcategory="swarmfm"></button> -->
+            <button id="swarmfm-button" onclick=OnSwarmFMButtonClick() data-rightclickcategory="swarmfm"></button>
           </div>
           <div id="search"> 
             <input id="search-bar" type="text" placeholder="search for a song!" oninput=OnSearchValueChange(event)>

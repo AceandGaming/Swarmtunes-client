@@ -34,9 +34,21 @@
   font-size: medium;
   padding: 3px 8px;
 }
+#change-theme-button {
+  position: absolute;
+  top: 7px;
+  right: 100px;
+  border-radius: 5px;
+  font-size: medium;
+  padding: 3px 8px;
+  background: none;
+}
+#change-theme-button img {
+  width: 30px;
+}
 
 @media (max-width: 600px) {
-  #header-login-button {
+  #header-login-button, #change-theme-button {
     display: none;
   }
 }

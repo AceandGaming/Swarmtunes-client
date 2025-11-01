@@ -1,3 +1,4 @@
+currentTheme = 0
 function AttachButtons() {
     const header = document.getElementById("header-tabs")
     const tabs = header.children
@@ -38,4 +39,25 @@ function OnLoginButtonClick() {
 }
 function OnLogoutButtonClick() {
     Network.LogOut()
+}
+function OnChangeThemeClick() {
+    currentTheme++
+    if (currentTheme > 2) {
+        currentTheme = 0
+    }
+    const img = document.querySelector("#change-theme-button img")
+    switch (currentTheme) {
+        case 0:
+            img.src = "src/art/icons/moon.svg"
+            document.documentElement.dataset.theme = "dark"
+            break
+        case 1:
+            img.src = "src/art/icons/newero.avif"
+            document.documentElement.dataset.theme = "neuro"
+            break
+        case 2:
+            img.src = "src/art/icons/newliv.avif"
+            document.documentElement.dataset.theme = "evil"
+            break
+    }
 }

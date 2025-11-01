@@ -35,6 +35,7 @@ function AddLoadingImage(element, wrapper, source) {
 function CreateCatagoryItemElement(title, uuid, cover, onClickEvent, type = "") {
     const element = document.createElement("div")
     element.classList.add("catagory-item", type)
+    element.title = type
     element.setAttribute("data-uuid", uuid)
     element.setAttribute("onclick", onClickEvent)
     element.setAttribute("data-rightclickcategory", type)

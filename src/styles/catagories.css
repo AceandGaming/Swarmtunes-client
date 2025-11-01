@@ -3,10 +3,14 @@
 }
 .catagory .display-wrapper {
   overflow-x: auto;
+  padding-bottom: 10px;
 }
 .catagory .display {
   display: flex;
-  padding-bottom: 10px;
+  width: max-content;
+  max-width: none;
+  background-color: var(--background-sub-colour);
+  border-radius: 15px;
 }
 .catagory .grid {
   flex-wrap: wrap;

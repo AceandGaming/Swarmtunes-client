@@ -9,8 +9,8 @@ class SwarmFMInfo {
 
 class Network {
     static get serverURL() {
-        //return "https://dev-api.swarmtunes.com"
-        return "https://api.swarmtunes.com"
+        return "https://dev-api.swarmtunes.com"
+        //return "https://api.swarmtunes.com"
     }
     static get userToken() {
         return sessionStorage.getItem("userToken") //bad but I don't care
@@ -57,7 +57,7 @@ class Network {
     static async GetSwarmFMStream() {
         const response = await this.Get(`swarmfm`)
         const json = await response.json()
-        return `${json[0]}?${Date.now()}`
+        return `${json[0]}?now=${Date.now()}`
     }
     static async GetSwarmFMInfo() {
         const response = await fetch("https://swarmfm.boopdev.com/v2/player")

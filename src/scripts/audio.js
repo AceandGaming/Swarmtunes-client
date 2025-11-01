@@ -111,7 +111,6 @@ class SwarmFM {
         this.audio.pause()
     }
     static Play() {
-        throw new Error("Sorry SwarmFM support is currently broken :(")
         this.paused = false
         Audio.Pause()
         this.audio.load()
