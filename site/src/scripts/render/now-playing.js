@@ -25,17 +25,3 @@ function OnNowPlayingItemClick(event) {
     Audio.Play(song)
 }
 
-function DisplaySong(song) {
-    const url = Network.GetCoverUrl(song.uuid, 256)
-    document.getElementById("current-song-title").textContent = song.title
-    document.getElementById("current-song-artist").textContent = song.artist
-    document.querySelector("#current-song-bar > .cover").src = url
-    document.querySelector("#current-song-bar .cover-artist").children[1].textContent = song.coverArtist.replace(",", "\n")
-    navigator.mediaSession.metadata = new MediaMetadata({
-        title: song.title,
-        artist: song.artist,
-        artwork: [
-            { src: url, sizes: "256x256", type: "image/png" }
-        ]
-    })
-}

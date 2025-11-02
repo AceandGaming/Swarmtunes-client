@@ -1,63 +1,91 @@
-currentTheme = 0
+function CreateButton(footer = false) {
+    const container = document.createElement("div");
+    container.id = "tabs-container";
+    container.innerHTML = `
+        <button class="tab" data-window="playlists-tab">
+            <span>Playlists</span>
+            <img src="src/assets/icons/layout-grid.svg">
+        </button>
+        <button class="tab" data-window="discover">
+            <span>Discover</span>
+            <img src="src/assets/icons/web.svg">
+        </button>
+        <button class="tab" data-window="search">
+            <span>Search</span>
+            <img src="src/assets/icons/search.svg">
+        </button>
+        <button class="tab require-admin" data-window="admin-panel">
+            <span>Admin</span>
+            <img src="src/assets/icons/tool.svg">
+        </button>
+    `;
+    if (footer) {
+        document.querySelector("footer").append(container);
+    } else {
+        document.querySelector("header").prepend(container);
+    }
+}
+
+currentTheme = 0;
 function AttachButtons() {
-    const header = document.getElementById("header-tabs")
-    const tabs = header.children
+    const header = document.getElementById("tabs-container");
+    const tabs = header.children;
     for (let i = 0; i < tabs.length; i++) {
-        tabs[i].addEventListener("click", OnTabClick)
+        tabs[i].addEventListener("click", OnTabClick);
         if (tabs[i].dataset.window === "discover") {
-            tabs[i].style.backgroundColor = CssColours.GetColour("header-tab-active")
+            tabs[i].classList.add("selected");
         }
     }
 }
 function ShowContentWindow(window) {
-    const contentTabs = document.getElementById("content-tabs")
+    const contentTabs = document.getElementById("content-tabs");
     for (let i = 0; i < contentTabs.children.length; i++) {
-        contentTabs.children[i].style.display = "none"
+        contentTabs.children[i].style.display = "none";
     }
-    window.style.display = "flex"
-    PlaylistView.Hide()
+    window.style.display = "flex";
+    PlaylistView.Hide();
 }
 function OnTabClick(event) {
-    const tab = event.target
-    const windowId = tab.dataset.window
+    const tab = event.target;
+    const windowId = tab.dataset.window;
     if (windowId === undefined) {
-        return
+        return;
     }
-    const window = document.getElementById(windowId)
+    const window = document.getElementById(windowId);
     if (window === undefined) {
-        return
+        return;
     }
-    ShowContentWindow(window)
-    const tabs = document.getElementById("header-tabs").children
+    ShowContentWindow(window);
+    const tabs = document.getElementById("tabs-container").children;
     for (let i = 0; i < tabs.length; i++) {
-        tabs[i].style = ""
+        tabs[i].classList.remove("selected");
     }
-    tab.style.backgroundColor = CssColours.GetColour("header-tab-active")
+    tab.classList.add("selected");
 }
 function OnLoginButtonClick() {
-    Login.Show()
+    Login.Show();
 }
 function OnLogoutButtonClick() {
-    Network.LogOut()
+    Network.LogOut();
 }
 function OnChangeThemeClick() {
-    currentTheme++
+    currentTheme++;
     if (currentTheme > 2) {
-        currentTheme = 0
+        currentTheme = 0;
     }
-    const img = document.querySelector("#change-theme-button img")
+    const img = document.querySelector("#change-theme-button img");
     switch (currentTheme) {
         case 0:
-            img.src = "src/assets/icons/moon.svg"
-            document.documentElement.dataset.theme = "dark"
-            break
+            img.src = "src/assets/icons/moon.svg";
+            document.documentElement.dataset.theme = "dark";
+            break;
         case 1:
-            img.src = "src/assets/icons/newero.avif"
-            document.documentElement.dataset.theme = "neuro"
-            break
+            img.src = "src/assets/icons/newero.avif";
+            document.documentElement.dataset.theme = "neuro";
+            break;
         case 2:
-            img.src = "src/assets/icons/newliv.avif"
-            document.documentElement.dataset.theme = "evil"
-            break
+            img.src = "src/assets/icons/newliv.avif";
+            document.documentElement.dataset.theme = "evil";
+            break;
     }
 }
