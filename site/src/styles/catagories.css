@@ -1,0 +1,70 @@
+.catagory {
+  margin-bottom: 20px;
+}
+.catagory .display-wrapper {
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+.catagory .display {
+  display: flex;
+  width: max-content;
+  max-width: none;
+  background-color: var(--background-sub-colour);
+  border-radius: 15px;
+}
+.catagory .grid {
+  flex-wrap: wrap;
+}
+.catagory > .title {
+  font-weight: bold;
+  font-size: 40px;
+}
+.catagory-item {
+  position: relative;
+  flex: 0 0 22vw;
+  max-width: 180px;
+  min-width: 80px;
+  height: fit-content;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background-color: var(--cover-background);
+  border-radius: 10px;
+  border: 4px solid var(--cover-background);
+}
+.catagory-item * {
+  pointer-events: none;
+}
+.catagory-item .cover {
+  width: 100%;
+  height: auto;
+  background-color: var(--cover-background);
+  border-radius: 10px;
+}
+.catagory-item .loading {
+  position: absolute;
+  opacity: 0;
+  left: 0;
+}
+.catagory-item > span {
+  margin: 0 auto;
+  max-width: 75%;
+  max-height: 40px;
+  text-wrap: wrap;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: white;
+}
+
+@media (max-width: 550px) {
+  .catagory .display {
+    background-color: var(--background-colour);
+  }
+}
+@media (max-width: 400px) {
+  .catagory > .title {
+    font-size: 30px;
+  }
+}

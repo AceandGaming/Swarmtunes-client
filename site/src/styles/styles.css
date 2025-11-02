@@ -1,0 +1,246 @@
+:root {
+  --background-colour: #171717;
+  --background-sub-colour: #111;
+  --text-colour: #ffffff;
+  --subtext-colour: #8b8b8b;
+  --cover-background: #202020;
+  --current-song-bar: #202020;
+  --seek-bar-background: #171717;
+  --seek-bar-played: #ffffff;
+  --seek-bar-loaded: #5b5b5b;
+  --header-tab-default: #000000;
+  --header-tab-active: var(--background-colour);
+  --header-tab-border: #404040;
+  --header-colour: #1a1a1a;
+  --default-button-colour: #252525;
+  --default-button-hover: #303030;
+  --default-button-active: #404040;
+  --input-colour: #252525;
+  --input-colour-hover: #303030;
+  --input-border: #404040;
+  --song-item-hover: #202020;
+  overflow: hidden;
+}
+:root[data-theme="light"], :root[data-theme="neuro"] {
+  --background-colour: #eee;
+  --background-sub-colour: #fff;
+  --text-colour: #000;
+  --subtext-colour: #646464;
+  --cover-background: #ececec;
+  --current-song-bar: #e5e5e5;
+  --seek-bar-background: #a6a6a6;
+  --seek-bar-played: #feffff;
+  --seek-bar-loaded: #d0d0d0;
+  --header-tab-default: #d5d5d5;
+  --header-tab-active: var(--background-colour);
+  --header-tab-border: #ffffff;
+  --header-colour: #bebebe;
+  --default-button-colour: #ddd;
+  --default-button-hover: #fff;
+  --default-button-active: #ccc;
+  --input-colour: #eee;
+  --input-colour-hover: #fff;
+  --input-border: #646464;
+  --song-item-hover: #fff;
+}
+:root[data-theme="neuro"] {
+  --background-colour: url("../assets/neuro-bg.png");
+  --background-sub-colour: #965159;
+  --header-colour: #ce838c;
+  --current-song-bar: #ce838c;
+  --song-item-hover: #ffffff50;
+  --text-colour: #fff;
+  --subtext-colour: #fff;
+  --cover-background: #965159;
+  --header-tab-default: #ce838c;
+  --header-tab-active: #ffa3ae;
+  --header-tab-border: #965159;
+  --default-button-colour: #965159;
+  --default-button-hover: #764046;
+  --default-button-active: none;
+  --input-colour: #ce838c;
+  --input-colour-hover: #764046;
+  --input-border: #965159;
+}
+:root[data-theme="evil"] {
+  --background-colour: url("../assets/evil-bg.png");
+  --background-sub-colour: #3a1c1e;
+  --header-colour: #50272a;
+  --current-song-bar: #50272a;
+  --song-item-hover: #ffffff50;
+  --text-colour: #fff;
+  --subtext-colour: #fff;
+  --cover-background: #3a1c1e;
+  --header-tab-default: #50272a;
+  --header-tab-active: #643134;
+  --header-tab-border: #3a1c1e;
+  --default-button-colour: #965159;
+  --default-button-hover: #764046;
+  --default-button-active: none;
+  --input-colour: #50272a;
+  --input-colour-hover: #764046;
+  --input-border: #965159;
+}
+:root[data-theme="clear"] {
+  --background-colour: none;
+  --background-sub-colour: #171717;
+  --default-button-colour: #ffffff10;
+  --default-button-hover: #ffffff15;
+  --default-button-active: none;
+  --input-colour: #ffffff10;
+  --input-colour-hover: #ffffff15;
+}
+
+body {
+  overflow: hidden;
+  background-color: var(--background-sub-colour);
+  color: var(--text-colour);
+  font-family: Helvetica, Arial, sans-serif;
+  overflow-y: clip;
+  margin: 0;
+  text-wrap: nowrap;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+main {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  gap: 5px;
+}
+#content-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-width: 100vw;
+  min-width: 300px;
+  background: var(--background-colour);
+  background-size: 256px;
+}
+#content {
+  position: relative;
+  overflow: hidden;
+  height: calc(100vh - 150px);
+  margin-top: 20px;
+  margin-left: 20px;
+}
+#content > *,
+#content-tabs > * {
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  height: inherit;
+}
+img {
+  pointer-events: none;
+}
+.cover {
+  border-radius: 15%;
+  background-color: var(--cover-background);
+}
+button {
+  cursor: pointer;
+  border: none;
+  background-color: var(--default-button-colour);
+  color: var(--text-colour);
+  padding: 6px;
+  pointer-events: all;
+}
+button:hover {
+  background-color: var(--default-button-hover);
+}
+button:active {
+  background-color: var(--default-button-active);
+}
+.spacer {
+  flex: 1;
+}
+.loading {
+  width: fit-content;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 25px;
+  clip-path: inset(0 3ch 0 0);
+  animation: l4 1s steps(4) infinite;
+}
+.loading:before {
+  content:"Loading..."
+}
+@keyframes l4 {to{clip-path: inset(0 -1ch 0 0)}}
+
+.sub-text {
+  color: var(--subtext-colour);
+  font-size: 12px;
+}
+.hidden {
+  display: none;
+}
+.require-auth {
+  display: none !important;
+}
+.require-admin {
+  display: none !important;
+}
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+svg {
+  color: var(--icon-default);
+}
+svg:hover {
+  color: var(--icon-hover);
+}
+svg:active {
+  color: var(--icon-active);
+}
+input {
+  border-radius:  10px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-colour);
+  color: var(--text-colour);
+  padding: 5px 10px;
+}
+input::placeholder {
+  color: var(--subtext-colour);
+}
+input:hover {
+  background-color: var(--input-colour-hover);
+}
+input:focus {
+  outline: none;
+  background-color: var(--input-colour-hover);
+}
+p {
+  user-select: text;
+}
+
+::-webkit-scrollbar {
+  background-color: var(--background-colour);
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+::-webkit-scrollbar:hover {
+  height: 5px;
+  width: 5px
+}
+
+.flip {
+  transform: scaleX(-1);
+}

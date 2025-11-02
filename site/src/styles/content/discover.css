@@ -1,0 +1,14 @@
+
+#swarmfm-button {
+  width: 50px; 
+  height: auto;
+  min-height: 50px;
+  border-radius: 50%; 
+  background-image: url(../../assets/icons/swarmfm.png); 
+  background-size: 45px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#discover > .loading {
+  margin: 0 auto;
+}
