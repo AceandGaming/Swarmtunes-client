@@ -92,8 +92,14 @@
     --input-colour-hover: #ffffff15;
 }
 
+html,
 body {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+    height: 100%;
     overflow: hidden;
+}
+body {
     background-color: var(--background-sub-colour);
     color: var(--text-colour);
     font-family: Helvetica, Arial, sans-serif;
@@ -126,21 +132,24 @@ main {
 #content {
     position: relative;
     overflow: hidden;
-    height: calc(100vh - 170px);
-    margin-top: 20px;
-    margin-left: 20px;
+    height: calc(100dvh - 150px);
 }
 @media (max-width: 500px) {
     #content {
-        height: calc(100vh - 200px);
+        height: calc(100dvh - 200px);
     }
 }
 #content > *,
 #content-tabs > * {
-    display: none;
     flex-direction: column;
     overflow-y: auto;
+    overflow-x: hidden;
     height: inherit;
+}
+#content-tabs > * {
+    display: none;
+    margin-top: 20px;
+    margin-left: 20px;
 }
 img {
     pointer-events: none;

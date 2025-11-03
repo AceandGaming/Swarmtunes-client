@@ -5,7 +5,7 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     element.setAttribute("data-rightclickcategory", catagory)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
-        <img loading="lazy" class="cover" src=${Network.GetCoverUrl(song.uuid, 64)}>
+        <img loading="lazy" class="cover" src=${song.CoverUrl(64)}>
         <div class="title-artist">
             <span>${song.title}</span>
             <span class="sub-text">${song.artist}</span>

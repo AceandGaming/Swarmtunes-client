@@ -28,10 +28,16 @@
         margin-left: 0px;
         align-items: center;
     }
+    #playlists-tab .display-wrapper,
     #playlists-tab .display {
         justify-content: center;
     }
     #playlists-tab .catagory-item .rename-button {
         display: none;
+    }
+    #playlists-tab .display-wrapper {
+        width: 85vw;
+        min-width: 85vw;
+        max-width: 85vw;
     }
 }

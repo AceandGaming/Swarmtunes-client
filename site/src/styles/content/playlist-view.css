@@ -1,3 +1,7 @@
+#playlist-view {
+  margin-top: 20px;
+  margin-left: 20px;
+}
 #playlist-view > .title-cover {
   display: flex;
   flex-direction: row;

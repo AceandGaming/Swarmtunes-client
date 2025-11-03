@@ -61,6 +61,7 @@ function OnTabClick(event) {
         tabs[i].classList.remove("selected");
     }
     tab.classList.add("selected");
+    ResizeGridDisplay()
 }
 function OnLoginButtonClick() {
     Login.Show();
@@ -88,4 +89,6 @@ function OnChangeThemeClick() {
             document.documentElement.dataset.theme = "evil";
             break;
     }
+    const meta = document.querySelector('meta[name="theme-color"]');
+    meta.setAttribute("content", CssColours.GetColour("header-colour"));
 }

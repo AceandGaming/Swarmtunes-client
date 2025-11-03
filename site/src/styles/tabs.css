@@ -28,7 +28,13 @@
     pointer-events: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
+    header > #tabs-container { /*"Just in case" Tabs should be on footer*/
+        display: none;
+    }
+}
+@media (max-width: 700px) {
+
     #tabs-container {
         width: 90%;
         margin: 2px auto;

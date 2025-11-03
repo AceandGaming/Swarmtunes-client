@@ -5,7 +5,15 @@ function UpdateNowPlaying() {
     }
     const nowPlaying = document.querySelector("#now-playing");
     const list = new SongList(SongQueue.nextSongs, OnNowPlayingItemClick, "now-playing-item")
-    nowPlaying.appendChild(list.CreateElement())
+    const element = list.CreateElement()
+    const sortable = new Sortable(element, {
+        animation: 150,
+        dataIdAttr: "data-uuid"
+    })
+    sortable.option("onEnd", (evt) => {
+        SongQueue.OnQueueOrderChange(sortable.toArray())
+    });
+    nowPlaying.appendChild(element)
 }
 function ClearNowPlaying() {
     const nowPlaying = document.querySelector("#now-playing > .song-list");

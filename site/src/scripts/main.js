@@ -12,16 +12,18 @@ if (window.innerWidth <= 500) {
     CurrentSongBar.CreateDesktop();
     CreateButton();
 }
-
-SwarmFM.Initalise();
 CssColours.InitaliseColours();
+SwarmFM.Initalise();
+
 AttachAudioControls();
 AttachButtons();
 Login.CreateWindow();
 new CreatePlaylistPopup();
 new RenamePlaylistPopup();
-
 PopulateDiscover();
+
+ResizeGridDisplay()
+
 function OnLogin(isAdmin) {
     document.getElementById("header-login-button").textContent = "Log Out";
     document
@@ -74,7 +76,5 @@ LoadUrlBar();
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker
         .register("/service-worker.js")
-        .catch((err) =>
-            console.error("Service worker registration failed", err)
-        );
+        .catch((err) => console.error(err));
 }

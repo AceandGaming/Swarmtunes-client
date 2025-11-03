@@ -1,6 +1,9 @@
 #select-playlist {
   padding: 0 10px;
-  border-left: solid 1px var(--subtext-colour);
+  /* border-left: solid 1px var(--subtext-colour); */
+  min-width: 300px;
+  max-height: 350px;
+  overflow-y: scroll;
 }
 #select-playlist li {
   display: flex;

@@ -71,6 +71,13 @@ class Playlist {
         this.GetTypeFromSongs()
         Network.AddSongToPlaylist(this.uuid, song.uuid)
     }
+    AddMultipleSongs(songs) {
+        for (const song of songs) {
+            this.#songs.push(song)
+        }
+        this.GetTypeFromSongs()
+        Network.AddSongToPlaylist(this.uuid, songs.map(s => s.uuid))
+    }
     RemoveSong(song) {
         this.#songs = this.#songs.filter(s => s.uuid !== song.uuid)
         this.GetTypeFromSongs()

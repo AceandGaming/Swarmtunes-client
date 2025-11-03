@@ -5,10 +5,12 @@
     background-color: var(--current-song-bar);
     width: 100%;
     height: 100%;
+    pointer-events: all;
 }
 #current-song-bar > * {
     flex: 1 1 0;
     display: flex;
+    pointer-events: none;
 }
 #current-song-bar > *:nth-child(1) {
     justify-content: left;
@@ -77,6 +79,7 @@
     border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
+    pointer-events: all;
 }
 #seek-bar > * {
     position: absolute;

@@ -9,17 +9,17 @@ class SwarmFMInfo {
 
 class Network {
     static get serverURL() {
-        //return "https://dev-api.swarmtunes.com"
-        return "https://api.swarmtunes.com";
+        return "https://dev-api.swarmtunes.com";
+        //return "https://api.swarmtunes.com";
     }
     static get userToken() {
-        return sessionStorage.getItem("userToken"); //bad but I don't care
+        return localStorage.getItem("userToken"); //bad but I don't care
     }
     static IsLoggedIn() {
         return this.userToken !== null;
     }
     static IsAdmin() {
-        return sessionStorage.getItem("isAdmin") == "true";
+        return localStorage.getItem("isAdmin") == "true";
     }
 
     static async SafeFetch(url, method, body) {
@@ -36,7 +36,7 @@ class Network {
             response.status == 401 &&
             response.headers.get("token-expired") == "true"
         ) {
-            sessionStorage.removeItem("userToken");
+            localStorage.removeItem("userToken");
             window.location.reload();
             throw new Error("token expired");
         }
@@ -112,6 +112,11 @@ class Network {
             songs.push(Song.CreateSongFromJson(dict));
         }
         return EnsureValue(songs);
+    }
+    static async ShareSong(uuid) {
+        const response = await this.Get(`songs/${uuid}/share`);
+        const json = await response.json();
+        return json["link"];
     }
     static async GetMP3(uuid, isTagged = false) {
         const a = document.createElement("a");
@@ -200,8 +205,8 @@ class Network {
         });
         const json = await response.json();
         if (json["token"]) {
-            sessionStorage.setItem("userToken", json["token"]);
-            sessionStorage.setItem("isAdmin", json["isAdmin"]);
+            localStorage.setItem("userToken", json["token"]);
+            localStorage.setItem("isAdmin", json["isAdmin"]);
         } else {
             return json["detail"];
         }
@@ -214,15 +219,15 @@ class Network {
         });
         const json = await response.json();
         if (json["token"]) {
-            sessionStorage.setItem("userToken", json["token"]);
-            sessionStorage.setItem("isAdmin", json["isAdmin"]);
+            localStorage.setItem("userToken", json["token"]);
+            localStorage.setItem("isAdmin", json["isAdmin"]);
         } else {
             return json["detail"];
         }
     }
     static async LogOut() {
         await this.Post(`me/logout`);
-        sessionStorage.removeItem("userToken");
+        localStorage.removeItem("userToken");
         window.location.reload();
     }
 

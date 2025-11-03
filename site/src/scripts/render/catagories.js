@@ -32,7 +32,7 @@ function AddLoadingImage(element, wrapper, source) {
     image.src = source
     wrapper.appendChild(image)
 }
-function CreateCatagoryItemElement(title, uuid, cover, onClickEvent, type = "") {
+function CreateCatagoryItemElement(title, uuid, imageSource, onClickEvent, type = "") {
     const element = document.createElement("div")
     element.classList.add("catagory-item", type)
     element.title = type
@@ -41,7 +41,7 @@ function CreateCatagoryItemElement(title, uuid, cover, onClickEvent, type = "") 
     element.setAttribute("data-rightclickcategory", type)
 
     const wrapper = document.createElement("div")
-    const source = Network.GetCoverUrl(cover, 256)
+    const source = imageSource
     if (source.startsWith('src')) {
         const image = document.createElement("img")
         image.classList.add("cover")
@@ -93,7 +93,7 @@ class Catagory {
 class SongCatagory extends Catagory {
     AddChildren(display) {
         for (const song of this.items) {
-            display.appendChild(CreateCatagoryItemElement(song.title, song.uuid, song.uuid, "OnSongClick(event)", "song"))
+            display.appendChild(CreateCatagoryItemElement(song.title, song.uuid, song.CoverUrl(256), "OnSongClick(event)", "song"))
         }
     }
 }
@@ -103,10 +103,10 @@ class AlbumCatagory extends Catagory {
             let name = album.prettyDate
             if (album.songs.length === 1) {
                 const song = album.songs[0]
-                display.appendChild(CreateCatagoryItemElement(name, album.uuid, song.uuid, "OnAlbumClick(event)", "album"))
+                display.appendChild(CreateCatagoryItemElement(name, album.uuid, Network.GetCoverUrl(song.uuid, 256), "OnAlbumClick(event)", "album"))
             }
             else {
-                display.appendChild(CreateCatagoryItemElement(name, album.uuid, album.type, "OnAlbumClick(event)", "album"))
+                display.appendChild(CreateCatagoryItemElement(name, album.uuid, Network.GetCoverUrl(album.type, 256), "OnAlbumClick(event)", "album"))
             }
         }
     }
@@ -114,7 +114,7 @@ class AlbumCatagory extends Catagory {
 class PlaylistCatagory extends Catagory {
     AddChildren(display) {
         for (const playlist of this.items) {
-            const element = CreateCatagoryItemElement(playlist.name, playlist.uuid, playlist.cover, "OnPlaylistClick(event)", "playlist")
+            const element = CreateCatagoryItemElement(playlist.name, playlist.uuid, Network.GetCoverUrl(playlist.cover, 256), "OnPlaylistClick(event)", "playlist")
             const renameButton = document.createElement("button")
             renameButton.classList.add("rename-button")
             renameButton.onclick = (event) => {
@@ -127,3 +127,21 @@ class PlaylistCatagory extends Catagory {
         }
     }
 }
+function ResizeGridDisplay() {
+    const grids = document.querySelectorAll(".display.grid")
+    for (const grid of grids) {
+        const parentWidth = grid.parentElement.offsetWidth
+        if (parentWidth <= 0) {
+            return
+        }
+
+        const gap = parseFloat(getComputedStyle(grid).gap) || 0;
+
+        const childWdith = grid.children[0].offsetWidth + gap
+        const childrenPerRow = Math.max(Math.floor(parentWidth / childWdith), 1)
+
+        const width = childrenPerRow * childWdith + gap + 2 //margin because js isn't instant
+        grid.style.width = `${width}px`
+    }
+}
+window.addEventListener('resize', ResizeGridDisplay);

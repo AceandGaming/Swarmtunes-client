@@ -109,6 +109,19 @@ class SongQueue {
         }
         console.warn("Song not found in queue")
     }
+    static OnQueueOrderChange(newOrder) {
+        const newQueue = []
+        for (const uuid of newOrder) {
+            newQueue.push(this.GetSong(uuid))
+        }
+        if (newQueue[0].uuid !== this.currentSong.uuid) {
+            Audio.Play(newQueue[0])
+        }
+        const previusSongs = this.#songQueue.slice(0, this.#queuePointer)
+        newQueue.splice(0, 0, ...previusSongs)
+
+        this.#songQueue = CloneSongs(newQueue)
+    }
 
     static SkipSong(song) {
         for (let i = 0; i < this.#songQueue.length; i++) {
@@ -150,6 +163,6 @@ class SongQueue {
         this.#songQueue = CloneSongs(this.#loadedSongs)
         if (currentSong !== undefined) {
             this.SkipSong(currentSong)
-        }  
+        }
     }
 }

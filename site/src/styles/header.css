@@ -47,6 +47,6 @@ footer {
 
 @media (max-width: 500px) {
     footer {
-        height: 130px;
+        height: 150px;
     }
 }

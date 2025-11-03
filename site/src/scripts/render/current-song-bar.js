@@ -3,6 +3,7 @@ class CurrentSongBar {
     static #artistText;
     static #titleText;
     static #singersText;
+    static #element;
 
     static CreateDesktop() {
         const currentSongBar = document.createElement("div");
@@ -66,6 +67,8 @@ class CurrentSongBar {
         const nextButton = document.createElement("img");
         nextButton.src = "src/assets/icons/track-next.svg";
         nextButton.title = "Next Song";
+        nextButton.id = "next-button";
+        nextButton.onclick = OnNextButtonClick;
         const volumeControls = document.createElement("div");
         volumeControls.title = "Volume";
         volumeControls.tabIndex = 0;
@@ -85,6 +88,8 @@ class CurrentSongBar {
         rightContent.append(buttons);
 
         currentSongBar.append(leftContent, middleContent, rightContent);
+
+        this.#element = currentSongBar;
 
         document.querySelector("footer").appendChild(currentSongBar);
     }
@@ -136,6 +141,8 @@ class CurrentSongBar {
         const nextButton = document.createElement("img");
         nextButton.src = "src/assets/icons/track-next.svg";
         nextButton.title = "Next Song";
+        nextButton.id = "next-button";
+        nextButton.onclick = OnNextButtonClick;
 
         buttons.append(previousButton, playPauseButton, nextButton);
         rightContent.append(buttons);
@@ -146,7 +153,9 @@ class CurrentSongBar {
     }
 
     static DisplaySong(song) {
-        const url = Network.GetCoverUrl(song.uuid, 256);
+        this.#element.setAttribute("data-uuid", song.uuid);
+        this.#element.setAttribute("data-rightclickcategory", "song");
+        const url = song.CoverUrl(256);
         this.#titleText.textContent = song.title;
         this.#artistText.textContent = song.artist;
         this.#coverImage.src = url;

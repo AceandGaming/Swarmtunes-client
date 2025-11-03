@@ -26,10 +26,11 @@ class VolumeButton {
             "blur",
             this.OnSliderLooseFocus.bind(this)
         );
-        const volume = sessionStorage.getItem("volume") || 0.75;
+        const volume = localStorage.getItem("volume") || 0.75;
         this.#volumeSlider.value = volume;
         Audio.audio.volume = volume;
         SwarmFM.audio.volume = volume;
+        this.#UpdateIcon(volume);
     }
     static OnButtonClick() {
         this.Show();
@@ -39,11 +40,7 @@ class VolumeButton {
             this.Hide();
         }
     }
-    static OnSliderChange(event) {
-        this.#sliderFocus = true;
-        Audio.audio.volume = event.target.value;
-        SwarmFM.audio.volume = event.target.value;
-
+    static #UpdateIcon(volume) {
         const icon = document.querySelector("#volume-controls img");
         if (Audio.audio.volume === 0) {
             icon.src = "src/assets/icons/volume-off.svg";
@@ -52,6 +49,13 @@ class VolumeButton {
         } else {
             icon.src = "src/assets/icons/volume.svg";
         }
+    }
+    static OnSliderChange(event) {
+        this.#sliderFocus = true;
+        Audio.audio.volume = event.target.value;
+        SwarmFM.audio.volume = event.target.value;
+
+        this.#UpdateIcon(event.target.value);
     }
     static OnSliderLooseFocus() {
         this.#sliderFocus = false;
@@ -62,7 +66,7 @@ class VolumeButton {
     }
     static Hide() {
         VolumeButton.#volumeSlider.style.display = "none";
-        sessionStorage.setItem("volume", Audio.audio.volume);
+        localStorage.setItem("volume", Audio.audio.volume);
     }
 }
 
@@ -80,10 +84,7 @@ function AttachAudioControls() {
         navigator.mediaSession.setActionHandler("play", OnPauseButtonClick);
         navigator.mediaSession.setActionHandler("pause", OnPauseButtonClick);
         navigator.mediaSession.setActionHandler("nexttrack", OnNextButtonClick);
-        navigator.mediaSession.setActionHandler(
-            "previoustrack",
-            OnPreviousButtonClick
-        );
+        navigator.mediaSession.setActionHandler("previoustrack", OnPreviousButtonClick);
         navigator.mediaSession.setActionHandler("seekto", (details) => {
             Audio.SeekToTime(details.seekTime);
         });
