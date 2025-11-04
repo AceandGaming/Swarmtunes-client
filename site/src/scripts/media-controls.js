@@ -162,17 +162,16 @@ function UpdateSeekBar(audio) {
     const seekBarLoaded = document.getElementById("seek-loaded");
     const seekTimeStart = document.getElementById("song-time-start");
     const seekTimeEnd = document.getElementById("song-time-end");
+    let currentTime, duration
     if (SwarmFM.swarmfmPlaying) {
-        seekBar.style.width = "100%";
-        seekBarLoaded.style.width = "100%";
-        if (seekTimeStart) {
-            seekTimeStart.textContent = "0:00";
-            seekTimeEnd.textContent = FormatTime(audio.currentTime);
-        }
-
-        return;
+        currentTime = SwarmFM.currentTime;
+        duration = SwarmFM.duration;
     }
-    if (audio.duration !== audio.duration) {
+    else {
+        currentTime = audio.currentTime;
+        duration = audio.duration
+    }
+    if (audio.readyState < 3 || !isFinite(currentTime) || !isFinite(duration)) {
         //still loading
         seekBar.style.width = "0%";
         seekBarLoaded.style.width = "0%";
@@ -183,16 +182,22 @@ function UpdateSeekBar(audio) {
         return;
     }
     let end = 0;
-    for (i = 0; i < audio.buffered.length; i++) {
-        if (audio.buffered.end(i) > end) {
-            end = audio.buffered.end(i);
+    if (SwarmFM.swarmfmPlaying) {
+        end = SwarmFM.buffered;
+    }
+    else {
+        for (i = 0; i < audio.buffered.length; i++) {
+            if (audio.buffered.end(i) > end) {
+                end = audio.buffered.end(i);
+            }
         }
     }
-    seekBar.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
-    seekBarLoaded.style.width = `${(end / audio.duration) * 100}%`;
+
+    seekBar.style.width = `${(currentTime / duration) * 100}%`;
+    seekBarLoaded.style.width = `${(end / duration) * 100}%`;
     if (seekTimeStart) {
-        seekTimeStart.textContent = FormatTime(audio.currentTime);
-        seekTimeEnd.textContent = FormatTime(audio.duration);
+        seekTimeStart.textContent = FormatTime(currentTime);
+        seekTimeEnd.textContent = FormatTime(duration);
     }
 
     if (!mediaSessionSupported) {
@@ -200,9 +205,9 @@ function UpdateSeekBar(audio) {
     }
     navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";
     navigator.mediaSession.setPositionState({
-        duration: audio.duration,
+        duration: duration,
         playbackRate: audio.playbackRate,
-        position: audio.currentTime,
+        position: currentTime,
     });
 }
 

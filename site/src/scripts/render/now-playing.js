@@ -1,10 +1,17 @@
-function UpdateNowPlaying() {
+function UpdateNowPlaying(swarmfm = false) {
     ClearNowPlaying()
-    if (SongQueue.songCount === 0) {
+    if (SongQueue.songCount === 0 && !swarmfm) {
         return
     }
     const nowPlaying = document.querySelector("#now-playing");
-    const list = new SongList(SongQueue.nextSongs, OnNowPlayingItemClick, "now-playing-item")
+    let songs = []
+    if (swarmfm) {
+        songs = [SwarmFM.song]
+    }
+    else {
+        songs = SongQueue.nextSongs
+    }
+    const list = new SongList(songs, OnNowPlayingItemClick, "now-playing-item")
     const element = list.CreateElement()
     const sortable = new Sortable(element, {
         animation: 150,
@@ -23,6 +30,9 @@ function ClearNowPlaying() {
 }
 function OnNowPlayingItemClick(event) {
     const uuid = event.target.dataset.uuid
+    if (uuid === "swarmfm") {
+        return
+    }
     const song = SongQueue.GetSong(uuid)
     if (song === undefined) {
         console.warn("Item clicked with no song")

@@ -11,8 +11,8 @@ async function PopulateDiscover() {
     while (true) {
         try {
             albums = await Network.GetAllAlbums()
-            orginalSongs = await Network.GetAllSongs({filters: ["original=true"]})
-            mashupSongs = await Network.GetAllSongs({filters: ["type=mashup"]})
+            orginalSongs = await Network.GetAllSongs({ filters: ["original=true"] })
+            mashupSongs = await Network.GetAllSongs({ filters: ["type=mashup"] })
             break
         }
         catch (e) {
@@ -39,6 +39,6 @@ async function PopulateDiscover() {
 }
 
 function OnSwarmFMButtonClick() {
-    SongQueue.LoadSingleSong(SwarmFM.song)
+    UpdateNowPlaying(true)
     SwarmFM.Play()
 }

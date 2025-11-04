@@ -36,7 +36,7 @@
 }
 #now-playing > .song-list {
     padding-left: 5px;
-    height: calc(100dvh - 160px);
+    height: calc(100dvh - 161px);
     margin: 0;
     overflow-y: auto;
 }

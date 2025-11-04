@@ -159,10 +159,6 @@ function RemoveFromQueue(event, uiEvent) {
     SongQueue.RemoveSong(uuid);
     UpdateNowPlaying();
 }
-function SwarmFMPlayNext(event, uiEvent) {
-    SongQueue.PlayNow([SwarmFM.song]);
-    SwarmFM.Play();
-}
 async function OnAddToPlaylistClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
     const playlistUuid = await SelectPlaylist.AskUser();
@@ -285,15 +281,6 @@ menuItems["playlist-item"] = new MenuItem(
     ],
     "song"
 );
-
-menuItems["swarmfm"] = new MenuItem([
-    new RightClickOption(
-        "Play Now",
-        SwarmFMPlayNext,
-        "queue",
-        "src/assets/icons/play.svg"
-    ),
-]);
 
 menuItems["playlist"] = new MenuItem([
     new RightClickOption(

@@ -56,7 +56,7 @@
 }
 
 @media (max-width: 800px) {
-    #playlist-view .song-list {
+  #playlist-view .song-list {
     padding-left: 0px;
   }
   #playlist-close-button {

@@ -18,6 +18,8 @@ class PlaylistTab {
 
         const grid = document.getElementById("playlist-grid")
         grid.replaceWith(element)
+
+        ResizeGridDisplay(document.querySelector("#playlist-grid .display"))
     }
     static OnPlaylistLoaded() {
         this.Populate()

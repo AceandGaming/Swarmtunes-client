@@ -3,7 +3,14 @@ class Album {
         return this.#uuid
     }
     get jsDate() {
+        if (this.date === "unknown") {
+            return new Date(0)
+        }
         const [day, month, year] = this.date.split('/').map(Number);
+        if (!day || !month || !year) {
+            console.error("Invalid date", this.date)
+            return new Date()
+        }
         return new Date(year + 2000, month - 1, day)
     }
     get prettyDate() {
@@ -23,7 +30,7 @@ class Album {
         return this.#songsLoaded
     }
     get prettyType() {
-        return {"neuro": "Neuro-sama", "evil": "Evil Neuro", "duet": "Neuro sama and Evil Neuro"}[this.type]
+        return { "neuro": "Neuro-sama", "evil": "Evil Neuro", "duet": "Neuro sama and Evil Neuro" }[this.type]
     }
     get title() {
         return this.prettyType + " Karaoke"

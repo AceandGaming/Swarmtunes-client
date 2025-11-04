@@ -149,6 +149,8 @@ class CurrentSongBar {
 
         currentSongBar.append(leftContent, middleContent, rightContent);
 
+        this.#element = currentSongBar;
+
         document.querySelector("footer").appendChild(currentSongBar);
     }
 

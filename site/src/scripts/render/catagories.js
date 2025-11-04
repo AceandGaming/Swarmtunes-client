@@ -127,21 +127,25 @@ class PlaylistCatagory extends Catagory {
         }
     }
 }
-function ResizeGridDisplay() {
-    const grids = document.querySelectorAll(".display.grid")
+function ResizeGridDisplay(grid) {
+    const parentWidth = grid.parentElement.offsetWidth
+    if (parentWidth <= 0) {
+        return
+    }
+
+    const gap = parseFloat(getComputedStyle(grid).gap) || 0;
+
+    const childWdith = grid.children[0].offsetWidth + gap
+    let childrenPerRow = Math.max(Math.floor(parentWidth / childWdith), 1)
+    childrenPerRow = Math.min(childrenPerRow, grid.children.length)
+
+    const width = childrenPerRow * childWdith + gap + 2 //margin because js isn't instant
+    grid.style.width = `${width}px`
+}
+function ResizeAllGridDisplays() {
+    const grids = document.querySelectorAll(".grid")
     for (const grid of grids) {
-        const parentWidth = grid.parentElement.offsetWidth
-        if (parentWidth <= 0) {
-            return
-        }
-
-        const gap = parseFloat(getComputedStyle(grid).gap) || 0;
-
-        const childWdith = grid.children[0].offsetWidth + gap
-        const childrenPerRow = Math.max(Math.floor(parentWidth / childWdith), 1)
-
-        const width = childrenPerRow * childWdith + gap + 2 //margin because js isn't instant
-        grid.style.width = `${width}px`
+        ResizeGridDisplay(grid)
     }
 }
-window.addEventListener('resize', ResizeGridDisplay);
+window.addEventListener('resize', ResizeAllGridDisplays);

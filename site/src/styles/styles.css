@@ -139,17 +139,21 @@ main {
         height: calc(100dvh - 200px);
     }
 }
-#content > *,
-#content-tabs > * {
+#content > * {
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     height: inherit;
 }
 #content-tabs > * {
+    flex-direction: column;
     display: none;
-    margin-top: 20px;
-    margin-left: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
+    height: inherit;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 img {
     pointer-events: none;

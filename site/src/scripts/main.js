@@ -22,7 +22,7 @@ new CreatePlaylistPopup();
 new RenamePlaylistPopup();
 PopulateDiscover();
 
-ResizeGridDisplay()
+ResizeAllGridDisplays()
 
 function OnLogin(isAdmin) {
     document.getElementById("header-login-button").textContent = "Log Out";

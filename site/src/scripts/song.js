@@ -39,8 +39,15 @@ class Song {
         return ({ neuro: "Neuro-sama", evil: "Evil Neuro", duet: "Neuro-sama, Evil Neuro", mashup: "Neuro-sama, Evil Neuro" }[this.type] ?? this.type);
     }
     get jsDate() {
-        const [day, month, year] = this.date.split("/").map(Number);
-        return new Date(year + 2000, month - 1, day);
+        if (this.date === "unknown") {
+            return new Date(0)
+        }
+        const [day, month, year] = this.date.split('/').map(Number);
+        if (!day || !month || !year) {
+            console.error("Invalid date", this.date)
+            return new Date()
+        }
+        return new Date(year + 2000, month - 1, day)
     }
     get prettyDate() {
         return this.jsDate.toLocaleDateString("en-AU", {

@@ -80,13 +80,29 @@ class Network {
                 return "duet";
             }
         }
+        const type = ConvertCoverartist(current["singer"])
+        let song = null;
+        if (current["album_cover"]) {
+            const songs = await this.GetAllSongs({
+                filters: [
+                    "title=" + current["name"],
+                    "artist=" + current["artist"],
+                    "type=" + type
+                ]
+            });
+            if (songs.length > 0) {
+                song = songs[0]
+            }
+        }
 
         const currentSong = new Song(
-            "swarmfm",
+            song && song.uuid || "swarmfm",
             current["name"],
             current["artist"],
             "unknown",
-            ConvertCoverartist(current["singer"])
+            type,
+            false,
+            song && song.hasCustomCover
         );
         const nextSong = new Song(
             "swarmfm",
@@ -121,7 +137,6 @@ class Network {
     static async GetMP3(uuid, isTagged = false) {
         const a = document.createElement("a");
         a.href = `${this.serverURL}/files/${uuid}?export=${isTagged}`;
-        a.download = uuid + ".mp3";
         a.click();
         a.remove();
     }
@@ -183,7 +198,6 @@ class Network {
     static async GetAlbumMP3s(uuid) {
         const a = document.createElement("a");
         a.href = `${this.serverURL}/files/album/${uuid}`;
-        a.download = uuid + ".zip";
         a.click();
         a.remove();
     }

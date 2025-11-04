@@ -61,7 +61,7 @@ function OnTabClick(event) {
         tabs[i].classList.remove("selected");
     }
     tab.classList.add("selected");
-    ResizeGridDisplay()
+    ResizeAllGridDisplays()
 }
 function OnLoginButtonClick() {
     Login.Show();

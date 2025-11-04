@@ -81,12 +81,22 @@ class SwarmFM {
     static get song() {
         return new Song("swarmfm", "SwarmFM", "boop", "unknown", "swarmfm");
     }
+    static get currentTime() {
+        return Math.max(0, SwarmFM.audio.currentTime - SwarmFM.startTime - SwarmFM.TARGET_LATENCY);
+    }
+    static get buffered() {
+        const end = SwarmFM.audio.seekable.end(SwarmFM.audio.seekable.length - 1);
+        return Math.max(0, end - SwarmFM.startTime);
+    }
 
-    swarmfmPlaying = false;
-    paused = false;
-    currentSong;
-    nextSong;
-    audio;
+    static TARGET_LATENCY = 4;
+    static swarmfmPlaying = false;
+    static paused = false;
+    static currentSong;
+    static nextSong;
+    static audio;
+    static startTime;
+    static duration;
 
     static UpdateSongBar() {
         if (!SwarmFM.swarmfmPlaying) {
@@ -96,28 +106,31 @@ class SwarmFM {
             SwarmFM.currentSong = info.currentSong;
             SwarmFM.nextSong = info.nextSong;
             CurrentSongBar.DisplaySong(info.currentSong);
+            SwarmFM.startTime = SwarmFM.audio.currentTime - info.position;
+            SwarmFM.duration = info.duration;
             setTimeout(
                 SwarmFM.UpdateSongBar,
-                (info.duration - info.position) * 1000
+                (info.duration - info.position + SwarmFM.TARGET_LATENCY / 2) * 1000
             );
         }
         Network.GetSwarmFMInfo().then((info) => OnInfoLoaded(info));
     }
     static CheckInSync() {
         const audio = SwarmFM.audio;
+        const TARGET_LATENCY = SwarmFM.TARGET_LATENCY;
         if (audio.readyState === 0 || !SwarmFM.swarmfmPlaying) {
             return;
         }
         const end = audio.seekable.end(audio.seekable.length - 1);
         const diff = end - audio.currentTime;
-        audio.playbackRate = Math.max(Math.floor(diff + 0.5) / 8 + 0.5, 1);
-        if (diff > 6 && !audio.paused) {
+        audio.playbackRate = Math.max(Math.floor(diff + 0.5) / (TARGET_LATENCY * 2) + 0.5, 1);
+        if (diff > TARGET_LATENCY + 2 && !audio.paused) {
             audio.pause();
-            audio.currentTime = end - 4;
+            audio.currentTime = end - TARGET_LATENCY;
             audio.playbackRate = 1;
             audio.play();
         }
-        if (diff < 1) {
+        if (diff < TARGET_LATENCY / 4) {
             audio.playbackRate = 1;
             audio.load();
         }
