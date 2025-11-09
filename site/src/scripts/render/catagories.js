@@ -133,6 +133,11 @@ function ResizeGridDisplay(grid) {
         return
     }
 
+    if (grid.children.length === 0) {
+        grid.style.width = "0"
+        return
+    }
+
     const gap = parseFloat(getComputedStyle(grid).gap) || 0;
 
     const childWdith = grid.children[0].offsetWidth + gap

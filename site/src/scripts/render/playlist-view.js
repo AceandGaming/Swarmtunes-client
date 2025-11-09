@@ -16,14 +16,14 @@ class PlaylistView {
     static Show() {
         document.getElementById("content-tabs").style.display = "none"
         this.playlistElement.style.display = "block"
+        this.playlistElement.querySelector(".title").textContent = this.title
         this.playlistElement.querySelector(".subtitle").textContent = this.subtitle
         if (this.songs.length === 1) {
             this.playlistElement.querySelector(".cover").src = Network.GetCoverUrl(this.songs[0].uuid, 512)
-            this.playlistElement.querySelector(".title").textContent = "Special Release"
         }
         else {
             this.playlistElement.querySelector(".cover").src = Network.GetCoverUrl(this.cover, 512)
-            this.playlistElement.querySelector(".title").textContent = this.title
+
         }
         this.Update()
     }

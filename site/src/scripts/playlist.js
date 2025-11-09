@@ -36,28 +36,23 @@ class Playlist {
     #type
     #name
 
-    static CreatePlaylistFromJson(json, songsAreUuids = false) {
-        if (!HasValues(json, "uuid", "title", "songs")) {
+    static CreatePlaylistFromJson(json) {
+        if (!HasValues(json, "id", "name", "songIds")) {
             console.error("Invalid playlist json", json)
             return
         }
         const songs = []
-        for (const song of json["songs"]) {
-            if (songsAreUuids) {
-                songs.push(new SongPlaceholder(song))
-            }
-            else {
-                songs.push(Song.CreateSongFromJson(song))
-            }
+        for (const song of json["songIds"]) {
+            songs.push(new SongPlaceholder(song))
         }
-        return new Playlist(json["uuid"], json["title"], songs, json["type"] || "unknown", !songsAreUuids)
+        return new Playlist(json["id"], json["name"], songs, json["coverType"] || "unknown")
     }
-    constructor(uuid, name, songs, type = "unknown", songsLoaded = false) {
+    constructor(uuid, name, songs, type = "unknown") {
         this.#uuid = uuid
         this.#name = name
         this.#songs = songs
         this.#type = type
-        this.#songsLoaded = songsLoaded
+        this.#songsLoaded = false
     }
     #RenamePlaylist(name) {
         this.#name = name

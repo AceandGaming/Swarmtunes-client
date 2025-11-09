@@ -21,6 +21,9 @@ class SongPlaceholder {
         this.#uuid = uuid;
     }
 
+    CoverUrl(size = 128) {
+        return Network.GetCoverUrl(this.uuid, size);
+    }
     ToString() {
         return `Song placeholder (${this.uuid})`;
     }
@@ -42,12 +45,7 @@ class Song {
         if (this.date === "unknown") {
             return new Date(0)
         }
-        const [day, month, year] = this.date.split('/').map(Number);
-        if (!day || !month || !year) {
-            console.error("Invalid date", this.date)
-            return new Date()
-        }
-        return new Date(year + 2000, month - 1, day)
+        return new Date(this.date)
     }
     get prettyDate() {
         return this.jsDate.toLocaleDateString("en-AU", {
@@ -59,28 +57,33 @@ class Song {
 
     #uuid;
 
-    constructor(uuid, title, artist, date, type, isOriginal = false, hasCustomCover = false) {
+    constructor(uuid, title, artist, singers, date, type, isOriginal = false, hasCustomCover = false) {
         this.#uuid = uuid;
         this.title = title;
         this.artist = artist;
+        this.singers = singers;
         this.date = date;
         this.type = type;
         this.isOriginal = isOriginal;
         this.hasCustomCover = hasCustomCover;
+        if (title == "mashup") {
+            this.title = this.jsDate.getFullYear() + " Mashup";
+        }
     }
     static CreateSongFromJson(json) {
-        if (!HasValues(json, "uuid", "title", "artist", "date", "type", "original", "has_custom_cover")) {
+        if (!HasValues(json, "id", "title", "artist", "date", "coverType", "singers", "original")) {
             console.error("Invalid song json", json);
             return;
         }
         return new Song(
-            json["uuid"],
+            json["id"],
             json["title"],
             json["artist"],
+            json["singers"],
             json["date"],
-            json["type"],
+            json["coverType"],
             json["original"],
-            json["has_custom_cover"]
+            json["coverType"] == "custom"
         );
     }
 
@@ -92,6 +95,7 @@ class Song {
             this.uuid,
             this.title,
             this.artist,
+            this.singers,
             this.date,
             this.type,
             this.isOriginal,

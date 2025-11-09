@@ -162,7 +162,7 @@ class CurrentSongBar {
         this.#artistText.textContent = song.artist;
         this.#coverImage.src = url;
         if (this.#singersText) {
-            this.#singersText.textContent = song.coverArtist.replace(",", "\n");
+            this.#singersText.textContent = song.singers.join("\n");
         }
         navigator.mediaSession.metadata = new MediaMetadata({
             title: song.title,

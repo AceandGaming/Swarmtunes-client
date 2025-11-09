@@ -12,7 +12,7 @@ async function PopulateDiscover() {
         try {
             albums = await Network.GetAllAlbums()
             orginalSongs = await Network.GetAllSongs({ filters: ["original=true"] })
-            mashupSongs = await Network.GetAllSongs({ filters: ["type=mashup"] })
+            mashupSongs = await Network.GetAllSongs({ filters: ["title=mashup"] })
             break
         }
         catch (e) {

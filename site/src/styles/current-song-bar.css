@@ -38,7 +38,7 @@
     height: 90%;
 }
 #current-song-bar .singer-wrapper span {
-    white-space: wrap;
+    white-space: pre;
 }
 
 #current-song-bar .title-container {

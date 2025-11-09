@@ -9,8 +9,8 @@ class SwarmFMInfo {
 
 class Network {
     static get serverURL() {
-        return "https://dev-api.swarmtunes.com";
-        //return "https://api.swarmtunes.com";
+        //return "https://dev-api.swarmtunes.com";
+        return "https://api.swarmtunes.com";
     }
     static get userToken() {
         return localStorage.getItem("userToken"); //bad but I don't care
@@ -96,7 +96,7 @@ class Network {
         }
 
         const currentSong = new Song(
-            song && song.uuid || "swarmfm",
+            song && song.id || "swarmfm",
             current["name"],
             current["artist"],
             "unknown",
@@ -116,11 +116,11 @@ class Network {
 
         return new SwarmFMInfo(currentSong, nextSong, position, duration);
     }
-    static async GetSong(uuidOrUuids) {
+    static async GetSong(idOrIds) {
         const params = new URLSearchParams();
-        const uuids = EnsureArray(uuidOrUuids);
-        for (let i = 0; i < uuids.length; i++) {
-            params.append("uuids", uuids[i]);
+        const ids = EnsureArray(idOrIds);
+        for (let i = 0; i < ids.length; i++) {
+            params.append("ids", ids[i]);
         }
         const response = await this.Get(`songs?${params.toString()}`);
         const songs = [];
@@ -129,14 +129,14 @@ class Network {
         }
         return EnsureValue(songs);
     }
-    static async ShareSong(uuid) {
-        const response = await this.Get(`songs/${uuid}/share`);
+    static async ShareSong(id) {
+        const response = await this.Get(`songs/${id}/share`);
         const json = await response.json();
         return json["link"];
     }
-    static async GetMP3(uuid, isTagged = false) {
+    static async GetMP3(id, isTagged = false) {
         const a = document.createElement("a");
-        a.href = `${this.serverURL}/files/${uuid}?export=${isTagged}`;
+        a.href = `${this.serverURL}/files/${id}?export=${isTagged}`;
         a.click();
         a.remove();
     }
@@ -172,16 +172,21 @@ class Network {
         return songs;
     }
 
-    static async GetAlbum(uuidOrUuids) {
+    static async GetAlbum(idOrIds, getSongs = false) {
         const params = new URLSearchParams();
-        const uuids = EnsureArray(uuidOrUuids);
-        for (let i = 0; i < uuids.length; i++) {
-            params.append("uuids", uuids[i]);
+        const ids = EnsureArray(idOrIds);
+        for (let i = 0; i < ids.length; i++) {
+            params.append("ids", ids[i]);
         }
         const response = await this.Get(`albums?${params.toString()}`);
         const albums = [];
         for (const dict of await response.json()) {
             albums.push(Album.CreateAlbumFromJson(dict));
+        }
+        if (getSongs) {
+            for (const album of albums) {
+                await album.LoadSongs();
+            }
         }
         return EnsureValue(albums);
     }
@@ -195,9 +200,9 @@ class Network {
         }
         return albums;
     }
-    static async GetAlbumMP3s(uuid) {
+    static async GetAlbumMP3s(id) {
         const a = document.createElement("a");
-        a.href = `${this.serverURL}/files/album/${uuid}`;
+        a.href = `${this.serverURL}/files/album/${id}`;
         a.click();
         a.remove();
     }
@@ -245,16 +250,21 @@ class Network {
         window.location.reload();
     }
 
-    static async GetPlaylist(uuidOrUuids) {
+    static async GetPlaylist(idOrIds, getSongs = false) {
         const params = new URLSearchParams();
-        const uuids = EnsureArray(uuidOrUuids);
-        for (let i = 0; i < uuids.length; i++) {
-            params.append("uuids", uuids[i]);
+        const ids = EnsureArray(idOrIds);
+        for (let i = 0; i < ids.length; i++) {
+            params.append("ids", ids[i]);
         }
         const response = await this.Get(`playlists?${params.toString()}`);
         const playlists = [];
         for (const dict of await response.json()) {
             playlists.push(Playlist.CreatePlaylistFromJson(dict));
+        }
+        if (getSongs) {
+            for (const playlist of playlists) {
+                await playlist.LoadSongs();
+            }
         }
         return EnsureValue(playlists);
     }
@@ -274,21 +284,21 @@ class Network {
         }
         return Playlist.CreatePlaylistFromJson(json);
     }
-    static async DeletePlaylist(playlistUuid) {
-        await this.Delete(`playlists/${playlistUuid}`);
+    static async DeletePlaylist(playlistid) {
+        await this.Delete(`playlists/${playlistid}`);
     }
-    static async AddSongToPlaylist(playlistUuid, songUuids) {
-        await this.Patch(`playlists/${playlistUuid}/add`, {
-            songs: EnsureArray(songUuids),
+    static async AddSongToPlaylist(playlistid, songids) {
+        await this.Patch(`playlists/${playlistid}/add`, {
+            songs: EnsureArray(songids),
         });
     }
-    static async RemoveSongFromPlaylist(playlistUuid, songUuids) {
-        await this.Patch(`playlists/${playlistUuid}/remove`, {
-            songs: EnsureArray(songUuids),
+    static async RemoveSongFromPlaylist(playlistid, songids) {
+        await this.Patch(`playlists/${playlistid}/remove`, {
+            songs: EnsureArray(songids),
         });
     }
-    static async RenamePlaylist(playlistUuid, name) {
-        await this.Patch(`playlists/${playlistUuid}`, { name: name });
+    static async RenamePlaylist(playlistid, name) {
+        await this.Patch(`playlists/${playlistid}`, { name: name });
     }
 
     static async ServerResync() {

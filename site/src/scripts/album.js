@@ -6,12 +6,7 @@ class Album {
         if (this.date === "unknown") {
             return new Date(0)
         }
-        const [day, month, year] = this.date.split('/').map(Number);
-        if (!day || !month || !year) {
-            console.error("Invalid date", this.date)
-            return new Date()
-        }
-        return new Date(year + 2000, month - 1, day)
+        return new Date(this.date)
     }
     get prettyDate() {
         return this.jsDate.toLocaleDateString("en-AU", {
@@ -39,28 +34,23 @@ class Album {
     #songs
     #songsLoaded
 
-    static CreateAlbumFromJson(json, songsAreUuids = false) {
-        if (!HasValues(json, "uuid", "date", "type", "songs")) {
+    static CreateAlbumFromJson(json) {
+        if (!HasValues(json, "id", "date", "type", "songIds")) {
             console.error("Invalid album json", json)
             return
         }
         const songs = []
-        for (const song of json["songs"]) {
-            if (songsAreUuids) {
-                songs.push(new SongPlaceholder(song))
-            }
-            else {
-                songs.push(Song.CreateSongFromJson(song))
-            }
+        for (const id of json["songIds"]) {
+            songs.push(new SongPlaceholder(id))
         }
-        return new Album(json["uuid"], json["date"], json["type"], songs)
+        return new Album(json["id"], json["date"], json["type"], songs)
     }
-    constructor(uuid, date, type, songs, songsLoaded = false) {
+    constructor(uuid, date, type, songs) {
         this.#uuid = uuid
         this.date = date
         this.type = type
         this.#songs = songs
-        this.#songsLoaded = songsLoaded
+        this.#songsLoaded = false
     }
     async LoadSongs() {
         if (this.#songsLoaded) {
@@ -70,15 +60,19 @@ class Album {
         for (const song of this.#songs) {
             uuids.push(song.uuid)
         }
-        this.#songs = await Network.GetSong(uuids)
+        this.#songs = EnsureArray(await Network.GetSong(uuids))
         this.#songsLoaded = true
     }
 }
 
 function OnAlbumClick(event) {
     const uuid = event.target.dataset.uuid
-    Network.GetAlbum(uuid).then(album => {
-        PlaylistView.Load(album.songs, album.title, album.type, album.prettyDate)
+    Network.GetAlbum(uuid, true).then(album => {
+        title = album.title
+        if (album.songs.length === 1) {
+            title = "Special Release"
+        }
+        PlaylistView.Load(album.songs, title, album.type, album.prettyDate)
         PlaylistView.Show()
     })
 }

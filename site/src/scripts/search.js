@@ -12,13 +12,7 @@ function PopulateSearch(searchTerm) {
         element.id = "search-results"
         document.getElementById("search-results").replaceWith(element)
     }
-    let async
-    if (searchTerm) {
-        async = Network.Search(searchTerm)
-    }
-    else {
-        async = Network.GetAllSongs({maxResults: 30})
-    }
+    async = Network.Search(searchTerm)
     async.catch(OnNetworkFailed)
     async.then(NetworkReturnPromise)
 }
