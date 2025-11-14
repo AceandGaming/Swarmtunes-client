@@ -7,14 +7,16 @@
     "theme_color": "#1c1c1c",
     "icons": [
         {
-            "src": "/icon.png",
-            "sizes": "128x128",
-            "type": "image/png"
+            "src": "/icon_filled.png",
+            "sizes": "180x180",
+            "type": "image/png",
+            "purpose": "maskable"
         },
         {
-            "src": "/screw-safari.png",
-            "sizes": "180x180",
-            "type": "image/png"
+            "src": "/icon.png",
+            "sizes": "1024x1024",
+            "type": "image/png",
+            "purpose": "any"
         }
     ]
 }

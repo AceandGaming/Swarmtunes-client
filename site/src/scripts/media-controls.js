@@ -212,13 +212,13 @@ function UpdateSeekBar(audio) {
 }
 
 function OnSeek(event) {
-    const rect = event.target.getBoundingClientRect();
+    const rect = CurrentSongBar.SeekBar.getBoundingClientRect();
     let fraction = (event.clientX - rect.left) / rect.width;
     fraction = Math.min(1, Math.max(0, fraction));
     Audio.Seek(fraction);
 }
 function OnSeekMobile(event) {
-    const rect = event.target.getBoundingClientRect();
+    const rect = CurrentSongBar.SeekBar.getBoundingClientRect();
     let fraction = (event.touches[0].clientX - rect.left) / rect.width;
     fraction = Math.min(1, Math.max(0, fraction));
     Audio.Seek(fraction);

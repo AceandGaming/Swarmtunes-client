@@ -16,9 +16,6 @@ class RenamePlaylistPopup extends PopupWindow {
         this.input.addEventListener("input", this.#OnInput.bind(this))
         this.CreateButton("Rename", this.#OnButtonClick.bind(this), false)
 
-        this.boarderColour = CssColours.GetColour("input-boarder")
-        this.errorColour = "red"
-
         RenamePlaylistPopup.instance = this
     }
     #OnInput() {
@@ -26,11 +23,11 @@ class RenamePlaylistPopup extends PopupWindow {
         const result = ValidatePlaylistName(name)
         if (result.error) {
             this.error.textContent = result.message
-            this.input.style.borderColor = this.errorColour
+            this.input.classList.add("error")
         }
         else {
             this.error.textContent = ""
-            this.input.style.borderColor = this.boarderColour
+            this.input.classList.remove("error")
         }
     }
     #OnButtonClick() {

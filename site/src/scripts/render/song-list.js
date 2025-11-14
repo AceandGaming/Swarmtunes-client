@@ -17,7 +17,7 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     return element
 }
 class SongList {
-    constructor(songs, songOnClickEvent = OnSongClick, catagory = "song") {
+    constructor(songs, songOnClickEvent = OnSongClick, catagory = "song", showDate = true) {
         if (songs == undefined || !Array.isArray(songs)) {
             console.error("SongList must be initialized with an array of songs")
             return
@@ -25,6 +25,10 @@ class SongList {
         this.songs = songs
         this.songOnClickEvent = songOnClickEvent
         this.catagory = catagory
+        this.showDate = showDate
+
+        this.element = document.createElement("ol")
+        this.element.classList.add("song-list")
     }
     SortByDate() {
         this.songs.sort((a, b) => b.jsDate - a.jsDate)
@@ -37,12 +41,23 @@ class SongList {
             return aDistance - bDistance
         })
     }
+    //deprecated
     CreateElement(showDate = false) {
-        const element = document.createElement("ol")
-        element.classList.add("song-list")
+        this.showDate = showDate
+        this.Update()
+        return this.element
+    }
+    Update() {
+        this.element.style.display = ""
+        this.element.innerHTML = ""
         for (const song of this.songs) {
-            element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, showDate, this.catagory))
+            this.element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, this.showDate, this.catagory))
         }
-        return element
+    }
+    Hide() {
+        this.element.style.display = "none"
+    }
+    Show() {
+        this.element.style.display = ""
     }
 }

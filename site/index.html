@@ -8,30 +8,30 @@
   <meta name="theme-color" content="#1c1c1c"/>
 
   <title>Swarmtunes</title>
-  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="icon" type="image/png" href="/icon_small.png">
+  <link rel="mask-icon" sizes="180x180" href="/icon_small.png">
 
   <meta property="og:title" content="Swarmtunes" />
   <meta property="og:description" content="The Neuro-sama music app" />
-  <meta property="og:image" content="https://api.swarmtunes.com/covers/neuro?size=256" />
+  <meta property="og:image" content="/icon.png" />
   <meta property="og:type" content="music.song">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/screw-safari.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon_filled.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Swarmtunes">
   <meta name="apple-mobile-web-app-status-bar-style" content="transparent">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Swarmtunes" />
   <meta name="twitter:description" content="The Neuro-sama music app" />
-  <meta name="twitter:image" content="https://api.swarmtunes.com/covers/neuro?size=256" />
+  <meta name="twitter:image" content="/icon.png" />
       
   
   <link rel="stylesheet" href="src/styles/styles.css"/>
   <link rel="stylesheet" href="src/styles/content/discover.css"/>
-  <link rel="stylesheet" href="src/styles/content/playlist-view.css"/>
+  <link rel="stylesheet" href="src/styles/content/media-view.css"/>
   <link rel="stylesheet" href="src/styles/content/search.css"/>
   <link rel="stylesheet" href="src/styles/catagories.css"/>
   <link rel="stylesheet" href="src/styles/current-song-bar.css"/>
@@ -86,7 +86,7 @@
             <button onclick="OnServerResyncButtonClick()">Resync Songs</button>
           </div>
         </div>
-        <div id="playlist-view">
+        <!-- <div id="playlist-view">
           <img id="playlist-close-button" src="src/assets/icons/x.svg" onclick=OnPlaylistCloseButtonClick()></img>
           <div class="title-cover">
             <img class="cover" src="src/assets/no-song.png">
@@ -96,7 +96,7 @@
             </div>
           </div>
           <ul class="song-list">
-        </div>
+        </div> -->
       </div>
     </div>
   </main>
@@ -115,7 +115,7 @@
   <script src="src/scripts/misc.js"></script>
   <script src="src/scripts/render/now-playing.js"></script>
   <script src="src/scripts/render/song-list.js"></script>
-  <script src="src/scripts/render/playlist-view.js"></script>
+  <script src="src/scripts/render/media-view.js"></script>
   <script src="src/scripts/render/error-screens.js"></script>
   <script src="src/scripts/render/loading.js"></script>
   <script src="src/scripts/album.js"></script>
@@ -128,10 +128,9 @@
   <script src="src/scripts/utils.js"></script>
   <script src="src/scripts/media-controls.js"></script>
   <script src="src/scripts/header.js"></script>
-  <script src="src/scripts/css-colours.js"></script>
   <script src="src/scripts/search.js"></script>
   <script src="src/scripts/login.js"></script>
-  <script src="src/scripts/playlist-tab.js"></script>
+  <script src="src/scripts/render/playlist-tab.js"></script>
   <script src="src/scripts/playlist.js"></script>
   <script src="src/scripts/create-playlist-popup.js"></script>
   <script src="src/scripts/select-playlist.js"></script>

@@ -39,6 +39,7 @@
     height: calc(100dvh - 161px);
     margin: 0;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 #now-playing .song-list-item > .title-artist :nth-child(1) {
     font-size: 14px;

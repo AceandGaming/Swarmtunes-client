@@ -120,6 +120,7 @@ class Playlist {
         }
         this.#songs = EnsureArray(await Network.GetSong(uuids))
         this.#songsLoaded = true
+        return this.#songs
     }
 }
 class PlaylistManager {
@@ -165,11 +166,7 @@ class PlaylistManager {
     }
     static async DisplayPlaylist(uuid) {
         const playlist = this.#playlists[uuid]
-        if (!playlist.songsLoaded) {
-            await this.LoadPlaylist(uuid)
-        }
-        PlaylistView.Load(playlist.songs, playlist.name, playlist.type, "", "playlist-item", playlist.uuid)
-        PlaylistView.Show()
+        PlaylistView.Show(playlist)
     }
 }
 

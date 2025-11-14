@@ -39,11 +39,18 @@ function AttachButtons() {
 }
 function ShowContentWindow(window) {
     const contentTabs = document.getElementById("content-tabs");
+    contentTabs.style.display = "block";
     for (let i = 0; i < contentTabs.children.length; i++) {
         contentTabs.children[i].style.display = "none";
     }
     window.style.display = "flex";
-    PlaylistView.Hide();
+    MediaView.Hide();
+}
+function HideContentTabs(window) {
+    document.getElementById("content-tabs").style.display = "none";
+}
+function ShowContentTabs() {
+    document.getElementById("content-tabs").style.display = "block";
 }
 function OnTabClick(event) {
     const tab = event.target;

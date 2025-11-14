@@ -179,7 +179,7 @@ button:active {
 .spacer {
     flex: 1;
 }
-.loading {
+.loading-text {
     width: fit-content;
     font-weight: bold;
     font-family: monospace;
@@ -187,7 +187,7 @@ button:active {
     clip-path: inset(0 3ch 0 0);
     animation: l4 1s steps(4) infinite;
 }
-.loading:before {
+.loading-text:before {
     content: "Loading...";
 }
 @keyframes l4 {
@@ -216,15 +216,6 @@ button:active {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-svg {
-    color: var(--icon-default);
-}
-svg:hover {
-    color: var(--icon-hover);
-}
-svg:active {
-    color: var(--icon-active);
 }
 input {
     border-radius: 10px;

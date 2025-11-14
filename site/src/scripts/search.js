@@ -12,6 +12,7 @@ function PopulateSearch(searchTerm) {
         element.id = "search-results"
         document.getElementById("search-results").replaceWith(element)
     }
+    LoadingText.Attach(document.getElementById("search-results"))
     async = Network.Search(searchTerm)
     async.catch(OnNetworkFailed)
     async.then(NetworkReturnPromise)

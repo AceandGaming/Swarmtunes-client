@@ -9,6 +9,7 @@
   font-size: x-large;
   font-weight: bold;
   pointer-events: none;
+  background: var(--background-colour);
 }
 .error-screen button {
   pointer-events: all;

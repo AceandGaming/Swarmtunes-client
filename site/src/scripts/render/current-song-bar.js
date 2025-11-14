@@ -1,4 +1,8 @@
 class CurrentSongBar {
+    static get SeekBar() {
+        return document.querySelector("#seek-bar");
+    }
+
     static #coverImage;
     static #artistText;
     static #titleText;

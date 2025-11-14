@@ -18,7 +18,7 @@ class ErrorScreen {
 
         const text = document.createElement("span")
         text.textContent = this.message
-        
+
         element.append(image, text)
 
         if (this.retryEvent) {
@@ -33,7 +33,7 @@ class ErrorScreen {
 }
 class LoginRequired extends ErrorScreen {
     constructor(imagePath = "") {
-        super("Login required", () => {}, imagePath, "Login")
+        super("Login required", () => { }, imagePath, "Login")
         Login.AddLoginCallback(this.OnLogin.bind(this))
     }
     OnRetryButtonClick() {
@@ -41,5 +41,10 @@ class LoginRequired extends ErrorScreen {
     }
     OnLogin() {
         this.element.remove()
+    }
+}
+class LoadingError extends ErrorScreen {
+    constructor() {
+        super("Error while loading content", () => { document.location.reload() })
     }
 }

@@ -4,7 +4,6 @@ const colourThief = new ColorThief();
 
 PlaylistTab.ShowLoggedOutScreen();
 PopulateSearch("");
-ShowContentWindow(document.getElementById("discover"));
 if (window.innerWidth <= 500) {
     CurrentSongBar.CreateMobile();
     CreateButton(true);
@@ -12,7 +11,7 @@ if (window.innerWidth <= 500) {
     CurrentSongBar.CreateDesktop();
     CreateButton();
 }
-CssColours.InitaliseColours();
+MediaView.Create()
 SwarmFM.Initalise();
 
 AttachAudioControls();
@@ -20,7 +19,13 @@ AttachButtons();
 Login.CreateWindow();
 new CreatePlaylistPopup();
 new RenamePlaylistPopup();
-PopulateDiscover();
+PopulateDiscover().catch((e) => {
+    const errorScreen = new LoadingError()
+    discoverPage.append(errorScreen.CreateElement())
+    console.error(e)
+})
+
+ShowContentWindow(document.getElementById("discover"));
 
 ResizeAllGridDisplays()
 

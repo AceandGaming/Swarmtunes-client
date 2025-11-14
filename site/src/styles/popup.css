@@ -88,6 +88,11 @@
   width: 100%;
   height: 25px;
 }
+.popup-window > .content > input.error,
+.popup-window > .content > button.error,
+.popup-window > .buttons button.error {
+  border-color: red;
+} 
 
 @media (max-width: 550px) {
   .popup-window {

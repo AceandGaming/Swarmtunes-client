@@ -86,8 +86,7 @@ class Network {
             const songs = await this.GetAllSongs({
                 filters: [
                     "title=" + current["name"],
-                    "artist=" + current["artist"],
-                    "type=" + type
+                    "artist=" + current["artist"]
                 ]
             });
             if (songs.length > 0) {
@@ -99,6 +98,7 @@ class Network {
             song && song.id || "swarmfm",
             current["name"],
             current["artist"],
+            current["singer"],
             "unknown",
             type,
             false,
@@ -108,6 +108,7 @@ class Network {
             "swarmfm",
             next["name"],
             next["artist"],
+            current["singer"],
             "unknown",
             ConvertCoverartist(next["singer"])
         );
@@ -146,6 +147,7 @@ class Network {
     }
     static GetCoverUrl(name, size = 128) {
         if (name == "unknown" || name == null || name == undefined) {
+            console.error("Invalid cover name", name);
             return "src/assets/no-song.png";
         }
         return `${this.serverURL}/covers/${name}?size=${size}`;

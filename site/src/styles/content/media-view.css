@@ -1,0 +1,95 @@
+#media-view {
+  position: relative;
+  margin-top: 20px;
+  margin-left: 20px;
+  overflow-y: auto;
+}
+#media-view .close-button {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  pointer-events: all;
+  cursor: pointer;
+  background: url("../../assets/icons/x.svg") no-repeat center;
+  background-size: contain;
+}
+#media-view .close-button:hover {
+  background-color: var(--default-button-hover)
+}
+#media-view .close-button:active {
+  background-color: var(--default-button-active);
+}
+
+#media-view .loading-text {
+  margin: 60px auto;
+}
+
+#media-view .content {
+  display: flex;
+  padding-top: 40px;
+  flex-direction: row;
+  gap: 20px;
+  border-bottom: 1px solid var(--subtext-colour);
+  padding-bottom: 10px;
+}
+#media-view .text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#media-view .text-container * {
+  margin: 0;
+  font-size: min(4vw, 50px);
+  font-weight: bold;
+}
+#media-view .text-container h2 {
+  font-size: min(3vw, 40px);
+}
+
+#media-view .content > img{
+  width: 20vw;
+  max-width: 256px;
+  height: auto;
+  border-radius: 10px;
+  background-color: var(--cover-background);
+  object-fit: contain;
+}
+#media-view .content > img.loading {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  #media-view .song-list {
+    padding-left: 0px;
+  }
+  #media-view .close-button {
+    width: 40px;
+    height: 40px;
+    right: 20px;
+  }
+  #media-view .content {
+    flex-direction: column;
+    padding-top: 0;
+  }
+  #media-view .text-container h1 {
+    margin-left: 0px;
+    font-size: 4vw;
+  }
+  #media-view .text-container h2 {
+    margin-left: 0px;
+    font-size: 3vw;
+  }
+}
+@media (max-width: 550px) {
+  #media-view .content img {
+    width: 50vw;
+    margin-bottom: 5px;
+  }
+  #media-view .text-container h1 {
+    font-size: 8vw;
+  }
+  #media-view .text-container h2 {
+    font-size: 5vw;
+  }
+}

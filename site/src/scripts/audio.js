@@ -79,7 +79,7 @@ class Audio {
 
 class SwarmFM {
     static get song() {
-        return new Song("swarmfm", "SwarmFM", "boop", "unknown", "swarmfm");
+        return new Song("swarmfm", "SwarmFM", "boop", [], "unknown", "swarmfm");
     }
     static get currentTime() {
         return Math.max(0, SwarmFM.audio.currentTime - SwarmFM.startTime - SwarmFM.TARGET_LATENCY);

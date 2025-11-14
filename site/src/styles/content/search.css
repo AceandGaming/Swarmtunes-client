@@ -1,6 +1,9 @@
 #search {
   padding-right: 20px;
 }
+#search .loading-text {
+  margin: 0 auto;
+}
 #search-bar {
   flex: 0 1 auto;
   display: block;

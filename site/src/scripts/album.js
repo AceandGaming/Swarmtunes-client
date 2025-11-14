@@ -30,6 +30,13 @@ class Album {
     get title() {
         return this.prettyType + " Karaoke"
     }
+    get cover() {
+        if (this.#songs.length === 1) {
+            return this.#songs[0].uuid
+        }
+        return this.type
+    }
+
     #uuid
     #songs
     #songsLoaded
@@ -62,17 +69,18 @@ class Album {
         }
         this.#songs = EnsureArray(await Network.GetSong(uuids))
         this.#songsLoaded = true
+        return this.#songs
     }
 }
 
 function OnAlbumClick(event) {
     const uuid = event.target.dataset.uuid
-    Network.GetAlbum(uuid, true).then(album => {
+    MediaView.ShowLoading()
+    Network.GetAlbum(uuid).then(album => {
         title = album.title
         if (album.songs.length === 1) {
             title = "Special Release"
         }
-        PlaylistView.Load(album.songs, title, album.type, album.prettyDate)
-        PlaylistView.Show()
+        AlbumView.Show(album)
     })
 }
