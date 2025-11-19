@@ -22,6 +22,8 @@ PopulateDiscover().catch((e) => {
     discoverPage.append(errorScreen.CreateElement())
     console.error(e)
 })
+currentTheme = Number(localStorage.getItem("theme") ?? 0);
+UpdateTheme();
 
 ShowContentWindow(document.getElementById("discover"));
 

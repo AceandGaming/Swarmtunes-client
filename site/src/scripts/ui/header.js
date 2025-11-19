@@ -1,3 +1,5 @@
+let currentTheme = 0
+
 function CreateButton(footer = false) {
     const container = document.createElement("div");
     container.id = "tabs-container";
@@ -26,7 +28,7 @@ function CreateButton(footer = false) {
     }
 }
 
-let currentTheme = 0;
+
 function AttachButtons() {
     const header = document.getElementById("tabs-container");
     const tabs = header.children;
@@ -76,11 +78,7 @@ function OnLoginButtonClick() {
 function OnLogoutButtonClick() {
     Network.LogOut();
 }
-function OnChangeThemeClick() {
-    currentTheme++;
-    if (currentTheme > 2) {
-        currentTheme = 0;
-    }
+function UpdateTheme() {
     const img = document.querySelector("#change-theme-button img");
     switch (currentTheme) {
         case 0:
@@ -89,13 +87,25 @@ function OnChangeThemeClick() {
             break;
         case 1:
             img.src = "src/assets/icons/newero.avif";
-            document.documentElement.dataset.theme = "neuro";
+            document.documentElement.dataset.theme = "neuro"
             break;
         case 2:
             img.src = "src/assets/icons/newliv.avif";
             document.documentElement.dataset.theme = "evil";
             break;
     }
+    const root = document.documentElement;
+    const styles = getComputedStyle(root);
+    const colour = styles.getPropertyValue(`--header-colour`).trim();
     const meta = document.querySelector('meta[name="theme-color"]');
-    meta.setAttribute("content", CssColours.GetColour("header-colour"));
+    meta.setAttribute("content", colour);
+
+}
+function OnChangeThemeClick() {
+    currentTheme++;
+    if (currentTheme > 2) {
+        currentTheme = 0;
+    }
+    UpdateTheme();
+    localStorage.setItem("theme", currentTheme);
 }

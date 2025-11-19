@@ -1,6 +1,8 @@
 class MediaControls {
     static PLAY_BUTTON_IMAGE = "src/assets/icons/play.svg"
     static PAUSE_BUTTON_IMAGE = "src/assets/icons/pause.svg"
+    static SHUFFLE_BUTTON_IMAGE = "src/assets/icons/shuffle.svg"
+    static SHUFFLE_ACTIVE_IMAGE = "src/assets/icons/active/shuffle.svg"
 
     static get element() {
         return this.#element
@@ -72,6 +74,8 @@ class MediaControls {
         SongQueue.PlayPreviousSong()
     }
     static #OnShuffleClick() {
-        SongQueue.suffleSongs = !SongQueue.suffleSongs
+        const active = !SongQueue.suffleSongs
+        this.#shuffleButton.src = active ? MediaControls.SHUFFLE_ACTIVE_IMAGE : MediaControls.SHUFFLE_BUTTON_IMAGE
+        SongQueue.suffleSongs = active
     }
 }
