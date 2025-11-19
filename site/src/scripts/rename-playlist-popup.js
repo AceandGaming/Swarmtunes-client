@@ -36,7 +36,7 @@ class RenamePlaylistPopup extends PopupWindow {
             return
         }
         this.Hide()
-        this.playlist.name = name
+        this.playlist.Title = name
         PlaylistTab.Populate()
     }
     Show(uuid) {
@@ -46,7 +46,7 @@ class RenamePlaylistPopup extends PopupWindow {
         const playlist = PlaylistManager.GetPlaylist(uuid)
 
         this.background.style.display = "flex"
-        this.input.value = playlist.name
+        this.input.value = playlist.title
         this.error.textContent = ""
 
         this.playlist = playlist

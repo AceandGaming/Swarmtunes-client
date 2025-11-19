@@ -27,9 +27,9 @@ async function PopulateDiscover() {
         }
         await new Promise(r => setTimeout(r, 2000))
     }
-    albums.sort((a, b) => b.jsDate - a.jsDate)
-    orginalSongs.sort((a, b) => b.jsDate - a.jsDate)
-    mashupSongs.sort((a, b) => b.jsDate - a.jsDate)
+    albums.sort((a, b) => b.Date - a.Date)
+    orginalSongs.sort((a, b) => b.Date - a.Date)
+    mashupSongs.sort((a, b) => b.Date - a.Date)
 
     AddCategoryToDiscover(new AlbumCatagory("Recent Streams", albums))
     AddCategoryToDiscover(new SongCatagory("Original Songs", orginalSongs))
@@ -39,6 +39,7 @@ async function PopulateDiscover() {
 }
 
 function OnSwarmFMButtonClick() {
-    UpdateNowPlaying(true)
-    SwarmFM.Play()
+    throw new Error("broken")
+    //UpdateNowPlaying(true)
+    //SwarmFM.Play()
 }

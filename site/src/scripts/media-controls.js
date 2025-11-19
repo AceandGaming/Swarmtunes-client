@@ -29,7 +29,7 @@ class VolumeButton {
         const volume = localStorage.getItem("volume") || 0.75;
         this.#volumeSlider.value = volume;
         Audio.audio.volume = volume;
-        SwarmFM.audio.volume = volume;
+        //SwarmFM.audio.volume = volume;
         this.#UpdateIcon(volume);
     }
     static OnButtonClick() {
@@ -53,7 +53,7 @@ class VolumeButton {
     static OnSliderChange(event) {
         this.#sliderFocus = true;
         Audio.audio.volume = event.target.value;
-        SwarmFM.audio.volume = event.target.value;
+        //SwarmFM.audio.volume = event.target.value;
 
         this.#UpdateIcon(event.target.value);
     }
@@ -75,12 +75,12 @@ function AttachAudioControls() {
     Audio.audio.addEventListener("timeupdate", () =>
         UpdateSeekBar(Audio.audio)
     );
-    SwarmFM.audio.addEventListener("timeupdate", () =>
-        UpdateSeekBar(SwarmFM.audio)
-    );
+    // SwarmFM.audio.addEventListener("timeupdate", () =>
+    //     UpdateSeekBar(SwarmFM.audio)
+    // );
     Audio.audio.addEventListener("ended", () => OnAudioFinish());
     if ("mediaSession" in navigator) {
-        mediaSessionSupported = true;
+        navigator.mediaSessionSupported = true;
         navigator.mediaSession.setActionHandler("play", OnPauseButtonClick);
         navigator.mediaSession.setActionHandler("pause", OnPauseButtonClick);
         navigator.mediaSession.setActionHandler("nexttrack", OnNextButtonClick);
@@ -98,8 +98,8 @@ function AttachAudioControls() {
     VolumeButton.AttachInputs();
     Audio.audio.addEventListener("play", () => UpdatePlayPauseIcon());
     Audio.audio.addEventListener("pause", () => UpdatePlayPauseIcon());
-    SwarmFM.audio.addEventListener("play", () => UpdatePlayPauseIcon());
-    SwarmFM.audio.addEventListener("pause", () => UpdatePlayPauseIcon());
+    // SwarmFM.audio.addEventListener("play", () => UpdatePlayPauseIcon());
+    // SwarmFM.audio.addEventListener("pause", () => UpdatePlayPauseIcon());
 
     SeekBar.addEventListener("mousedown", OnSeekBarMouseDown);
     SeekBar.addEventListener("touchstart", OnSeekBarMouseDown);
@@ -163,14 +163,14 @@ function UpdateSeekBar(audio) {
     const seekTimeStart = document.getElementById("song-time-start");
     const seekTimeEnd = document.getElementById("song-time-end");
     let currentTime, duration
-    if (SwarmFM.swarmfmPlaying) {
-        currentTime = SwarmFM.currentTime;
-        duration = SwarmFM.duration;
-    }
-    else {
-        currentTime = audio.currentTime;
-        duration = audio.duration
-    }
+    // if (SwarmFM.swarmfmPlaying) {
+    //     currentTime = SwarmFM.currentTime;
+    //     duration = SwarmFM.duration;
+    // }
+    //else {
+    currentTime = audio.currentTime;
+    duration = audio.duration
+    //}
     if (audio.readyState < 3 || !isFinite(currentTime) || !isFinite(duration)) {
         //still loading
         seekBar.style.width = "0%";
@@ -182,16 +182,16 @@ function UpdateSeekBar(audio) {
         return;
     }
     let end = 0;
-    if (SwarmFM.swarmfmPlaying) {
-        end = SwarmFM.buffered;
-    }
-    else {
-        for (i = 0; i < audio.buffered.length; i++) {
-            if (audio.buffered.end(i) > end) {
-                end = audio.buffered.end(i);
-            }
+    // if (SwarmFM.swarmfmPlaying) {
+    //     end = SwarmFM.buffered;
+    // }
+    //else {
+    for (let i = 0; i < audio.buffered.length; i++) {
+        if (audio.buffered.end(i) > end) {
+            end = audio.buffered.end(i);
         }
     }
+    //}
 
     seekBar.style.width = `${(currentTime / duration) * 100}%`;
     seekBarLoaded.style.width = `${(end / duration) * 100}%`;
@@ -200,7 +200,7 @@ function UpdateSeekBar(audio) {
         seekTimeEnd.textContent = FormatTime(duration);
     }
 
-    if (!mediaSessionSupported) {
+    if (!navigator.mediaSessionSupported) {
         return;
     }
     navigator.mediaSession.playbackState = audio.paused ? "paused" : "playing";

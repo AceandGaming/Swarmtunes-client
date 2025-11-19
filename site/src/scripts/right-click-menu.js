@@ -1,4 +1,4 @@
-rightClickMenu = document.getElementById("right-click-menu");
+const rightClickMenu = document.getElementById("right-click-menu");
 let time;
 let touchPosition;
 
@@ -17,7 +17,7 @@ class RightClickOption {
         this.requiresAccount = requiresAccount;
     }
 }
-menuItems = {};
+let menuItems = {};
 class MenuItem {
     constructor(options, inheritFrom = null) {
         if (inheritFrom !== null && inheritFrom in menuItems) {
@@ -167,18 +167,18 @@ async function OnAddToPlaylistClick(event, uiEvent) {
     }
     const song = await Network.GetSong(uuid);
     const playlist = PlaylistManager.GetPlaylist(playlistUuid);
-    await playlist.LoadSongs();
-    playlist.AddSong(song);
+    await playlist.GetSongs();
+    playlist.Add(song);
 }
 function OnRemoveFromPlaylistClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
-    const playlistUuid = PlaylistView.uuid;
-    if (PlaylistView.catagory !== "playlist-item") {
+    const playlistUuid = PlaylistView.playlist.Id
+    console.log(playlistUuid)
+    if (playlistUuid === undefined) {
         return;
     }
-    const playlsit = PlaylistManager.GetPlaylist(playlistUuid);
-    playlsit.RemoveSong(new SongPlaceholder(uuid));
-    PlaylistView.songs = playlsit.songs;
+    const playlist = PlaylistManager.GetPlaylist(playlistUuid);
+    playlist.Remove(new SongPlaceholder(uuid));
     PlaylistView.Update();
 }
 function OnDeletePlaylistClick(event, uiEvent) {
@@ -222,7 +222,7 @@ function OnAlbumPlayNowClick(event, uiEvent) {
 }
 function OnClearQueueClick(event, uiEvent) {
     SongQueue.ClearSongQueue();
-    UpdateNowPlaying();
+    UpdateNowPlaying()
 }
 
 //fill options

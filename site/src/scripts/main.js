@@ -1,4 +1,4 @@
-const print = console.log.bind(console);
+//const print = console.log.bind(console);
 
 const colourThief = new ColorThief();
 
@@ -12,7 +12,7 @@ if (window.innerWidth <= 500) {
     CreateButton();
 }
 MediaView.Create()
-SwarmFM.Initalise();
+//SwarmFM.Initalise();
 
 AttachAudioControls();
 AttachButtons();

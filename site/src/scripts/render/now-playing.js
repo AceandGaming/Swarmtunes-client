@@ -5,12 +5,12 @@ function UpdateNowPlaying(swarmfm = false) {
     }
     const nowPlaying = document.querySelector("#now-playing");
     let songs = []
-    if (swarmfm) {
-        songs = [SwarmFM.song]
-    }
-    else {
-        songs = SongQueue.nextSongs
-    }
+    // if (swarmfm) {
+    //     songs = [SwarmFM.song]
+    // }
+    //else {
+    songs = SongQueue.nextSongs
+    //}
     const list = new SongList(songs, OnNowPlayingItemClick, "now-playing-item")
     const element = list.CreateElement()
     const sortable = new Sortable(element, {

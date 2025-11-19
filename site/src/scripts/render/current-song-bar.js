@@ -159,9 +159,9 @@ class CurrentSongBar {
     }
 
     static DisplaySong(song) {
-        this.#element.setAttribute("data-uuid", song.uuid);
+        this.#element.setAttribute("data-uuid", song.Id);
         this.#element.setAttribute("data-rightclickcategory", "song");
-        const url = song.CoverUrl(256);
+        const url = Network.GetCover(song.Cover, 256);
         this.#titleText.textContent = song.title;
         this.#artistText.textContent = song.artist;
         this.#coverImage.src = url;

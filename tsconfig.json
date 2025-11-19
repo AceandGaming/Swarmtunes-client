@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./site/src/scripts",
+    "outDir": "./site/dist",
+
+    // Environment Settings
+    "target": "esnext",
+    "module": "none",
+    "allowJs": true,
+    
+
+    // Optional Libraries
+    "lib": ["es2020", "dom"],
+
+    // Source maps (optional, helpful for debugging)
+    "sourceMap": true,
+
+    // Stricter Typechecking Options
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Avoid unnecessary module stuff
+    "verbatimModuleSyntax": false,
+    "isolatedModules": false,
+    "moduleDetection": "legacy",
+    "declaration": false,
+    "declarationMap": false,
+    "noUncheckedSideEffectImports": false,
+    "types": []
+  },
+  "include": ["./site/src/scripts/**/*"]
+}

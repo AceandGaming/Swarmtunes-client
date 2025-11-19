@@ -26,7 +26,7 @@ function CreateButton(footer = false) {
     }
 }
 
-currentTheme = 0;
+let currentTheme = 0;
 function AttachButtons() {
     const header = document.getElementById("tabs-container");
     const tabs = header.children;

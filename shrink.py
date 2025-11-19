@@ -7,6 +7,18 @@ print("Clearing folder")
 fs.rmtree("mini")
 os.mkdir("mini")
 
+print("Compiling TS")
+out = subprocess.run(
+    "npx tsc",
+    shell=True,
+    capture_output=True,
+    text=True
+)
+if out.returncode != 0:
+    print(out.stdout)
+    print(out.stderr)
+    raise Exception("Failed to compile TS")
+
 print("Copying files")
 fileCount = 0
 for file in os.listdir("site"):

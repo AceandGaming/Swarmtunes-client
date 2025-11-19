@@ -93,32 +93,25 @@ class Catagory {
 class SongCatagory extends Catagory {
     AddChildren(display) {
         for (const song of this.items) {
-            display.appendChild(CreateCatagoryItemElement(song.title, song.uuid, song.CoverUrl(256), "OnSongClick(event)", "song"))
+            display.appendChild(CreateCatagoryItemElement(song.Title, song.Id, Network.GetCover(song.Cover, 256), "OnSongClick(event)", "song"))
         }
     }
 }
 class AlbumCatagory extends Catagory {
     AddChildren(display) {
         for (const album of this.items) {
-            let name = album.prettyDate
-            if (album.songs.length === 1) {
-                const song = album.songs[0]
-                display.appendChild(CreateCatagoryItemElement(name, album.uuid, Network.GetCoverUrl(song.uuid, 256), "OnAlbumClick(event)", "album"))
-            }
-            else {
-                display.appendChild(CreateCatagoryItemElement(name, album.uuid, Network.GetCoverUrl(album.type, 256), "OnAlbumClick(event)", "album"))
-            }
+            display.appendChild(CreateCatagoryItemElement(album.PrettyDate, album.Id, Network.GetCover(album.Cover, 256), "OnAlbumClick(event)", "album"))
         }
     }
 }
 class PlaylistCatagory extends Catagory {
     AddChildren(display) {
         for (const playlist of this.items) {
-            const element = CreateCatagoryItemElement(playlist.name, playlist.uuid, Network.GetCoverUrl(playlist.cover, 256), "OnPlaylistClick(event)", "playlist")
+            const element = CreateCatagoryItemElement(playlist.Title, playlist.Id, Network.GetCover(playlist.Cover, 256), "OnPlaylistClick(event)", "playlist")
             const renameButton = document.createElement("button")
             renameButton.classList.add("rename-button")
             renameButton.onclick = (event) => {
-                RenamePlaylistPopup.instance.Show(playlist.uuid)
+                RenamePlaylistPopup.instance.Show(playlist.Id)
                 event.stopPropagation()
             }
             renameButton.title = "Rename Playlist"

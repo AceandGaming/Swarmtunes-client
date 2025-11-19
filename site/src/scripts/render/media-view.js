@@ -75,7 +75,7 @@ class MediaView {
         MediaView._loadingArt.style.display = "block"
         MediaView._coverArt.src = coverUrl
     }
-    static _PopulateSongList(mediaObject) {
+    static _PopulateSongList(mediaObject, catagory = "song") {
         if (mediaObject.uuid == MediaView._lastMediaId) {
             LoadingText.Detach(MediaView.element)
             MediaView._songList.Show()
@@ -88,11 +88,12 @@ class MediaView {
             MediaView._songList.Update()
         }
         MediaView._songList.Hide()
+        MediaView._songList.catagory = catagory
         if (mediaObject.songsLoaded) {
             Update(mediaObject.songs)
         } else {
             LoadingText.Attach(MediaView.element)
-            mediaObject.LoadSongs().then(() => {
+            mediaObject.GetSongs().then(() => {
                 LoadingText.Detach(MediaView.element)
                 Update(mediaObject.songs)
             })
@@ -109,19 +110,24 @@ class MediaView {
     static ShowLoading() {
         MediaView.element.style.display = "flex"
         HideContentTabs()
-        MediaView._UpdateContent("Loading...", "", "src/assets/no-song.png")
+        MediaView._UpdateContent("Loading...", "", "src/assets/no-song.png",)
         MediaView._songList.Hide()
         LoadingText.Attach(MediaView.element)
+    }
+    static ClearMediaId(id) {
+        if (MediaView._lastMediaId == id) {
+            MediaView._lastMediaId = null
+        }
     }
 }
 
 class AlbumView {
     static Show(album) {
-        title = album.title
+        let title = album.title
         if (album.songs.length === 1) {
             title = "Special Release"
         }
-        MediaView._UpdateContent(title, album.prettyDate, Network.GetCoverUrl(album.cover, 512))
+        MediaView._UpdateContent(title, album.prettyDate, Network.GetCover(album.Cover, 512),)
         MediaView._PopulateActions()
         MediaView.Show()
         MediaView._PopulateSongList(album)
@@ -129,10 +135,15 @@ class AlbumView {
 }
 
 class PlaylistView {
+    static playlist
     static Show(playlist) {
-        MediaView._UpdateContent(playlist.name, "", Network.GetCoverUrl(playlist.cover, 512))
+        PlaylistView.playlist = playlist
+        MediaView._UpdateContent(playlist.Title, "", Network.GetCover(playlist.Cover, 512))
         MediaView._PopulateActions()
         MediaView.Show()
-        MediaView._PopulateSongList(playlist)
+        MediaView._PopulateSongList(playlist, "playlist-item")
+    }
+    static Update() {
+        PlaylistView.Show(this.playlist)
     }
 }

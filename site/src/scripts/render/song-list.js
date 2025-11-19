@@ -1,18 +1,18 @@
 function CreateSongListItemElement(song, onClickEvent, showDate = false, catagory = "song") {
     const element = document.createElement("li")
     element.classList.add("song-list-item", "song")
-    element.setAttribute("data-uuid", song.uuid)
+    element.setAttribute("data-uuid", song.Id)
     element.setAttribute("data-rightclickcategory", catagory)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
-        <img loading="lazy" class="cover" src=${song.CoverUrl(64)}>
+        <img loading="lazy" class="cover" src=${Network.GetCover(song.Cover, 64)}>
         <div class="title-artist">
-            <span>${song.title}</span>
-            <span class="sub-text">${song.artist}</span>
+            <span>${song.Title}</span>
+            <span class="sub-text">${song.Artist}</span>
         </div>
     `
     if (showDate) {
-        element.innerHTML += `<span class="sub-text date">${song.prettyDate}</span>`
+        element.innerHTML += `<span class="sub-text date">${song.PrettyDate}</span>`
     }
     return element
 }
@@ -41,7 +41,7 @@ class SongList {
             return aDistance - bDistance
         })
     }
-    //deprecated
+    /** @deprecated */
     CreateElement(showDate = false) {
         this.showDate = showDate
         this.Update()

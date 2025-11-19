@@ -1,14 +1,14 @@
 function CreatePlaylistListItemElement(playlist, onClickEvent) {
     const element = document.createElement("li")
-    element.setAttribute("data-uuid", playlist.uuid)
+    element.setAttribute("data-uuid", playlist.Id)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
-        <img loading="lazy" src=${Network.GetCoverUrl(playlist.cover, 64)}>
-        <span>${playlist.name}</span>
+        <img loading="lazy" src=${Network.GetCover(playlist.Cover, 64)}>
+        <span>${playlist.Title}</span>
     `
     return element
 }
-class SelectPlaylist extends PopupWindow{
+class SelectPlaylist extends PopupWindow {
     static instance
     static AskUser() {
         return new Promise((resolve, reject) => {
