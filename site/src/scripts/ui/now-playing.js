@@ -40,6 +40,6 @@ function OnNowPlayingItemClick(event) {
     }
     SongQueue.SkipSong(song)
     UpdateNowPlaying()
-    Audio.Play(song)
+    AudioPlayer.instance.Play(song)
 }
 

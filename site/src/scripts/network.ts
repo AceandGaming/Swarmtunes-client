@@ -7,19 +7,13 @@ type Json =
   | { [key: string]: Json };
 type id = string
 
-// class SwarmFMInfo {
-//     constructor(currentSong, nextSong, position, duration) {
-//         this.currentSong = currentSong;
-//         this.nextSong = nextSong;
-//         this.position = position;
-//         this.duration = duration;
-//     }
-// }
-
 class Network {
     static get serverURL() {
         return "https://dev-api.swarmtunes.com";
         //return "https://api.swarmtunes.com";
+    }
+    static get swarmFMURL() {
+        return "https://swarmfm.boopdev.com/v2";
     }
     static get userToken() {
         return localStorage.getItem("userToken"); //bad but I don't care
@@ -75,60 +69,69 @@ class Network {
         const json = await response.json();
         return `${json[0]}?now=${Date.now()}`;
     }
-    // static async GetSwarmFMInfo() {
-    //     const response = await fetch("https://swarmfm.boopdev.com/v2/player");
-    //     if (!response.ok) {
-    //         console.error("Failed to get swarmfm info");
-    //         return;
-    //     }
-    //     const json = await response.json();
-    //     const current = json["current"];
-    //     const next = json["next"];
+    static async GetSwarmFMInfo() {
+        const response = await fetch(`${this.swarmFMURL}/player`);
+        if (!response.ok) {
+            console.error("Failed to get swarmfm info");
+            return;
+        }
+        const json = await response.json();
+        const current = json["current"];
+        const next = json["next"];
 
-    //     function ConvertCoverartist(artists: string[]) {
-    //         if (artists.length == 1) {
-    //             return artists[0];
-    //         } else {
-    //             return "duet";
-    //         }
-    //     }
-    //     const type = ConvertCoverartist(current["singer"])
-    //     let song = null;
-    //     if (current["album_cover"]) {
-    //         const songs = await this.GetAllSongs({
-    //             filters: [
-    //                 "title=" + current["name"],
-    //                 "artist=" + current["artist"]
-    //             ]
-    //         });
-    //         if (songs.length > 0) {
-    //             song = songs[0]
-    //         }
-    //     }
+        function ConvertSingers(singers: string[]) {
+            const result = [];
+            for (const singer of singers) {
+                switch (singer) {
+                    case "neuro":
+                        result.push("Neuro-sama");
+                        break
+                    case "evil":
+                        result.push("Evil Neuro");
+                        break
+                    default:
+                        result.push(singer.charAt(0).toUpperCase() + singer.slice(1));
+                        break
+                }
+            }
+            return result
+        }
+        function GetCoverType(singers: string[]) {
+            if (singers.includes("neuro")) {
+                return "neuro";
+            }
+            if (singers.includes("evil")) {
+                return "evil";
+            }
+            return "duet";
+        }
 
-    //     const currentSong = new Song(
-    //         song && song.id || "swarmfm",
-    //         current["name"],
-    //         current["artist"],
-    //         current["singer"],
-    //         "unknown",
-    //         type,
-    //         false,
-    //         song && song.hasCustomCover
-    //     );
-    //     const nextSong = new Song(
-    //         "swarmfm",
-    //         next["name"],
-    //         next["artist"],
-    //         current["singer"],
-    //         "unknown",
-    //         ConvertCoverartist(next["singer"])
-    //     );
-    //     const position = json["position"];
-    //     const duration = current["duration"];
+        let coverType: "neuro" | "evil" | "duet" | "custom" = GetCoverType(current["singer"]);
+        if (current["album_cover"] != null) {
+            coverType = "custom";
+        }
+        const currentSong = new Song({
+            id: "swarmfm_" + current["id"],
+            title: current["name"],
+            artist: current["artist"],
+            singers: ConvertSingers(current["singer"]),
+            coverType: coverType,
+            coverArt: current["album_cover"],
+        })
 
-    //     return new SwarmFMInfo(currentSong, nextSong, position, duration);
-    // }
+        const nextSong = new Song({
+            id: "swarmfm_" + next["id"],
+            title: next["name"],
+            artist: next["artist"],
+            singers: ConvertSingers(next["singer"]),
+            coverType: GetCoverType(next["singer"]),
+        })
+
+        const position = json["position"];
+        const duration = current["duration"];
+
+        return new SwarmFMInfo(currentSong, nextSong, position, duration);
+    }
     static async GetSong(id: id | id[]) {
         const params = new URLSearchParams();
         const ids = EnsureArray(id);
@@ -159,6 +162,10 @@ class Network {
             return "src/assets/no-song.png";
         }
         return `${this.serverURL}/covers/${name}?size=${size}`;
+    }
+    static GetAudio(song: Song) {
+        return `${this.serverURL}/files/${song.Id}`;
+        
     }
     static async GetAllSongs({ filters = [], maxResults = 100 } = {}) {
         const params = new URLSearchParams();

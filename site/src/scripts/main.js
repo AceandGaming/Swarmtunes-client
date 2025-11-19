@@ -12,9 +12,7 @@ if (window.innerWidth <= 500) {
     CreateButton();
 }
 MediaView.Create()
-//SwarmFM.Initalise();
 
-AttachAudioControls();
 AttachButtons();
 Login.CreateWindow();
 new CreatePlaylistPopup();
@@ -65,7 +63,7 @@ function LoadUrlBar() {
     if (songId !== null) {
         Network.GetSong(songId).then((song) => {
             SongQueue.LoadSingleSong(song);
-            Audio.Play(song);
+            AudioPlayer.instance.Play(song);
         });
     }
 

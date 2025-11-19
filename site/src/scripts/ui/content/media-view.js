@@ -13,7 +13,7 @@ class MediaView {
         SongQueue.UpdateQueue()
         SongQueue.currentSong = SongQueue.GetSong(event.target.dataset.uuid)
         UpdateNowPlaying()
-        Audio.Play(SongQueue.currentSong)
+        AudioPlayer.instance.Play(SongQueue.currentSong)
     }
     static Create() {
         const element = document.createElement("div")
@@ -75,7 +75,7 @@ class MediaView {
         MediaView._loadingArt.style.display = "block"
         MediaView._coverArt.src = coverUrl
     }
-    static _PopulateSongList(mediaObject, catagory = "song") {
+    static _PopulateSongList(mediaObject, catagory = "song", onSongsLoaded = () => { }) {
         if (mediaObject.uuid == MediaView._lastMediaId) {
             LoadingText.Detach(MediaView.element)
             MediaView._songList.Show()
@@ -86,6 +86,7 @@ class MediaView {
         function Update(songs) {
             MediaView._songList.songs = songs
             MediaView._songList.Update()
+            onSongsLoaded()
         }
         MediaView._songList.Hide()
         MediaView._songList.catagory = catagory
@@ -123,14 +124,17 @@ class MediaView {
 
 class AlbumView {
     static Show(album) {
-        let title = album.title
+        let title = album.Title
         if (album.songs.length === 1) {
             title = "Special Release"
         }
-        MediaView._UpdateContent(title, album.prettyDate, Network.GetCover(album.Cover, 512),)
+        MediaView._UpdateContent(title, album.PrettyDate, Network.GetCover(album.Cover, 512))
         MediaView._PopulateActions()
         MediaView.Show()
-        MediaView._PopulateSongList(album)
+        function OnSongsLoaded() {
+            MediaView._songList.SortByTitle()
+        }
+        MediaView._PopulateSongList(album, "song", OnSongsLoaded)
     }
 }
 

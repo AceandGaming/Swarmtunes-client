@@ -30,11 +30,12 @@ class Song {
             year: "numeric",
         });
     }
-    get Cover() {
+    get Cover(): string {
         if (this.HasCustomCover) {
             if (this.coverArt == null) {
                 console.error("Song has custom cover but no cover art", `Type: ${this.coverType}, Art: ${this.coverArt}`);
             }
+            // @ts-ignore
             return this.coverArt;
         }
         return this.coverType

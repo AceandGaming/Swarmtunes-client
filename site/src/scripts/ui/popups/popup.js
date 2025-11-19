@@ -34,6 +34,7 @@ class PopupWindow {
         }
         button.textContent = name
         this.buttons.appendChild(button)
+        return button
     }
     Hide() {
         this.background.style.display = "none"

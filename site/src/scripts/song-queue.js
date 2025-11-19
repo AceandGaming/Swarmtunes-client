@@ -48,10 +48,10 @@ class SongQueue {
     static PlayNextSong() {
         const song = this.GetNextSong()
         if (song === null) {
-            Audio.Pause()
+            AudioPlayer.instance.Pause()
             return
         }
-        Audio.Play(song)
+        AudioPlayer.instance.Play(song)
         UpdateNowPlaying()
     }
     static GetPreviousSong() {
@@ -63,6 +63,15 @@ class SongQueue {
             this.#queuePointer = this.#songQueue.length - 1
         }
         return this.#songQueue[this.#queuePointer]
+    }
+    static PlayPreviousSong() {
+        const song = this.GetPreviousSong()
+        if (song === null) {
+            AudioPlayer.Pause()
+            return
+        }
+        AudioPlayer.instance.Play(song)
+        UpdateNowPlaying()
     }
     static ClearSongQueue() {
         this.#songQueue = []
@@ -102,7 +111,7 @@ class SongQueue {
             if (this.#songQueue[i].uuid === uuid) {
                 this.#songQueue.splice(i, 1)
                 if (this.#queuePointer === i) {
-                    Audio.Play(this.currentSong)
+                    AudioPlayer.instance.Play(this.currentSong)
                 }
                 return
             }
@@ -115,7 +124,7 @@ class SongQueue {
             newQueue.push(this.GetSong(uuid))
         }
         if (newQueue[0].uuid !== this.currentSong.uuid) {
-            Audio.Play(newQueue[0])
+            AudioPlayer.instance.Play(newQueue[0])
         }
         const previusSongs = this.#songQueue.slice(0, this.#queuePointer)
         newQueue.splice(0, 0, ...previusSongs)

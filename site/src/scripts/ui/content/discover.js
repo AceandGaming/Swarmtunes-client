@@ -39,7 +39,5 @@ async function PopulateDiscover() {
 }
 
 function OnSwarmFMButtonClick() {
-    throw new Error("broken")
-    //UpdateNowPlaying(true)
-    //SwarmFM.Play()
+    SwarmFM.instance.Play()
 }

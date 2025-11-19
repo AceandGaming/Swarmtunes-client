@@ -155,6 +155,7 @@ main {
     overflow-y: auto;
     box-sizing: border-box;
 }
+
 img {
     pointer-events: none;
 }
@@ -236,6 +237,7 @@ input:focus {
 }
 p {
     user-select: text;
+    white-space: pre;
 }
 
 ::-webkit-scrollbar {

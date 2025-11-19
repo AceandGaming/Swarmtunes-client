@@ -30,6 +30,9 @@ class SongList {
         this.element = document.createElement("ol")
         this.element.classList.add("song-list")
     }
+    SortByTitle() {
+        this.songs.sort((a, b) => a.title.localeCompare(b.title))
+    }
     SortByDate() {
         this.songs.sort((a, b) => b.jsDate - a.jsDate)
     }

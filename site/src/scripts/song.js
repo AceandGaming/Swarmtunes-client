@@ -41,7 +41,7 @@ class SongPlaceholder {
 function OnSongClick(event) {
     const uuid = event.target.dataset.uuid;
     Network.GetSong(uuid).then((song) => {
-        Audio.Play(song);
+        AudioPlayer.instance.Play(song);
         SongQueue.LoadSingleSong(song);
     });
 }

@@ -151,7 +151,7 @@ function OnPlayNextClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
     Network.GetSong(uuid).then((song) => {
         SongQueue.PlayNow([song]);
-        Audio.Play(song);
+        AudioPlayer.instance.Play(song);
     });
 }
 function RemoveFromQueue(event, uiEvent) {
@@ -181,8 +181,12 @@ function OnRemoveFromPlaylistClick(event, uiEvent) {
     playlist.Remove(new SongPlaceholder(uuid));
     PlaylistView.Update();
 }
-function OnDeletePlaylistClick(event, uiEvent) {
+async function OnDeletePlaylistClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
+    const confirmation = await ConfirmAction.AskUser("You are about to delete this playlist.")
+    if (!confirmation) {
+        return;
+    }
     PlaylistManager.RemovePlaylist(uuid);
 }
 function OnNewPlaylistClick(event, uiEvent) {
@@ -217,7 +221,7 @@ function OnAlbumPlayNowClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
     Network.GetAlbum(uuid).then((album) => {
         SongQueue.PlayNow(album.songs);
-        Audio.Play(album.songs[0]);
+        AudioPlayer.instance.Play(album.songs[0]);
     });
 }
 function OnClearQueueClick(event, uiEvent) {

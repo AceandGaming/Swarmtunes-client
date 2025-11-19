@@ -106,6 +106,10 @@
   .popup-window > .buttons button {
     font-size: medium;
   }
+  .popup-window > .content input {
+    font-size: medium;
+    height: 30px;
+  }
   .popup-window > .close-button {
     width: 40px;
     height: 40px;
