@@ -8,7 +8,8 @@ class PopupWindow {
         this.background.appendChild(this.window)
 
         const closeButton = document.createElement("button")
-        closeButton.classList.add("close-button")
+        closeButton.append(LoadSVG("src/assets/icons/x.svg"))
+        closeButton.classList.add("close-button", "icon-button")
         closeButton.addEventListener("click", this.Hide.bind(this))
         this.window.appendChild(closeButton)
 

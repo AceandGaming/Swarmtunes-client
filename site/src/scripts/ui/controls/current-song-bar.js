@@ -35,80 +35,6 @@ class CurrentSongBar {
         titleContainer.append(this.#titleText, this.#artistText)
         return titleContainer
     }
-    static #CreateSeekBar(showTime = false) {
-        const seek = document.createElement("div")
-        seek.id = "seek-bar-container"
-        let html = `
-                <div id="seek-bar">
-                    <div class="loaded"></div>
-                    <div class="progress"></div>
-                </div>`
-
-        if (showTime) {
-            html = `
-                <span class="seek-time">0:00</span>`
-                + html +
-                `<span class="seek-time">0:00</span>`
-        }
-
-        seek.innerHTML = html
-        SeekBar.Attach(seek, seek.querySelector("#seek-bar"))
-        return seek
-    }
-    static #CreateMediaControls(includeShuffle = false, includeVolume = false) {
-        const buttons = document.createElement("div")
-        buttons.classList.add("media-controls")
-
-        let shuffleButton
-        if (includeShuffle) {
-            shuffleButton = document.createElement("button")
-            shuffleButton.append(LoadSVG("src/assets/icons/shuffle.svg"))
-            shuffleButton.title = "Shuffle"
-            shuffleButton.classList.add("shuffle")
-            buttons.append(shuffleButton)
-        }
-
-        const previousButton = document.createElement("button")
-        previousButton.append(LoadSVG("src/assets/icons/track-prev.svg"))
-        previousButton.title = "Previous Song"
-        previousButton.classList.add("previous")
-
-        const playPauseButton = document.createElement("button")
-        const playIcon = LoadSVG("src/assets/icons/play.svg")
-        playIcon.classList.add("play")
-        const pauseIcon = LoadSVG("src/assets/icons/pause.svg")
-        pauseIcon.classList.add("pause")
-        playPauseButton.append(playIcon, pauseIcon)
-        playPauseButton.title = "Play/Pause"
-        playPauseButton.classList.add("play-pause")
-
-        const nextButton = document.createElement("button")
-        nextButton.append(LoadSVG("src/assets/icons/track-next.svg"))
-        nextButton.title = "Next Song"
-        nextButton.classList.add("next")
-
-        buttons.append(previousButton, playPauseButton, nextButton)
-
-        if (includeVolume) {
-            const volumeControls = document.createElement("button")
-            volumeControls.title = "Volume"
-            volumeControls.tabIndex = 0
-            volumeControls.classList.add("volume-controls")
-            volumeControls.innerHTML = `
-                <input type="range" min="0" max="1" step="0.01" value="0.5" id="volume-slider">
-            `
-            volumeControls.append(
-                LoadSVG("src/assets/icons/volume-off.svg"),
-                LoadSVG("src/assets/icons/volume-2.svg"),
-                LoadSVG("src/assets/icons/volume.svg")
-            )
-            buttons.append(volumeControls)
-            VolumeButton.Attach(volumeControls, volumeControls.querySelector("#volume-slider"))
-        }
-
-        MediaControls.Attach(buttons, previousButton, playPauseButton, nextButton, shuffleButton)
-        return buttons
-    }
 
     static CreateDesktop() {
         const currentSongBar = document.createElement("div")
@@ -123,12 +49,18 @@ class CurrentSongBar {
         const middleContent = document.createElement("div")
         middleContent.append(
             this.#CreateTitleContainer(),
-            this.#CreateSeekBar(true)
+            new SeekBar().element
         )
 
         const rightContent = document.createElement("div")
+        const fullscreenButton = document.createElement("button")
+        fullscreenButton.append(LoadSVG("src/assets/icons/maximize.svg"))
+        fullscreenButton.title = "Fullscreen"
+        fullscreenButton.classList.add("fullscreen", "icon-button")
+        fullscreenButton.addEventListener("click", SongFullscreen.Show.bind(SongFullscreen))
         rightContent.append(
-            this.#CreateMediaControls(true, true)
+            MediaControls.Create(true, true),
+            fullscreenButton
         )
 
         currentSongBar.append(leftContent, middleContent, rightContent)
@@ -148,16 +80,21 @@ class CurrentSongBar {
 
         const middleContent = document.createElement("div")
         middleContent.append(
-            this.#CreateSeekBar()
+            new SeekBar(false).element
         )
 
         const rightContent = document.createElement("div")
         rightContent.append(
-            this.#CreateMediaControls()
+            MediaControls.Create(false, false)
         )
 
         currentSongBar.append(leftContent, middleContent, rightContent)
         this.#element = currentSongBar
+        currentSongBar.addEventListener("touchstart", e => {
+            if (e.target.id === "current-song-bar") {
+                SongFullscreen.Show()
+            }
+        });
         document.querySelector("footer").appendChild(currentSongBar)
     }
 
@@ -172,6 +109,7 @@ class CurrentSongBar {
         this.#element.setAttribute("data-rightclickcategory", "song")
     }
     static Display(title, artist, singers, coverUrl) {
+        SongFullscreen.Display(title, artist, singers, coverUrl)
         this.UpdateRightClick()
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
@@ -189,7 +127,7 @@ class CurrentSongBar {
         })
     }
     static DisplaySong(song) {
-        const url = Network.GetCover(song.Cover, 256)
+        const url = Network.GetCover(song.Cover, 512)
         this.Display(song.Title, song.Artist, song.Singers, url)
         this.UpdateRightClick(song.Id)
     }

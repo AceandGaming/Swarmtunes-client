@@ -4,9 +4,9 @@ document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; sames
 
 const colourThief = new ColorThief();
 
-PlaylistTab.ShowLoggedOutScreen();
-PopulateSearch("");
+let isMobile = false
 if (window.innerWidth <= 500) {
+    isMobile = true
     CurrentSongBar.CreateMobile();
     CreateButton(true);
     localStorage.setItem("volume", 1)
@@ -14,7 +14,11 @@ if (window.innerWidth <= 500) {
     CurrentSongBar.CreateDesktop();
     CreateButton();
 }
+PlaylistTab.ShowLoggedOutScreen();
+PopulateSearch("");
+
 MediaView.Create()
+SongFullscreen.Create()
 
 AttachButtons();
 Login.CreateWindow();
@@ -59,6 +63,9 @@ Login.AddLoginCallback(OnLogin);
 if (Network.IsLoggedIn()) {
     Login.CallLoginCallbacks();
 }
+else {
+    Network.GetNewSession()
+}
 
 function LoadUrlBar() {
     const queryString = window.location.search;
@@ -86,3 +93,14 @@ if ("serviceWorker" in navigator) {
         .register("/service-worker.js")
         .catch((err) => console.error(err));
 }
+
+function UpdateNavigatorTime(played, duration, loaded) {
+    navigator.mediaSession.setPositionState({
+        duration: duration,
+        playbackRate: 1,
+        position: played,
+    });
+}
+
+AudioPlayer.instance.OnTimeUpdate(UpdateNavigatorTime);
+SwarmFM.instance.OnTimeUpdate(UpdateNavigatorTime);

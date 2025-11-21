@@ -31,8 +31,15 @@ class Network {
             return
         }
         const json = await response.json()
+        let activateCallbacks = false
+        if (!this.IsLoggedIn()) {
+            activateCallbacks = true
+        }
         sessionStorage.setItem("userToken", json["token"])
         sessionStorage.setItem("isAdmin", json["isAdmin"])
+        if (activateCallbacks) {
+            Login.CallLoginCallbacks()
+        }
     }
     static async SafeFetch(url: string, method: "GET" | "POST" | "DELETE" | "PUT" | "PATCH", body?: Json): Promise<Response> {
         const response = await fetch(`${this.serverURL}/${url}`, {
@@ -48,15 +55,13 @@ class Network {
             //@@release-only@@if (response.headers.get("token-expired") == "true") {
             //@@release-only@@    sessionStorage.removeItem("userToken")
             //@@release-only@@    sessionStorage.removeItem("isAdmin")
-            //@@release-only@@    // window.location.reload()
-            //@@release-only@@    throw new Error("Token expired")
             //@@release-only@@}
             if (response.headers.get("session-expired") == "true") {
                 sessionStorage.removeItem("userToken")
                 sessionStorage.removeItem("isAdmin")
                 await this.GetNewSession()
                 if (!this.IsLoggedIn()) {
-                    //window.location.reload()
+                    window.location.reload()
                 }
                 else {
                     return await this.SafeFetch(url, method, body)

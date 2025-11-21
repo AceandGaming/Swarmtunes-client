@@ -1,23 +1,30 @@
 .media-controls {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    gap: 7px;
 }
 .media-controls button {
+    flex: 0 1 1;
+    max-width: 20px;
+    min-width: 20px;
     pointer-events: all;
     cursor: pointer;
     padding: 0;
     background-color: var(--current-song-bar);
+    aspect-ratio: 1/1;
+}
+.media-controls > :first-child {
+    margin-right: 10px;
+}
+.media-controls > :last-child {
+    margin-left: 10px;
 }
 .media-controls button.next, .media-controls button.previous {
-    margin: 0 5px;
-    width: 25px;
-    height: 20px;
     transform: scaleX(1.5);
+    aspect-ratio: 3/2;
 }
 .media-controls button.play-pause {
-    width: 30px;
-    height: 30px;
-    margin: 0 5px;
+    max-width: 30px;
 }
 .media-controls button.play-pause .pause{
     display: none;
@@ -27,11 +34,6 @@
 }
 .media-controls button.play-pause.playing .play {
     display: none;
-}
-.media-controls button.shuffle {
-    width: 25px;
-    height: 25px;
-    margin: 0 10px;
 }
 .media-controls button.shuffle.active svg {
     color: #fff
@@ -53,14 +55,10 @@
 }
 
 .volume-controls {
-    margin: auto 0;
-    margin-left: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     pointer-events: all;
-    width: 25px;
-    height: 25px;
 }
 .volume-controls.active svg {
     color: #fff;

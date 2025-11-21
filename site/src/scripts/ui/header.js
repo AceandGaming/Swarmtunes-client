@@ -109,3 +109,10 @@ function OnChangeThemeClick() {
     UpdateTheme();
     localStorage.setItem("theme", currentTheme);
 }
+
+function HideFooter() {
+    document.querySelector("footer").style.display = "none";
+}
+function ShowFooter() {
+    document.querySelector("footer").style.display = "flex";
+}

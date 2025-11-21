@@ -3,12 +3,13 @@ class VolumeButton {
     static #volumeSlider
 
     static #sliderFocus = false
+    static menuOpen = false
 
     static Attach(volumeButton, volumeSlider) {
         this.#volumeButton = volumeButton
         this.#volumeSlider = volumeSlider
 
-        this.#volumeButton.addEventListener("mousedown", this.OnButtonClick.bind(this))
+        this.#volumeButton.addEventListener("click", this.OnButtonClick.bind(this))
         this.#volumeButton.addEventListener("blur", this.OnButtonLooseFocus.bind(this))
         this.#volumeSlider.addEventListener("input", this.OnSliderChange.bind(this))
         this.#volumeSlider.addEventListener("blur", this.OnSliderLooseFocus.bind(this))
@@ -19,10 +20,13 @@ class VolumeButton {
         SwarmFM.instance.Volume = volume
         this.#UpdateIcon(volume)
     }
-    static OnButtonClick() {
-        if (this.#sliderFocus) {
-            this.Hide()
-            return
+    static OnButtonClick(event) {
+        console.log(event.target.id)
+        if (event.target.id === "") {
+            if (this.menuOpen) {
+                this.Hide()
+                return
+            }
         }
         this.Show()
     }
@@ -51,10 +55,12 @@ class VolumeButton {
         this.Hide()
     }
     static Show() {
+        VolumeButton.menuOpen = true
         VolumeButton.#volumeSlider.style.display = "flex"
         VolumeButton.#volumeButton.classList.add("active")
     }
     static Hide() {
+        VolumeButton.menuOpen = false
         VolumeButton.#volumeSlider.style.display = "none"
         localStorage.setItem("volume", AudioPlayer.instance.Volume)
         VolumeButton.#volumeButton.classList.remove("active")

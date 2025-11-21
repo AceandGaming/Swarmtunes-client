@@ -12,6 +12,9 @@ class PlaylistTab {
     }
     static Populate() {
         const playlists = PlaylistManager.playlists
+        if (playlists.length == 0) {
+            return
+        }
         const catagory = new PlaylistCatagory("", playlists, true)
         const element = catagory.CreateElement()
         element.setAttribute("id", "playlist-grid")

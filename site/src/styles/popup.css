@@ -59,14 +59,6 @@
   right: 10px;
   width: 25px;
   height: 25px;
-  background: url("../assets/icons/x-img.svg") no-repeat center;
-  background-size: contain;
-}
-.popup-window > .close-button:hover {
-  background-color: var(--default-button-hover);
-}
-.popup-window > .close-button:active {
-  background-color: var(--default-button-active);
 }
 .popup-window > .content {
   flex: 1 1 0;

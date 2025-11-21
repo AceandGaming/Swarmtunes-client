@@ -36,6 +36,7 @@
 #media-view .text-container {
   display: flex;
   flex-direction: column;
+  white-space: break-spaces;
   gap: 5px;
 }
 

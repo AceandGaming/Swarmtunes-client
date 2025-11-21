@@ -166,20 +166,26 @@ button:hover {
 button:active {
     background-color: var(--default-button-active);
 }
-button svg {
+.icon-button {
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 0;
+}
+.icon-button svg {
     width: 100%;
     height: 100%;
     color: var(--icon-default);
     background: none;
 }
-button:hover svg {
+.icon-button:hover svg {
     color: var(--icon-hover);
 }
-button:active svg {
+.icon-button:active svg {
     color: var(--icon-active);
 }
 .spacer {
     flex: 1;
+    content: "";
 }
 .loading-text {
     width: fit-content;
@@ -259,31 +265,46 @@ p {
 }
 
 input[type="range"] {
-  -webkit-appearance: none; /* remove default styling */
-  background: var(--background-colour);
-  padding: 6px;
-  outline: none;
-  border: none;
+    -webkit-appearance: none;
+    background: var(--background-colour);
+    padding: 6px;
+    outline: none;
+    border: none;
 }
 
 /* Track */
-input[type="range"]::-webkit-slider-runnable-track, input[type="range"]::-moz-range-track {
-  height: 6px;
-  width: calc(100% - 20px);
-  background: var(--slider-track);
-  border-radius: 10px;
+input[type="range"]::-webkit-slider-runnable-track  {
+    height: 6px;
+    width: calc(100% - 20px);
+    background: var(--slider-track);
+    border-radius: 10px;
+}
+input[type="range"]::-moz-range-track {
+    height: 6px;
+    width: calc(100% - 20px);
+    background: var(--slider-track);
+    border-radius: 10px;
 }
 
-
 /* Thumb */
-input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  background: var(--slider-default);
-  border: 2px solid var(--slider-border);
-  border-radius: 50%;
-  cursor: pointer;
-  margin-top: -6px;
-  transition: transform 0.2s ease;
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--slider-default);
+    border: 2px solid var(--slider-border);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -6px;
+    transition: transform 0.2s ease;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--slider-default);
+    border: 2px solid var(--slider-border);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -6px;
+    transition: transform 0.2s ease;
 }
