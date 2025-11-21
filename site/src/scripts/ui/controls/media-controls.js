@@ -1,33 +1,13 @@
 class MediaControls {
-    static PLAY_BUTTON_IMAGE = "src/assets/icons/play.svg"
-    static PAUSE_BUTTON_IMAGE = "src/assets/icons/pause.svg"
-    static SHUFFLE_BUTTON_IMAGE = "src/assets/icons/shuffle.svg"
-    static SHUFFLE_ACTIVE_IMAGE = "src/assets/icons/active/shuffle.svg"
-
     static get element() {
         return this.#element
     }
-    static #previousButton;
-    static #pauseButton;
-    static #nextButton;
-    static #shuffleButton;
     static #element
+    static #initialised = false
 
-    static Attach(element, previous, pause, next, shuffle) {
-        this.#element = element
-        this.#previousButton = previous
-        this.#pauseButton = pause
-        this.#nextButton = next
-        this.#shuffleButton = shuffle
-
-        this.#previousButton.addEventListener("click", this.#OnPreviousClick.bind(this))
-        this.#pauseButton.addEventListener("click", this.#OnPauseClick.bind(this))
-        this.#nextButton.addEventListener("click", this.#OnNextClick.bind(this))
-        if (shuffle) {
-            this.#shuffleButton.addEventListener("click", this.#OnShuffleClick.bind(this))
-        }
-
+    static #Initialise() {
         AudioPlayer.instance.OnPlayPause(this.#OnPlayPause.bind(this))
+        AudioPlayer.instance.Audio.addEventListener("ended", () => this.#OnNextClick())
         SwarmFM.instance.OnPlayPause(this.#OnPlayPause.bind(this))
 
         const media = navigator.mediaSession
@@ -39,14 +19,32 @@ class MediaControls {
         media.onseekforward = (amount) => AudioPlayer.instance.Skip(amount)
         media.onseekbackward = (amount) => AudioPlayer.instance.Skip(-amount)
         media.onseekto = (event) => AudioPlayer.instance.Played = event.seekTime
+
+        this.#initialised = true
+    }
+
+    static Attach(element, previous, pause, next, shuffle) {
+        this.#element = element
+
+        previous.addEventListener("click", this.#OnPreviousClick.bind(this))
+        pause.addEventListener("click", this.#OnPauseClick.bind(this))
+        next.addEventListener("click", this.#OnNextClick.bind(this))
+        if (shuffle) {
+            shuffle.addEventListener("click", this.#OnShuffleClick.bind(this, shuffle))
+        }
+
+        function UpdatePauseButton(button, state) {
+            console.log(state, button)
+            button.classList.toggle("playing", state)
+        }
+        AudioPlayer.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
+        SwarmFM.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
+
+        if (!this.#initialised) {
+            this.#Initialise()
+        }
     }
     static #OnPlayPause(state) {
-        if (state) {
-            this.#pauseButton.src = MediaControls.PAUSE_BUTTON_IMAGE
-        }
-        else {
-            this.#pauseButton.src = MediaControls.PLAY_BUTTON_IMAGE
-        }
         navigator.mediaSession.playbackState = state ? "playing" : "paused"
     }
     static #OnPauseClick() {
@@ -73,9 +71,14 @@ class MediaControls {
     static #OnPreviousClick() {
         SongQueue.PlayPreviousSong()
     }
-    static #OnShuffleClick() {
+    static #OnShuffleClick(button) {
         const active = !SongQueue.suffleSongs
-        this.#shuffleButton.src = active ? MediaControls.SHUFFLE_ACTIVE_IMAGE : MediaControls.SHUFFLE_BUTTON_IMAGE
+        button.classList.toggle("active", active)
+
+        button.classList.remove("flip")
+        void button.offsetWidth
+        button.classList.add("flip")
+
         SongQueue.suffleSongs = active
     }
 }

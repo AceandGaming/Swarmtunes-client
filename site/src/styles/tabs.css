@@ -16,8 +16,7 @@
     height: 30px;
     margin: 0 5px;
     margin-top: auto;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-radius: 8px 8px 0 0;
     color: var(--text-colour);
     font-weight: bold;
 }

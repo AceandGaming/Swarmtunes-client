@@ -1,0 +1,5 @@
+class SongFullscreen {
+    static Create() {
+
+    }
+}

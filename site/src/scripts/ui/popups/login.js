@@ -58,6 +58,7 @@ class Login {
         this.passwordInput = this.window.passwordInput
         this.usernameInput = this.window.usernameInput
         this.error = this.window.error
+        this.remeberMeToggle = this.window.remeberMeToggle
     }
     static Show() {
         if (!this.window) {
@@ -93,7 +94,9 @@ class Login {
     static #OnLoginButtonClick() {
         const username = this.usernameInput.value
         const password = this.passwordInput.value
-        const cor = Network.Login(username, password)
+        const remeber = this.remeberMeToggle.checked
+        console.log(username, password, remeber)
+        const cor = Network.Login(username, password, remeber)
         cor.catch(() => this.error.textContent = "An unknown error occurred")
         cor.then(output => {
             if (typeof output === "string") {
@@ -107,7 +110,8 @@ class Login {
     static #OnSignupButtonClick() {
         const username = this.usernameInput.value
         const password = this.passwordInput.value
-        const cor = Network.Register(username, password)
+        const remeber = this.remeberMeToggle.checked
+        const cor = Network.Register(username, password, remeber)
         cor.catch(() => this.error.textContent = "An unknown error occurred")
         cor.then(output => {
             if (typeof output === "string") {
@@ -139,6 +143,16 @@ class LoginPopup extends PopupWindow {
         this.passwordInput.autocomplete = "current-password"
         this.passwordInput.addEventListener("input", OnPasswordInput.bind(this))
         this.content.appendChild(this.passwordInput)
+
+        this.remeberMeLabel = document.createElement("label")
+        this.remeberMeLabel.textContent = "Remeber me"
+
+        this.remeberMeToggle = document.createElement("input")
+        this.remeberMeToggle.type = "checkbox"
+        this.remeberMeToggle.checked = true
+        this.remeberMeLabel.prepend(this.remeberMeToggle)
+
+        this.content.appendChild(this.remeberMeLabel)
 
         this.error = document.createElement("p")
         this.error.style.color = "red"

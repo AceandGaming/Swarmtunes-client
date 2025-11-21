@@ -8,12 +8,12 @@ class SeekBar {
     static #startTime
     static #endTime
 
-    static Attach(seekBar) {
+    static Attach(seek, seekBar) {
         this.#seekBar = seekBar
-        this.#seekProgress = seekBar.querySelector("#seek-progress")
-        this.#seekLoaded = seekBar.querySelector("#seek-loaded")
+        this.#seekProgress = seekBar.querySelector(".progress")
+        this.#seekLoaded = seekBar.querySelector(".loaded")
 
-        const times = seekBar.querySelectorAll(".seek-time")
+        const times = seek.querySelectorAll(".seek-time")
         if (times.length === 2) {
             this.#startTime = times[0]
             this.#endTime = times[1]

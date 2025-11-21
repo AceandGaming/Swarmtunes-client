@@ -81,6 +81,9 @@
     cursor: pointer;
     pointer-events: all;
 }
+#seek-bar:hover {
+    height: 10px;
+}
 #seek-bar > * {
     position: absolute;
     top: 0;
@@ -90,68 +93,11 @@
     border-radius: 4px;
     pointer-events: none;
 }
-#seek-progress {
+#seek-bar .progress {
     background: var(--seek-bar-played);
 }
-#seek-loaded {
+#seek-bar .loaded {
     background: var(--seek-bar-loaded);
-}
-
-#media-controls {
-    display: flex;
-    align-items: center;
-}
-#media-controls img {
-    margin: auto 2px;
-    pointer-events: all;
-    cursor: pointer;
-}
-#previous-button {
-    width: 25px;
-    height: 20px;
-    transform: scaleX(1.5);
-}
-#play-pause {
-    width: 30px;
-    height: 30px;
-    padding: 0 5px;
-}
-#next-button {
-    width: 25px;
-    height: 20px;
-    transform: scaleX(1.5);
-}
-#shuffle-button {
-    width: 25px;
-    height: 25px;
-    padding: 0 10px;
-}
-#volume-controls {
-    margin: auto 0;
-    margin-left: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    pointer-events: all;
-}
-#volume-controls input {
-    position: absolute;
-    display: none;
-    width: 100px;
-    transform: translateY(-30px) translateX(-2px);
-    cursor: grab;
-}
-#volume-controls input:active {
-    cursor: grabbing;
-}
-#volume-controls img {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background-color: #00000000;
-    color: var(--text-colour);
-    cursor: pointer;
-    pointer-events: all;
 }
 
 @media (max-width: 600px) {

@@ -45,7 +45,7 @@ class RenamePlaylistPopup extends PopupWindow {
         }
         const playlist = PlaylistManager.GetPlaylist(uuid)
 
-        this.background.style.display = "flex"
+        super.Show()
         this.input.value = playlist.title
         this.error.textContent = ""
 

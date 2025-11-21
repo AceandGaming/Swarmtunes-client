@@ -59,6 +59,9 @@ class Song {
         this.date = options.date ? new Date(options.date) : new Date()
         this.isOriginal = options.isOriginal ?? false
         this.coverArt = options.coverArt ?? null
+        if (options.title === "mashup" && options.date) {
+            this.title = `Mashup ${this.date.getFullYear()}`
+        }
     }
 
     ToString() {

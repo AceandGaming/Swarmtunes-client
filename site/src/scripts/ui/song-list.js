@@ -57,6 +57,38 @@ class SongList {
             this.element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, this.showDate, this.catagory))
         }
     }
+    UpdateAnimated() {
+        const oldBounds = {}
+        for (const child of this.element.children) {
+            const id = child.getAttribute("data-uuid")
+            oldBounds[id] = child.getBoundingClientRect()
+        }
+
+        this.Update()
+        if (oldBounds.length === 0) {
+            return
+        }
+
+        for (const element of this.element.children) {
+            const id = element.getAttribute("data-uuid")
+            const oldBound = oldBounds[id]
+            if (oldBound === undefined) {
+                continue
+            }
+            const newBound = element.getBoundingClientRect()
+            const dy = oldBound.top - newBound.top
+
+            element.style.transform = `translate(0, ${dy}px)`
+            element.style.transition = "transform 0"
+
+            element.getBoundingClientRect() //force update. Idk browser are weird
+
+            requestAnimationFrame(() => {
+                element.style.transition = "transform 300ms ease";
+                element.style.transform = "";
+            });
+        }
+    }
     Hide() {
         this.element.style.display = "none"
     }

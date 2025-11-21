@@ -111,7 +111,7 @@ class SwarmFM extends AudioBase {
         this.hasControl = true;
         this.paused = false;
         this.UpdateInfo();
-        ClearNowPlaying();
+        NowPlaying.Clear();
         this.audio.volume = this.volume;
         this.audio.play();
         setInterval(this.CheckSync.bind(this), 1000);

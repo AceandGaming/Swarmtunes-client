@@ -157,7 +157,7 @@ function OnPlayNextClick(event, uiEvent) {
 function RemoveFromQueue(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
     SongQueue.RemoveSong(uuid);
-    UpdateNowPlaying();
+    NowPlaying.Update();
 }
 async function OnAddToPlaylistClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
@@ -219,14 +219,14 @@ async function OnAlbumAddToPlaylistClick(event, uiEvent) {
 }
 function OnAlbumPlayNowClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid;
-    Network.GetAlbum(uuid).then((album) => {
+    Network.GetAlbum(uuid, true).then((album) => {
         SongQueue.PlayNow(album.songs);
         AudioPlayer.instance.Play(album.songs[0]);
     });
 }
 function OnClearQueueClick(event, uiEvent) {
     SongQueue.ClearSongQueue();
-    UpdateNowPlaying()
+    NowPlaying.Update()
 }
 
 //fill options
@@ -235,7 +235,7 @@ menuItems["song"] = new MenuItem([
         "Play Now",
         OnPlayNextClick,
         "queue",
-        "src/assets/icons/play.svg"
+        "src/assets/icons/play-img.svg"
     ),
     new RightClickOption(
         "Add To Playlist",
@@ -269,7 +269,7 @@ menuItems["now-playing-item"] = new MenuItem(
             "Clear Queue",
             OnClearQueueClick,
             "queue",
-            "src/assets/icons/x.svg"
+            "src/assets/icons/x-img.svg"
         ),
     ],
     "song"
@@ -312,7 +312,7 @@ menuItems["album"] = new MenuItem([
         "Play Now",
         OnAlbumPlayNowClick,
         "queue",
-        "src/assets/icons/play.svg"
+        "src/assets/icons/play-img.svg"
     ),
     new RightClickOption(
         "Add Songs To Playlist",

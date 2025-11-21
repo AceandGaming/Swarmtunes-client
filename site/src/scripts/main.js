@@ -1,4 +1,6 @@
-//const print = console.log.bind(console);
+let DEV_MODE = true
+//@@release-only@@ DEV_MODE = false
+document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=lax; path=/";
 
 const colourThief = new ColorThief();
 
@@ -7,6 +9,7 @@ PopulateSearch("");
 if (window.innerWidth <= 500) {
     CurrentSongBar.CreateMobile();
     CreateButton(true);
+    localStorage.setItem("volume", 1)
 } else {
     CurrentSongBar.CreateDesktop();
     CreateButton();

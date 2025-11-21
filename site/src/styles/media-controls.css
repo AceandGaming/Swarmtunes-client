@@ -1,0 +1,93 @@
+.media-controls {
+    display: flex;
+    align-items: center;
+}
+.media-controls button {
+    pointer-events: all;
+    cursor: pointer;
+    padding: 0;
+    background-color: var(--current-song-bar);
+}
+.media-controls button.next, .media-controls button.previous {
+    margin: 0 5px;
+    width: 25px;
+    height: 20px;
+    transform: scaleX(1.5);
+}
+.media-controls button.play-pause {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+}
+.media-controls button.play-pause .pause{
+    display: none;
+}
+.media-controls button.play-pause.playing .pause {
+    display: block;
+}
+.media-controls button.play-pause.playing .play {
+    display: none;
+}
+.media-controls button.shuffle {
+    width: 25px;
+    height: 25px;
+    margin: 0 10px;
+}
+.media-controls button.shuffle.active svg {
+    color: #fff
+}
+.media-controls button.shuffle.flip {
+    animation: shuffle-flip 0.1s linear;
+}
+
+@keyframes shuffle-flip {
+    0% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(0);
+    }
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+.volume-controls {
+    margin: auto 0;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: all;
+    width: 25px;
+    height: 25px;
+}
+.volume-controls.active svg {
+    color: #fff;
+}
+.volume-controls svg {
+    display: none;
+}
+.volume-controls svg.active {
+    display: block;
+}
+.volume-controls input {
+    position: absolute;
+    display: none;
+    width: 85px;
+    transform: rotate(-90deg) translateX(62px);
+    background: var(--current-song-bar);
+    cursor: grab;
+}
+.volume-controls input:active {
+    cursor: grabbing;
+}
+.volume-controls img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #00000000;
+    color: var(--text-colour);
+    cursor: pointer;
+    pointer-events: all;
+}

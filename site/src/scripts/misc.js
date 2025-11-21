@@ -41,3 +41,20 @@ function RequireAdmin() {
         console.error("User is not admin")
     }
 }
+function LoadSVG(path,) {
+    let svg = document.createElement("svg")
+    fetch(path).then((response) => {
+        response.text().then((text) => {
+            text = text.replace(/\swidth=\"\d+\"/g, "").replace(/\sheight=\"\d+\"/g, "").replace(/<!--[\s\S]*?-->/g, "")
+
+            const attributeString = Array.from(svg.attributes)
+                .map(attr => `${attr.name}="${attr.value}"`)
+                .join(" ");
+            text = text.replace(/<svg/g, "<svg " + attributeString)
+
+            svg.outerHTML = text
+        })
+    })
+
+    return svg
+}

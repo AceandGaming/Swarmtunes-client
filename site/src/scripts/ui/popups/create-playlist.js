@@ -67,7 +67,7 @@ class CreatePlaylistPopup extends PopupWindow {
         if (!Network.IsLoggedIn()) {
             return
         }
-        this.background.style.display = "flex"
+        super.Show()
         this.input.value = ""
         this.error.textContent = ""
     }

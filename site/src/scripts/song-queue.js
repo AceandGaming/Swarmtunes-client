@@ -52,7 +52,7 @@ class SongQueue {
             return
         }
         AudioPlayer.instance.Play(song)
-        UpdateNowPlaying()
+        NowPlaying.Update()
     }
     static GetPreviousSong() {
         if (this.#songQueue.length == 0) {
@@ -71,7 +71,7 @@ class SongQueue {
             return
         }
         AudioPlayer.instance.Play(song)
-        UpdateNowPlaying()
+        NowPlaying.Update()
     }
     static ClearSongQueue() {
         this.#songQueue = []
@@ -85,7 +85,7 @@ class SongQueue {
         this.#loadedSongs = [song]
         this.currentSong = song
         this.#UnshuffleQueue()
-        UpdateNowPlaying()
+        NowPlaying.Update()
     }
     static UpdateQueue() {
         if (this.#suffle) {
@@ -94,10 +94,11 @@ class SongQueue {
         else {
             this.#UnshuffleQueue()
         }
+        NowPlaying.Update()
     }
     static PlayNow(songs) {
         this.#songQueue.splice(this.#queuePointer, 0, ...songs)
-        UpdateNowPlaying()
+        NowPlaying.Update()
     }
     static GetSong(uuid) {
         for (let i = 0; i < this.#songQueue.length; i++) {

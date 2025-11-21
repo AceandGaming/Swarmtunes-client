@@ -1,33 +1,3 @@
-function UpdateNowPlaying(swarmfm = false) {
-    ClearNowPlaying()
-    if (SongQueue.songCount === 0 && !swarmfm) {
-        return
-    }
-    const nowPlaying = document.querySelector("#now-playing");
-    let songs = []
-    // if (swarmfm) {
-    //     songs = [SwarmFM.song]
-    // }
-    //else {
-    songs = SongQueue.nextSongs
-    //}
-    const list = new SongList(songs, OnNowPlayingItemClick, "now-playing-item")
-    const element = list.CreateElement()
-    const sortable = new Sortable(element, {
-        animation: 150,
-        dataIdAttr: "data-uuid"
-    })
-    sortable.option("onEnd", (evt) => {
-        SongQueue.OnQueueOrderChange(sortable.toArray())
-    });
-    nowPlaying.appendChild(element)
-}
-function ClearNowPlaying() {
-    const nowPlaying = document.querySelector("#now-playing > .song-list");
-    if (nowPlaying !== null) {
-        nowPlaying.remove()
-    }
-}
 function OnNowPlayingItemClick(event) {
     const uuid = event.target.dataset.uuid
     if (uuid === "swarmfm") {
@@ -39,7 +9,38 @@ function OnNowPlayingItemClick(event) {
         return
     }
     SongQueue.SkipSong(song)
-    UpdateNowPlaying()
+    NowPlaying.Update()
     AudioPlayer.instance.Play(song)
 }
 
+class NowPlaying {
+    static #songlist
+    static #element = document.querySelector("#now-playing")
+
+    static Update(songs = undefined) {
+        if (songs === undefined) {
+            songs = SongQueue.nextSongs
+        }
+        if (this.#songlist === undefined) {
+            this.#songlist = new SongList(songs, OnNowPlayingItemClick, "now-playing-item", false)
+            const element = this.#songlist.CreateElement()
+
+            const sortable = new Sortable(element, {
+                animation: 150,
+                dataIdAttr: "data-uuid"
+            })
+            sortable.option("onEnd", (evt) => {
+                SongQueue.OnQueueOrderChange(sortable.toArray())
+            });
+
+            this.#element.appendChild(element)
+        } else {
+            this.#songlist.songs = songs
+            this.#songlist.UpdateAnimated()
+        }
+    }
+    static Clear() {
+        this.#songlist.songs = []
+        this.#songlist.Update()
+    }
+}

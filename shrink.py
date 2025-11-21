@@ -97,6 +97,8 @@ for scriptPath in scriptPaths:
         with open(f"site/{scriptPath}", "r") as f:
             js += f.read() + "\n"
 
+js = re.sub(r"//\s*@@release-only@@\s*", "", js)
+
 with open("mini/all.js", "w") as f:
     f.write(js)
 

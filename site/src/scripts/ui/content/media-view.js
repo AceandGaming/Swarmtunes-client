@@ -12,7 +12,7 @@ class MediaView {
         SongQueue.LoadSongs(MediaView._songList.songs)
         SongQueue.UpdateQueue()
         SongQueue.currentSong = SongQueue.GetSong(event.target.dataset.uuid)
-        UpdateNowPlaying()
+        NowPlaying.Update()
         AudioPlayer.instance.Play(SongQueue.currentSong)
     }
     static Create() {
@@ -20,6 +20,7 @@ class MediaView {
         element.id = "media-view"
 
         const closeButton = document.createElement("button")
+        closeButton.append(LoadSVG("src/assets/icons/x.svg"))
         closeButton.classList.add("close-button")
         closeButton.addEventListener("click", MediaView.Hide.bind(MediaView))
 
@@ -131,10 +132,7 @@ class AlbumView {
         MediaView._UpdateContent(title, album.PrettyDate, Network.GetCover(album.Cover, 512))
         MediaView._PopulateActions()
         MediaView.Show()
-        function OnSongsLoaded() {
-            MediaView._songList.SortByTitle()
-        }
-        MediaView._PopulateSongList(album, "song", OnSongsLoaded)
+        MediaView._PopulateSongList(album, "song")
     }
 }
 

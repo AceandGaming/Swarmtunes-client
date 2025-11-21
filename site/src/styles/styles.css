@@ -19,49 +19,41 @@
     --input-colour-hover: #303030;
     --input-border: #404040;
     --song-item-hover: #202020;
+    --icon-default: #aaa;
+    --icon-hover: #ddd;
+    --icon-active: #fff;
+    --slider-default: #aaa;
+    --slider-border: #444;
+    --slider-track: #444;
     overflow: hidden;
-}
-:root[data-theme="light"],
-:root[data-theme="neuro"] {
-    --background-colour: #eee;
-    --background-sub-colour: #fff;
-    --text-colour: #000;
-    --subtext-colour: #646464;
-    --cover-background: #ececec;
-    --current-song-bar: #e5e5e5;
-    --seek-bar-background: #a6a6a6;
-    --seek-bar-played: #feffff;
-    --seek-bar-loaded: #d0d0d0;
-    --header-tab-default: #d5d5d5;
-    --header-tab-active: var(--background-colour);
-    --header-tab-border: #ffffff;
-    --header-colour: #bebebe;
-    --default-button-colour: #ddd;
-    --default-button-hover: #fff;
-    --default-button-active: #ccc;
-    --input-colour: #eee;
-    --input-colour-hover: #fff;
-    --input-border: #646464;
-    --song-item-hover: #fff;
 }
 :root[data-theme="neuro"] {
     --background-colour: url("../assets/neuro-bg.png");
-    --background-sub-colour: #965159;
+    --background-sub-colour: #8a4a52;
     --header-colour: #ce838c;
     --current-song-bar: #ea95a0;
     --song-item-hover: #ffffff50;
-    --text-colour: #2b2323;
-    --subtext-colour: #fff;
-    --cover-background: #965159;
+    --text-colour: #ffffff;
+    --subtext-colour: #eee;
+    --cover-background: #8a4a52;
+    --seek-bar-background: #ce838c;
+    --seek-bar-played: #ffffff;
+    --seek-bar-loaded: #ffb9c1;
     --header-tab-default: #ce838c;
     --header-tab-active: #ffa3ae;
-    --header-tab-border: #965159;
+    --header-tab-border: #8a4a52;
     --default-button-colour: #b3626c;
     --default-button-hover: #b46770;
     --default-button-active: none;
     --input-colour: #ce838c;
     --input-colour-hover: #764046;
-    --input-border: #965159;
+    --input-border: #8a4a52;
+    --slider-default: #fff;
+    --slider-border: #ffb9c1;
+    --slider-track: #ffb9c1;
+    --icon-default: #fff;
+    --icon-hover: #ddd;
+    --icon-active: #ccc;
 }
 :root[data-theme="evil"] {
     --background-colour: url("../assets/evil-bg.png");
@@ -70,8 +62,11 @@
     --current-song-bar: #50272a;
     --song-item-hover: #ffffff50;
     --text-colour: #fff;
-    --subtext-colour: #fff;
+    --subtext-colour: #eee;
     --cover-background: #3a1c1e;
+    --seek-bar-background: #3a1c1e;
+    --seek-bar-played: #ffffff;
+    --seek-bar-loaded: #764046;
     --header-tab-default: #50272a;
     --header-tab-active: #643134;
     --header-tab-border: #3a1c1e;
@@ -81,15 +76,9 @@
     --input-colour: #50272a;
     --input-colour-hover: #764046;
     --input-border: #965159;
-}
-:root[data-theme="clear"] {
-    --background-colour: none;
-    --background-sub-colour: #171717;
-    --default-button-colour: #ffffff10;
-    --default-button-hover: #ffffff15;
-    --default-button-active: none;
-    --input-colour: #ffffff10;
-    --input-colour-hover: #ffffff15;
+    --slider-default: #ce7680;
+    --slider-border: #965159;
+    --slider-track: #965159;
 }
 
 html,
@@ -177,6 +166,18 @@ button:hover {
 button:active {
     background-color: var(--default-button-active);
 }
+button svg {
+    width: 100%;
+    height: 100%;
+    color: var(--icon-default);
+    background: none;
+}
+button:hover svg {
+    color: var(--icon-hover);
+}
+button:active svg {
+    color: var(--icon-active);
+}
 .spacer {
     flex: 1;
 }
@@ -257,6 +258,32 @@ p {
     width: 5px;
 }
 
-.flip {
-    transform: scaleX(-1);
+input[type="range"] {
+  -webkit-appearance: none; /* remove default styling */
+  background: var(--background-colour);
+  padding: 6px;
+  outline: none;
+  border: none;
+}
+
+/* Track */
+input[type="range"]::-webkit-slider-runnable-track, input[type="range"]::-moz-range-track {
+  height: 6px;
+  width: calc(100% - 20px);
+  background: var(--slider-track);
+  border-radius: 10px;
+}
+
+
+/* Thumb */
+input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--slider-default);
+  border: 2px solid var(--slider-border);
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -6px;
+  transition: transform 0.2s ease;
 }
