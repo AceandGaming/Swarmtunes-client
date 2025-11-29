@@ -54,11 +54,7 @@ class SongFullscreen {
         controls.append(seekBar.element)
         let mediaControls
         if (isMobile) {
-            mediaControls = MediaControls.Create(true, false)
-            const spacer = document.createElement("div")
-            spacer.style.height = "40px"
-            spacer.style.width = "40px"
-            mediaControls.append(spacer)
+            mediaControls = MediaControls.Create(true, false, true)
         }
         else {
             mediaControls = MediaControls.Create(true, true)
@@ -88,14 +84,28 @@ class SongFullscreen {
             this.#singersText.textContent = singers.join("\n")
         }
 
-        this.#coverImage.onload = () => {
+        this.#coverImage.src = coverUrl
+
+
+        const image = new Image()
+        image.onload = () => {
             const colour = colourThief.getColor(this.#coverImage)
-            console.log(colour)
             this.#element.style.background = `linear-gradient(
                 rgba(${colour[0]}, ${colour[1]}, ${colour[2]}, 1), 
                 rgba(${colour[0]}, ${colour[1]}, ${colour[2]}, 0.2)
             )`
+            if (colour[0] > 170) {
+                this.#artistText.style.color = "white"
+                this.#titleText.style.color = "white"
+                this.#singersText.style.color = "white"
+            }
+            else {
+                this.#artistText.style.color = ""
+                this.#titleText.style.color = ""
+                this.#singersText.style.color = ""
+            }
         }
-        this.#coverImage.src = coverUrl
+        image.src = coverUrl
+
     }
 }

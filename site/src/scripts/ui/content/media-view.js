@@ -12,7 +12,12 @@ class MediaView {
         SongQueue.LoadSongs(MediaView._songList.songs)
         SongQueue.UpdateQueue()
         SongQueue.currentSong = SongQueue.GetSong(event.target.dataset.uuid)
-        NowPlaying.Update()
+        AudioPlayer.instance.Play(SongQueue.currentSong)
+    }
+    static OnCoverClick(event) {
+        SongQueue.ClearSongQueue()
+        SongQueue.LoadSongs(MediaView._songList.songs)
+        SongQueue.UpdateQueue()
         AudioPlayer.instance.Play(SongQueue.currentSong)
     }
     static Create() {
@@ -27,6 +32,10 @@ class MediaView {
         const content = document.createElement("div")
         content.classList.add("content")
 
+        const coverContainer = document.createElement("div")
+        coverContainer.classList.add("cover-container")
+        coverContainer.addEventListener("click", MediaView.OnCoverClick)
+
         const cover = document.createElement("img")
         cover.src = "src/assets/no-song.png"
         cover.classList.add("loading")
@@ -39,6 +48,12 @@ class MediaView {
             loadingCover.style.display = "none"
         }
 
+        const playIcon = document.createElement("div")
+        playIcon.appendChild(LoadSVG("src/assets/icons/play.svg"))
+        playIcon.classList.add("play")
+
+        coverContainer.append(cover, loadingCover, playIcon)
+
         const textContainer = document.createElement("div")
         textContainer.classList.add("text-container")
         const title = document.createElement("h1")
@@ -50,7 +65,7 @@ class MediaView {
         actions.classList.add("actions")
 
         textContainer.append(title, discription)
-        content.append(cover, loadingCover, textContainer, actions)
+        content.append(coverContainer, textContainer, actions)
 
         MediaView._songList = new SongList([], MediaView.OnItemClick, "media-item")
 

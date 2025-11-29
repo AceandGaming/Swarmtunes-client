@@ -88,10 +88,14 @@
 }
 #song-fullscreen .media-controls button {
     background: none;
-    max-width: 28px;
+    max-width: 36px;
+    flex-basis: 36px;
+    min-width: 36px;
 }
 #song-fullscreen .media-controls button.play-pause {
     max-width: 40px;
+    min-width: 40px;
+    flex-basis: 40px;
 }
 #song-fullscreen .media-controls > :first-child {
     margin-right: 20px;

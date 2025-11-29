@@ -95,7 +95,6 @@ class Login {
         const username = this.usernameInput.value
         const password = this.passwordInput.value
         const remeber = this.remeberMeToggle.checked
-        console.log(username, password, remeber)
         const cor = Network.Login(username, password, remeber)
         cor.catch(() => this.error.textContent = "An unknown error occurred")
         cor.then(output => {

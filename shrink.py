@@ -2,6 +2,10 @@ import re
 import os
 import shutil as fs
 import subprocess
+import hashlib
+
+def Hash(data):
+    return hashlib.sha256(data.encode("utf-8")).hexdigest()[:8]
 
 print("Clearing folder")
 fs.rmtree("mini")
@@ -82,9 +86,11 @@ for var, value in cssVars.items():
 
 
 print(f"{len(css)}b -> {len(newCss)}b")
+cssFileName = f"styles-{Hash(newCss)}.css"
 
-with open("mini/src/styles.css", "w") as f:
+with open("mini/src/" + cssFileName, "w") as f:
     f.write(newCss)
+
 
 print("\nCompiling JS")
 externalScripts = []
@@ -98,13 +104,52 @@ for scriptPath in scriptPaths:
             js += f.read() + "\n"
 
 js = re.sub(r"//\s*@@release-only@@\s*", "", js)
+jsFileName = f"main-{Hash(js)}.js"
 
 with open("mini/all.js", "w") as f:
     f.write(js)
+print("\nCompiling Service-Worker")
+
+os.remove("mini/service-worker.js")
+
+assetPaths = [
+    "index.html",
+    "src/" + jsFileName,
+    "src/" + cssFileName
+]
+def GetAssetPaths(path):
+    for file in os.listdir(path):
+        if os.path.isdir(f"{path}/{file}"):
+            GetAssetPaths(f"{path}/{file}")
+        elif (not file.endswith("~")):
+            assetPaths.append(f"{path}/{file}".replace("site/", ""))
+
+GetAssetPaths("site/src/assets")
+
+data = ""
+with open("site/service-worker.js", "r") as f:
+    data = f.read()
+
+print(assetPaths)
+data = re.sub(r"const staticFiles = \[.*?\]", f"const staticFiles = {assetPaths}", data)
+
+with open("site/service-worker.js", "w") as f:
+    f.write(data)
 
 print("Minifying JS")
 out = subprocess.run(
-    "esbuild mini/all.js --minify --outfile=mini/src/main.js",
+    "esbuild site/service-worker.js --minify --outfile=mini/service-worker.js",
+    shell=True,
+    capture_output=True,
+    text=True
+)
+if out.returncode != 0:
+    print(out.stdout)
+    print(out.stderr)
+    raise Exception("Failed to minify Service Worker")
+
+out = subprocess.run(
+    "esbuild mini/all.js --minify --outfile=mini/src/" + jsFileName,
     shell=True,
     capture_output=True,
     text=True
@@ -113,7 +158,7 @@ if out.returncode != 0:
     print(out.stdout)
     print(out.stderr)
     raise Exception("Failed to minify JS")
-print(out.stderr)
+
 newJsSize = int(float(re.findall(r"([\d.]+)kb", out.stderr)[0]) * 1000)
 print(f"{len(js)}b -> {newJsSize}b")
 os.remove("mini/all.js")
@@ -125,8 +170,8 @@ html = re.sub(r"<script\s*src=\".*?\"\s*></script>", "", html)
 externalScriptsHtml = ""
 for scriptPath in externalScripts:
     externalScriptsHtml += f"<script src=\"{scriptPath}\"></script>"
-html = html.replace("</head>", "<link rel=\"stylesheet\" href=\"src/styles.css\"/></head>")
-html = html.replace("</body>", externalScriptsHtml + "<script src=\"src/main.js\"></script></body>")
+html = html.replace("</head>", f"<link rel=\"stylesheet\" href=\"src/{cssFileName}\"/></head>")
+html = html.replace("</body>", externalScriptsHtml + f"<script src=\"src/{jsFileName}\"></script></body>")
 
 print("Minifying HTML")
 newHtml = re.sub(r"<!--.*?-->", "", html)

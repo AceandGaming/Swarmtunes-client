@@ -1,11 +1,11 @@
 class VolumeButton {
-    static #volumeButton
-    static #volumeSlider
+    #volumeButton
+    #volumeSlider
 
-    static #sliderFocus = false
-    static menuOpen = false
+    #sliderFocus = false
+    menuOpen = false
 
-    static Attach(volumeButton, volumeSlider) {
+    constructor(volumeButton, volumeSlider) {
         this.#volumeButton = volumeButton
         this.#volumeSlider = volumeSlider
 
@@ -19,9 +19,10 @@ class VolumeButton {
         AudioPlayer.instance.Volume = volume
         SwarmFM.instance.Volume = volume
         this.#UpdateIcon(volume)
+
+        AudioPlayer.instance.OnVolumeUpdate(this.#UpdateIcon.bind(this))
     }
-    static OnButtonClick(event) {
-        console.log(event.target.id)
+    OnButtonClick(event) {
         if (event.target.id === "") {
             if (this.menuOpen) {
                 this.Hide()
@@ -30,39 +31,40 @@ class VolumeButton {
         }
         this.Show()
     }
-    static OnButtonLooseFocus() {
+    OnButtonLooseFocus() {
         if (!this.#sliderFocus) {
             this.Hide()
         }
     }
-    static #UpdateIcon(volume) {
+    #UpdateIcon(volume) {
         const icons = this.#volumeButton.querySelectorAll("svg")
         icons.forEach(icon => {
             icon.classList.remove("active")
         })
         const fraction = Math.ceil(volume * (icons.length - 1))
         icons[fraction].classList.add("active")
+        this.#volumeSlider.value = volume
     }
-    static OnSliderChange(event) {
+    OnSliderChange(event) {
         this.#sliderFocus = true
         AudioPlayer.instance.Volume = event.target.value
         SwarmFM.instance.Volume = event.target.value
 
         this.#UpdateIcon(event.target.value)
     }
-    static OnSliderLooseFocus() {
+    OnSliderLooseFocus() {
         this.#sliderFocus = false
         this.Hide()
     }
-    static Show() {
-        VolumeButton.menuOpen = true
-        VolumeButton.#volumeSlider.style.display = "flex"
-        VolumeButton.#volumeButton.classList.add("active")
+    Show() {
+        this.menuOpen = true
+        this.#volumeSlider.style.display = "flex"
+        this.#volumeButton.classList.add("active")
     }
-    static Hide() {
-        VolumeButton.menuOpen = false
-        VolumeButton.#volumeSlider.style.display = "none"
+    Hide() {
+        this.menuOpen = false
+        this.#volumeSlider.style.display = "none"
         localStorage.setItem("volume", AudioPlayer.instance.Volume)
-        VolumeButton.#volumeButton.classList.remove("active")
+        this.#volumeButton.classList.remove("active")
     }
 }

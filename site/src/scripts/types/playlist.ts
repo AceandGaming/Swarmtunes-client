@@ -71,6 +71,9 @@ class Playlist {
         if (!this.songsLoaded) {
             throw new Error("Playlist songs not loaded")
         }
+        if (this.songIds.includes(song.Id)) {
+            return
+        }
         this.songIds.push(song.Id)
         this.songs.push(song)
         Network.AddSongToPlaylist(this.id, [song.Id])

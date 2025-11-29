@@ -143,4 +143,7 @@
     #current-song-bar .seek-bar {
         height: 4px;
     }
+    #current-song-bar .media-controls {
+        margin-right: 10px;
+    }
 }

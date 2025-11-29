@@ -18,7 +18,7 @@ class ConfirmAction extends PopupWindow {
     constructor(displayMessage) {
         super("Are you sure?")
         const discription = document.createElement("p")
-        discription.textContent = displayMessage
+        discription.innerHTML = displayMessage
         this.content.appendChild(discription)
 
         const cancel = this.CreateButton("Cancel", this.Hide.bind(this))

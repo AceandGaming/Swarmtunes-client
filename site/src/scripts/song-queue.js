@@ -3,6 +3,10 @@ class SongQueue {
         return this.#songQueue[this.#queuePointer]
     }
     static set currentSong(song) {
+        if (song === undefined) {
+            this.#queuePointer = 0
+            return
+        }
         if (this.#suffle) {
             this.SpliceSong(song)
         }
@@ -19,6 +23,9 @@ class SongQueue {
     static set suffleSongs(value) {
         this.#suffle = value
         this.UpdateQueue()
+        for (const callback of this.#callbacks) {
+            callback(value)
+        }
     }
     static get suffleSongs() {
         return this.#suffle
@@ -31,6 +38,7 @@ class SongQueue {
     static #songQueue = []
     static #queuePointer = 0
     static #suffle = false
+    static #callbacks = []
 
     static GetNextSong() {
         if (this.#songQueue.length == 0) {
@@ -174,5 +182,9 @@ class SongQueue {
         if (currentSong !== undefined) {
             this.SkipSong(currentSong)
         }
+    }
+
+    static OnShuffleChange(callback) {
+        this.#callbacks.push(callback)
     }
 }

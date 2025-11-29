@@ -90,8 +90,13 @@ LoadUrlBar();
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-        .register("/service-worker.js")
-        .catch((err) => console.error(err));
+        .register("./service-worker.js")
+        .catch((err) => console.error(err))
+
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+    });
 }
 
 function UpdateNavigatorTime(played, duration, loaded) {

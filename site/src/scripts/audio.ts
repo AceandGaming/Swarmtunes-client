@@ -11,7 +11,12 @@ class AudioPlayer extends AudioBase {
         if (!this.HasControl || !isFinite(value)) {
             return
         }
-        this.audio.fastSeek(value);
+        try {
+            this.audio.fastSeek(value);
+        }
+        catch {
+            this.audio.currentTime = value
+        }
     }
     get Loaded(): number {
         if (!this.audio.buffered.length) {
@@ -38,19 +43,20 @@ class AudioPlayer extends AudioBase {
     }
     set Volume(value: number) {
         this.volume = value;
-        if (!this.Paused) {
-            this.audio.volume = value;
-        }
+        this.audio.volume = value;
     }
     get HasControl(): boolean {
         return this.hasControl;
+    }
+    get CurrentSong(): Song|undefined {
+        return this.currentSong
     }
 
     private audio: HTMLAudioElement
     private hasControl: boolean = false
     private paused: boolean = true
     private volume: number = 0.5
-    private currentSong?: Song|null = null
+    private currentSong?: Song
 
     constructor() {
         super();
@@ -67,8 +73,15 @@ class AudioPlayer extends AudioBase {
             this.currentSong = song
             this.audio.src = Network.GetAudio(song)
             CurrentSongBar.DisplaySong(song)
+            this.audio.oncanplay = () => {
+                this.audio.play()
+            }
         }
-        this.audio.play()
+        else {
+            this.audio.play()
+        }
+        
+
     }
     public Pause(): void {
         this.audio.pause()
@@ -85,6 +98,9 @@ class AudioPlayer extends AudioBase {
     }
     public OnTimeUpdate(callback: (played: number, duration: number, loaded: number) => void): void {
         this.audio.addEventListener("timeupdate", () => callback(this.Played, this.Duration, this.Loaded));
+    }
+    public OnVolumeUpdate(callback: (volume: number) => void): void {
+        this.audio.addEventListener("volumechange", () => callback(this.Volume));
     }
 
     public Seek(fraction: number): void {

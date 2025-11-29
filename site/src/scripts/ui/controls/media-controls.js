@@ -11,19 +11,37 @@ class MediaControls {
         SwarmFM.instance.OnPlayPause(this.#OnPlayPause.bind(this))
 
         const media = navigator.mediaSession
+
         media.playbackState = "paused"
-        media.onplay = () => this.#OnPlayPause(true)
-        media.onpause = () => this.#OnPlayPause(false)
-        media.onnexttrack = () => this.#OnNextClick()
-        media.onprevioustrack = () => this.#OnPreviousClick()
-        media.onseekforward = (amount) => AudioPlayer.instance.Skip(amount)
-        media.onseekbackward = (amount) => AudioPlayer.instance.Skip(-amount)
-        media.onseekto = (event) => AudioPlayer.instance.Played = event.seekTime
+
+        media.setActionHandler('play', () => {
+            if (SwarmFM.instance.HasControl) {
+                SwarmFM.instance.Play()
+            }
+            else if (AudioPlayer.instance.HasControl) {
+                AudioPlayer.instance.Play()
+            }
+        })
+        media.setActionHandler('pause', () => {
+            if (SwarmFM.instance.HasControl) {
+                SwarmFM.instance.Pause()
+            }
+            else if (AudioPlayer.instance.HasControl) {
+                AudioPlayer.instance.Pause()
+            }
+        })
+        media.setActionHandler('nexttrack', () => this.#OnNextClick())
+        media.setActionHandler('previoustrack', () => this.#OnPreviousClick())
+        media.setActionHandler('seekforward', (details) => AudioPlayer.instance.Skip(details.seekOffset))
+        media.setActionHandler('seekbackward', (details) => AudioPlayer.instance.Skip(-details.seekOffset))
+        media.setActionHandler('seekto', (details) => AudioPlayer.instance.Played = details.seekTime)
+
+
 
         this.#initialised = true
     }
 
-    static Create(includeShuffle = false, includeVolume = false) {
+    static Create(includeShuffle = true, includeVolume = true, includeAddToPlaylist = false) {
         const buttons = document.createElement("div")
         buttons.classList.add("media-controls")
 
@@ -71,8 +89,33 @@ class MediaControls {
                 LoadSVG("src/assets/icons/volume.svg")
             )
             buttons.append(volumeControls)
-            VolumeButton.Attach(volumeControls, volumeControls.querySelector("#volume-slider"))
+            new VolumeButton(volumeControls, volumeControls.querySelector("#volume-slider"))
         }
+
+        function CreateAddToPlaylistButton(callback) {
+            const addToPlaylistButton = document.createElement("button")
+            addToPlaylistButton.append(LoadSVG("src/assets/icons/playlist-add.svg"))
+            addToPlaylistButton.title = "Add to Playlist"
+            addToPlaylistButton.classList.add("add-to-playlist", "icon-button")
+            addToPlaylistButton.addEventListener("click", callback)
+            return addToPlaylistButton
+        }
+
+        if (includeAddToPlaylist) {
+            if (!Network.IsLoggedIn()) {
+                const spacer = document.createElement("div")
+                spacer.classList.add("spacer", "add-to-playlist")
+                buttons.append(spacer)
+                // Login.AddLoginCallback(() => {
+                //     spacer.remove()
+                //     const addToPlaylist = CreateAddToPlaylistButton(this.#OnAddToPlaylistClick.bind(this))
+                //     buttons.append(addToPlaylist)
+                // })
+                return
+            }
+            buttons.append(CreateAddToPlaylistButton(this.#OnAddToPlaylistClick.bind(this)))
+        }
+
 
         MediaControls.Attach(buttons, previousButton, playPauseButton, nextButton, shuffleButton)
         return buttons
@@ -85,6 +128,9 @@ class MediaControls {
         next.addEventListener("click", this.#OnNextClick.bind(this))
         if (shuffle) {
             shuffle.addEventListener("click", this.#OnShuffleClick.bind(this, shuffle))
+            SongQueue.OnShuffleChange((state) => {
+                shuffle.classList.toggle("active", state)
+            })
         }
 
         function UpdatePauseButton(button, state) {
@@ -96,6 +142,19 @@ class MediaControls {
         if (!this.#initialised) {
             this.#Initialise()
         }
+    }
+    static async #OnAddToPlaylistClick() {
+        const currentSong = AudioPlayer.instance.CurrentSong
+        if (!currentSong) {
+            return
+        }
+        const playlistId = await SelectPlaylist.AskUser()
+        if (!playlistId) {
+            return
+        }
+        const playlist = PlaylistManager.GetPlaylist(playlistId)
+        await playlist.GetSongs()
+        playlist.Add(currentSong)
     }
     static #OnPlayPause(state) {
         navigator.mediaSession.playbackState = state ? "playing" : "paused"
@@ -119,19 +178,30 @@ class MediaControls {
         }
     }
     static #OnNextClick() {
+        if (!AudioPlayer.instance.HasControl) {
+            return
+        }
         SongQueue.PlayNextSong()
     }
     static #OnPreviousClick() {
+        if (!AudioPlayer.instance.HasControl) {
+            return
+        }
+        if (AudioPlayer.instance.Played > 5) {
+            AudioPlayer.instance.Played = 0
+            return
+        }
         SongQueue.PlayPreviousSong()
     }
     static #OnShuffleClick(button) {
-        const active = !SongQueue.suffleSongs
-        button.classList.toggle("active", active)
-
         button.classList.remove("flip")
         void button.offsetWidth
         button.classList.add("flip")
+        button.addEventListener("animationend", () => {
+            button.classList.remove("flip")
+        })
 
+        const active = !SongQueue.suffleSongs
         SongQueue.suffleSongs = active
     }
 }
