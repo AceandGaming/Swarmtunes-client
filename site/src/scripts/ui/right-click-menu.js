@@ -182,7 +182,7 @@ function OnRemoveFromPlaylistClick(event, uiEvent) {
 }
 async function OnDeletePlaylistClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid
-    const confirmation = await ConfirmAction.AskUser("Are you sure you want to delete <strong>" + PlaylistManager.GetPlaylist(uuid).title + "</strong>")
+    const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + PlaylistManager.GetPlaylist(uuid).title + "</strong>")
     if (!confirmation) {
         return
     }
@@ -324,7 +324,7 @@ menuItems["playlist"] = new MenuItem([
         "src/assets/icons/trash.svg"
     ),
     new RightClickOption(
-        "Add Songs To Playlist",
+        "Add To Other Playlist",
         OnAddPlaylistToPlaylistClick,
         "playlists",
         "src/assets/icons/playlist-add.svg",

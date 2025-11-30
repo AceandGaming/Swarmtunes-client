@@ -1,92 +1,95 @@
 let DEV_MODE = true
 //@@release-only@@ DEV_MODE = false
-document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=lax; path=/";
+document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=lax; path=/"
+Network.CheckOnline()
 
-const colourThief = new ColorThief();
+const colourThief = new ColorThief()
+
 
 let isMobile = false
 if (window.innerWidth <= 500) {
     isMobile = true
-    CurrentSongBar.CreateMobile();
-    CreateButton(true);
+    CurrentSongBar.CreateMobile()
+    CreateButton(true)
     localStorage.setItem("volume", 1)
 } else {
-    CurrentSongBar.CreateDesktop();
-    CreateButton();
+    CurrentSongBar.CreateDesktop()
+    CreateButton()
 }
-PlaylistTab.ShowLoggedOutScreen();
-PopulateSearch("");
+PlaylistTab.ShowLoggedOutScreen()
+PopulateSearch("")
+SongDatabase.Initalise()
 
 MediaView.Create()
 SongFullscreen.Create()
 
-AttachButtons();
-Login.CreateWindow();
-new CreatePlaylistPopup();
-new RenamePlaylistPopup();
+AttachButtons()
+Login.CreateWindow()
+new CreatePlaylistPopup()
+new RenamePlaylistPopup()
 PopulateDiscover().catch((e) => {
     const errorScreen = new LoadingError()
     discoverPage.append(errorScreen.CreateElement())
     console.error(e)
 })
-currentTheme = Number(localStorage.getItem("theme") ?? 0);
-UpdateTheme();
+currentTheme = Number(localStorage.getItem("theme") ?? 0)
+UpdateTheme()
 
-ShowContentWindow(document.getElementById("discover"));
+ShowContentWindow(document.getElementById("discover"))
 
 ResizeAllGridDisplays()
 
 function OnLogin(isAdmin) {
-    document.getElementById("header-login-button").textContent = "Log Out";
+    document.getElementById("header-login-button").textContent = "Log Out"
     document
         .getElementById("header-login-button")
-        .setAttribute("onclick", "OnLogoutButtonClick()");
-    PlaylistManager.GetPlaylists().then(PlaylistTab.Populate);
+        .setAttribute("onclick", "OnLogoutButtonClick()")
+    PlaylistManager.GetPlaylists().then(PlaylistTab.Populate)
 
     const authElements = Array.from(
         document.getElementsByClassName("require-auth")
-    );
+    )
     for (let element of authElements) {
-        element.classList.remove("require-auth");
+        element.classList.remove("require-auth")
     }
     if (isAdmin) {
         const adminElements = Array.from(
             document.getElementsByClassName("require-admin")
-        );
+        )
         for (let element of adminElements) {
-            element.classList.remove("require-admin");
+            element.classList.remove("require-admin")
         }
     }
 }
-Login.AddLoginCallback(OnLogin);
+Login.AddLoginCallback(OnLogin)
 
 if (Network.IsLoggedIn()) {
-    Login.CallLoginCallbacks();
+    Login.CallLoginCallbacks()
 }
 else {
     Network.GetNewSession()
 }
 
 function LoadUrlBar() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const songId = urlParams.get("song");
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    const songId = urlParams.get("song")
 
     if (songId !== null) {
         Network.GetSong(songId).then((song) => {
-            SongQueue.LoadSingleSong(song);
-            AudioPlayer.instance.Play(song);
-        });
+            SongQueue.LoadSingleSong(song)
+            AudioPlayer.instance.Play(song)
+        })
     }
 
     const cleanUrl =
         window.location.protocol +
         "//" +
         window.location.host +
-        window.location.pathname;
-    window.history.replaceState({}, document.title, cleanUrl);
+        window.location.pathname
+    window.history.replaceState({}, document.title, cleanUrl)
 }
-LoadUrlBar();
+LoadUrlBar()
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker
@@ -95,8 +98,8 @@ if ("serviceWorker" in navigator) {
 
 
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
-    });
+        window.location.reload()
+    })
 }
 
 function UpdateNavigatorTime(played, duration, loaded) {
@@ -104,8 +107,8 @@ function UpdateNavigatorTime(played, duration, loaded) {
         duration: duration,
         playbackRate: 1,
         position: played,
-    });
+    })
 }
 
-AudioPlayer.instance.OnTimeUpdate(UpdateNavigatorTime);
+AudioPlayer.instance.OnTimeUpdate(UpdateNavigatorTime)
 SwarmFM.instance.OnTimeUpdate(UpdateNavigatorTime);

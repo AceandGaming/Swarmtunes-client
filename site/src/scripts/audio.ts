@@ -71,7 +71,7 @@ class AudioPlayer extends AudioBase {
         this.audio.volume = this.volume
         if (song) {
             this.currentSong = song
-            this.audio.src = Network.GetAudio(song)
+            this.audio.src = Network.GetAudioURL(song)
             CurrentSongBar.DisplaySong(song)
             this.audio.oncanplay = () => {
                 this.audio.play()

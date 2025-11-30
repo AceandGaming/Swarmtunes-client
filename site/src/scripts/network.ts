@@ -24,7 +24,21 @@ class Network {
     static IsAdmin() {
         return sessionStorage.getItem("isAdmin") == "true"
     }
+    static IsOnline() {
+        return this.isOnline
+    }
 
+    private static isOnline = true
+
+    static async CheckOnline() {
+        try {
+            const response = await fetch(`${this.serverURL}/`)
+            this.isOnline = response.ok
+        }
+        catch {
+            this.isOnline = false
+        }
+    }
     static async GetNewSession() {
         const response = await this.SafeFetch("me/session", "GET")
         if (!response.ok) {
@@ -159,7 +173,7 @@ class Network {
     }
     static async GetSong(id: id | id[]) {
         const params = new URLSearchParams()
-        const ids = EnsureArray(id)
+        let ids = EnsureArray(id)
         for (let i = 0; i < ids.length; i++) {
             params.append("ids", ids[i])
         }
@@ -175,11 +189,20 @@ class Network {
         const json = await response.json()
         return json["link"]
     }
+    /** @deprecated */
     static async GetMP3(id: id, isTagged: boolean = false) {
+        return await this.DownloadSong(id, isTagged)
+    }
+    static async DownloadSong(id: id, isTagged: boolean = false) {
         const a = document.createElement("a")
         a.href = `${this.serverURL}/files/${id}?export=${isTagged}`
         a.click()
         a.remove()
+    }
+    static async GetSongAudio(id: id) {
+        const response = await this.Get(`files/${id}`)
+        const blob = await response.blob()
+        return blob
     }
     static GetCover(name: string, size: number = 128) {
         if (!name) {
@@ -188,9 +211,8 @@ class Network {
         }
         return `${this.serverURL}/covers/${name}?size=${size}`
     }
-    static GetAudio(song: Song) {
+    static GetAudioURL(song: Song) {
         return `${this.serverURL}/files/${song.Id}`
-        
     }
     static async GetAllSongs({ filters = [], maxResults = 100 } = {}) {
         const params = new URLSearchParams()

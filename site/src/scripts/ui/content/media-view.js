@@ -9,6 +9,9 @@ class MediaView {
     _lastMediaId
 
     static OnItemClick(event) {
+        if (MediaView._songList.songs.length === 0) {
+            return
+        }
         SongQueue.LoadSongs(MediaView._songList.songs)
         SongQueue.UpdateQueue()
         SongQueue.currentSong = SongQueue.GetSong(event.target.dataset.uuid)
@@ -129,6 +132,7 @@ class MediaView {
         HideContentTabs()
         MediaView._UpdateContent("Loading...", "", "src/assets/no-song.png",)
         MediaView._songList.Hide()
+        MediaView._songList.songs = []
         LoadingText.Attach(MediaView.element)
     }
     static ClearMediaId(id) {
