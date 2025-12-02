@@ -1,8 +1,8 @@
-const STATIC_CACHE_NAME = "static"
-const DYNAMIC_CACHE_NAME = "dynamic-v7"
+const STATIC_CACHE = "static"
+const DYNAMIC_CACHE = "dynamic-v7"
 
 //Populated by a python file
-const staticFiles = ['index.html', 'src/main-4fb4fdfb.js', 'src/styles-3c62f4cd.css', 'src/assets/neuro-cry.png', 'src/assets/evil-bg.png', 'src/assets/evil-cheer.webp', 'src/assets/no-song.png', 'src/assets/neuro-cheer.webp', 'src/assets/icons/shuffle.svg', 'src/assets/icons/volume-off.svg', 'src/assets/icons/newero.avif', 'src/assets/icons/play-img.svg', 'src/assets/icons/folder-plus.svg', 'src/assets/icons/layout-grid.svg', 'src/assets/icons/plus.svg', 'src/assets/icons/track-prev.svg', 'src/assets/icons/share.svg', 'src/assets/icons/newliv.avif', 'src/assets/icons/maximize.svg', 'src/assets/icons/x.svg', 'src/assets/icons/tool.svg', 'src/assets/icons/search.svg', 'src/assets/icons/web.svg', 'src/assets/icons/play.svg', 'src/assets/icons/volume.svg', 'src/assets/icons/file-export.svg', 'src/assets/icons/swarmfm.png', 'src/assets/icons/track-next.svg', 'src/assets/icons/trash.svg', 'src/assets/icons/edit.svg', 'src/assets/icons/volume-2.svg', 'src/assets/icons/pause.svg', 'src/assets/icons/x-img.svg', 'src/assets/icons/playlist-remove.svg', 'src/assets/icons/playlist-add.svg', 'src/assets/icons/moon.svg', 'src/assets/neuro-bg.png']
+const staticFiles = ['index.html', 'src/main-4314a830.js', 'src/styles-7c7853b5.css', 'src/assets/neuro-cry.png', 'src/assets/evil-bg.png', 'src/assets/evil-cheer.webp', 'src/assets/no-song.png', 'src/assets/neuro-cheer.webp', 'src/assets/icons/shuffle.svg', 'src/assets/icons/volume-off.svg', 'src/assets/icons/newero.avif', 'src/assets/icons/play-img.svg', 'src/assets/icons/folder-plus.svg', 'src/assets/icons/layout-grid.svg', 'src/assets/icons/plus.svg', 'src/assets/icons/track-prev.svg', 'src/assets/icons/share.svg', 'src/assets/icons/newliv.avif', 'src/assets/icons/maximize.svg', 'src/assets/icons/x.svg', 'src/assets/icons/tool.svg', 'src/assets/icons/search.svg', 'src/assets/icons/web.svg', 'src/assets/icons/play.svg', 'src/assets/icons/volume.svg', 'src/assets/icons/file-export.svg', 'src/assets/icons/swarmfm.png', 'src/assets/icons/track-next.svg', 'src/assets/icons/trash.svg', 'src/assets/icons/edit.svg', 'src/assets/icons/volume-2.svg', 'src/assets/icons/pause.svg', 'src/assets/icons/x-img.svg', 'src/assets/icons/playlist-remove.svg', 'src/assets/icons/playlist-add.svg', 'src/assets/icons/moon.svg', 'src/assets/neuro-bg.png']
 
 //Folders must have trailing slash
 const cacheFirstUrls = [
@@ -18,12 +18,9 @@ const offlineResponse = new Response("Offline", {
     statusText: "Offline"
 })
 
-let StaticCache
-let DynamicCache
-
 async function LoadStaticFiles() {
     try {
-        const cache = await caches.open(STATIC_CACHE_NAME)
+        const cache = await caches.open(STATIC_CACHE)
         await cache.addAll(staticFiles)
     }
     catch (error) {
@@ -40,21 +37,16 @@ self.addEventListener("install", (event) => {
 async function ClearCaches() {
     const cacheNames = await caches.keys()
     for (const cacheName of cacheNames) {
-        if (cacheName !== STATIC_CACHE_NAME && cacheName !== DYNAMIC_CACHE_NAME) {
+        if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
             await caches.delete(cacheName)
         }
     }
-}
-async function OpenCaches() {
-    StaticCache = await caches.open(STATIC_CACHE_NAME)
-    DynamicCache = await caches.open(DYNAMIC_CACHE_NAME)
 }
 
 self.addEventListener("activate", (event) => {
     event.waitUntil((async () => {
         try {
             await ClearCaches()
-            await OpenCaches()
             self.clients.claim()
         }
         catch (error) {
@@ -63,7 +55,8 @@ self.addEventListener("activate", (event) => {
     })())
 })
 
-async function CacheFirst(request, cache) {
+async function CacheFirst(request, cacheName) {
+    const cache = await caches.open(cacheName)
     const cached = await cache.match(request)
     if (cached) {
         return cached
@@ -81,7 +74,8 @@ async function CacheFirst(request, cache) {
         return cachedResponse || offlineResponse
     }
 }
-async function NetworkFirst(request, cache) {
+async function NetworkFirst(request, cacheName) {
+    const cache = await caches.open(cacheName)
     try {
         const response = await fetch(request)
         if (response.ok) {
@@ -98,7 +92,7 @@ async function NetworkFirst(request, cache) {
 self.addEventListener("fetch", (event) => {
     if (event.request.mode === "navigate") {
         event.respondWith(
-            NetworkFirst(event.request, StaticCache)
+            NetworkFirst(event.request, STATIC_CACHE)
         )
         return
     }
@@ -106,7 +100,7 @@ self.addEventListener("fetch", (event) => {
     for (let file of cacheFirstUrls) {
         if (url.pathname.startsWith(file)) {
             event.respondWith(
-                CacheFirst(event.request, DynamicCache)
+                CacheFirst(event.request, DYNAMIC_CACHE)
             )
             return
         }
@@ -114,7 +108,7 @@ self.addEventListener("fetch", (event) => {
     for (let file of networkFirstUrls) {
         if (url.pathname.startsWith(file)) {
             event.respondWith(
-                NetworkFirst(event.request, DynamicCache)
+                NetworkFirst(event.request, DYNAMIC_CACHE)
             )
             return
         }

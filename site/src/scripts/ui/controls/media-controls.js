@@ -106,14 +106,15 @@ class MediaControls {
                 const spacer = document.createElement("div")
                 spacer.classList.add("spacer", "add-to-playlist")
                 buttons.append(spacer)
-                // Login.AddLoginCallback(() => {
-                //     spacer.remove()
-                //     const addToPlaylist = CreateAddToPlaylistButton(this.#OnAddToPlaylistClick.bind(this))
-                //     buttons.append(addToPlaylist)
-                // })
-                return
+                Login.AddLoginCallback(() => {
+                    spacer.remove()
+                    const addToPlaylist = CreateAddToPlaylistButton(this.#OnAddToPlaylistClick.bind(this))
+                    buttons.append(addToPlaylist)
+                })
             }
-            buttons.append(CreateAddToPlaylistButton(this.#OnAddToPlaylistClick.bind(this)))
+            else {
+                buttons.append(CreateAddToPlaylistButton(this.#OnAddToPlaylistClick.bind(this)))
+            }
         }
 
 
