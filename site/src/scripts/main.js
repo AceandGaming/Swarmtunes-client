@@ -33,11 +33,11 @@ PopulateDiscover().catch((e) => {
     console.error(e)
 })
 currentTheme = Number(localStorage.getItem("theme") ?? 0)
-UpdateTheme()
 
 ShowContentWindow(document.getElementById("discover"))
-
+UpdateTheme()
 ResizeAllGridDisplays()
+PlayState.Initalise()
 
 function OnLogin(isAdmin) {
     document.getElementById("header-login-button").textContent = "Log Out"

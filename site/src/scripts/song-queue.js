@@ -21,7 +21,7 @@ class SongQueue {
         return this.#songQueue.slice(this.#queuePointer)
     }
     static set suffleSongs(value) {
-        this.#suffle = value
+        localStorage.setItem("suffle", value)
         this.UpdateQueue()
         for (const callback of this.#callbacks) {
             callback(value)
@@ -33,11 +33,13 @@ class SongQueue {
     static get songCount() {
         return this.#songQueue.length
     }
+    static get #suffle() {
+        return localStorage.getItem("suffle") == "true"
+    }
 
     static #loadedSongs = []
     static #songQueue = []
     static #queuePointer = 0
-    static #suffle = false
     static #callbacks = []
 
     static GetNextSong() {
@@ -85,22 +87,27 @@ class SongQueue {
         this.#songQueue = []
         this.#queuePointer = 0
         this.#loadedSongs = []
+        PlayState.Update({ songIds: [] })
     }
     static LoadSongs(songs) {
         this.#loadedSongs = CloneSongs(songs)
+        PlayState.Update({ songIds: GetUuidsFromSongList(songs) })
     }
     static LoadSingleSong(song) {
-        this.#loadedSongs = [song]
-        this.currentSong = song
+        this.LoadSongs([song])
         this.#UnshuffleQueue()
+        this.currentSong = song
         NowPlaying.Update()
     }
-    static UpdateQueue() {
+    static UpdateQueue(currentSong) {
         if (this.#suffle) {
             this.#ShuffleQueue()
         }
         else {
             this.#UnshuffleQueue()
+        }
+        if (currentSong) {
+            this.currentSong = currentSong
         }
         NowPlaying.Update()
     }
@@ -109,9 +116,9 @@ class SongQueue {
         NowPlaying.Update()
     }
     static GetSong(uuid) {
-        for (let i = 0; i < this.#songQueue.length; i++) {
-            if (this.#songQueue[i].uuid === uuid) {
-                return this.#songQueue[i]
+        for (let i = 0; i < this.#loadedSongs.length; i++) {
+            if (this.#loadedSongs[i].uuid === uuid) {
+                return this.#loadedSongs[i]
             }
         }
     }
@@ -148,8 +155,6 @@ class SongQueue {
                 return
             }
         }
-        console.warn("Song not found in queue")
-        this.#queuePointer = 0
     }
     static SpliceSong(song) {
         if (song === undefined) {

@@ -1,6 +1,10 @@
 class ConfirmAction extends PopupWindow {
     static instance
     static AskUser(displayMessage) {
+        const oldInstance = this.instance
+        if (oldInstance) {
+            document.body.removeChild(oldInstance.background)
+        }
         return new Promise((resolve, reject) => {
             new ConfirmAction(displayMessage)
             ConfirmAction.instance.window.querySelector(".cancel-button").addEventListener("click", () => {

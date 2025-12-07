@@ -1,5 +1,7 @@
 #song-fullscreen {
-    display: none;
+    position: absolute;
+    display: block;
+    visibility: hidden;
     width: 100%;
     height: 100%;
     background: linear-gradient(
@@ -8,7 +10,7 @@
     );
 }
 #song-fullscreen.show {
-    display: block;
+    visibility: visible;
 }
 
 #song-fullscreen .close-button {
@@ -17,6 +19,11 @@
     right: 10px;
     width: 35px;
     height: 35px;
+}
+#song-fullscreen .swarmfm-player {
+    border: none;
+    width: inherit;
+    height: inherit;
 }
 #song-fullscreen .content {
     display: flex;
@@ -61,6 +68,7 @@
     width: 42vh;
     height: auto;
     border-radius: 8%;
+    background-color: transparent;
 }
 #song-fullscreen .title-container {
     display: flex;
@@ -81,27 +89,10 @@
 
 
 #song-fullscreen .media-controls {
-    width: inherit;
-    margin-bottom: auto;
-    gap: 6%;
-    height: 40px;
+    margin: auto;
 }
 #song-fullscreen .media-controls button {
     background: none;
-    max-width: 36px;
-    flex-basis: 36px;
-    min-width: 36px;
-}
-#song-fullscreen .media-controls button.play-pause {
-    max-width: 40px;
-    min-width: 40px;
-    flex-basis: 40px;
-}
-#song-fullscreen .media-controls > :first-child {
-    margin-right: 20px;
-}
-#song-fullscreen .media-controls > :last-child {
-    margin-left: 20px;
 }
 
 #song-fullscreen .seek-bar-container {

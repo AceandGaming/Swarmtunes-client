@@ -4,6 +4,8 @@ class SongFullscreen {
     static #artistText
     static #titleText
     static #singersText
+    static #swarmFMPanel
+    static #content
 
     static Create() {
         const element = document.createElement("div")
@@ -14,10 +16,15 @@ class SongFullscreen {
         closeButton.addEventListener("click", SongFullscreen.Hide.bind(SongFullscreen))
         element.appendChild(closeButton)
 
+        const swarmFMPlayer = document.createElement("iframe")
+        swarmFMPlayer.classList.add("swarmfm-player", "hidden")
+        this.#swarmFMPanel = swarmFMPlayer
+
         const content = document.createElement("div")
         content.classList.add("content")
         const info = document.createElement("div")
         const controls = document.createElement("div")
+        this.#content = content
 
         const coverContainer = document.createElement("div")
         coverContainer.classList.add("cover-container")
@@ -54,15 +61,15 @@ class SongFullscreen {
         controls.append(seekBar.element)
         let mediaControls
         if (isMobile) {
-            mediaControls = MediaControls.Create(true, false, true)
+            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, addToPlaylist: true, size: 40, gap: 10 })
         }
         else {
-            mediaControls = MediaControls.Create(true, true)
+            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, volume: true, size: 40, gap: 10 })
         }
         controls.append(mediaControls)
 
         content.append(info, controls)
-        element.appendChild(content)
+        element.append(content, swarmFMPlayer)
         this.#element = element
         document.querySelector("body").prepend(element)
     }
@@ -70,25 +77,30 @@ class SongFullscreen {
         this.#element.classList.remove("show")
         document.querySelector("main").style.display = ""
         ShowFooter()
+        document.exitFullscreen()
     }
     static Show() {
         this.#element.classList.add("show")
         document.querySelector("main").style.display = "none"
         HideFooter()
-
+        this.#element.requestFullscreen()
+        document.onfullscreenchange = () => {
+            if (!document.fullscreenElement) {
+                this.Hide()
+            }
+        }
     }
     static Display(title, artist, singers, coverUrl) {
+        this.#swarmFMPanel.classList.add("hidden")
+        this.#content.classList.remove("hidden")
+
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
         if (this.#singersText) {
             this.#singersText.textContent = singers.join("\n")
         }
 
-        this.#coverImage.src = coverUrl
-
-
-        const image = new Image()
-        image.onload = () => {
+        this.#coverImage.onload = () => {
             const colour = colourThief.getColor(this.#coverImage)
             this.#element.style.background = `linear-gradient(
                 rgba(${colour[0]}, ${colour[1]}, ${colour[2]}, 1), 
@@ -105,7 +117,11 @@ class SongFullscreen {
                 this.#singersText.style.color = ""
             }
         }
-        image.src = coverUrl
-
+        this.#coverImage.src = coverUrl
+    }
+    static DisplaySwarmFM() {
+        this.#swarmFMPanel.src = Network.swarmFMURL + "/player/dummy-player?offset=" + SwarmFM.TARGET_LATENCY
+        this.#swarmFMPanel.classList.remove("hidden")
+        this.#content.classList.add("hidden")
     }
 }

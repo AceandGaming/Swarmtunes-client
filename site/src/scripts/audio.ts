@@ -72,16 +72,16 @@ class AudioPlayer extends AudioBase {
         if (song) {
             this.currentSong = song
             this.audio.src = Network.GetAudioURL(song)
-            CurrentSongBar.DisplaySong(song)
+            PlaybackController.DisplaySong(song)
             this.audio.oncanplay = () => {
                 this.audio.play()
             }
+            PlayState.Update({ currentSongId: song.Id })
         }
         else {
             this.audio.play()
         }
-        
-
+        PlaybackController.UpdateMediaSession({playPause: true, skipping: SongQueue.songCount > 1, seeking: true})
     }
     public Pause(): void {
         this.audio.pause()

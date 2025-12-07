@@ -3,7 +3,7 @@
     max-width: 250px;
     min-width: 165px;
     min-height: 100%;
-    background: var(--background-colour);
+    background: var(--background);
     background-size: 256px;
     flex-direction: column;
 }
@@ -19,7 +19,7 @@
     border-bottom: 1px solid var(--subtext-colour);
     margin-bottom: 10px;
     overflow: hidden;
-    background-color: var(--header-colour);
+    background-color: var(--background-colour);
 }
 #now-playing > .title > img {
     width: 30px;

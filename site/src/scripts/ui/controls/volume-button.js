@@ -58,6 +58,7 @@ class VolumeButton {
     }
     Show() {
         this.menuOpen = true
+        this.#volumeSlider.blur()
         this.#volumeSlider.style.display = "flex"
         this.#volumeButton.classList.add("active")
     }

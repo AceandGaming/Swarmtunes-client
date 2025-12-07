@@ -31,6 +31,7 @@ class PlaylistManager {
         const playlist = this.#playlists[uuid]
         await playlist.GetSongs()
         PlaylistTab.OnPlaylistLoaded()
+        return playlist
     }
     static AddPlaylist(playlist) {
         this.#playlists[playlist.uuid] = playlist
@@ -41,7 +42,7 @@ class PlaylistManager {
         PlaylistTab.Populate()
     }
     static async DisplayPlaylist(uuid) {
-        const playlist = this.#playlists[uuid]
+        const playlist = await this.LoadPlaylist(uuid)
         PlaylistView.Show(playlist)
     }
 }

@@ -1,10 +1,8 @@
 .media-controls {
     display: flex;
-    justify-content: center;
-    gap: 7px;
+    justify-content: left;
 }
 .media-controls button {
-    flex: 0 0 30px;
     pointer-events: all;
     cursor: pointer;
     padding: 0;
@@ -12,18 +10,25 @@
     aspect-ratio: 1/1;
     margin: auto 0;
 }
+.media-controls button.hidden {
+    display: none;
+}
 .media-controls > :first-child {
-    margin-right: 10px;
+    margin-right: var(--endGap)
 }
 .media-controls > :last-child {
-    margin-left: 10px;
+    margin-left: var(--endGap)
 }
 .media-controls button.next, .media-controls button.previous {
     transform: scaleX(1.5);
     aspect-ratio: 3/2;
 }
-.media-controls button.play-pause {
-    max-width: 30px;
+.media-controls button.play-pause { 
+    display: contents;
+}
+.media-controls button.play-pause * {
+    width: inherit;
+    height: inherit;
 }
 .media-controls button.play-pause .pause{
     display: none;
@@ -65,6 +70,8 @@
 }
 .volume-controls svg {
     display: none;
+    width: inherit;
+    height: inherit;
 }
 .volume-controls svg.active {
     display: block;

@@ -52,4 +52,8 @@ class PopupWindow {
         //     this.window.style.transform = ""
         // })
     }
+    Close() {
+        this.Hide()
+        document.removeChild
+    }
 }

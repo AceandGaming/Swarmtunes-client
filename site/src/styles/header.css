@@ -2,9 +2,13 @@ header {
     position: relative;
     display: flex;
     justify-content: right;
-    background-color: var(--header-colour);
+    background: linear-gradient(
+        var(--header-colour),
+        var(--background-colour)
+    );
     width: 100%;
     height: 50px;
+    box-shadow: 0 0 5px #00000050;
 }
 footer {
     position: relative;

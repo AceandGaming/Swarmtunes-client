@@ -1,5 +1,6 @@
 :root {
     --background-colour: #171717;
+    --background: var(--background-colour);
     --background-sub-colour: #111;
     --text-colour: #ffffff;
     --subtext-colour: #8b8b8b;
@@ -28,9 +29,10 @@
     overflow: hidden;
 }
 :root[data-theme="neuro"] {
-    --background-colour: url("../assets/neuro-bg.png");
+    --background-colour: #ffa3ae;
+    --background: url("../assets/neuro-bg.png");
     --background-sub-colour: #8a4a52;
-    --header-colour: #ce838c;
+    --header-colour: #ffb1bb;
     --current-song-bar: #ea95a0;
     --song-item-hover: #ffffff50;
     --text-colour: #ffffff;
@@ -56,9 +58,10 @@
     --icon-active: #ccc;
 }
 :root[data-theme="evil"] {
-    --background-colour: url("../assets/evil-bg.png");
+    --background-colour: #643134;
+    --background: url("../assets/evil-bg.png");
     --background-sub-colour: #3a1c1e;
-    --header-colour: #432123;
+    --header-colour: #693a3d;
     --current-song-bar: #50272a;
     --song-item-hover: #ffffff50;
     --text-colour: #fff;
@@ -70,9 +73,9 @@
     --header-tab-default: #50272a;
     --header-tab-active: #643134;
     --header-tab-border: #3a1c1e;
-    --default-button-colour: #965159;
-    --default-button-hover: #764046;
-    --default-button-active: none;
+    --default-button-colour: #783d42;
+    --default-button-hover: #87494e;
+    --default-button-active: #50272a;
     --input-colour: #50272a;
     --input-colour-hover: #764046;
     --input-border: #965159;
@@ -80,7 +83,59 @@
     --slider-border: #965159;
     --slider-track: #965159;
 }
-
+:root[data-theme="darker"] {
+    --background-colour: black;
+    --background-sub-colour: black;
+    --text-colour: #555;
+    --subtext-colour: #333;
+    --header-colour: #111;
+    --header-tab-default: #0a0a0a;
+    --current-song-bar: #0a0a0a;
+    --seek-bar-background: black;
+    --seek-bar-played: #222;
+    --seek-bar-loaded: #111;
+    --default-button-colour: #111;
+    --default-button-hover: #1a1a1a;
+    --default-button-active: black;
+    --cover-background: black;
+    --icon-default: #333;
+    --icon-hover: #444;
+    --icon-active: #111;
+}
+:root[data-theme="darker"] img {
+    filter: brightness(0.3);
+}
+:root[data-theme="light"] {
+    --background-colour: #fafafa;
+    --background-sub-colour: #zzzzzz;
+    --text-colour: black;
+    --subtext-colour: black;
+    --header-colour: white;
+    --current-song-bar: white;
+    --icon-default: #222;
+    --icon-hover: #888;
+    --icon-active: #ccc;
+    --header-tab-default: #ddd;
+    --header-tab-active: #fafafa;
+    --header-tab-border: #ccc;
+    --default-button-colour: #ddd;
+    --default-button-hover: #eee;
+    --default-button-active: #ccc;
+    --input-colour: #ddd;
+    --input-colour-hover: #eee;
+    --input-border: #000;
+    filter: brightness(3);
+}
+:root[data-theme="bad eyesight"] {
+    filter: blur(10px) grayscale(80%) sepia(10%) contrast(0.9);
+}
+:root[data-theme="what"] {
+    --background-colour: rgb(107, 167, 110);
+    --header-colour: white;
+    --current-song-bar: white;
+    --text-colour: black;
+    filter: hue-rotate(180deg) contrast(2);
+}
 html,
 body {
     padding-bottom: env(safe-area-inset-bottom);
@@ -115,7 +170,7 @@ main {
     flex: 1;
     max-width: 100vw;
     min-width: 300px;
-    background: var(--background-colour);
+    background: var(--background);
     background-size: 256px;
 }
 #content {
@@ -209,7 +264,7 @@ button:active {
     font-size: 12px;
 }
 .hidden {
-    display: none;
+    display: none !important;
 }
 .require-auth {
     display: none !important;
@@ -266,7 +321,7 @@ p {
 
 input[type="range"] {
     -webkit-appearance: none;
-    background: var(--background-colour);
+    background: var(--background);
     padding: 6px;
     outline: none;
     border: none;

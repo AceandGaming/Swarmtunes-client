@@ -79,6 +79,11 @@ class Playlist {
         Network.AddSongToPlaylist(this.id, [song.Id])
         MediaView.ClearMediaId(this.Id)
     }
+    AddMultiple(songs: Song[]) {
+        for (const song of songs) {
+            this.Add(song)
+        }
+    }
     Remove(song: Song) {
         if (!this.songsLoaded) {
             throw new Error("Playlist songs not loaded")

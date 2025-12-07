@@ -11,7 +11,7 @@
   font-size: x-large;
   font-weight: bold;
   pointer-events: none;
-  background: var(--background-colour);
+  background: transparent;
 }
 .error-screen button {
   pointer-events: all;

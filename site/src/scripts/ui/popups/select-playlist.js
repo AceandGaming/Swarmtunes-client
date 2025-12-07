@@ -11,6 +11,10 @@ function CreatePlaylistListItemElement(playlist, onClickEvent) {
 class SelectPlaylist extends PopupWindow {
     static instance
     static AskUser() {
+        const oldInstance = this.instance
+        if (oldInstance) {
+            document.body.removeChild(oldInstance.background)
+        }
         return new Promise((resolve, reject) => {
             function OnPlaylistClick(event) {
                 const uuid = event.target.dataset.uuid

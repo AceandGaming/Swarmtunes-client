@@ -40,6 +40,9 @@ class NowPlaying {
         }
     }
     static Clear() {
+        if (this.#songlist === undefined) {
+            return
+        }
         this.#songlist.songs = []
         this.#songlist.Update()
     }

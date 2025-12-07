@@ -211,10 +211,9 @@ async function OnAlbumAddToPlaylistClick(event, uiEvent) {
     if (playlistUuid === null) {
         return
     }
-    const album = await Network.GetAlbum(uuid)
-    const playlist = PlaylistManager.GetPlaylist(playlistUuid)
-    await playlist.LoadSongs()
-    playlist.AddMultipleSongs(album.songs)
+    const album = await Network.GetAlbum(uuid, true)
+    const playlist = await PlaylistManager.LoadPlaylist(playlistUuid)
+    playlist.AddMultiple(album.Songs)
 }
 function OnAlbumPlayNowClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid
@@ -229,19 +228,23 @@ function OnClearQueueClick(event, uiEvent) {
 }
 function OnPlaylistPlayNowClick(event, uiEvent) {
     const uuid = event.target.dataset.uuid
-    Network.GetPlaylist(uuid, true).then((playlist) => {
+    PlaylistManager.LoadPlaylist(uuid).then((playlist) => {
         SongQueue.PlayNow(playlist.songs)
         AudioPlayer.instance.Play(playlist.songs[0])
     })
 }
 async function OnAddPlaylistToPlaylistClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    const playlistUuid = await SelectPlaylist.AskUser()
-    if (playlistUuid === null) {
+    const id = event.target.dataset.uuid
+    const otherId = await SelectPlaylist.AskUser()
+    if (otherId === null) {
         return
     }
-    const playlist = await Network.GetPlaylist(uuid)
-    await PlaylistManager.GetPlaylist(playlistUuid).AddMultipleSongs(playlist.songs)
+    if (id === otherId) {
+        return
+    }
+    const playlist = await PlaylistManager.LoadPlaylist(id)
+    const otherPlaylist = await PlaylistManager.LoadPlaylist(otherId)
+    otherPlaylist.AddMultiple(playlist.songs)
 }
 // async function OnPlaylistExportClick(event, uiEvent) {
 

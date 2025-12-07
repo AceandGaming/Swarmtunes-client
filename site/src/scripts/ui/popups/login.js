@@ -148,7 +148,6 @@ class LoginPopup extends PopupWindow {
 
         this.remeberMeToggle = document.createElement("input")
         this.remeberMeToggle.type = "checkbox"
-        this.remeberMeToggle.checked = true
         this.remeberMeLabel.prepend(this.remeberMeToggle)
 
         this.content.appendChild(this.remeberMeLabel)

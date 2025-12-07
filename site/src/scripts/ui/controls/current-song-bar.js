@@ -59,7 +59,7 @@ class CurrentSongBar {
         fullscreenButton.classList.add("fullscreen", "icon-button")
         fullscreenButton.addEventListener("click", SongFullscreen.Show.bind(SongFullscreen))
         rightContent.append(
-            MediaControls.Create(true, true),
+            MediaControls.Create({ skipping: true, shuffle: true, volume: true }),
             fullscreenButton
         )
 
@@ -85,7 +85,7 @@ class CurrentSongBar {
 
         const rightContent = document.createElement("div")
         rightContent.append(
-            MediaControls.Create(false, false)
+            MediaControls.Create({ skipping: true })
         )
 
         currentSongBar.append(leftContent, middleContent, rightContent)
@@ -109,8 +109,6 @@ class CurrentSongBar {
         this.#element.setAttribute("data-rightclickcategory", "song")
     }
     static Display(title, artist, singers, coverUrl) {
-        SongFullscreen.Display(title, artist, singers, coverUrl)
-        this.UpdateRightClick()
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
         if (this.#singersText) {
@@ -118,17 +116,5 @@ class CurrentSongBar {
         }
 
         this.#coverImage.src = coverUrl
-
-        navigator.mediaSession.metadata = new MediaMetadata({
-            title: title,
-            artist: artist,
-            album: singers.join(", "),
-            artwork: [{ src: coverUrl }],
-        })
-    }
-    static DisplaySong(song) {
-        const url = Network.GetCover(song.Cover, 512)
-        this.Display(song.Title, song.Artist, song.Singers, url)
-        this.UpdateRightClick(song.Id)
     }
 }

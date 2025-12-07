@@ -13,7 +13,7 @@ class Network {
         return "https://dev-api.swarmtunes.com"
     }
     static get swarmFMURL() {
-        return "https://swarmfm.boopdev.com/v2"
+        return "https://swarmfm.boopdev.com"
     }
     static get userToken() {
         return sessionStorage.getItem("userToken")
@@ -104,12 +104,10 @@ class Network {
     }
 
     static async GetSwarmFMStream() {
-        const response = await this.Get(`swarmfm`)
-        const json = await response.json()
-        return `${json[0]}?now=${Date.now()}`
+        return `https://cast.sw.arm.fm/stream?now=${Date.now()}`
     }
     static async GetSwarmFMInfo() {
-        const response = await fetch(`${this.swarmFMURL}/player`)
+        const response = await fetch(`${this.swarmFMURL}/v2/player`)
         if (!response.ok) {
             console.error("Failed to get swarmfm info")
             return

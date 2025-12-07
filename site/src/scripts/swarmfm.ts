@@ -7,49 +7,52 @@ class SwarmFMInfo {
     ) {}
 }
 class SwarmFM extends AudioBase {
-    static instance = new SwarmFM();
-    static TARGET_LATENCY = 4;
+    static instance = new SwarmFM()
+    static TARGET_LATENCY = 4
 
     get Audio(): HTMLAudioElement {
-        return this.audio;
+        return this.audio
     }
     get Played(): number {
         if (!this.startTime) {
-            return 0;
+            return 0
         }
-        return Math.max(0, this.audio.currentTime - this.startTime - SwarmFM.TARGET_LATENCY);
+        return Math.max(0, (performance.now() / 1000) - this.startTime - SwarmFM.TARGET_LATENCY)
     }
     get Loaded(): number {
         if (!this.startTime) {
-            return 0;
+            return 0
         }
-        return Math.max(0, this.audio.seekable.end(this.audio.seekable.length - 1) - this.startTime);
+        if (this.audio.buffered.length < 1) {
+            return 0
+        }
+        return Math.max(0, this.audio.buffered.end(this.audio.buffered.length - 1) - this.startTime)
     }
     get Duration(): number {
-        return this.duration || 0;
+        return this.duration || 0
     }
     get Paused(): boolean {
-        return this.audio.paused;
+        return this.paused
     }
     set Paused(value: boolean) {
         if (value) {
-            this.Pause();
+            this.Pause()
         }
         else {
-            this.Play();
+            this.Play()
         }
     }
     get Volume(): number {
-        return this.volume;
+        return this.volume
     }
     set Volume(value: number) {
-        this.volume = value;
+        this.volume = value
         if (!this.Paused) {
-            this.audio.volume = value;
+            this.audio.volume = value
         }
     }
     get HasControl(): boolean {
-        return this.hasControl;
+        return this.hasControl
     }
 
     private audio: HTMLAudioElement
@@ -61,77 +64,79 @@ class SwarmFM extends AudioBase {
     private volume: number = 0.5
 
     constructor() {
-        super();
-        this.audio = new window.Audio();
-        this.audio.id = "swarmfm-radio";
-        Network.GetSwarmFMStream().then((swarmfm) => (this.audio.src = swarmfm));
-        this.audio.preload = "none";
-        this.audio.volume = 0
+        super()
+        this.audio = new window.Audio()
+        this.audio.id = "swarmfm-radio"
+        Network.GetSwarmFMStream().then((swarmfm) => (this.audio.src = swarmfm))
+        this.audio.preload = "none"
     }
 
     private async CheckSync() {
+        if (!this.hasControl) {
+            return
+        }
         if (!this.paused && this.audio.paused) {
-            this.Play();
+            this.Play()
+        }
+        if (this.audio.buffered.length < 1) {
+            return
+        }
+        const end = this.audio.buffered.end(this.audio.buffered.length - 1)
+        if (this.audio.currentTime - end > -0.1) {
+            this.audio.currentTime = end - SwarmFM.TARGET_LATENCY
         }
     }
     private async UpdateInfo() {
         if (!this.hasControl) {
-            return;
+            return
         }
-        const info = await Network.GetSwarmFMInfo(); 
+        const info = await Network.GetSwarmFMInfo() 
         if (!info) {
-            return;
+            return
         }
-        this.currentSong = info.currentSong;
-        this.duration = info.duration;
-        this.startTime = this.audio.currentTime - info.position;
+        this.currentSong = info.currentSong
+        this.duration = info.duration
+        this.startTime = performance.now() / 1000 - info.position
 
-        const song = this.currentSong;
-        let coverUrl = Network.GetCover(song.Cover, 256);
-        if (song.HasCustomCover) {
-            coverUrl = Network.swarmFMURL + song.Cover + ".png"
-        }
-        CurrentSongBar.Display(
-            song.Title,
-            song.Artist,
-            song.Singers,
-            coverUrl
-        )
+        const song = this.currentSong
+        PlaybackController.DisplaySwarmFMInfo(info)
 
         setTimeout(
             this.UpdateInfo.bind(this),
             (info.duration - info.position + SwarmFM.TARGET_LATENCY / 2) * 1000
-        );
+        )
     }
     Play(): void {
         if (!this.paused) {
-            return;
+            return
         }
-        AudioPlayer.instance.Clear();
-        this.hasControl = true;
-        this.paused = false;
-        this.UpdateInfo();
-        NowPlaying.Clear();
-        this.audio.volume = this.volume;
-        this.audio.play();
-        setInterval(this.CheckSync.bind(this), 1000);
+        AudioPlayer.instance.Clear()
+        this.hasControl = true
+        this.paused = false
+        this.UpdateInfo()
+        NowPlaying.Clear()
+        this.audio.volume = this.volume
+        this.audio.play()
+        setInterval(this.CheckSync.bind(this), 1000)
+        PlaybackController.UpdateMediaSession({playPause: true})
+        PlayState.Update({ currentSongId: "swarmfm", played: this.Played, songIds: [] })
     }
     Pause(): void {
-        this.audio.pause();
-        this.paused = true;
+        this.audio.pause()
+        this.paused = true
     }
     Clear(): void {
         this.Pause()
-        this.duration = null;
-        this.startTime = null;
-        this.hasControl = false;
+        this.duration = null
+        this.startTime = null
+        this.hasControl = false
     }
 
     public OnPlayPause(callback: (state: boolean) => void): void {
-        this.audio.addEventListener("play", () => callback(true));
-        this.audio.addEventListener("pause", () => callback(false));
+        this.audio.addEventListener("play", () => callback(true))
+        this.audio.addEventListener("pause", () => callback(false))
     }
     public OnTimeUpdate(callback: (played: number, duration: number, loaded: number) => void): void {
-        this.audio.addEventListener("timeupdate", () => callback(this.Played, this.Duration, this.Loaded));
+        this.audio.addEventListener("timeupdate", () => callback(this.Played, this.Duration, this.Loaded))
     }
 }

@@ -13,8 +13,8 @@ class MediaView {
             return
         }
         SongQueue.LoadSongs(MediaView._songList.songs)
-        SongQueue.UpdateQueue()
-        SongQueue.currentSong = SongQueue.GetSong(event.target.dataset.uuid)
+        const song = SongQueue.GetSong(event.target.dataset.uuid)
+        SongQueue.UpdateQueue(song)
         AudioPlayer.instance.Play(SongQueue.currentSong)
     }
     static OnCoverClick(event) {
