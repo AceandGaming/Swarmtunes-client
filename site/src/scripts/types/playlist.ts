@@ -7,11 +7,8 @@ interface PlaylistPrams {
     songIds?: id[]
 }
 
-
 class Playlist {
     get Id() { return this.id }
-    /** @deprecated Use Playlist.Id instead */ 
-    get uuid() { return this.id }
     get Title() { return this.title }
     set Title(title) { 
         this.title = title 
@@ -94,4 +91,9 @@ class Playlist {
         Network.RemoveSongFromPlaylist(this.id, [song.Id])
         MediaView.ClearMediaId(this.Id)
     }
+}
+
+function OnPlaylistClick(event: any) {
+    const id = event.target.dataset.id
+    PlaylistManager.DisplayPlaylist(id)
 }

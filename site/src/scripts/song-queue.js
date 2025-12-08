@@ -91,7 +91,7 @@ class SongQueue {
     }
     static LoadSongs(songs) {
         this.#loadedSongs = CloneSongs(songs)
-        PlayState.Update({ songIds: GetUuidsFromSongList(songs) })
+        PlayState.Update({ songIds: GetidsFromSongList(songs) })
     }
     static LoadSingleSong(song) {
         this.LoadSongs([song])
@@ -115,16 +115,16 @@ class SongQueue {
         this.#songQueue.splice(this.#queuePointer, 0, ...songs)
         NowPlaying.Update()
     }
-    static GetSong(uuid) {
+    static GetSong(id) {
         for (let i = 0; i < this.#loadedSongs.length; i++) {
-            if (this.#loadedSongs[i].uuid === uuid) {
+            if (this.#loadedSongs[i].id === id) {
                 return this.#loadedSongs[i]
             }
         }
     }
-    static RemoveSong(uuid) {
+    static RemoveSong(id) {
         for (let i = 0; i < this.#songQueue.length; i++) {
-            if (this.#songQueue[i].uuid === uuid) {
+            if (this.#songQueue[i].id === id) {
                 this.#songQueue.splice(i, 1)
                 if (this.#queuePointer === i) {
                     AudioPlayer.instance.Play(this.currentSong)
@@ -136,10 +136,10 @@ class SongQueue {
     }
     static OnQueueOrderChange(newOrder) {
         const newQueue = []
-        for (const uuid of newOrder) {
-            newQueue.push(this.GetSong(uuid))
+        for (const id of newOrder) {
+            newQueue.push(this.GetSong(id))
         }
-        if (newQueue[0].uuid !== this.currentSong.uuid) {
+        if (newQueue[0].id !== this.currentSong.id) {
             AudioPlayer.instance.Play(newQueue[0])
         }
         const previusSongs = this.#songQueue.slice(0, this.#queuePointer)
@@ -150,7 +150,7 @@ class SongQueue {
 
     static SkipSong(song) {
         for (let i = 0; i < this.#songQueue.length; i++) {
-            if (this.#songQueue[i].uuid === song.uuid) {
+            if (this.#songQueue[i].id === song.id) {
                 this.#queuePointer = i
                 return
             }
@@ -162,7 +162,7 @@ class SongQueue {
         }
         const songQueue = this.#songQueue
         for (let i = 0; i < songQueue.length; i++) {
-            if (songQueue[i].uuid === song.uuid) {
+            if (songQueue[i].id === song.id) {
                 songQueue.splice(i, 1)
                 songQueue.splice(0, 0, song)
             }

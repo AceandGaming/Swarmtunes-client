@@ -13,7 +13,7 @@ class MediaView {
             return
         }
         SongQueue.LoadSongs(MediaView._songList.songs)
-        const song = SongQueue.GetSong(event.target.dataset.uuid)
+        const song = SongQueue.GetSong(event.target.dataset.id)
         SongQueue.UpdateQueue(song)
         AudioPlayer.instance.Play(SongQueue.currentSong)
     }
@@ -95,12 +95,12 @@ class MediaView {
         MediaView._coverArt.src = coverUrl
     }
     static _PopulateSongList(mediaObject, catagory = "song", onSongsLoaded = () => { }) {
-        if (mediaObject.uuid == MediaView._lastMediaId) {
+        if (mediaObject.id == MediaView._lastMediaId) {
             LoadingText.Detach(MediaView.element)
             MediaView._songList.Show()
             return
         }
-        MediaView._lastMediaId = mediaObject.uuid
+        MediaView._lastMediaId = mediaObject.id
 
         function Update(songs) {
             MediaView._songList.songs = songs

@@ -1,11 +1,11 @@
 function CreateSongListItemElement(song, onClickEvent, showDate = false, catagory = "song") {
     const element = document.createElement("li")
     element.classList.add("song-list-item", "song")
-    element.setAttribute("data-uuid", song.Id)
+    element.setAttribute("data-id", song.Id)
     element.setAttribute("data-rightclickcategory", catagory)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
-        <img loading="lazy" class="cover" src=${Network.GetCover(song.Cover, 64)}>
+        <cover-img src=${Network.GetCover(song.Cover, 64)}></cover-img>
         <div class="title-artist">
             <span>${song.Title}</span>
             <span class="sub-text">${song.Artist}</span>
@@ -60,7 +60,7 @@ class SongList {
     UpdateAnimated() {
         const oldBounds = {}
         for (const child of this.element.children) {
-            const id = child.getAttribute("data-uuid")
+            const id = child.getAttribute("data-id")
             oldBounds[id] = child.getBoundingClientRect()
         }
 
@@ -70,7 +70,7 @@ class SongList {
         }
 
         for (const element of this.element.children) {
-            const id = element.getAttribute("data-uuid")
+            const id = element.getAttribute("data-id")
             const oldBound = oldBounds[id]
             if (oldBound === undefined) {
                 continue

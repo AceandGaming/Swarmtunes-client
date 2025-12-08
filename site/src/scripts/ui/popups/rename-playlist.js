@@ -39,11 +39,11 @@ class RenamePlaylistPopup extends PopupWindow {
         this.playlist.Title = name
         PlaylistTab.Populate()
     }
-    Show(uuid) {
+    Show(id) {
         if (!Network.IsLoggedIn()) {
             return
         }
-        const playlist = PlaylistManager.GetPlaylist(uuid)
+        const playlist = PlaylistManager.GetPlaylist(id)
 
         super.Show()
         this.input.value = playlist.title

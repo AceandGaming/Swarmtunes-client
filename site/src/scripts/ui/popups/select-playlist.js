@@ -1,6 +1,6 @@
 function CreatePlaylistListItemElement(playlist, onClickEvent) {
     const element = document.createElement("li")
-    element.setAttribute("data-uuid", playlist.Id)
+    element.setAttribute("data-id", playlist.Id)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
         <img loading="lazy" src=${Network.GetCover(playlist.Cover, 64)}>
@@ -17,10 +17,10 @@ class SelectPlaylist extends PopupWindow {
         }
         return new Promise((resolve, reject) => {
             function OnPlaylistClick(event) {
-                const uuid = event.target.dataset.uuid
+                const id = event.target.dataset.id
                 SelectPlaylist.instance.Hide()
-                if (uuid) {
-                    resolve(uuid)
+                if (id) {
+                    resolve(id)
                 }
                 else {
                     reject()

@@ -10,33 +10,31 @@ interface SongPrams {
 }
 
 class Song {
-    get Id() { return this.id; }
-    /** @deprecated Use Song.Id instead */ 
-    get uuid() { return this.id }
-    get Title() { return this.title; }
-    get Artist() { return this.artist; }
-    get Singers() { return this.singers; }
-    get CoverType() { return this.coverType; }
-    get Date() { return this.date; }
-    get IsOriginal() { return this.isOriginal; }
+    get Id() { return this.id }
+    get Title() { return this.title }
+    get Artist() { return this.artist }
+    get Singers() { return this.singers }
+    get CoverType() { return this.coverType }
+    get Date() { return this.date }
+    get IsOriginal() { return this.isOriginal }
 
     get HasCustomCover() {
-        return this.coverType == "custom";
+        return this.coverType == "custom"
     }
     get PrettyDate() {
         return this.date.toLocaleDateString("en-AU", {
             day: "numeric",
             month: "short",
             year: "numeric",
-        });
+        })
     }
     get Cover(): string {
         if (this.HasCustomCover) {
             if (this.coverArt == null) {
-                console.error("Song has custom cover but no cover art", `Type: ${this.coverType}, Art: ${this.coverArt}`);
+                console.error("Song has custom cover but no cover art", `Type: ${this.coverType}, Art: ${this.coverArt}`)
             }
             // @ts-ignore
-            return this.coverArt;
+            return this.coverArt
         }
         return this.coverType
     }
@@ -65,7 +63,7 @@ class Song {
     }
 
     ToString() {
-        return `${this.title} by ${this.artist}`;
+        return `${this.title} by ${this.artist}`
     }
     ToJson() {
         return {
@@ -82,4 +80,17 @@ class Song {
     Copy() {
         return new Song(this.ToJson())
     }
+}
+
+function OnSongClick(event: any) {
+    const id = event.target.dataset.id
+    Network.GetSong(id).then((song) => {
+        if (song === undefined) {
+            console.warn("Song clicked with no song")
+            return
+        }
+        // @ts-ignore
+        AudioPlayer.instance.Play(song)
+        SongQueue.LoadSingleSong(song)
+    })
 }

@@ -1,9 +1,9 @@
 function OnNowPlayingItemClick(event) {
-    const uuid = event.target.dataset.uuid
-    if (uuid === "swarmfm") {
+    const id = event.target.dataset.id
+    if (id === "swarmfm") {
         return
     }
-    const song = SongQueue.GetSong(uuid)
+    const song = SongQueue.GetSong(id)
     if (song === undefined) {
         console.warn("Item clicked with no song")
         return
@@ -27,7 +27,7 @@ class NowPlaying {
 
             const sortable = new Sortable(element, {
                 animation: 150,
-                dataIdAttr: "data-uuid"
+                dataIdAttr: "data-id"
             })
             sortable.option("onEnd", (evt) => {
                 SongQueue.OnQueueOrderChange(sortable.toArray())

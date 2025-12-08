@@ -21,12 +21,12 @@ function FormatTime(seconds) {
     const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
     return `${minutes}:${secs}`;
 }
-function GetUuidsFromSongList(songs) {
-    const uuids = []
+function GetidsFromSongList(songs) {
+    const ids = []
     for (const song of songs) {
-        uuids.push(song.uuid)
+        ids.push(song.id)
     }
-    return uuids
+    return ids
 }
 function HasValues(dict, ...args) {
     for (const arg of args) {
@@ -41,7 +41,7 @@ function RequireAdmin() {
         console.error("User is not admin")
     }
 }
-function LoadSVG(path,) {
+function LoadSVG(path) {
     let svg = document.createElement("svg")
     fetch(path).then((response) => {
         response.text().then((text) => {
@@ -63,4 +63,11 @@ function Promiseify(req) {
         req.onsuccess = () => resolve(req.result)
         req.onerror = () => reject(req.error)
     })
+}
+function CloneSongs(songs) {
+    const newSongs = [];
+    for (const song of songs) {
+        newSongs.push(song.Copy());
+    }
+    return newSongs;
 }

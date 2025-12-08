@@ -8,8 +8,6 @@ interface AlbumPrams {
 
 class Album {
     get Id() { return this.id }
-    /** @deprecated Use Album.Id instead */ 
-    get uuid() { return this.id }
     get Date() { return this.date }
     get Singers() { return this.singers }
     get SongIds() { return this.songIds }
@@ -68,4 +66,12 @@ class Album {
         this.songsLoaded = true
         return this.songs
     }
+}
+
+function OnAlbumClick(event: any) {
+    const id = event.target.dataset.id
+    MediaView.ShowLoading()
+    Network.GetAlbum(id).then(album => {
+        AlbumView.Show(album)
+    })
 }

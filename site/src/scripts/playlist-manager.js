@@ -1,4 +1,3 @@
-
 class PlaylistManager {
     static get playlists() {
         return Object.values(this.#playlists)
@@ -11,7 +10,7 @@ class PlaylistManager {
         try {
             const playlists = await Network.GetAllPlaylists()
             for (const playlist of playlists) {
-                this.#playlists[playlist.uuid] = playlist
+                this.#playlists[playlist.id] = playlist
             }
         }
         catch (error) {
@@ -19,35 +18,30 @@ class PlaylistManager {
             this.error = true
         }
     }
-    static GetPlaylist(uuid) {
-        const playlist = this.#playlists[uuid]
+    static GetPlaylist(id) {
+        const playlist = this.#playlists[id]
         if (playlist === undefined) {
             console.error("Playlist not found")
             return
         }
         return playlist
     }
-    static async LoadPlaylist(uuid) {
-        const playlist = this.#playlists[uuid]
+    static async LoadPlaylist(id) {
+        const playlist = this.#playlists[id]
         await playlist.GetSongs()
         PlaylistTab.OnPlaylistLoaded()
         return playlist
     }
     static AddPlaylist(playlist) {
-        this.#playlists[playlist.uuid] = playlist
+        this.#playlists[playlist.id] = playlist
     }
-    static RemovePlaylist(uuid) {
-        delete this.#playlists[uuid]
-        Network.DeletePlaylist(uuid)
+    static RemovePlaylist(id) {
+        delete this.#playlists[id]
+        Network.DeletePlaylist(id)
         PlaylistTab.Populate()
     }
-    static async DisplayPlaylist(uuid) {
-        const playlist = await this.LoadPlaylist(uuid)
+    static async DisplayPlaylist(id) {
+        const playlist = await this.LoadPlaylist(id)
         PlaylistView.Show(playlist)
     }
-}
-
-function OnPlaylistClick(event) {
-    const uuid = event.target.dataset.uuid
-    PlaylistManager.DisplayPlaylist(uuid)
 }

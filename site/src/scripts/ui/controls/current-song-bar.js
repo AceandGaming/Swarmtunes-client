@@ -101,11 +101,11 @@ class CurrentSongBar {
 
     static UpdateRightClick(id = "") {
         if (id == "") {
-            this.#element.removeAttribute("data-uuid")
+            this.#element.removeAttribute("data-id")
             this.#element.removeAttribute("data-rightclickcategory")
             return
         }
-        this.#element.setAttribute("data-uuid", id)
+        this.#element.setAttribute("data-id", id)
         this.#element.setAttribute("data-rightclickcategory", "song")
     }
     static Display(title, artist, singers, coverUrl) {

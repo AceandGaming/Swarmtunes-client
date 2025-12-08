@@ -35,7 +35,7 @@ class PlayState {
         if (!song) {
             return
         }
-        AudioPlayer.instance.Play(song)
+        AudioPlayer.instance.Load(song)
         if (data.played) {
             AudioPlayer.instance.Played = data.played
         }

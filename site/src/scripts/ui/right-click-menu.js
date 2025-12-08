@@ -144,80 +144,80 @@ document.addEventListener("mousedown", (event) => {
 })
 
 function OnSongExportClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    Network.GetMP3(uuid, true)
+    const id = event.target.dataset.id
+    Network.GetMP3(id, true)
 }
 function OnPlayNextClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    Network.GetSong(uuid).then((song) => {
+    const id = event.target.dataset.id
+    Network.GetSong(id).then((song) => {
         SongQueue.PlayNow([song])
         AudioPlayer.instance.Play(song)
     })
 }
 function RemoveFromQueue(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    SongQueue.RemoveSong(uuid)
+    const id = event.target.dataset.id
+    SongQueue.RemoveSong(id)
     NowPlaying.Update()
 }
 async function OnAddToPlaylistClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    const playlistUuid = await SelectPlaylist.AskUser()
-    if (playlistUuid === null) {
+    const id = event.target.dataset.id
+    const playlistid = await SelectPlaylist.AskUser()
+    if (playlistid === null) {
         return
     }
-    const song = await Network.GetSong(uuid)
-    const playlist = PlaylistManager.GetPlaylist(playlistUuid)
+    const song = await Network.GetSong(id)
+    const playlist = PlaylistManager.GetPlaylist(playlistid)
     await playlist.GetSongs()
     playlist.Add(song)
 }
 function OnRemoveFromPlaylistClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    const playlistUuid = PlaylistView.playlist.Id
-    if (playlistUuid === undefined) {
+    const id = event.target.dataset.id
+    const playlistid = PlaylistView.playlist.Id
+    if (playlistid === undefined) {
         return
     }
-    const playlist = PlaylistManager.GetPlaylist(playlistUuid)
-    playlist.Remove(new SongPlaceholder(uuid))
+    const playlist = PlaylistManager.GetPlaylist(playlistid)
+    playlist.Remove(new SongPlaceholder(id))
     PlaylistView.Update()
 }
 async function OnDeletePlaylistClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + PlaylistManager.GetPlaylist(uuid).title + "</strong>")
+    const id = event.target.dataset.id
+    const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + PlaylistManager.GetPlaylist(id).title + "</strong>")
     if (!confirmation) {
         return
     }
-    PlaylistManager.RemovePlaylist(uuid)
+    PlaylistManager.RemovePlaylist(id)
 }
 function OnNewPlaylistClick(event, uiEvent) {
     CreatePlaylistPopup.Show()
 }
 async function OnRenamePlaylistClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    RenamePlaylistPopup.instance.Show(uuid)
+    const id = event.target.dataset.id
+    RenamePlaylistPopup.instance.Show(id)
 }
 async function OnSongShareClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
+    const id = event.target.dataset.id
     const url =
-        "https://share.swarmtunes.com/?s=" + (await Network.ShareSong(uuid))
+        "https://share.swarmtunes.com/?s=" + (await Network.ShareSong(id))
     navigator.clipboard.writeText(url)
 }
 function OnAlbumExportClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    Network.GetAlbumMP3s(uuid)
+    const id = event.target.dataset.id
+    Network.GetAlbumMP3s(id)
 }
 async function OnAlbumAddToPlaylistClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    const playlistUuid = await SelectPlaylist.AskUser()
-    if (playlistUuid === null) {
+    const id = event.target.dataset.id
+    const playlistid = await SelectPlaylist.AskUser()
+    if (playlistid === null) {
         return
     }
-    const album = await Network.GetAlbum(uuid, true)
-    const playlist = await PlaylistManager.LoadPlaylist(playlistUuid)
+    const album = await Network.GetAlbum(id, true)
+    const playlist = await PlaylistManager.LoadPlaylist(playlistid)
     playlist.AddMultiple(album.Songs)
 }
 function OnAlbumPlayNowClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    Network.GetAlbum(uuid, true).then((album) => {
+    const id = event.target.dataset.id
+    Network.GetAlbum(id, true).then((album) => {
         SongQueue.PlayNow(album.songs)
         AudioPlayer.instance.Play(album.songs[0])
     })
@@ -227,14 +227,14 @@ function OnClearQueueClick(event, uiEvent) {
     NowPlaying.Update()
 }
 function OnPlaylistPlayNowClick(event, uiEvent) {
-    const uuid = event.target.dataset.uuid
-    PlaylistManager.LoadPlaylist(uuid).then((playlist) => {
+    const id = event.target.dataset.id
+    PlaylistManager.LoadPlaylist(id).then((playlist) => {
         SongQueue.PlayNow(playlist.songs)
         AudioPlayer.instance.Play(playlist.songs[0])
     })
 }
 async function OnAddPlaylistToPlaylistClick(event, uiEvent) {
-    const id = event.target.dataset.uuid
+    const id = event.target.dataset.id
     const otherId = await SelectPlaylist.AskUser()
     if (otherId === null) {
         return

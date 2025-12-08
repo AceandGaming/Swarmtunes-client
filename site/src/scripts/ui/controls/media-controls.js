@@ -2,7 +2,7 @@ class MediaControls {
     static #initialised = false
 
     static #Initialise() {
-        AudioPlayer.instance.Audio.addEventListener("ended", () => this.NextTrack())
+        AudioPlayer.instance.Audio.addEventListener("ended", () => PlaybackController.NextTrack())
         this.#initialised = true
     }
 

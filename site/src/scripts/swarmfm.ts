@@ -82,7 +82,8 @@ class SwarmFM extends AudioBase {
             return
         }
         const end = this.audio.buffered.end(this.audio.buffered.length - 1)
-        if (this.audio.currentTime - end > -0.1) {
+        const latency = end - this.audio.currentTime
+        if (latency < 0.1 || latency > SwarmFM.TARGET_LATENCY + 1) {
             this.audio.currentTime = end - SwarmFM.TARGET_LATENCY
         }
     }
