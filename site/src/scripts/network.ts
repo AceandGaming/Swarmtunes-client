@@ -347,6 +347,13 @@ class Network {
         }
         return playlists
     }
+    static async GetPlaylistMP3s(id: id) {
+        const a = document.createElement("a")
+        a.referrerPolicy = "no-referrer"
+        a.href = `${this.serverURL}/files/playlist/${id}?session=${this.userToken}`
+        a.click()
+        a.remove()
+    }
     static async CreatePlaylist(name: string) {
         const response = await this.Post(`playlists`, { name: name })
         const json = await response.json()

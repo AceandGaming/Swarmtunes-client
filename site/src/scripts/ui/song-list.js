@@ -2,7 +2,7 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     const element = document.createElement("li")
     element.classList.add("song-list-item", "song")
     element.setAttribute("data-id", song.Id)
-    element.setAttribute("data-rightclickcategory", catagory)
+    element.setAttribute("data-category", catagory)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
         <cover-img src=${Network.GetCover(song.Cover, 64)}></cover-img>

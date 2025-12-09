@@ -13,11 +13,11 @@ class Album {
     get SongIds() { return this.songIds }
     get CoverType() { return this.coverType }
 
-    get Songs() { 
+    get Songs() {
         if (!this.songsLoaded) {
             console.warn("Album songs not loaded")
         }
-        return this.songs 
+        return this.songs
     }
     get PrettyDate() {
         return this.date.toLocaleDateString("en-AU", {
@@ -26,7 +26,7 @@ class Album {
             year: "numeric",
         });
     }
-    get Title() { 
+    get Title() {
         return this.singers.join(" and ") + " Karaoke"
     }
     get Cover() {
@@ -75,3 +75,38 @@ function OnAlbumClick(event: any) {
         AlbumView.Show(album)
     })
 }
+
+
+
+
+ContextMenu.AddCategory("album", [
+    new ContextGroup("queue", false, [
+        new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
+            const album = await Network.GetAlbum(event.id, true)
+            SongQueue.PlayNow(album.songs)
+            // @ts-ignore
+            AudioPlayer.instance.Play(album.songs[0])
+        }),
+    ]),
+    new ContextGroup("playlist", true, [
+        new ContextOption("Add Songs To Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
+            const playlistid = await SelectPlaylist.AskUser()
+            if (playlistid === null) {
+                return
+            }
+            const playlist = PlaylistManager.GetPlaylist(playlistid)
+            await playlist.GetSongs()
+            const album = await Network.GetAlbum(event.id, true)
+            playlist.AddMultiple(album.songs)
+        }),
+    ]),
+    new ContextGroup("share", false, [
+        // new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
+        //     const url = "https://share.swarmtunes.com/?a=" + (await Network.ShareAlbum(event.id))
+        //     navigator.clipboard.writeText(url)
+        // }),
+        new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {
+            Network.GetAlbumMP3s(event.id)
+        }),
+    ])
+])

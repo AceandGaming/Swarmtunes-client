@@ -6,7 +6,7 @@ interface SongPrams {
     coverType: "neuro" | "evil" | "duet" | "custom",
     date?: string,
     isOriginal?: boolean,
-    coverArt?: string|null
+    coverArt?: string | null
 }
 
 class Song {
@@ -46,7 +46,7 @@ class Song {
     private coverType: "neuro" | "evil" | "duet" | "custom"
     private date: Date
     private isOriginal: boolean
-    private readonly coverArt: string|null
+    private readonly coverArt: string | null
 
     constructor(options: SongPrams) {
         this.id = options.id
@@ -94,3 +94,36 @@ function OnSongClick(event: any) {
         SongQueue.LoadSingleSong(song)
     })
 }
+
+
+ContextMenu.AddCategory("song", [
+    new ContextGroup("queue", false, [
+        new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
+            const song = await Network.GetSong(event.id)
+            SongQueue.PlayNow([song])
+            // @ts-ignore
+            AudioPlayer.instance.Play(song)
+        }),
+    ]),
+    new ContextGroup("playlist", true, [
+        new ContextOption("Add to Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
+            const playlistid = await SelectPlaylist.AskUser()
+            if (playlistid === null) {
+                return
+            }
+            const playlist = PlaylistManager.GetPlaylist(playlistid)
+            await playlist.GetSongs()
+            const song = await Network.GetSong(event.id)
+            playlist.Add(song)
+        })
+    ]),
+    new ContextGroup("share", false, [
+        new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
+            const url = "https://share.swarmtunes.com/?s=" + (await Network.ShareSong(event.id))
+            navigator.clipboard.writeText(url)
+        }),
+        new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {
+            Network.DownloadSong(event.id, true)
+        }),
+    ])
+])

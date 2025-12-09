@@ -1,0 +1,63 @@
+#context-menu {
+    position: absolute;
+    width: fit-content;
+    min-width: 130px;
+    height: fit-content;
+
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px 0;
+
+    background-color: var(--default-button-colour);
+    border-radius: 10px;
+    border: solid 1px var(--background-sub-colour);
+    box-shadow: 0 2px 10px #00000080;
+
+    overflow: hidden;
+
+    transform-origin: top left;
+}
+
+#context-menu.show {
+    display: flex;
+    animation: expand 0.15s ease-out;
+}
+
+@keyframes expand {
+    from {
+        transform: scale(0.2);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#context-menu > div {
+    display: flex;
+    height: 26px;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 7px;
+    gap: 15px;
+}
+
+#context-menu > hr {
+    width: calc(100% - 14px);
+    margin: 2px auto;
+    color: var(--subtext-colour);
+}
+
+#context-menu > * svg {
+    margin-left: auto;
+    color: var(--icon-default);
+    height: 90%;
+    aspect-ratio: 1;
+}
+
+#context-menu > *:hover {
+    background-color: var(--default-button-hover);
+}

@@ -101,7 +101,7 @@ class PlaybackController {
     public static DisplaySwarmFMInfo(info: SwarmFMInfo) {
         let cover = Network.GetCover(info.currentSong.Cover, 512)
         if (info.currentSong.HasCustomCover) {
-            cover = Network.swarmFMURL + "/assets/" + info.currentSong.Cover + ".png"
+            cover = Network.swarmFMURL + "/assets/" + info.currentSong.Cover
         }
         this.Display(
             info.currentSong.Title,

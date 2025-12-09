@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="darker">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#1c1c1c"/>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1c1c1c" />
 
   <title>Swarmtunes</title>
   <link rel="icon" type="image/png" href="/icon_small.png">
@@ -27,28 +28,29 @@
   <meta name="twitter:title" content="Swarmtunes" />
   <meta name="twitter:description" content="The Neuro-sama music app" />
   <meta name="twitter:image" content="/icon.png" />
-      
-  
-  <link rel="stylesheet" href="src/styles/styles.css"/>
-  <link rel="stylesheet" href="src/styles/content/discover.css"/>
-  <link rel="stylesheet" href="src/styles/content/media-view.css"/>
-  <link rel="stylesheet" href="src/styles/content/search.css"/>
-  <link rel="stylesheet" href="src/styles/catagories.css"/>
-  <link rel="stylesheet" href="src/styles/current-song-bar.css"/>
-  <link rel="stylesheet" href="src/styles/media-controls.css"/>
-  <link rel="stylesheet" href="src/styles/header.css"/>
-  <link rel="stylesheet" href="src/styles/now-playing.css"/>
-  <link rel="stylesheet" href="src/styles/right-click-menu.css"/>
-  <link rel="stylesheet" href="src/styles/song-list.css"/>
-  <link rel="stylesheet" href="src/styles/error-screen.css"/>
-  <link rel="stylesheet" href="src/styles/content/playlist-tab.css"/>
-  <link rel="stylesheet" href="src/styles/content/admin-panel.css"/>
-  <link rel="stylesheet" href="src/styles/select-playlist.css"/>
-  <link rel="stylesheet" href="src/styles/tabs.css"/>
-  <link rel="stylesheet" href="src/styles/popup.css"/>
-  <link rel="stylesheet" href="src/styles/content/song-fullscreen.css"/>
+
+
+  <link rel="stylesheet" href="src/styles/styles.css" />
+  <link rel="stylesheet" href="src/styles/content/discover.css" />
+  <link rel="stylesheet" href="src/styles/content/media-view.css" />
+  <link rel="stylesheet" href="src/styles/content/search.css" />
+  <link rel="stylesheet" href="src/styles/catagories.css" />
+  <link rel="stylesheet" href="src/styles/current-song-bar.css" />
+  <link rel="stylesheet" href="src/styles/media-controls.css" />
+  <link rel="stylesheet" href="src/styles/header.css" />
+  <link rel="stylesheet" href="src/styles/now-playing.css" />
+  <link rel="stylesheet" href="src/styles/context-menu.css" />
+  <link rel="stylesheet" href="src/styles/song-list.css" />
+  <link rel="stylesheet" href="src/styles/error-screen.css" />
+  <link rel="stylesheet" href="src/styles/content/playlist-tab.css" />
+  <link rel="stylesheet" href="src/styles/content/admin-panel.css" />
+  <link rel="stylesheet" href="src/styles/select-playlist.css" />
+  <link rel="stylesheet" href="src/styles/tabs.css" />
+  <link rel="stylesheet" href="src/styles/popup.css" />
+  <link rel="stylesheet" href="src/styles/content/song-fullscreen.css" />
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <body>
   <main>
     <div id="now-playing">
@@ -62,12 +64,12 @@
       <header>
         <div id="header-buttons">
           <button title="Change Theme" id="change-theme-button" onclick="OnChangeThemeClick()">
-            <img src="src/assets/icons/moon.svg"/>
+            <img src="src/assets/icons/moon.svg" />
           </button>
           <button id="header-login-button" onclick="OnLoginButtonClick()">Log In</button>
         </div>
       </header>
-      
+
       <div id="content">
         <div id="content-tabs">
           <div id="playlists-tab">
@@ -77,9 +79,10 @@
             </div>
           </div>
           <div id="discover">
-            <button id="swarmfm-button" title="Play SwarmFM!" onclick=OnSwarmFMButtonClick() data-rightclickcategory="swarmfm"></button>
+            <button id="swarmfm-button" title="Play SwarmFM!" onclick=OnSwarmFMButtonClick()
+              data-rightclickcategory="swarmfm"></button>
           </div>
-          <div id="search"> 
+          <div id="search">
             <input id="search-bar" type="text" placeholder="search for a song!" oninput=OnSearchValueChange(event)>
             <ol id="search-results"></ol>
           </div>
@@ -88,17 +91,6 @@
             <button onclick="OnServerResyncButtonClick()">Resync Songs</button>
           </div>
         </div>
-        <!-- <div id="playlist-view">
-          <img id="playlist-close-button" src="src/assets/icons/x.svg" onclick=OnPlaylistCloseButtonClick()></img>
-          <div class="title-cover">
-            <img class="cover" src="src/assets/no-song.png">
-            <div>
-              <span class="title">PLAYLIST</span>
-              <span class="sub-text subtitle"></span>
-            </div>
-          </div>
-          <ul class="song-list">
-        </div> -->
       </div>
     </div>
   </main>
@@ -106,15 +98,16 @@
   <footer>
 
   </footer>
-  <div id="right-click-menu"></div>
   <!-- Now that's a lot of scripts -->
-   
+
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <script src="dist/ui/cover.js"></script>
   <script src="dist/ui/controls/current-song-bar.js"></script>
   <script src="dist/ui/catagories.js"></script>
   <script src="dist/ui/popups/popup.js"></script>
+  <script src="dist/ui/context-menu.js"></script>
+  <script src="dist/types/song.js"></script>
   <script src="dist/misc.js"></script>
   <script src="dist/ui/now-playing.js"></script>
   <script src="dist/ui/song-list.js"></script>
@@ -124,9 +117,7 @@
   <script src="dist/types/album.js"></script>
   <script src="dist/ui/content/discover.js"></script>
   <script src="dist/network.js"></script>
-  <script src="dist/ui/right-click-menu.js"></script>
   <script src="dist/song-queue.js"></script>
-  <script src="dist/types/song.js"></script>
   <script src="dist/ui/header.js"></script>
   <script src="dist/ui/content/search.js"></script>
   <script src="dist/ui/popups/login.js"></script>
@@ -149,4 +140,5 @@
   <script src="dist/play-state.js"></script>
   <script src="dist/main.js"></script>
 </body>
+
 </html>

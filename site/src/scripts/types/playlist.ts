@@ -10,8 +10,8 @@ interface PlaylistPrams {
 class Playlist {
     get Id() { return this.id }
     get Title() { return this.title }
-    set Title(title) { 
-        this.title = title 
+    set Title(title) {
+        this.title = title
         Network.RenamePlaylist(this.id, title);
     }
     get Singers() { return this.singers }
@@ -59,7 +59,7 @@ class Playlist {
         }
         if (this.songIds.length > 0) {
             // @ts-ignore
-            this.songs = await Network.GetSong(this.songIds) 
+            this.songs = await Network.GetSong(this.songIds)
         }
         this.songsLoaded = true
         return this.songs
@@ -91,9 +91,69 @@ class Playlist {
         Network.RemoveSongFromPlaylist(this.id, [song.Id])
         MediaView.ClearMediaId(this.Id)
     }
+    RemoveAtId(id: id) {
+        const index = this.songIds.indexOf(id)
+        this.songIds.splice(index, 1)
+        if (this.songsLoaded) {
+            this.songs.splice(index, 1)
+        }
+        Network.RemoveSongFromPlaylist(this.id, [id])
+        MediaView.ClearMediaId(this.Id)
+    }
 }
 
 function OnPlaylistClick(event: any) {
     const id = event.target.dataset.id
     PlaylistManager.DisplayPlaylist(id)
 }
+
+
+ContextMenu.AddCategory("playlist", [
+    new ContextGroup("queue", false, [
+        new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
+            const playlist = await Network.GetPlaylist(event.id)
+            SongQueue.PlayNow(playlist.Songs)
+            // @ts-ignore
+            AudioPlayer.instance.Play(playlist.Songs[0])
+        })
+    ]),
+    new ContextGroup("manage playlist", true, [
+        new ContextOption("Rename", "src/assets/icons/edit.svg", (event) => {
+            RenamePlaylistPopup.instance.Show(event.id)
+        }),
+        new ContextOption("Delete", "src/assets/icons/trash.svg", async (event) => {
+            const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + PlaylistManager.GetPlaylist(event.id).title + "</strong>")
+            if (!confirmation) {
+                return
+            }
+            PlaylistManager.RemovePlaylist(event.id)
+        })
+    ]),
+    new ContextGroup("playlists", true, [
+        new ContextOption("Add to Other Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
+            const id = event.id
+            const otherId = await SelectPlaylist.AskUser()
+            if (otherId === null) {
+                return
+            }
+            if (id === otherId) {
+                return
+            }
+            const playlist = await PlaylistManager.LoadPlaylist(id)
+            const otherPlaylist = await PlaylistManager.LoadPlaylist(otherId)
+            otherPlaylist.AddMultiple(playlist.songs)
+        }),
+        new ContextOption("New Playlist", "src/assets/icons/plus.svg", (event) => {
+            CreatePlaylistPopup.instance.Show()
+        })
+    ]),
+    new ContextGroup("share", false, [
+        // new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
+        //     const url = "https://share.swarmtunes.com/?p=" + (await Network.SharePlaylist(event.id))
+        //     navigator.clipboard.writeText(url)
+        // }),
+        new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {
+            Network.GetPlaylistMP3s(event.id)
+        })
+    ])
+])

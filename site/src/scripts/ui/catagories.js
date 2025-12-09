@@ -29,7 +29,7 @@ function CreateCatagoryItemElement(title, id, imageSource, onClickEvent, type, o
     element.classList.add("catagory-item", type)
     element.setAttribute("data-id", id)
     element.setAttribute("onclick", onClickEvent)
-    element.setAttribute("data-rightclickcategory", type)
+    element.setAttribute("data-category", type)
 
     const wrapper = document.createElement("div")
     wrapper.append(CreateCatagoryItemImage(element, imageSource))

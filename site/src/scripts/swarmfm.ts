@@ -104,7 +104,7 @@ class SwarmFM extends AudioBase {
 
         setTimeout(
             this.UpdateInfo.bind(this),
-            (info.duration - info.position + SwarmFM.TARGET_LATENCY / 2) * 1000
+            (info.duration - info.position + SwarmFM.TARGET_LATENCY) * 1000
         )
     }
     Play(): void {

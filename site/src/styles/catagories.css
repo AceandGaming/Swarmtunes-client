@@ -1,6 +1,8 @@
 .catagory {
+  position: relative;
   margin-bottom: 20px;
 }
+
 .catagory.overflowing::after {
   content: "";
   height: 100%;
@@ -10,6 +12,7 @@
   top: 0;
   background: linear-gradient(to left, var(--background-colour), transparent);
 }
+
 .catagory .display-wrapper {
   position: relative;
   display: flex;
@@ -17,6 +20,7 @@
   margin-bottom: 10px;
   min-width: 100px;
 }
+
 .catagory .display {
   display: inline-flex;
   box-sizing: border-box;
@@ -25,16 +29,18 @@
   gap: 10px;
   padding: 10px;
 }
+
 .catagory .display.grid {
   flex-wrap: wrap;
   width: 100%;
 }
 
 
-.catagory > .title {
+.catagory>.title {
   font-weight: bold;
   font-size: 40px;
 }
+
 .catagory-item {
   position: relative;
   width: 22vw;
@@ -48,9 +54,11 @@
   border-radius: 10px;
   border: 4px solid var(--cover-background);
 }
+
 .catagory-item * {
   pointer-events: none;
 }
+
 .catagory-item .overlay {
   display: flex;
   flex-direction: row;
@@ -61,61 +69,72 @@
   border-radius: 6px;
   overflow: hidden;
 }
-.catagory-item .overlay > * {
+
+.catagory-item .overlay>* {
   background: #00000070;
   padding: 1px 4px;
   padding-right: 8px;
 }
+
 .catagory-item .overlay :not(.hover) {
   animation: test 0s forwards;
   animation-delay: 0.2s;
 }
+
 .catagory-item:hover .overlay :not(.hover) {
   animation: none;
   border-radius: 0;
 }
+
 @keyframes test {
   to {
     border-radius: 6px;
   }
 }
+
 .catagory-item .overlay img {
   width: 19px;
   height: 19px;
   padding: none;
   margin-bottom: -3px;
 }
+
 .catagory-item .overlay .hover {
   animation: scale2 0.2s ease-out;
   opacity: 0;
   width: 0;
   overflow: hidden;
 }
+
 .catagory-item:hover .overlay .hover {
   width: 100%;
   opacity: 100%;
   animation: scale 0.2s ease-out;
 }
+
 @keyframes scale {
   0% {
     width: 0;
   }
+
   100% {
     width: 100%;
   }
 }
+
 @keyframes scale2 {
   0% {
     width: 100%;
     opacity: 100%;
   }
+
   100% {
     width: 0;
     opacity: 100%;
   }
 }
 
-.catagory-item > span {
+.catagory-item>span {
   margin: 0 auto;
   max-width: 75%;
   max-height: 40px;
@@ -127,10 +146,15 @@
 }
 
 @media (max-width: 570px) {
-  .catagory > .title {
+  .catagory>.title {
     font-size: 30px;
   }
-  .catagory-item > span {
+
+  .catagory-item>span {
     font-size: 16px;
+  }
+
+  .catagory.overflowing::after {
+    width: 40px;
   }
 }

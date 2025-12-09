@@ -47,3 +47,18 @@ class NowPlaying {
         this.#songlist.Update()
     }
 }
+
+
+
+ContextMenu.InheritCategory("now-playing-item", "song", [
+    new ContextGroup("queue", false, [
+        new ContextOption("Remove", "src/assets/icons/playlist-remove.svg", (event) => {
+            SongQueue.RemoveSong(event.id)
+            NowPlaying.Update()
+        }),
+        new ContextOption("Clear Queue", "src/assets/icons/x-img.svg", (event) => {
+            SongQueue.ClearSongQueue()
+            NowPlaying.Update()
+        }),
+    ])
+])
