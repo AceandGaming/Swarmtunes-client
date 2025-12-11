@@ -2,6 +2,7 @@
     display: flex;
     justify-content: left;
 }
+
 .media-controls button {
     pointer-events: all;
     cursor: pointer;
@@ -10,38 +11,50 @@
     aspect-ratio: 1/1;
     margin: auto 0;
 }
+
 .media-controls button.hidden {
     display: none;
 }
-.media-controls > :first-child {
+
+.media-controls > :first-child:not(.next) {
     margin-right: var(--endGap)
 }
-.media-controls > :last-child {
+
+.media-controls > :last-child:not(.previous) {
     margin-left: var(--endGap)
 }
-.media-controls button.next, .media-controls button.previous {
+
+.media-controls button.next,
+.media-controls button.previous {
     transform: scaleX(1.5);
     aspect-ratio: 3/2;
 }
-.media-controls button.play-pause { 
+
+.media-controls button.play-pause {
     display: contents;
 }
+
 .media-controls button.play-pause * {
     width: inherit;
     height: inherit;
 }
-.media-controls button.play-pause .pause{
+
+.media-controls button.play-pause .pause {
     display: none;
 }
+
 .media-controls button.play-pause.playing .pause {
     display: block;
 }
+
 .media-controls button.play-pause.playing .play {
     display: none;
 }
+
 .media-controls button.shuffle.active svg {
     color: #fff
 }
+
 .media-controls button.shuffle.flip {
     animation: shuffle-flip 0.1s linear;
 }
@@ -50,9 +63,11 @@
     0% {
         transform: scaleY(1);
     }
+
     50% {
         transform: scaleY(0);
     }
+
     100% {
         transform: scaleY(1);
     }
@@ -65,17 +80,21 @@
     pointer-events: all;
     transform: translateY(-2px);
 }
+
 .volume-controls.active svg {
     color: #fff;
 }
+
 .volume-controls svg {
     display: none;
     width: inherit;
     height: inherit;
 }
+
 .volume-controls svg.active {
     display: block;
 }
+
 .volume-controls input {
     position: absolute;
     display: none;
@@ -84,9 +103,11 @@
     background: var(--current-song-bar);
     cursor: grab;
 }
+
 .volume-controls input:active {
     cursor: grabbing;
 }
+
 .volume-controls img {
     width: 25px;
     height: 25px;

@@ -1,10 +1,10 @@
 type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | Json[]
-  | { [key: string]: Json }
+    | string
+    | number
+    | boolean
+    | null
+    | Json[]
+    | { [key: string]: Json }
 type id = string
 
 class Network {
@@ -104,10 +104,10 @@ class Network {
     }
 
     static async GetSwarmFMStream() {
-        return `https://cast.sw.arm.fm/stream?now=${Date.now()}`
+        return `https://cast.sw.arm.fm/stream?from=swarmtunes?now=${Date.now()}`
     }
     static async GetSwarmFMInfo() {
-        const response = await fetch(`${this.swarmFMURL}/v2/player`)
+        const response = await fetch(`${this.swarmFMURL}/v2/player?from=swarmtunes`)
         if (!response.ok) {
             console.error("Failed to get swarmfm info")
             return
@@ -278,6 +278,17 @@ class Network {
     //     const response = await this.Get(`emotes/?${params.toString()}`)
     //     return EnsureValue(response.json()) //just a list of urls. no class
     // }
+    static async SharePlaylist(id: id) {
+        const response = await this.Get(`playlists/${id}/share`)
+        const json = await response.json()
+        return json["link"]
+    }
+    static async AddSharedPlaylist(code: string) {
+        const response = await this.Post(`playlists/shared`, { code: code })
+        const json = await response.json()
+        const playlist = new Playlist(json["playlist"])
+        return playlist
+    }
 
     static async Login(username: string, password: string, remeber: boolean = false) {
         if (DEV_MODE) {

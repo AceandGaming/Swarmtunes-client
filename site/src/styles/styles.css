@@ -153,10 +153,16 @@ body {
 }
 
 body {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: clip;
+
     background-color: var(--background-sub-colour);
     color: var(--text-colour);
     font-family: Helvetica, Arial, sans-serif;
-    overflow-y: clip;
     margin: 0;
     text-wrap: nowrap;
 
@@ -169,6 +175,7 @@ body {
 }
 
 main {
+
     display: flex;
     flex-direction: row;
     width: 100vw;
@@ -340,8 +347,8 @@ p {
 
 ::-webkit-scrollbar {
     background-color: var(--background-colour);
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -358,6 +365,8 @@ p {
     width: 5px;
 }
 
+
+/* Slider */
 input[type="range"] {
     -webkit-appearance: none;
     background: var(--background);

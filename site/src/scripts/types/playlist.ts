@@ -148,10 +148,10 @@ ContextMenu.AddCategory("playlist", [
         })
     ]),
     new ContextGroup("share", false, [
-        // new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
-        //     const url = "https://share.swarmtunes.com/?p=" + (await Network.SharePlaylist(event.id))
-        //     navigator.clipboard.writeText(url)
-        // }),
+        new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
+            const url = "https://share.swarmtunes.com/?p=" + (await Network.SharePlaylist(event.id))
+            navigator.clipboard.writeText(url)
+        }),
         new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {
             Network.GetPlaylistMP3s(event.id)
         })

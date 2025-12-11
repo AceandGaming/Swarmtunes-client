@@ -73,22 +73,23 @@ function OnLogin(isAdmin) {
 }
 Login.AddLoginCallback(OnLogin)
 
-if (Network.IsLoggedIn()) {
-    Login.CallLoginCallbacks()
-}
-else {
-    Network.GetNewSession()
-}
-
 function LoadUrlBar() {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
     const songId = urlParams.get("song")
+    const playlistLink = urlParams.get("playlist")
 
     if (songId !== null) {
         Network.GetSong(songId).then((song) => {
             SongQueue.LoadSingleSong(song)
             AudioPlayer.instance.Play(song)
+        })
+    }
+    if (playlistLink !== null) {
+        Login.AddLoginCallback(async () => {
+            const playlist = await Network.AddSharedPlaylist(playlistLink)
+            PlaylistManager.AddPlaylist(playlist)
+            PlaylistTab.Populate()
         })
     }
 
@@ -111,3 +112,10 @@ function UpdateNavigatorTime(played, duration, loaded) {
 
 AudioPlayer.instance.OnTimeUpdate(UpdateNavigatorTime)
 SwarmFM.instance.OnTimeUpdate(UpdateNavigatorTime);
+
+if (Network.IsLoggedIn()) {
+    Login.CallLoginCallbacks()
+}
+else {
+    Network.GetNewSession()
+}

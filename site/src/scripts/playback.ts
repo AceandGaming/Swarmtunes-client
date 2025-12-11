@@ -1,5 +1,5 @@
 class PlaybackController {
-    public static get HasControl(): AudioBase|null {
+    public static get HasControl(): AudioBase | null {
         if (this.Audio.HasControl) {
             return AudioPlayer.instance
         }
@@ -14,7 +14,7 @@ class PlaybackController {
         const audio = PlaybackController.HasControl
         return audio ? !audio.Paused : false
     }
-    
+
     private static get Audio() {
         return AudioPlayer.instance
     }
@@ -58,7 +58,7 @@ class PlaybackController {
             artwork: [{ src: coverUrl }],
         })
     }
-    public static UpdateMediaSession({playPause = false, skipping = false, seeking = false}) {
+    public static UpdateMediaSession({ playPause = false, skipping = false, seeking = false }) {
         const media = navigator.mediaSession
 
         media.setActionHandler('play', null)
@@ -85,10 +85,16 @@ class PlaybackController {
             media.setActionHandler('seekto', (details) => this.Audio.Played = details.seekTime ?? 0)
         }
     }
-    public static Display(title: string, artist: string, singers: string[], coverUrl: string) {
+    public static Display(title: string, artist: string, singers: string[], coverUrl: string, swarmfm = false) {
         this.UpdateMetadata(title, artist, singers, coverUrl)
         CurrentSongBar.Display(title, artist, singers, coverUrl)
-        SongFullscreen.Display(title, artist, singers, coverUrl)
+        if (swarmfm) {
+            SongFullscreen.DisplaySwarmFM()
+        }
+        else {
+            SongFullscreen.Display(title, artist, singers, coverUrl)
+        }
+
     }
     public static DisplaySong(song: Song) {
         this.Display(
@@ -107,10 +113,8 @@ class PlaybackController {
             info.currentSong.Title,
             info.currentSong.Artist,
             info.currentSong.Singers,
-            cover
+            cover,
+            !isMobile
         )
-        if (!isMobile) {
-            SongFullscreen.DisplaySwarmFM()
-        }
     }
 }

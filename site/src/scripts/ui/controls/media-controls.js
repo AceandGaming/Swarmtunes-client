@@ -116,7 +116,7 @@ class MediaControls {
         const gapEnds = gap * 1.4
         width += (buttons.children.length - 3) * gap + gapEnds * 2
         if (childCount !== lengthOdd) {
-            width += size
+            width -= size
         }
 
         buttons.style.width = `${width}px`

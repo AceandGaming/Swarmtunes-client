@@ -42,7 +42,7 @@ html = ""
 with open("site/index.html", "r") as f:
     html = f.read()
     scriptPaths = re.findall(r"<script\s*src=\"(.*?)\"\s*></script>", html)
-    stylePaths = re.findall(r"<link rel=\"stylesheet\" href=\"(.*?)\"/>", html)
+    stylePaths = re.findall(r"<link rel=\"stylesheet\" href=\"(.*?)\"\s*/>", html)
 
 print(f"Detected {len(scriptPaths)} scripts and {len(stylePaths)} styles")
 
@@ -164,7 +164,7 @@ print(f"{len(js)}b -> {newJsSize}b")
 os.remove("mini/all.js")
 
 print("\nPatching HTML")
-html = re.sub(r"<link rel=\"stylesheet\" href=\".*?\"/>", "", html)
+html = re.sub(r"<link rel=\"stylesheet\" href=\".*?\"\s*/>", "", html)
 html = re.sub(r"<script\s*src=\".*?\"\s*></script>", "", html)
 
 externalScriptsHtml = ""

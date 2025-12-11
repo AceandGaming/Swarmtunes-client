@@ -48,7 +48,7 @@ class AudioPlayer extends AudioBase {
     get HasControl(): boolean {
         return this.hasControl;
     }
-    get CurrentSong(): Song|undefined {
+    get CurrentSong(): Song | undefined {
         return this.currentSong
     }
 
@@ -61,6 +61,7 @@ class AudioPlayer extends AudioBase {
     constructor() {
         super();
         this.audio = new window.Audio
+        this.audio.preload = "metadata"
     }
 
     public Load(song: Song) {
@@ -68,9 +69,10 @@ class AudioPlayer extends AudioBase {
         this.audio.volume = this.volume
         this.currentSong = song
         this.audio.src = Network.GetAudioURL(song)
+        this.audio.load()
         PlaybackController.DisplaySong(song)
         PlayState.Update({ currentSongId: song.Id })
-        PlaybackController.UpdateMediaSession({playPause: true, skipping: SongQueue.songCount > 1, seeking: true})
+        PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })
     }
     public Play(song?: Song): void {
         SwarmFM.instance.Clear()
@@ -87,9 +89,12 @@ class AudioPlayer extends AudioBase {
             }
         }
         else {
+            if (this.audio.src === "") {
+                return
+            }
             this.audio.play()
         }
-        PlaybackController.UpdateMediaSession({playPause: true, skipping: SongQueue.songCount > 1, seeking: true})
+        PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })
     }
     public Pause(): void {
         this.audio.pause()
