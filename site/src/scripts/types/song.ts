@@ -84,7 +84,7 @@ class Song {
 
 function OnSongClick(event: any) {
     const id = event.target.dataset.id
-    Network.GetSong(id).then((song) => {
+    SongRequester.GetSong(id).then((song) => {
         if (song === undefined) {
             console.warn("Song clicked with no song")
             return
@@ -99,9 +99,8 @@ function OnSongClick(event: any) {
 ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, [
         new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
-            const song = await Network.GetSong(event.id)
+            const song = await SongRequester.GetSong(event.id)
             SongQueue.PlayNow([song])
-            // @ts-ignore
             AudioPlayer.instance.Play(song)
         }),
     ]),
@@ -113,7 +112,7 @@ ContextMenu.AddCategory("song", [
             }
             const playlist = PlaylistManager.GetPlaylist(playlistid)
             await playlist.GetSongs()
-            const song = await Network.GetSong(event.id)
+            const song = await SongRequester.GetSong(event.id)
             playlist.Add(song)
         })
     ]),

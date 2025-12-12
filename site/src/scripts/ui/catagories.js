@@ -153,6 +153,9 @@ class PlaylistCatagory extends Catagory {
 }
 function ResizeGridDisplay(grid) {
     const parentWidth = grid.parentElement.offsetWidth
+    if (!grid.checkVisibility()) {
+        return
+    }
     if (parentWidth <= 0) {
         return
     }

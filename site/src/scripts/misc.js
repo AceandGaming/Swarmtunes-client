@@ -64,10 +64,28 @@ function Promiseify(req) {
         req.onerror = () => reject(req.error)
     })
 }
+async function* CursorIterator(store) {
+    let request = store.openCursor();
+
+    while (true) {
+        const cursor = await new Promise((resolve, reject) => {
+            request.onsuccess = (event) => resolve(event.target.result);
+            request.onerror = (event) => reject(event.target.IDBRequest.error);
+        });
+
+        if (!cursor) break;
+        yield cursor;
+        cursor.continue();
+    }
+}
+
 function CloneSongs(songs) {
     const newSongs = [];
     for (const song of songs) {
         newSongs.push(song.Copy());
     }
     return newSongs;
+}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

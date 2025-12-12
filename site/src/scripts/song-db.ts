@@ -17,7 +17,7 @@ class SongDatabase {
         this.database = db.result
         this.intialised = true
     }
-    public static async AddSong(song: Song|Song[]) {
+    public static async AddSong(song: Song | Song[]) {
         const songs = EnsureArray(song)
         for (const song of songs) {
             if (song === undefined) {
@@ -27,7 +27,7 @@ class SongDatabase {
         }
         const audioData = []
         for (const song of songs) {
-            audioData.push(await Network.GetSongAudio(song.id))
+            audioData.push(await Network.GetSongAudio(song.Id))
         }
 
         const songTransaction = this.database.transaction("songs", "readwrite")
@@ -59,7 +59,7 @@ class SongDatabase {
         }
         return songs
     }
-    public static async GetAudio(id: id): Promise<Blob|undefined> {
+    public static async GetAudio(id: id): Promise<Blob | undefined> {
         const audioTransaction = this.database.transaction("audio", "readonly")
         const audioStore = audioTransaction.objectStore("audio")
         const audio = await Promiseify(audioStore.get(id))

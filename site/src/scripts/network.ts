@@ -134,13 +134,17 @@ class Network {
             return result
         }
         function GetCoverType(singers: string[]) {
+            console.log(singers)
+            if (singers.length > 1) {
+                return "duet"
+            }
             if (singers.includes("neuro")) {
                 return "neuro"
             }
             if (singers.includes("evil")) {
                 return "evil"
             }
-            return "duet"
+            return "custom"
         }
 
         let coverType: "neuro" | "evil" | "duet" | "custom" = GetCoverType(current["singer"])
@@ -170,16 +174,23 @@ class Network {
         return new SwarmFMInfo(currentSong, nextSong, position, duration)
     }
     static async GetSong(id: id | id[]) {
-        const params = new URLSearchParams()
-        let ids = EnsureArray(id)
-        for (let i = 0; i < ids.length; i++) {
-            params.append("ids", ids[i])
-        }
-        const response = await this.Get(`songs?${params.toString()}`)
+
+        let ids = EnsureArray(id).slice()
         const songs = []
-        for (const dict of await response.json()) {
-            songs.push(new Song(dict))
+        while (ids.length > 0) {
+            const params = new URLSearchParams()
+            for (let i = 0; i < Math.min(ids.length, 100); i++) {
+                params.append("ids", ids.shift())
+            }
+            const response = await this.Get(`songs?${params.toString()}`)
+            for (const dict of await response.json()) {
+                songs.push(new Song(dict))
+            }
+            if (ids.length > 0) {
+                await sleep(100)
+            }
         }
+
         return Array.isArray(id) ? songs : songs[0]
     }
     static async ShareSong(id: id) {
@@ -209,8 +220,8 @@ class Network {
         }
         return `${this.serverURL}/covers/${name}?size=${size}`
     }
-    static GetAudioURL(song: Song) {
-        return `${this.serverURL}/files/${song.Id}`
+    static GetAudioURL(id: id) {
+        return `${this.serverURL}/files/${id}`
     }
     static async GetAllSongs({ filters = [], maxResults = 100 } = {}) {
         const params = new URLSearchParams()

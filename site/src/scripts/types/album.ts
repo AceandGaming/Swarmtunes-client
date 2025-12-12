@@ -60,8 +60,7 @@ class Album {
         if (this.songsLoaded) {
             return this.songs
         }
-        // @ts-ignore
-        this.songs = await Network.GetSong(this.songIds)
+        this.songs = await SongRequester.GetSongs(this.songIds)
         this.songs = this.songs.sort((a, b) => a.Title.localeCompare(b.Title))
         this.songsLoaded = true
         return this.songs

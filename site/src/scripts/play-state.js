@@ -31,8 +31,8 @@ class PlayState {
             SwarmFM.instance.Play()
             return
         }
-        const song = await Network.GetSong(data.currentSong)
-        if (!song) {
+        const song = await SongRequester.GetSong(data.currentSong)
+        if (song.length = 0) {
             return
         }
         AudioPlayer.instance.Load(song)
@@ -43,7 +43,7 @@ class PlayState {
         if (data.queue.length == 0) {
             return
         }
-        const songs = await Network.GetSong(data.queue)
+        const songs = await SongRequester.GetSongs(data.queue)
         SongQueue.LoadSongs(songs)
         SongQueue.UpdateQueue(song)
     }

@@ -53,8 +53,11 @@ class SongList {
     Update() {
         this.element.style.display = ""
         this.element.innerHTML = ""
-        for (const song of this.songs) {
+        for (const [i, song] of this.songs.entries()) {
             this.element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, this.showDate, this.catagory))
+            if (i > 30) {
+                break
+            }
         }
     }
     UpdateAnimated() {

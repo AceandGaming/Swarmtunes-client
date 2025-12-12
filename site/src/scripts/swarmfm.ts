@@ -8,7 +8,7 @@ class SwarmFMInfo {
 }
 class SwarmFM extends AudioBase {
     static instance = new SwarmFM()
-    static TARGET_LATENCY = 3
+    static TARGET_LATENCY = 4
 
     get Audio(): HTMLAudioElement {
         return this.audio
@@ -89,7 +89,7 @@ class SwarmFM extends AudioBase {
             this.audio.playbackRate = 1
         }
         else {
-            const give = 7
+            const give = 20
             this.audio.playbackRate = Math.max(1, ((latency / SwarmFM.TARGET_LATENCY) + give) / (give + 1))
         }
     }

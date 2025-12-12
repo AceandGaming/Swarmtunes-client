@@ -17,6 +17,7 @@ class Playlist {
     get Singers() { return this.singers }
     get Date() { return this.date }
     get SongIds() { return this.songIds }
+    get IsLoaded() { return this.songsLoaded }
 
     get Songs() {
         if (!this.songsLoaded) {
@@ -58,8 +59,7 @@ class Playlist {
             return this.songs
         }
         if (this.songIds.length > 0) {
-            // @ts-ignore
-            this.songs = await Network.GetSong(this.songIds)
+            this.songs = await SongRequester.GetSongs(this.songIds)
         }
         this.songsLoaded = true
         return this.songs
@@ -100,6 +100,17 @@ class Playlist {
         Network.RemoveSongFromPlaylist(this.id, [id])
         MediaView.ClearMediaId(this.Id)
     }
+
+    ToJson() {
+        return {
+            id: this.id,
+            title: this.title,
+            singers: this.singers,
+            date: this.date,
+            coverType: this.coverType,
+            songIds: this.songIds
+        }
+    }
 }
 
 function OnPlaylistClick(event: any) {
@@ -111,7 +122,7 @@ function OnPlaylistClick(event: any) {
 ContextMenu.AddCategory("playlist", [
     new ContextGroup("queue", false, [
         new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
-            const playlist = await Network.GetPlaylist(event.id)
+            const playlist = await PlaylistManager.LoadPlaylist(event.id)
             SongQueue.PlayNow(playlist.Songs)
             // @ts-ignore
             AudioPlayer.instance.Play(playlist.Songs[0])

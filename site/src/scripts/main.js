@@ -12,42 +12,15 @@ if ("serviceWorker" in navigator) {
     })
 }
 
-Network.CheckOnline()
 const colourThief = new ColorThief()
+async function AsyncCrap() {
+    await Network.CheckOnline()
+    await SongDatabase.Initalise()
+    await PlaylistDatabase.Initalise()
+}
 
 
 let isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-if (isMobile) {
-    CurrentSongBar.CreateMobile()
-    CreateButton(true)
-    localStorage.setItem("volume", 1)
-} else {
-    CurrentSongBar.CreateDesktop()
-    CreateButton()
-}
-PlaylistTab.ShowLoggedOutScreen()
-PopulateSearch("")
-SongDatabase.Initalise()
-ContextMenu.Initalise()
-
-MediaView.Create()
-SongFullscreen.Create()
-
-AttachButtons()
-Login.CreateWindow()
-new CreatePlaylistPopup()
-new RenamePlaylistPopup()
-PopulateDiscover().catch((e) => {
-    const errorScreen = new LoadingError()
-    discoverPage.append(errorScreen.CreateElement())
-    console.error(e)
-})
-currentTheme = Number(localStorage.getItem("theme") ?? 0)
-
-ShowContentWindow(document.getElementById("discover"))
-UpdateTheme()
-ResizeAllGridDisplays()
-PlayState.Initalise()
 
 function OnLogin(isAdmin) {
     document.getElementById("header-login-button").textContent = "Log Out"
@@ -73,6 +46,38 @@ function OnLogin(isAdmin) {
 }
 Login.AddLoginCallback(OnLogin)
 
+function CreateUI() {
+    if (isMobile) {
+        CurrentSongBar.CreateMobile()
+        CreateButton(true)
+        localStorage.setItem("volume", 1)
+    } else {
+        CurrentSongBar.CreateDesktop()
+        CreateButton()
+    }
+    PlaylistTab.ShowLoggedOutScreen()
+    PopulateSearch("")
+    ContextMenu.Initalise()
+
+    MediaView.Create()
+    SongFullscreen.Create()
+
+    AttachButtons()
+    Login.CreateWindow()
+    new CreatePlaylistPopup()
+    new RenamePlaylistPopup()
+    PopulateDiscover().catch((e) => {
+        const errorScreen = new LoadingError()
+        discoverPage.append(errorScreen.CreateElement())
+        console.error(e)
+    })
+    currentTheme = Number(localStorage.getItem("theme") ?? 0)
+
+    ShowContentWindow(document.getElementById("discover"))
+    UpdateTheme()
+    ResizeAllGridDisplays()
+    PlayState.Initalise()
+}
 function LoadUrlBar() {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
@@ -80,7 +85,7 @@ function LoadUrlBar() {
     const playlistLink = urlParams.get("playlist")
 
     if (songId !== null) {
-        Network.GetSong(songId).then((song) => {
+        SongRequester.GetSong(songId).then((song) => {
             SongQueue.LoadSingleSong(song)
             AudioPlayer.instance.Play(song)
         })
@@ -100,7 +105,17 @@ function LoadUrlBar() {
         window.location.pathname
     window.history.replaceState({}, document.title, cleanUrl)
 }
-LoadUrlBar()
+AsyncCrap().then(() => {
+    CreateUI()
+    LoadUrlBar()
+
+    if (Network.IsLoggedIn()) {
+        Login.CallLoginCallbacks()
+    }
+    else {
+        Network.GetNewSession()
+    }
+})
 
 function UpdateNavigatorTime(played, duration, loaded) {
     navigator.mediaSession.setPositionState({
@@ -112,10 +127,3 @@ function UpdateNavigatorTime(played, duration, loaded) {
 
 AudioPlayer.instance.OnTimeUpdate(UpdateNavigatorTime)
 SwarmFM.instance.OnTimeUpdate(UpdateNavigatorTime);
-
-if (Network.IsLoggedIn()) {
-    Login.CallLoginCallbacks()
-}
-else {
-    Network.GetNewSession()
-}

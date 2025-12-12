@@ -8,7 +8,7 @@ class PlaylistManager {
 
     static async GetPlaylists() {
         try {
-            const playlists = await Network.GetAllPlaylists()
+            const playlists = await PlaylistRequester.GetAllPlaylists()
             for (const playlist of playlists) {
                 this.#playlists[playlist.id] = playlist
             }
@@ -28,8 +28,11 @@ class PlaylistManager {
     }
     static async LoadPlaylist(id) {
         const playlist = this.#playlists[id]
+        const wasLoaded = playlist.IsLoaded
         await playlist.GetSongs()
-        PlaylistTab.OnPlaylistLoaded()
+        if (!wasLoaded) {
+            PlaylistTab.OnPlaylistLoaded()
+        }
         return playlist
     }
     static AddPlaylist(playlist) {
@@ -41,7 +44,9 @@ class PlaylistManager {
         PlaylistTab.Populate()
     }
     static async DisplayPlaylist(id) {
-        const playlist = await this.LoadPlaylist(id)
-        PlaylistView.Show(playlist)
+        MediaView.ShowLoading()
+        const playlist = this.GetPlaylist(id)
+        await PlaylistView.Show(playlist)
+        PlaylistTab.OnPlaylistLoaded()
     }
 }

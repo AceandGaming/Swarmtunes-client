@@ -64,11 +64,11 @@ class AudioPlayer extends AudioBase {
         this.audio.preload = "metadata"
     }
 
-    public Load(song: Song) {
+    public async Load(song: Song) {
         this.hasControl = true
         this.audio.volume = this.volume
         this.currentSong = song
-        this.audio.src = Network.GetAudioURL(song)
+        this.audio.src = await SongRequester.GetAudioUrl(song.Id)
         this.audio.load()
         PlaybackController.DisplaySong(song)
         PlayState.Update({ currentSongId: song.Id })

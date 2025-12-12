@@ -89,12 +89,11 @@ class MediaView {
     static _UpdateContent(title, discription, coverUrl) {
         MediaView._title.textContent = title
         MediaView._discription.textContent = discription
-
         MediaView._coverArt.classList.add("loading")
         MediaView._loadingArt.style.display = "block"
         MediaView._coverArt.src = coverUrl
     }
-    static _PopulateSongList(mediaObject, catagory = "song", onSongsLoaded = () => { }) {
+    static async _PopulateSongList(mediaObject, catagory = "song", onSongsLoaded = () => { }) {
         if (mediaObject.id == MediaView._lastMediaId) {
             LoadingText.Detach(MediaView.element)
             MediaView._songList.Show()
@@ -113,10 +112,9 @@ class MediaView {
             Update(mediaObject.songs)
         } else {
             LoadingText.Attach(MediaView.element)
-            mediaObject.GetSongs().then(() => {
-                LoadingText.Detach(MediaView.element)
-                Update(mediaObject.songs)
-            })
+            await mediaObject.GetSongs()
+            LoadingText.Detach(MediaView.element)
+            Update(mediaObject.songs)
         }
     }
     static Hide() {
@@ -143,7 +141,7 @@ class MediaView {
 }
 
 class AlbumView {
-    static Show(album) {
+    static async Show(album) {
         let title = album.Title
         if (album.songs.length === 1) {
             title = "Special Release"
@@ -151,18 +149,20 @@ class AlbumView {
         MediaView._UpdateContent(title, album.PrettyDate, Network.GetCover(album.Cover, 512))
         MediaView._PopulateActions()
         MediaView.Show()
-        MediaView._PopulateSongList(album, "song")
+
+        await MediaView._PopulateSongList(album, "song")
     }
 }
 
 class PlaylistView {
     static playlist
-    static Show(playlist) {
+    static async Show(playlist) {
         PlaylistView.playlist = playlist
         MediaView._UpdateContent(playlist.Title, "", Network.GetCover(playlist.Cover, 512))
         MediaView._PopulateActions()
         MediaView.Show()
-        MediaView._PopulateSongList(playlist, "playlist-item")
+
+        await MediaView._PopulateSongList(playlist, "playlist-item")
     }
     static Update() {
         PlaylistView.Show(this.playlist)
