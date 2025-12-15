@@ -18,7 +18,7 @@ class ContextOption {
             element.append(icon)
         }
 
-        element.addEventListener("click", () => this.action(prams))
+        element.addEventListener("mousedown", () => this.action(prams))
         return element
     }
 
@@ -29,6 +29,7 @@ class ContextGroup {
     constructor(
         public name: string,
         public accountRequired: boolean,
+        public internetRequired: boolean,
         public options: ContextOption[]
     ) { }
 }
@@ -41,16 +42,24 @@ class ContextMenu {
         if (isMobile) {
             this.menu = new MobileContextMenu()
 
-            let timer: any;
-            const HOLD_TIME = 500;
+            document.addEventListener("contextmenu", (event) => {
+                event.preventDefault()
+                event.stopPropagation()
+            }, { passive: false })
+
+            let timer: any
+            const HOLD_TIME = 500
             document.addEventListener("touchstart", (event) => {
                 timer = setTimeout(() => {
-                    this.OnRightClick(event);
-                }, HOLD_TIME);
-            }, { passive: false });
+                    this.OnRightClick(event)
+                }, HOLD_TIME)
+            }, { passive: false })
+
             document.addEventListener("touchend", () => {
-                clearTimeout(timer);
-            });
+                clearTimeout(timer)
+                //@ts-ignore
+                this.menu.AllowTouch()
+            })
         }
         else {
             this.menu = new DesktopContextMenu()
@@ -80,36 +89,37 @@ class ContextMenu {
         this.categories[name] = groups
     }
     public static InheritCategory(name: string, inherited: string, groups: ContextGroup[]) {
-        const inheritedGroups = this.categories[inherited];
+        const inheritedGroups = this.categories[inherited]
         if (!inheritedGroups) {
-            throw new Error(`Inherited category ${inherited} does not exist`);
+            throw new Error(`Inherited category ${inherited} does not exist`)
         }
 
-        const map: Record<string, ContextGroup> = {};
+        const map: Record<string, ContextGroup> = {}
 
         for (const group of inheritedGroups) {
             map[group.name] = {
                 name: group.name,
                 options: [...group.options],
-                accountRequired: group.accountRequired
-            };
+                accountRequired: group.accountRequired,
+                internetRequired: group.internetRequired
+            }
         }
 
         for (const group of groups) {
             if (map[group.name] !== undefined) {
-                // @ts-ignore
-                map[group.name].options.push(...group.options);
+                map[group.name]?.options.push(...group.options)
             }
             else {
                 map[group.name] = {
                     name: group.name,
                     options: [...group.options],
-                    accountRequired: group.accountRequired
-                };
+                    accountRequired: group.accountRequired,
+                    internetRequired: group.internetRequired
+                }
             }
         }
 
-        this.categories[name] = Object.values(map);
+        this.categories[name] = Object.values(map)
     }
 
 }
@@ -131,7 +141,6 @@ class DesktopContextMenu extends ContextMenuUI {
         this.element.id = "context-menu"
         this.element.classList.add("desktop")
 
-        this.element.onclick = this.Hide.bind(this)
         document.addEventListener("mousedown", (event) => {
             const target = event.target as HTMLElement
             if (!this.element.contains(target)) {
@@ -158,16 +167,23 @@ class DesktopContextMenu extends ContextMenuUI {
         this.element.innerHTML = ""
 
         for (const [i, group] of groups.entries()) {
+            if (group.internetRequired && !Network.IsOnline()) {
+                continue
+            }
             if (group.accountRequired && !Network.IsLoggedIn()) {
                 continue
             }
             for (const option of group.options) {
-                this.element.append(option.Element(data))
+                const child = option.Element(data)
+                child.onclick = this.Hide.bind(this)
+                this.element.append(child)
             }
-            if (i < groups.length - 1) {
-                const hr = document.createElement("hr")
-                this.element.append(hr)
-            }
+            const hr = document.createElement("hr")
+            this.element.append(hr)
+        }
+        const last = this.element.children[this.element.children.length - 1]
+        if (last instanceof HTMLHRElement) {
+            last.remove()
         }
     }
     public Show() {
@@ -184,6 +200,7 @@ class DesktopContextMenu extends ContextMenuUI {
 }
 class MobileContextMenu extends ContextMenuUI {
     private element: HTMLDivElement
+    private interactable: boolean = false
 
     constructor() {
         super()
@@ -191,8 +208,7 @@ class MobileContextMenu extends ContextMenuUI {
         this.element.id = "context-menu"
         this.element.classList.add("mobile")
 
-        this.element.onclick = this.Hide.bind(this)
-        document.addEventListener("touchend", (event) => {
+        document.addEventListener("touchstart", (event) => {
             const target = event.target as HTMLElement
             if (!this.element.contains(target)) {
                 this.Hide()
@@ -224,19 +240,34 @@ class MobileContextMenu extends ContextMenuUI {
         this.element.innerHTML = ""
 
         for (const [i, group] of groups.entries()) {
+            if (group.internetRequired && !Network.IsOnline()) {
+                continue
+            }
             if (group.accountRequired && !Network.IsLoggedIn()) {
                 continue
             }
             for (const option of group.options) {
-                this.element.append(option.Element(data))
+                const child = option.Element(data)
+                child.addEventListener("click", (event) => {
+                    if (this.interactable) {
+                        this.Hide()
+                    }
+                })
+                this.element.append(child)
             }
-            if (i < groups.length - 1) {
-                const hr = document.createElement("hr")
-                this.element.append(hr)
-            }
+            const hr = document.createElement("hr")
+            this.element.append(hr)
+        }
+        const last = this.element.children[this.element.children.length - 1]
+        if (last instanceof HTMLHRElement) {
+            last.remove()
         }
     }
+    public AllowTouch() {
+        this.interactable = true
+    }
     public Show() {
+        this.interactable = false
         this.element.classList.remove("show")
         this.element.getBoundingClientRect()
         this.element.classList.add("show")

@@ -12,7 +12,6 @@ class Playlist {
     get Title() { return this.title }
     set Title(title) {
         this.title = title
-        Network.RenamePlaylist(this.id, title);
     }
     get Singers() { return this.singers }
     get Date() { return this.date }
@@ -73,12 +72,22 @@ class Playlist {
         }
         this.songIds.push(song.Id)
         this.songs.push(song)
-        Network.AddSongToPlaylist(this.id, [song.Id])
         MediaView.ClearMediaId(this.Id)
     }
     AddMultiple(songs: Song[]) {
         for (const song of songs) {
             this.Add(song)
+        }
+    }
+    AddIds(ids: id[]) {
+        if (this.songsLoaded) {
+            throw new Error("Playlist songs already loaded")
+        }
+        for (const id of ids) {
+            if (this.songIds.includes(id)) {
+                continue
+            }
+            this.songIds.push(id)
         }
     }
     Remove(song: Song) {
@@ -88,8 +97,12 @@ class Playlist {
         const index = this.songIds.indexOf(song.Id)
         this.songIds.splice(index, 1)
         this.songs.splice(index, 1)
-        Network.RemoveSongFromPlaylist(this.id, [song.Id])
         MediaView.ClearMediaId(this.Id)
+    }
+    RemoveIds(ids: id[]) {
+        for (const id of ids) {
+            this.RemoveAtId(id)
+        }
     }
     RemoveAtId(id: id) {
         const index = this.songIds.indexOf(id)
@@ -97,7 +110,6 @@ class Playlist {
         if (this.songsLoaded) {
             this.songs.splice(index, 1)
         }
-        Network.RemoveSongFromPlaylist(this.id, [id])
         MediaView.ClearMediaId(this.Id)
     }
 
@@ -120,7 +132,7 @@ function OnPlaylistClick(event: any) {
 
 
 ContextMenu.AddCategory("playlist", [
-    new ContextGroup("queue", false, [
+    new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
             const playlist = await PlaylistManager.LoadPlaylist(event.id)
             SongQueue.PlayNow(playlist.Songs)
@@ -128,7 +140,7 @@ ContextMenu.AddCategory("playlist", [
             AudioPlayer.instance.Play(playlist.Songs[0])
         })
     ]),
-    new ContextGroup("manage playlist", true, [
+    new ContextGroup("manage playlist", true, false, [
         new ContextOption("Rename", "src/assets/icons/edit.svg", (event) => {
             RenamePlaylistPopup.instance.Show(event.id)
         }),
@@ -140,7 +152,7 @@ ContextMenu.AddCategory("playlist", [
             PlaylistManager.RemovePlaylist(event.id)
         })
     ]),
-    new ContextGroup("playlists", true, [
+    new ContextGroup("playlists", true, false, [
         new ContextOption("Add to Other Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
             const id = event.id
             const otherId = await SelectPlaylist.AskUser()
@@ -153,12 +165,13 @@ ContextMenu.AddCategory("playlist", [
             const playlist = await PlaylistManager.LoadPlaylist(id)
             const otherPlaylist = await PlaylistManager.LoadPlaylist(otherId)
             otherPlaylist.AddMultiple(playlist.songs)
+            PlaylistRequester.AddSongToPlaylist(otherId, playlist.songIds)
         }),
         new ContextOption("New Playlist", "src/assets/icons/plus.svg", (event) => {
             CreatePlaylistPopup.instance.Show()
         })
     ]),
-    new ContextGroup("share", false, [
+    new ContextGroup("share", false, true, [
         new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
             const url = "https://share.swarmtunes.com/?p=" + (await Network.SharePlaylist(event.id))
             navigator.clipboard.writeText(url)

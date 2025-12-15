@@ -28,7 +28,7 @@ class PlayState {
         }
 
         if (data.currentSong == "swarmfm") {
-            SwarmFM.instance.Play()
+            //SwarmFM.instance.Play()
             return
         }
         const song = await SongRequester.GetSong(data.currentSong)

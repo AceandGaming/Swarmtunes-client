@@ -7,7 +7,14 @@ class SongRequester {
             idsToRequest = await SongDatabase.SongsNotDownloaded(ids)
             songs = await SongDatabase.GetSongs(ids)
         }
-        songs = songs.concat(await Network.GetSong(idsToRequest) as Song[])
+        if (Network.IsOnline()) {
+            songs = songs.concat(await Network.GetSong(idsToRequest) as Song[])
+        }
+        else {
+            for (const id of idsToRequest) {
+                songs.push(Song.CreateOfflineSong(id))
+            }
+        }
         return songs
     }
     static async GetSong(id: id): Promise<Song | undefined> {
@@ -16,7 +23,12 @@ class SongRequester {
             song = (await SongDatabase.GetSongs([id]))[0]
         }
         if (song === undefined) {
-            song = await Network.GetSong(id) as Song
+            if (Network.IsOnline()) {
+                song = await Network.GetSong(id) as Song
+            }
+            else {
+                song = Song.CreateOfflineSong(id)
+            }
         }
         return song
     }
@@ -28,5 +40,14 @@ class SongRequester {
             }
         }
         return Network.GetAudioURL(id)
+    }
+    static async GetAvailableSongs(ids: id[]): Promise<id[]> {
+        if (Network.IsOnline()) {
+            return ids
+        }
+        if (!SongDatabase.Active) {
+            return []
+        }
+        return await SongDatabase.SongsDownloaded(ids)
     }
 }

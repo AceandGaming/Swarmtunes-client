@@ -130,7 +130,6 @@ data = ""
 with open("site/service-worker.js", "r") as f:
     data = f.read()
 
-print(assetPaths)
 data = re.sub(r"const staticFiles = \[.*?\]", f"const staticFiles = {assetPaths}", data)
 
 with open("site/service-worker.js", "w") as f:

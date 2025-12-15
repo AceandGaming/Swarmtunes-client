@@ -37,6 +37,7 @@ class RenamePlaylistPopup extends PopupWindow {
         }
         this.Hide()
         this.playlist.Title = name
+        PlaylistRequester.RenamePlaylist(this.playlist.Id, name)
         PlaylistTab.Populate()
     }
     Show(id) {

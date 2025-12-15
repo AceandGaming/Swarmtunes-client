@@ -6,7 +6,7 @@ function ValidatePlaylistName(name) {
             message: "Invalid playlist length"
         }
     }
-    if (!/^[0-9A-Za-z_ ]+$/.test(name)) {
+    if (!/^[0-9A-Za-z_ :]+$/.test(name)) {
         return {
             error: true,
             message: "Name contains invalid characters"
@@ -64,7 +64,7 @@ class CreatePlaylistPopup extends PopupWindow {
         })
     }
     Show() {
-        if (!Network.IsLoggedIn()) {
+        if (!Network.IsLoggedIn() || !Network.IsOnline()) {
             return
         }
         super.Show()

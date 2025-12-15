@@ -22,7 +22,7 @@ class NowPlaying {
             songs = SongQueue.nextSongs
         }
         if (this.#songlist === undefined) {
-            this.#songlist = new SongList(songs, OnNowPlayingItemClick, "now-playing-item", false)
+            this.#songlist = new SongList(songs, OnNowPlayingItemClick, "now-playing-item", false, 30)
             const element = this.#songlist.CreateElement()
 
             const sortable = new Sortable(element, {
@@ -51,7 +51,7 @@ class NowPlaying {
 
 
 ContextMenu.InheritCategory("now-playing-item", "song", [
-    new ContextGroup("queue", false, [
+    new ContextGroup("queue", false, false, [
         new ContextOption("Remove", "src/assets/icons/playlist-remove.svg", (event) => {
             SongQueue.RemoveSong(event.id)
             NowPlaying.Update()

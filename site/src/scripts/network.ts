@@ -174,7 +174,6 @@ class Network {
         return new SwarmFMInfo(currentSong, nextSong, position, duration)
     }
     static async GetSong(id: id | id[]) {
-
         let ids = EnsureArray(id).slice()
         const songs = []
         while (ids.length > 0) {
@@ -399,6 +398,12 @@ class Network {
     }
     static async RenamePlaylist(playlist: id, name: string) {
         await this.Patch(`playlists/${playlist}`, { name: name })
+    }
+    static async UpdatePlaylist(playlist: Playlist) {
+        await this.Patch(`playlists/${playlist.Id}`, {
+            name: playlist.Title,
+            songIds: playlist.SongIds
+        })
     }
 
     static async ServerResync() {

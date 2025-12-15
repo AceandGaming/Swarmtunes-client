@@ -79,7 +79,7 @@ function OnAlbumClick(event: any) {
 
 
 ContextMenu.AddCategory("album", [
-    new ContextGroup("queue", false, [
+    new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
             const album = await Network.GetAlbum(event.id, true)
             SongQueue.PlayNow(album.songs)
@@ -87,7 +87,7 @@ ContextMenu.AddCategory("album", [
             AudioPlayer.instance.Play(album.songs[0])
         }),
     ]),
-    new ContextGroup("playlist", true, [
+    new ContextGroup("playlist", true, false, [
         new ContextOption("Add Songs To Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
             const playlistid = await SelectPlaylist.AskUser()
             if (playlistid === null) {
@@ -97,9 +97,10 @@ ContextMenu.AddCategory("album", [
             await playlist.GetSongs()
             const album = await Network.GetAlbum(event.id, true)
             playlist.AddMultiple(album.songs)
+            PlaylistRequester.AddSongToPlaylist(playlistid, album.songIds)
         }),
     ]),
-    new ContextGroup("share", false, [
+    new ContextGroup("share", false, true, [
         // new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
         //     const url = "https://share.swarmtunes.com/?a=" + (await Network.ShareAlbum(event.id))
         //     navigator.clipboard.writeText(url)

@@ -17,6 +17,9 @@ class PlaylistDatabase {
         this.intialised = true
     }
     public static async AddPlaylist(playlists: Playlist | Playlist[]) {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
         playlists = EnsureArray(playlists)
         for (const playlist of playlists) {
             if (playlist === undefined) {
@@ -35,26 +38,43 @@ class PlaylistDatabase {
         await Promiseify(playlistStore)
     }
     public static async GetPlaylists(ids: id[]): Promise<Playlist[]> {
-        const playlistTransaction = this.database.transaction("playlists", "readonly")
-        const playlistStore = playlistTransaction.objectStore("playlists")
-
-        const playlists = []
-        for (const id of ids) {
-            const json = await Promiseify(playlistStore.get(id))
-            if (json === undefined) {
-                continue
-            }
-            playlists.push(new Playlist(json))
+        if (!this.Active) {
+            throw new Error("Database not Active")
         }
+
+        const transaction = this.database.transaction("playlists", "readonly")
+        const store = transaction.objectStore("playlists")
+
+        const playlists: Playlist[] = []
+
+        for (const id of ids) {
+            const json = await Promiseify(store.get(id))
+            if (json !== undefined) {
+                playlists.push(new Playlist(json))
+            }
+        }
+
+        await PromiseifyTransaction(transaction)
         return playlists
     }
 
+    public static async RemovePlaylist(playlistId: id) {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
+        const playlistTransaction = this.database.transaction("playlists", "readwrite")
+        const playlistStore = playlistTransaction.objectStore("playlists")
+        await Promiseify(playlistStore.delete(playlistId))
+    }
+
     public static async GetAllPlaylists(): Promise<Playlist[]> {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
         const playlistTransaction = this.database.transaction("playlists", "readonly")
         const playlistStore = playlistTransaction.objectStore("playlists")
 
         const playlists = []
-        const cursor = await Promiseify(playlistStore.openCursor())
         for await (const cursor of CursorIterator(playlistStore)) {
             const json = cursor.value
             if (json === undefined) {
@@ -66,6 +86,9 @@ class PlaylistDatabase {
         return playlists
     }
     public static async PlaylistsNotDownloaded(ids: id[]): Promise<id[]> {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
         const playlistTransaction = this.database.transaction("playlists", "readonly")
         const playlistStore = playlistTransaction.objectStore("playlists")
         const missingIds = []
@@ -76,6 +99,42 @@ class PlaylistDatabase {
             }
         }
         return missingIds
+    }
+    public static async AddSongsToPlaylist(playlistId: id, ids: id[]) {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
+        const playlists = await this.GetPlaylists([playlistId])
+        const playlist = playlists[0]
+        if (playlist === undefined) {
+            throw new Error("Playlist not found")
+        }
+        playlist.AddIds(ids)
+        await this.AddPlaylist(playlist)
+    }
+    public static async RemoveSongsFromPlaylist(playlistId: id, ids: id[]) {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
+        const playlists = await this.GetPlaylists([playlistId])
+        const playlist = playlists[0]
+        if (playlist === undefined) {
+            throw new Error("Playlist not found")
+        }
+        playlist.RemoveIds(ids)
+        await this.AddPlaylist(playlist)
+    }
+    public static async RenamePlaylist(playlistId: id, name: string) {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
+        const playlists = await this.GetPlaylists([playlistId])
+        const playlist = playlists[0]
+        if (playlist === undefined) {
+            throw new Error("Playlist not found")
+        }
+        playlist.Title = name
+        await this.AddPlaylist(playlist)
     }
 }
 

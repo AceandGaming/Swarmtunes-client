@@ -18,6 +18,9 @@ class SongDatabase {
         this.intialised = true
     }
     public static async AddSong(song: Song | Song[]) {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
         const songs = EnsureArray(song)
         for (const song of songs) {
             if (song === undefined) {
@@ -46,6 +49,9 @@ class SongDatabase {
         await Promiseify(audioTransaction)
     }
     public static async GetSongs(ids: id[]): Promise<Song[]> {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
         const songTransaction = this.database.transaction("songs", "readonly")
         const songStore = songTransaction.objectStore("songs")
 
@@ -60,18 +66,39 @@ class SongDatabase {
         return songs
     }
     public static async GetAudio(id: id): Promise<Blob | undefined> {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
         const audioTransaction = this.database.transaction("audio", "readonly")
         const audioStore = audioTransaction.objectStore("audio")
         const audio = await Promiseify(audioStore.get(id))
         return audio
     }
     public static async SongsNotDownloaded(ids: id[]): Promise<id[]> {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
         const songTransaction = this.database.transaction("songs", "readonly")
         const songStore = songTransaction.objectStore("songs")
         const missingIds = []
         for (const id of ids) {
             const count = await Promiseify(songStore.count(id))
             if (count === 0) {
+                missingIds.push(id)
+            }
+        }
+        return missingIds
+    }
+    public static async SongsDownloaded(ids: id[]): Promise<id[]> {
+        if (!this.Active) {
+            throw new Error("Database not Active")
+        }
+        const songTransaction = this.database.transaction("songs", "readonly")
+        const songStore = songTransaction.objectStore("songs")
+        const missingIds = []
+        for (const id of ids) {
+            const count = await Promiseify(songStore.count(id))
+            if (count > 0) {
                 missingIds.push(id)
             }
         }

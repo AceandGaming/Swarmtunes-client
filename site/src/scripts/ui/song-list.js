@@ -1,8 +1,9 @@
-function CreateSongListItemElement(song, onClickEvent, showDate = false, catagory = "song") {
+function CreateSongListItemElement(song, onClickEvent, showDate = false, catagory = "song", unavaliable = false) {
     const element = document.createElement("li")
     element.classList.add("song-list-item", "song")
     element.setAttribute("data-id", song.Id)
     element.setAttribute("data-category", catagory)
+    element.classList.toggle("unavaliable", unavaliable)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
         <cover-img src=${Network.GetCover(song.Cover, 64)}></cover-img>
@@ -17,7 +18,7 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     return element
 }
 class SongList {
-    constructor(songs, songOnClickEvent = OnSongClick, catagory = "song", showDate = true) {
+    constructor(songs, songOnClickEvent = OnSongClick, catagory = "song", showDate = true, max = -1) {
         if (songs == undefined || !Array.isArray(songs)) {
             console.error("SongList must be initialized with an array of songs")
             return
@@ -26,6 +27,7 @@ class SongList {
         this.songOnClickEvent = songOnClickEvent
         this.catagory = catagory
         this.showDate = showDate
+        this.max = max
 
         this.element = document.createElement("ol")
         this.element.classList.add("song-list")
@@ -50,12 +52,14 @@ class SongList {
         this.Update()
         return this.element
     }
-    Update() {
+    async Update() {
         this.element.style.display = ""
         this.element.innerHTML = ""
+        const avaliableSongs = new Set(await SongRequester.GetAvailableSongs(this.songs.map(s => s.Id)))
         for (const [i, song] of this.songs.entries()) {
-            this.element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, this.showDate, this.catagory))
-            if (i > 30) {
+            const avaliable = avaliableSongs.has(song.Id)
+            this.element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, this.showDate, this.catagory, !avaliable))
+            if (this.max > 0 && i > this.max) {
                 break
             }
         }

@@ -4,18 +4,14 @@ class PlaylistManager {
     }
 
     static #playlists = {}
-    static error = false
 
     static async GetPlaylists() {
-        try {
-            const playlists = await PlaylistRequester.GetAllPlaylists()
-            for (const playlist of playlists) {
-                this.#playlists[playlist.id] = playlist
-            }
+        const playlists = await PlaylistRequester.GetAllPlaylists()
+        for (const playlist of playlists) {
+            this.#playlists[playlist.id] = playlist
         }
-        catch (error) {
-            console.error(error)
-            this.error = true
+        if (Network.IsOnline && PlaylistDatabase.Active) {
+            PlaylistDatabase.AddPlaylist(playlists)
         }
     }
     static GetPlaylist(id) {
@@ -40,7 +36,7 @@ class PlaylistManager {
     }
     static RemovePlaylist(id) {
         delete this.#playlists[id]
-        Network.DeletePlaylist(id)
+        PlaylistRequester.DeletePlaylist(id)
         PlaylistTab.Populate()
     }
     static async DisplayPlaylist(id) {

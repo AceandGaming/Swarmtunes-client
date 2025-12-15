@@ -173,7 +173,7 @@ class PlaylistView {
 
 
 ContextMenu.InheritCategory("playlist-item", "song", [
-    new ContextGroup("playlist", true, [
+    new ContextGroup("playlist", true, false, [
         new ContextOption("Remove From Playlist", "src/assets/icons/playlist-remove.svg", async (event) => {
             const playlistid = PlaylistView.playlist.Id
             if (playlistid === undefined) {
@@ -181,6 +181,7 @@ ContextMenu.InheritCategory("playlist-item", "song", [
             }
             const playlist = PlaylistManager.GetPlaylist(playlistid)
             playlist.RemoveAtId(event.id)
+            PlaylistRequester.RemoveSongFromPlaylist(playlistid, [event.id])
             PlaylistView.Update()
         })
     ])

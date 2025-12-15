@@ -17,10 +17,19 @@ async function AsyncCrap() {
     await Network.CheckOnline()
     await SongDatabase.Initalise()
     await PlaylistDatabase.Initalise()
+
+    setInterval(() => {
+        if (!Network.IsOnline()) {
+            Network.CheckOnline()
+        }
+    }, 60000)
 }
 
 
 let isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+if (isMobile) {
+    AudioPlayer.instance.Audio.preload = "auto"
+}
 
 function OnLogin(isAdmin) {
     document.getElementById("header-login-button").textContent = "Log Out"

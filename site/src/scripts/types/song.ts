@@ -10,6 +10,17 @@ interface SongPrams {
 }
 
 class Song {
+    public static CreateOfflineSong(id: id) {
+        return new Song({
+            id,
+            title: "Unavailable",
+            artist: "offline",
+            singers: ["Offline"],
+            coverType: "duet",
+        })
+    }
+
+
     get Id() { return this.id }
     get Title() { return this.title }
     get Artist() { return this.artist }
@@ -97,14 +108,14 @@ function OnSongClick(event: any) {
 
 
 ContextMenu.AddCategory("song", [
-    new ContextGroup("queue", false, [
+    new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
             const song = await SongRequester.GetSong(event.id)
             SongQueue.PlayNow([song])
             AudioPlayer.instance.Play(song)
         }),
     ]),
-    new ContextGroup("playlist", true, [
+    new ContextGroup("playlist", true, false, [
         new ContextOption("Add to Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
             const playlistid = await SelectPlaylist.AskUser()
             if (playlistid === null) {
@@ -114,9 +125,10 @@ ContextMenu.AddCategory("song", [
             await playlist.GetSongs()
             const song = await SongRequester.GetSong(event.id)
             playlist.Add(song)
+            PlaylistRequester.AddSongToPlaylist(playlistid, [event.id])
         })
     ]),
-    new ContextGroup("share", false, [
+    new ContextGroup("share", false, true, [
         new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
             const url = "https://share.swarmtunes.com/?s=" + (await Network.ShareSong(event.id))
             navigator.clipboard.writeText(url)
