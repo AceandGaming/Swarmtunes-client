@@ -46,9 +46,9 @@ class PlaylistRequester {
         }
 
         let playlist
-        if (PlaylistDatabase.Active) {
-            playlist = (await PlaylistDatabase.GetPlaylists([id]))[0]
-        }
+        // if (PlaylistDatabase.Active) {
+        //     playlist = (await PlaylistDatabase.GetPlaylists([id]))[0]
+        // }
         if (playlist === undefined) {
             playlist = await Network.GetPlaylist(id) as Playlist
         }
@@ -104,9 +104,9 @@ class PlaylistRequester {
             throw new TypeError("Invalid arguments")
         }
 
-        if (PlaylistDatabase.Active) {
-            await PlaylistDatabase.RenamePlaylist(playlist, name)
-        }
+        // if (PlaylistDatabase.Active) {
+        //     await PlaylistDatabase.RenamePlaylist(playlist, name)
+        // }
         if (Network.IsOnline()) {
             await Network.RenamePlaylist(playlist, name)
         }

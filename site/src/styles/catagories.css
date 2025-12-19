@@ -134,14 +134,23 @@
 }
 
 .catagory-item > span {
+  display: block;
   margin: 0 auto;
   max-width: 75%;
   max-height: 40px;
+  min-height: 22px;
   text-wrap: wrap;
   text-align: center;
+  align-content: center;
   text-overflow: ellipsis;
+
   overflow: hidden;
   color: white;
+}
+
+.catagory-item > span img {
+  height: 18px;
+  translate: 0 3px;
 }
 
 @media (max-width: 570px) {

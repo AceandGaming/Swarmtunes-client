@@ -115,6 +115,10 @@ class SongQueue {
         this.#songQueue.splice(this.#queuePointer, 0, ...songs)
         NowPlaying.Update()
     }
+    static AppendSong(song) {
+        this.#songQueue.push(song)
+        NowPlaying.Update()
+    }
     static GetSong(id) {
         for (let i = 0; i < this.#loadedSongs.length; i++) {
             if (this.#loadedSongs[i].id === id) {

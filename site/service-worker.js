@@ -2,7 +2,7 @@ const STATIC_CACHE = "static"
 const DYNAMIC_CACHE = "dynamic-v7"
 
 //Populated by a python file
-const staticFiles = ['index.html', 'src/main-f359ce36.js', 'src/styles-46e9638d.css', 'src/assets/neuro-cry.png', 'src/assets/evil-bg.png', 'src/assets/evil-cheer.webp', 'src/assets/no-song.png', 'src/assets/neuro-cheer.webp', 'src/assets/icons/edit-img.svg', 'src/assets/icons/disc.svg', 'src/assets/icons/playlist.svg', 'src/assets/icons/shuffle.svg', 'src/assets/icons/volume-off.svg', 'src/assets/icons/newero.avif', 'src/assets/icons/note.png', 'src/assets/icons/folder-plus.svg', 'src/assets/icons/layout-grid.svg', 'src/assets/icons/plus.svg', 'src/assets/icons/track-prev.svg', 'src/assets/icons/share.svg', 'src/assets/icons/newliv.avif', 'src/assets/icons/maximize.svg', 'src/assets/icons/x.svg', 'src/assets/icons/tool.svg', 'src/assets/icons/search.svg', 'src/assets/icons/web.svg', 'src/assets/icons/play.svg', 'src/assets/icons/volume.svg', 'src/assets/icons/file-export.svg', 'src/assets/icons/swarmfm.png', 'src/assets/icons/track-next.svg', 'src/assets/icons/trash.svg', 'src/assets/icons/edit.svg', 'src/assets/icons/volume-2.svg', 'src/assets/icons/pause.svg', 'src/assets/icons/x-img.svg', 'src/assets/icons/playlist-remove.svg', 'src/assets/icons/playlist-add.svg', 'src/assets/icons/moon.svg', 'src/assets/neuro-bg.png']
+const staticFiles = ['index.html', 'src/main-7b9f4465.js', 'src/styles-31509d5c.css', 'src/assets/neuro-cry.png', 'src/assets/evil-bg.png', 'src/assets/evil-cheer.webp', 'src/assets/no-song.png', 'src/assets/neuro-cheer.webp', 'src/assets/icons/edit-img.svg', 'src/assets/icons/disc.svg', 'src/assets/icons/playlist.svg', 'src/assets/icons/shuffle.svg', 'src/assets/icons/volume-off.svg', 'src/assets/icons/newero.avif', 'src/assets/icons/note.png', 'src/assets/icons/folder-plus.svg', 'src/assets/icons/layout-grid.svg', 'src/assets/icons/plus.svg', 'src/assets/icons/track-prev.svg', 'src/assets/icons/share.svg', 'src/assets/icons/newliv.avif', 'src/assets/icons/maximize.svg', 'src/assets/icons/x.svg', 'src/assets/icons/tool.svg', 'src/assets/icons/search.svg', 'src/assets/icons/web.svg', 'src/assets/icons/play.svg', 'src/assets/icons/volume.svg', 'src/assets/icons/file-export.svg', 'src/assets/icons/swarmfm.png', 'src/assets/icons/track-next.svg', 'src/assets/icons/trash.svg', 'src/assets/icons/edit.svg', 'src/assets/icons/volume-2.svg', 'src/assets/icons/pause.svg', 'src/assets/icons/x-img.svg', 'src/assets/icons/playlist-remove.svg', 'src/assets/icons/playlist-add.svg', 'src/assets/icons/moon.svg', 'src/assets/neuro-bg.png']
 
 //Folders must have trailing slash
 const cacheFirstUrls = [
@@ -70,8 +70,7 @@ async function CacheFirst(request, cacheName) {
         return response
     }
     catch {
-        const cachedResponse = await cache.match(request)
-        return cachedResponse || offlineResponse
+        return offlineResponse
     }
 }
 async function NetworkFirst(request, cacheName) {

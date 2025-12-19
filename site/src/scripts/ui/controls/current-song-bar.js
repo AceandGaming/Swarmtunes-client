@@ -37,6 +37,11 @@ class CurrentSongBar {
     }
 
     static CreateDesktop() {
+        const old = document.querySelector("#current-song-bar")
+        if (old) {
+            old.remove()
+        }
+
         const currentSongBar = document.createElement("div")
         currentSongBar.id = "current-song-bar"
 
@@ -69,6 +74,11 @@ class CurrentSongBar {
     }
 
     static CreateMobile() {
+        const old = document.querySelector("#current-song-bar")
+        if (old) {
+            old.remove()
+        }
+
         const currentSongBar = document.createElement("div")
         currentSongBar.id = "current-song-bar"
 
@@ -118,3 +128,16 @@ class CurrentSongBar {
         this.#coverImage.src = coverUrl
     }
 }
+
+let lastWindowWidth = window.innerWidth
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 500 && lastWindowWidth <= 500) {
+        CurrentSongBar.CreateDesktop()
+        CreateButton(false)
+    }
+    else if (window.innerWidth <= 500 && lastWindowWidth > 500) {
+        CurrentSongBar.CreateMobile()
+        CreateButton(true)
+    }
+    lastWindowWidth = window.innerWidth
+})

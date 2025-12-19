@@ -111,8 +111,14 @@ class MediaView {
         if (mediaObject.songsLoaded) {
             Update(mediaObject.songs)
         } else {
+            if (MediaView._lastMediaId != mediaObject.id) {
+                return
+            }
             LoadingText.Attach(MediaView.element)
             await mediaObject.GetSongs()
+            if (MediaView._lastMediaId != mediaObject.id) {
+                return
+            }
             LoadingText.Detach(MediaView.element)
             Update(mediaObject.songs)
         }
@@ -121,7 +127,7 @@ class MediaView {
         MediaView.element.style.display = "none"
         ShowContentTabs()
     }
-    static Show(mediaObject) {
+    static Show() {
         MediaView.element.style.display = "flex"
         HideContentTabs()
     }

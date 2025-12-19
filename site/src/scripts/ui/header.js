@@ -1,6 +1,11 @@
 let currentTheme = 0
 
 function CreateButton(footer = false) {
+    const old = document.querySelector("#tabs-container")
+    if (old) {
+        old.remove()
+    }
+
     const container = document.createElement("div");
     container.id = "tabs-container";
     container.innerHTML = `
@@ -26,6 +31,7 @@ function CreateButton(footer = false) {
     } else {
         document.querySelector("header").prepend(container);
     }
+    AttachButtons()
 }
 
 

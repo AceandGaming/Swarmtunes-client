@@ -32,7 +32,7 @@ class PlayState {
             return
         }
         const song = await SongRequester.GetSong(data.currentSong)
-        if (song.length = 0) {
+        if (song === undefined) {
             return
         }
         AudioPlayer.instance.Load(song)

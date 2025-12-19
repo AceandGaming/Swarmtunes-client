@@ -5,15 +5,35 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     element.setAttribute("data-category", catagory)
     element.classList.toggle("unavaliable", unavaliable)
     element.addEventListener("click", onClickEvent)
-    element.innerHTML = `
-        <cover-img src=${Network.GetCover(song.Cover, 64)}></cover-img>
-        <div class="title-artist">
-            <span>${song.Title}</span>
-            <span class="sub-text">${song.Artist}</span>
-        </div>
-    `
+
+    const coverImg = document.createElement('cover-img');
+    coverImg.src = Network.GetCover(song.Cover, 64);
+
+    const titleArtist = document.createElement('div');
+    titleArtist.className = 'title-artist';
+
+    const titleSpan = document.createElement('span');
+    titleSpan.textContent = song.Title;
+
+    const artistSpan = document.createElement('span');
+    artistSpan.className = 'sub-text';
+    artistSpan.textContent = song.Artist;
+
+    titleArtist.append(titleSpan, artistSpan);
+
+    element.append(coverImg, titleArtist);
+
     if (showDate) {
-        element.innerHTML += `<span class="sub-text date">${song.PrettyDate}</span>`
+        const date = document.createElement('span');
+        date.className = 'sub-text date';
+        date.textContent = song.PrettyDate;
+
+        const tripleDot = document.createElement('button');
+        tripleDot.append(LoadSVG('src/assets/icons/triple-dot.svg'));
+        tripleDot.classList.add('icon-button', 'triple-dot');
+        ContextMenu.AttachButton(tripleDot, element);
+
+        element.appendChild(tripleDot, date);
     }
     return element
 }

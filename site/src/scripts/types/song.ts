@@ -114,6 +114,10 @@ ContextMenu.AddCategory("song", [
             SongQueue.PlayNow([song])
             AudioPlayer.instance.Play(song)
         }),
+        new ContextOption("Append to Queue", "src/assets/icons/playlist-add.svg", async (event) => {
+            const song = await SongRequester.GetSong(event.id)
+            SongQueue.AppendSong(song)
+        }),
     ]),
     new ContextGroup("playlist", true, false, [
         new ContextOption("Add to Playlist", "src/assets/icons/playlist-add.svg", async (event) => {

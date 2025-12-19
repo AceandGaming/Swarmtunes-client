@@ -29,6 +29,7 @@ async function AsyncCrap() {
 let isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 if (isMobile) {
     AudioPlayer.instance.Audio.preload = "auto"
+    localStorage.setItem("volume", 1)
 }
 
 function OnLogin(isAdmin) {
@@ -56,13 +57,12 @@ function OnLogin(isAdmin) {
 Login.AddLoginCallback(OnLogin)
 
 function CreateUI() {
-    if (isMobile) {
-        CurrentSongBar.CreateMobile()
-        CreateButton(true)
-        localStorage.setItem("volume", 1)
-    } else {
+    if (window.innerWidth > 500) {
         CurrentSongBar.CreateDesktop()
         CreateButton()
+    } else {
+        CurrentSongBar.CreateMobile()
+        CreateButton(true)
     }
     PlaylistTab.ShowLoggedOutScreen()
     PopulateSearch("")
@@ -71,7 +71,6 @@ function CreateUI() {
     MediaView.Create()
     SongFullscreen.Create()
 
-    AttachButtons()
     Login.CreateWindow()
     new CreatePlaylistPopup()
     new RenamePlaylistPopup()

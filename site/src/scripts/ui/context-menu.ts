@@ -79,11 +79,67 @@ class ContextMenu {
         if (category === undefined || this.categories[category] === undefined) {
             return
         }
+        let x, y, target
+        if (event instanceof MouseEvent) {
+            x = event.clientX
+            y = event.clientY
+            target = event.target
+        }
+        else if (event instanceof TouchEvent) {
+            const first = event.changedTouches[0]
+            const last = event.changedTouches[event.changedTouches.length - 1]
+            if (first === undefined || last === undefined) {
+                return
+            }
+            for (let i = 1; i < event.changedTouches.length - 1; i++) {
+                const touch = event.changedTouches[i]
+                if (touch === undefined) {
+                    continue
+                }
+                const distance = Math.sqrt(Math.pow(first.clientX - touch.clientX, 2) + Math.pow(first.clientY - touch.clientY, 2))
+                if (distance > 10) {
+                    return
+                }
+            }
 
-        this.menu.Populate(this.categories[category], event)
+            x = last.clientX
+            y = last.clientY
+            target = event.target
+        }
+        else {
+            throw new Error("Unknown event type")
+        }
+
+        if (!(target instanceof HTMLElement)) {
+            console.warn("No target found when opening context menu")
+            return
+        }
+
+        this.menu.Populate(this.categories[category], target, x, y)
         if (event) {
             this.menu.Show()
         }
+    }
+    public static AttachButton(button: HTMLElement, parent: HTMLElement) {
+        button.addEventListener("click", (event) => {
+            event.stopPropagation()
+
+            const x = event.clientX
+            const y = event.clientY
+
+            const category = parent.dataset.category
+            if (category === undefined || this.categories[category] === undefined) {
+                console.error("No category found for button's parent", parent)
+                return
+            }
+            if (parent.dataset.id === undefined) {
+                console.error("No id found for button's parent", parent)
+                return
+            }
+
+            this.menu.Populate(this.categories[category], parent, x, y)
+            this.menu.Show()
+        })
     }
     public static AddCategory(name: string, groups: ContextGroup[]) {
         this.categories[name] = groups
@@ -125,7 +181,7 @@ class ContextMenu {
 }
 
 abstract class ContextMenuUI {
-    public abstract Populate(groups: ContextGroup[], event: MouseEvent | TouchEvent): void
+    public abstract Populate(groups: ContextGroup[], element: HTMLElement, x: number, y: number): void
     public abstract Show(): void
     public abstract Hide(): void
 }
@@ -150,20 +206,20 @@ class DesktopContextMenu extends ContextMenuUI {
 
         document.body.append(this.element)
     }
-    public Populate(groups: ContextGroup[], event: MouseEvent) {
-        if (!(event.target instanceof HTMLElement)) {
+    public Populate(groups: ContextGroup[], target: HTMLElement, x: number, y: number) {
+        if (!(target instanceof HTMLElement)) {
             return
         }
 
-        const id = event.target.dataset.id
+        const id = target.dataset.id
         const data = {
             id,
-            x: event.clientX,
-            y: event.clientY,
-            object: event.target,
+            x: x,
+            y: y,
+            object: target,
         }
-        this.x = event.clientX
-        this.y = event.clientY
+        this.x = x
+        this.y = y
         this.element.innerHTML = ""
 
         for (const [i, group] of groups.entries()) {
@@ -187,12 +243,22 @@ class DesktopContextMenu extends ContextMenuUI {
         }
     }
     public Show() {
-        this.element.style.left = `${this.x}px`
-        this.element.style.top = `${this.y}px`
-
         this.element.classList.remove("show")
         this.element.getBoundingClientRect()
         this.element.classList.add("show")
+
+        let x = this.x
+        let y = this.y
+
+        if (x + this.element.offsetWidth > window.innerWidth) {
+            x -= this.element.offsetWidth
+        }
+        if (y + this.element.offsetHeight > window.innerHeight) {
+            y -= this.element.offsetHeight
+        }
+
+        this.element.style.left = `${x}px`
+        this.element.style.top = `${y}px`
     }
     public Hide() {
         this.element.classList.remove("show")
@@ -217,25 +283,18 @@ class MobileContextMenu extends ContextMenuUI {
 
         document.body.append(this.element)
     }
-    public Populate(groups: ContextGroup[], event: TouchEvent) {
-        if (!(event.target instanceof HTMLElement)) {
+    public Populate(groups: ContextGroup[], target: HTMLElement, x: number, y: number) {
+        if (!(target instanceof HTMLElement)) {
             return
         }
 
-        const id = event.target.dataset.id
+        const id = target.dataset.id
 
-        const touches = event.changedTouches
-        const firstTouch = touches[0]
-        const lastTouch = touches[touches.length - 1]
-
-        if (lastTouch === undefined || firstTouch === undefined) {
-            return
-        }
         const data = {
             id,
-            x: lastTouch.clientX,
-            y: lastTouch.clientY,
-            object: event.target,
+            x: x,
+            y: y,
+            target,
         }
         this.element.innerHTML = ""
 

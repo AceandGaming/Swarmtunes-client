@@ -53,7 +53,7 @@ function CreateCatagoryItemElement(title, id, imageSource, onClickEvent, type, o
     element.appendChild(wrapper)
 
     const span = document.createElement("span")
-    span.textContent = title
+    span.innerHTML = ReplaceEmotesOfString(title)
     element.appendChild(span)
 
     return element

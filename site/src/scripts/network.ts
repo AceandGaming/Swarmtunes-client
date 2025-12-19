@@ -178,10 +178,15 @@ class Network {
         const songs = []
         while (ids.length > 0) {
             const params = new URLSearchParams()
-            for (let i = 0; i < Math.min(ids.length, 100); i++) {
-                params.append("ids", ids.shift())
+            const batch = ids.splice(0, 100)
+            for (const id of batch) {
+                params.append("ids", id)
             }
             const response = await this.Get(`songs?${params.toString()}`)
+            if (!response.ok) {
+                console.error("Failed to get song")
+                return
+            }
             for (const dict of await response.json()) {
                 songs.push(new Song(dict))
             }
@@ -409,5 +414,9 @@ class Network {
     static async ServerResync() {
         RequireAdmin()
         await this.Post("resync", {})
+    }
+
+    static GetEmoteUrl(name: string) {
+        return `${this.serverURL}/emotes/${name}`
     }
 }

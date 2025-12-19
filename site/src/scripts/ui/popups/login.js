@@ -144,7 +144,7 @@ class LoginPopup extends PopupWindow {
         this.content.appendChild(this.passwordInput)
 
         this.remeberMeLabel = document.createElement("label")
-        this.remeberMeLabel.textContent = "Remeber me"
+        this.remeberMeLabel.textContent = "Remember me"
 
         this.remeberMeToggle = document.createElement("input")
         this.remeberMeToggle.type = "checkbox"
