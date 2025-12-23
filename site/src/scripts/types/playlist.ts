@@ -145,7 +145,7 @@ ContextMenu.AddCategory("playlist", [
             RenamePlaylistPopup.instance.Show(event.id)
         }),
         new ContextOption("Delete", "src/assets/icons/trash.svg", async (event) => {
-            const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + PlaylistManager.GetPlaylist(event.id).title + "</strong>")
+            const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + ReplaceEmotesOfString(PlaylistManager.GetPlaylist(event.id).title) + "</strong>")
             if (!confirmation) {
                 return
             }

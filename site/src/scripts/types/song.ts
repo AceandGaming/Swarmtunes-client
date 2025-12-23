@@ -95,6 +95,7 @@ class Song {
 
 function OnSongClick(event: any) {
     const id = event.target.dataset.id
+    AudioPlayer.instance.Clear()
     SongRequester.GetSong(id).then((song) => {
         if (song === undefined) {
             console.warn("Song clicked with no song")
@@ -110,6 +111,7 @@ function OnSongClick(event: any) {
 ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
+            AudioPlayer.instance.Clear()
             const song = await SongRequester.GetSong(event.id)
             SongQueue.PlayNow([song])
             AudioPlayer.instance.Play(song)

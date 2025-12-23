@@ -4,13 +4,16 @@
     visibility: hidden;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        var(--background-colour),
-        var(--background-sub-colour)
-    );
+    background: linear-gradient(var(--background-colour),
+            var(--background-sub-colour));
 }
+
 #song-fullscreen.show {
     visibility: visible;
+}
+
+#song-fullscreen.high-contrast :is(h1, h2, h3, h4, h5, h6, span) {
+    color: white;
 }
 
 #song-fullscreen .close-button {
@@ -20,11 +23,13 @@
     width: 35px;
     height: 35px;
 }
+
 #song-fullscreen .swarmfm-player {
     border: none;
     width: inherit;
     height: inherit;
 }
+
 #song-fullscreen .content {
     display: flex;
     flex-direction: column;
@@ -37,6 +42,7 @@
     margin: auto;
     box-sizing: border-box;
 }
+
 #song-fullscreen .content > div {
     flex: 1 1 auto;
     display: flex;
@@ -45,17 +51,21 @@
     align-items: center;
     width: 100%;
 }
+
 #song-fullscreen .content > div > div {
     width: 100%;
 }
+
 #song-fullscreen .content > :first-child {
     flex-basis: min(50%, fit-content);
     gap: 6%;
 }
+
 #song-fullscreen .content > :last-child {
     flex-basis: min(5%, fit-content);
     gap: 0;
 }
+
 #song-fullscreen .cover-container {
     display: flex;
     flex-direction: column;
@@ -63,6 +73,7 @@
     align-items: center;
     gap: 0;
 }
+
 #song-fullscreen .cover-container img {
     max-width: 100%;
     width: 42vh;
@@ -70,6 +81,7 @@
     border-radius: 8%;
     background-color: transparent;
 }
+
 #song-fullscreen .title-container {
     display: flex;
     flex-direction: column;
@@ -78,11 +90,13 @@
     gap: 5px;
     overflow: hidden;
 }
+
 #song-fullscreen .title-container > * {
     margin: 0;
     white-space: normal;
     max-width: inherit;
 }
+
 #song-fullscreen .title-container > h1 {
     font-size: x-large;
 }
@@ -91,6 +105,7 @@
 #song-fullscreen .media-controls {
     margin: auto;
 }
+
 #song-fullscreen .media-controls button {
     background: none;
 }
@@ -98,9 +113,11 @@
 #song-fullscreen .seek-bar-container {
     margin-bottom: auto;
 }
+
 #song-fullscreen .seek-bar {
     height: 10px;
 }
+
 #song-fullscreen .seek-bar:hover {
     height: 12px;
 }

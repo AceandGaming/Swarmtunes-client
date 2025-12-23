@@ -18,7 +18,6 @@ class MediaView {
         AudioPlayer.instance.Play(SongQueue.currentSong)
     }
     static OnCoverClick(event) {
-        SongQueue.ClearSongQueue()
         SongQueue.LoadSongs(MediaView._songList.songs)
         SongQueue.UpdateQueue()
         AudioPlayer.instance.Play(SongQueue.currentSong)
@@ -29,7 +28,7 @@ class MediaView {
 
         const closeButton = document.createElement("button")
         closeButton.append(LoadSVG("src/assets/icons/x.svg"))
-        closeButton.classList.add("close-button")
+        closeButton.classList.add("close-button", "icon-button")
         closeButton.addEventListener("click", MediaView.Hide.bind(MediaView))
 
         const content = document.createElement("div")
@@ -87,7 +86,7 @@ class MediaView {
 
     }
     static _UpdateContent(title, discription, coverUrl) {
-        MediaView._title.textContent = title
+        MediaView._title.innerHTML = ReplaceEmotesOfString(title)
         MediaView._discription.textContent = discription
         MediaView._coverArt.classList.add("loading")
         MediaView._loadingArt.style.display = "block"
@@ -130,6 +129,9 @@ class MediaView {
     static Show() {
         MediaView.element.style.display = "flex"
         HideContentTabs()
+    }
+    static IsVisible() {
+        return MediaView.element.style.display == "flex"
     }
     static ShowLoading() {
         MediaView.element.style.display = "flex"

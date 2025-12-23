@@ -6,38 +6,39 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     element.classList.toggle("unavaliable", unavaliable)
     element.addEventListener("click", onClickEvent)
 
-    const coverImg = document.createElement('cover-img');
-    coverImg.src = Network.GetCover(song.Cover, 64);
+    const coverImg = document.createElement('cover-img')
+    coverImg.src = Network.GetCover(song.Cover, 64)
 
-    const titleArtist = document.createElement('div');
-    titleArtist.className = 'title-artist';
+    const titleArtist = document.createElement('div')
+    titleArtist.className = 'title-artist'
 
-    const titleSpan = document.createElement('span');
-    titleSpan.textContent = song.Title;
+    const titleSpan = document.createElement('span')
+    titleSpan.textContent = song.Title
 
-    const artistSpan = document.createElement('span');
-    artistSpan.className = 'sub-text';
-    artistSpan.textContent = song.Artist;
+    const artistSpan = document.createElement('span')
+    artistSpan.className = 'sub-text'
+    artistSpan.textContent = song.Artist
 
-    titleArtist.append(titleSpan, artistSpan);
+    titleArtist.append(titleSpan, artistSpan)
 
-    element.append(coverImg, titleArtist);
+    element.append(coverImg, titleArtist)
 
     if (showDate) {
-        const date = document.createElement('span');
-        date.className = 'sub-text date';
-        date.textContent = song.PrettyDate;
+        const date = document.createElement('span')
+        date.className = 'sub-text date'
+        date.textContent = song.PrettyDate
 
-        const tripleDot = document.createElement('button');
-        tripleDot.append(LoadSVG('src/assets/icons/triple-dot.svg'));
-        tripleDot.classList.add('icon-button', 'triple-dot');
-        ContextMenu.AttachButton(tripleDot, element);
+        const tripleDot = document.createElement('button')
+        tripleDot.append(LoadSVG('src/assets/icons/triple-dot.svg'))
+        tripleDot.classList.add('icon-button', 'triple-dot')
+        ContextMenu.AttachButton(tripleDot, element)
 
-        element.appendChild(tripleDot, date);
+        element.append(date, tripleDot)
     }
     return element
 }
 class SongList {
+
     constructor(songs, songOnClickEvent = OnSongClick, catagory = "song", showDate = true, max = -1) {
         if (songs == undefined || !Array.isArray(songs)) {
             console.error("SongList must be initialized with an array of songs")
@@ -95,6 +96,9 @@ class SongList {
         if (oldBounds.length === 0) {
             return
         }
+        if (this.songs.length <= 1) {
+            return
+        }
 
         for (const element of this.element.children) {
             const id = element.getAttribute("data-id")
@@ -111,9 +115,9 @@ class SongList {
             element.getBoundingClientRect() //force update. Idk browser are weird
 
             requestAnimationFrame(() => {
-                element.style.transition = "transform 300ms ease";
-                element.style.transform = "";
-            });
+                element.style.transition = "transform 300ms ease"
+                element.style.transform = ""
+            })
         }
     }
     Hide() {

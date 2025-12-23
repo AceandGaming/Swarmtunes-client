@@ -8,6 +8,7 @@
   display: none;
   backdrop-filter: blur(6px);
 }
+
 .popup-window {
   aspect-ratio: 2 / 1;
   max-width: min(80vw, 700px);
@@ -26,11 +27,23 @@
   background-size: 192px;
   box-shadow: 0 5px 15px #00000080;
   min-width: 0;
+
 }
+
+.popup-window.busy {
+  filter: brightness(0.5);
+  transition: filter 0.2s ease;
+}
+
+.popup-window.busy :is(button:not(.close-button), input) {
+  pointer-events: none;
+}
+
 .popup-window h1 {
   margin: 0;
   font-size: 40px;
 }
+
 .popup-window > .buttons {
   display: flex;
   flex: 0 1 35px;
@@ -40,12 +53,14 @@
   width: 100%;
   gap: 10px
 }
+
 .popup-window > .buttons button {
   flex: 1;
   height: 100%;
   max-width: 150px;
   border-radius: 10px;
 }
+
 .popup-window > .close-button {
   position: absolute;
   top: 10px;
@@ -53,6 +68,7 @@
   width: 25px;
   height: 25px;
 }
+
 .popup-window > .content {
   flex: 1 1 0;
   width: 100%;
@@ -64,37 +80,44 @@
   gap: 10px;
   margin: 10px;
 }
+
 .popup-window > .content > * {
   flex: 1 1 auto;
   margin: 0;
   text-align: center;
 }
+
 .popup-window > .content > input {
   width: 100%;
   height: 25px;
 }
+
 .popup-window > .content > input.error,
 .popup-window > .content > button.error,
 .popup-window > .buttons button.error {
   border-color: red;
-} 
+}
 
 @media (max-width: 550px) {
   .popup-window {
     aspect-ratio: auto;
     height: auto;
   }
+
   .popup-window > .buttons {
     flex-basis: 45px;
     gap: 20px;
   }
+
   .popup-window > .buttons button {
     font-size: medium;
   }
+
   .popup-window > .content input {
     font-size: medium;
     height: 30px;
   }
+
   .popup-window > .close-button {
     width: 40px;
     height: 40px;

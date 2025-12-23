@@ -96,10 +96,11 @@ class Login {
         const password = this.passwordInput.value
         const remeber = this.remeberMeToggle.checked
         const cor = Network.Login(username, password, remeber)
-        cor.catch(() => this.error.textContent = "An unknown error occurred")
+        cor.catch(() => { this.window.SetBusy(false); this.error.textContent = "An unknown error occurred" })
         cor.then(output => {
             if (typeof output === "string") {
                 this.error.textContent = output
+                this.window.SetBusy(false)
                 return
             }
             this.window.Hide()
@@ -111,10 +112,11 @@ class Login {
         const password = this.passwordInput.value
         const remeber = this.remeberMeToggle.checked
         const cor = Network.Register(username, password, remeber)
-        cor.catch(() => this.error.textContent = "An unknown error occurred")
+        cor.catch(() => { this.window.SetBusy(false); this.error.textContent = "An unknown error occurred" })
         cor.then(output => {
             if (typeof output === "string") {
                 this.error.textContent = output
+                this.window.SetBusy(false)
                 return
             }
             this.window.Hide()

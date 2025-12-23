@@ -84,20 +84,17 @@ class SongQueue {
         NowPlaying.Update()
     }
     static ClearSongQueue() {
-        this.#songQueue = []
-        this.#queuePointer = 0
-        this.#loadedSongs = []
-        PlayState.Update({ songIds: [] })
+        this.LoadSingleSong(this.currentSong)
     }
     static LoadSongs(songs) {
         this.#loadedSongs = CloneSongs(songs)
         PlayState.Update({ songIds: GetidsFromSongList(songs) })
     }
     static LoadSingleSong(song) {
-        this.LoadSongs([song])
+        this.LoadSongs([song.Copy()])
         this.#UnshuffleQueue()
-        this.currentSong = song
         NowPlaying.Update()
+        PlayState.Update({ currentSong: song.id })
     }
     static UpdateQueue(currentSong) {
         if (this.#suffle) {

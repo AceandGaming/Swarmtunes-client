@@ -52,10 +52,11 @@ class CreatePlaylistPopup extends PopupWindow {
     #OnButtonClick() {
         const name = this.input.value
         const cor = Network.CreatePlaylist(name)
-        cor.catch(() => this.error.textContent = "An unknown error occurred")
+        cor.catch(() => { this.SetBusy(false); this.error.textContent = "An unknown error occurred" })
         cor.then(response => {
             if (response.error) {
                 this.error.textContent = response.error
+                this.SetBusy(false)
                 return
             }
             PlaylistManager.AddPlaylist(response)

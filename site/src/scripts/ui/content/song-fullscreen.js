@@ -100,7 +100,7 @@ class SongFullscreen {
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
         if (this.#singersText) {
-            this.#singersText.textContent = singers.join("\n")
+            this.#singersText.textContent = singers.join(", ")
         }
         const cover = document.createElement("img")
         cover.crossOrigin = "anonymous"
@@ -113,23 +113,14 @@ class SongFullscreen {
                 rgba(${colour[0]}, ${colour[1]}, ${colour[2]}, 1), 
                 rgba(${colour[0]}, ${colour[1]}, ${colour[2]}, 0.2)
             )`
-            if (colour[0] > 170) {
-                this.#artistText.style.color = "white"
-                this.#titleText.style.color = "white"
-                this.#singersText.style.color = "white"
-            }
-            else {
-                this.#artistText.style.color = ""
-                this.#titleText.style.color = ""
-                this.#singersText.style.color = ""
-            }
+            this.#element.classList.toggle("high-contrast", colour[0] > 170)
         }
 
         this.#coverImage.src = coverUrl
     }
     static DisplaySwarmFM() {
         if (this.#swarmFMPanel.src === "about:blank") {
-            this.#swarmFMPanel.src = Network.swarmFMURL + "/player/dummy-player?from=swarmtunes&now=" + Date.now() + "&offset=" + SwarmFM.TARGET_LATENCY * 1.2
+            this.#swarmFMPanel.src = Network.swarmFMURL + "/player/dummy-player?from=swarmtunes&now=" + Date.now() + "&offset=" + SwarmFM.TARGET_LATENCY
         }
         this.#swarmFMPanel.classList.remove("hidden")
         this.#content.classList.add("hidden")

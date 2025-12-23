@@ -8,7 +8,7 @@ class SwarmFMInfo {
 }
 class SwarmFM extends AudioBase {
     static instance = new SwarmFM()
-    static TARGET_LATENCY = 4
+    static TARGET_LATENCY = 0.2
 
     get Audio(): HTMLAudioElement {
         return this.audio
@@ -75,16 +75,25 @@ class SwarmFM extends AudioBase {
         if (!this.hasControl) {
             return
         }
+        const url = Network.GetSwarmFMSongUrl(Number(this.currentSong!.Id))
+        if (url !== this.audio.src) {
+            this.audio.volume = 0
+            this.audio.src = url
+        }
+        else {
+            this.audio.volume = this.volume
+        }
+
         if (!this.paused && this.audio.paused) {
-            this.Play()
+            this.audio.play()
         }
         if (this.audio.buffered.length < 1) {
             return
         }
-        const end = this.audio.buffered.end(this.audio.buffered.length - 1)
+        const end = this.Played + SwarmFM.TARGET_LATENCY
         const latency = end - this.audio.currentTime
         console.log("SwarmFM latency:", latency)
-        if (latency < 0.1 || latency > SwarmFM.TARGET_LATENCY + 1) {
+        if (latency < SwarmFM.TARGET_LATENCY / 4 || latency > SwarmFM.TARGET_LATENCY + 1) {
             this.audio.currentTime = end - SwarmFM.TARGET_LATENCY
             this.audio.playbackRate = 1
         }
@@ -105,7 +114,6 @@ class SwarmFM extends AudioBase {
         this.duration = info.duration
         this.startTime = performance.now() / 1000 - info.position
 
-        const song = this.currentSong
         PlaybackController.DisplaySwarmFMInfo(info)
 
         setTimeout(
@@ -115,7 +123,7 @@ class SwarmFM extends AudioBase {
     }
     Load() {
         this.hasControl = true
-        Network.GetSwarmFMStream().then((swarmfm) => { this.audio.src = swarmfm; this.audio.play() })
+        this.UpdateInfo()
     }
     Play(): void {
         if (!this.paused) {

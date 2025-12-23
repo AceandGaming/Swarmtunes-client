@@ -35,6 +35,9 @@ class PlayState {
         if (song === undefined) {
             return
         }
+        if (AudioPlayer.CurrentSong !== undefined) {
+            return
+        }
         AudioPlayer.instance.Load(song)
         if (data.played) {
             AudioPlayer.instance.Played = data.played

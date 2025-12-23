@@ -49,7 +49,10 @@ class ContextMenu {
 
             let timer: any
             const HOLD_TIME = 500
+            let startPos: Touch | undefined
+
             document.addEventListener("touchstart", (event) => {
+                startPos = event.touches[0]
                 timer = setTimeout(() => {
                     this.OnRightClick(event)
                 }, HOLD_TIME)
@@ -59,6 +62,21 @@ class ContextMenu {
                 clearTimeout(timer)
                 //@ts-ignore
                 this.menu.AllowTouch()
+            })
+            document.addEventListener("touchmove", (event) => {
+                if (startPos === undefined) {
+                    return
+                }
+                const touch = event.touches[0]
+                if (touch === undefined) {
+                    return
+                }
+                const distance = Math.sqrt(Math.pow(startPos.clientX - touch.clientX, 2) + Math.pow(startPos.clientY - touch.clientY, 2))
+                if (distance > 20) {
+                    clearTimeout(timer)
+                    //@ts-ignore
+                    this.menu.AllowTouch()
+                }
             })
         }
         else {
@@ -88,18 +106,9 @@ class ContextMenu {
         else if (event instanceof TouchEvent) {
             const first = event.changedTouches[0]
             const last = event.changedTouches[event.changedTouches.length - 1]
+            //these are actually the same in this context
             if (first === undefined || last === undefined) {
                 return
-            }
-            for (let i = 1; i < event.changedTouches.length - 1; i++) {
-                const touch = event.changedTouches[i]
-                if (touch === undefined) {
-                    continue
-                }
-                const distance = Math.sqrt(Math.pow(first.clientX - touch.clientX, 2) + Math.pow(first.clientY - touch.clientY, 2))
-                if (distance > 10) {
-                    return
-                }
             }
 
             x = last.clientX

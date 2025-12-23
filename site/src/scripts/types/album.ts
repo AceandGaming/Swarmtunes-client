@@ -71,6 +71,9 @@ function OnAlbumClick(event: any) {
     const id = event.target.dataset.id
     MediaView.ShowLoading()
     Network.GetAlbum(id).then(album => {
+        if (!MediaView.IsVisible()) {
+            return
+        }
         AlbumView.Show(album)
     })
 }

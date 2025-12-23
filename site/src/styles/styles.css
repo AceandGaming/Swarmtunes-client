@@ -240,8 +240,10 @@ button {
     pointer-events: all;
 }
 
-button:hover {
-    background-color: var(--default-button-hover);
+@media (hover: hover) {
+    button:hover {
+        background-color: var(--default-button-hover);
+    }
 }
 
 button:active {
@@ -261,8 +263,10 @@ button:active {
     background: none;
 }
 
-.icon-button:hover svg {
-    color: var(--icon-hover);
+@media (hover: hover) {
+    .icon-button:hover svg {
+        color: var(--icon-hover);
+    }
 }
 
 .icon-button:active svg {
@@ -331,8 +335,10 @@ input::placeholder {
     color: var(--subtext-colour);
 }
 
-input:hover {
-    background-color: var(--input-colour-hover);
+@media (hover: hover) {
+    input:hover {
+        background-color: var(--input-colour-hover);
+    }
 }
 
 input:focus {
@@ -412,4 +418,10 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: pointer;
     margin-top: -6px;
     transition: transform 0.2s ease;
+}
+
+@media (max-width: 550px) {
+    #content-tabs > * {
+        padding-left: 5px;
+    }
 }

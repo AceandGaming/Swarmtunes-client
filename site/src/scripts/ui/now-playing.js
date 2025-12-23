@@ -58,7 +58,6 @@ ContextMenu.InheritCategory("now-playing-item", "song", [
         }),
         new ContextOption("Clear Queue", "src/assets/icons/x-img.svg", (event) => {
             SongQueue.ClearSongQueue()
-            NowPlaying.Update()
         }),
     ])
 ])

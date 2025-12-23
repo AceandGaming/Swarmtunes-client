@@ -33,6 +33,7 @@ class PopupWindow {
         if (autoclose) {
             button.addEventListener("click", this.Hide.bind(this))
         }
+        button.addEventListener("click", this.SetBusy.bind(this))
         button.textContent = name
         this.buttons.appendChild(button)
         return button
@@ -41,16 +42,11 @@ class PopupWindow {
         this.background.style.display = "none"
     }
     Show() {
-        // this.window.style.transition = "transform: 0"
-        // this.window.style.transform = `translate(0, calc(-50vh - ${this.window.offsetHeight / 2}px))`
         this.background.style.display = "flex"
-
-        // this.window.getBoundingClientRect()
-
-        // requestAnimationFrame(() => {
-        //     this.window.style.transition = "transform 100ms ease-out"
-        //     this.window.style.transform = ""
-        // })
+        this.SetBusy(false)
+    }
+    SetBusy(state = true) {
+        this.window.classList.toggle("busy", state)
     }
     Close() {
         this.Hide()

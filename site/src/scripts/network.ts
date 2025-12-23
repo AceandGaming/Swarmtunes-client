@@ -103,8 +103,11 @@ class Network {
         return await this.SafeFetch(url, "PATCH", data)
     }
 
-    static async GetSwarmFMStream() {
-        return `https://cast.sw.arm.fm/stream?from=swarmtunes?now=${Date.now()}`
+    // static async GetSwarmFMStream() {
+    //     return `https://cast.sw.arm.fm/stream?from=swarmtunes?now=${Date.now()}`
+    // }
+    static GetSwarmFMSongUrl(id: number) {
+        return `${this.swarmFMURL}/assets/music/${id}.mp3?from=swarmtunes`
     }
     static async GetSwarmFMInfo() {
         const response = await fetch(`${this.swarmFMURL}/v2/player?from=swarmtunes`)
@@ -134,7 +137,6 @@ class Network {
             return result
         }
         function GetCoverType(singers: string[]) {
-            console.log(singers)
             if (singers.length > 1) {
                 return "duet"
             }
@@ -152,7 +154,7 @@ class Network {
             coverType = "custom"
         }
         const currentSong = new Song({
-            id: "swarmfm_" + current["id"],
+            id: current["id"],
             title: current["name"],
             artist: current["artist"],
             singers: ConvertSingers(current["singer"]),
@@ -161,7 +163,7 @@ class Network {
         })
 
         const nextSong = new Song({
-            id: "swarmfm_" + next["id"],
+            id: next["id"],
             title: next["name"],
             artist: next["artist"],
             singers: ConvertSingers(next["singer"]),

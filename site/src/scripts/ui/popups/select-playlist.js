@@ -4,7 +4,7 @@ function CreatePlaylistListItemElement(playlist, onClickEvent) {
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
         <img loading="lazy" src=${Network.GetCover(playlist.Cover, 64)}>
-        <span>${playlist.Title}</span>
+        <span>${ReplaceEmotesOfString(playlist.Title)}</span>
     `
     return element
 }
