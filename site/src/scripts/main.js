@@ -95,7 +95,7 @@ function LoadUrlBar() {
     if (songId !== null) {
         SongRequester.GetSong(songId).then((song) => {
             SongQueue.LoadSingleSong(song)
-            AudioPlayer.instance.Play(song)
+            PlaybackController.PlaySong(song)
         })
     }
     if (playlistLink !== null) {

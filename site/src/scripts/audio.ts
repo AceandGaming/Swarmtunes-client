@@ -75,7 +75,9 @@ class AudioPlayer extends AudioBase {
         PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })
     }
     public Play(song?: Song): void {
-        SwarmFM.instance.Clear()
+        if (PlaybackController.HasControl != this && PlaybackController.HasControl) {
+            PlaybackController.HasControl.Clear()
+        }
         this.hasControl = true
         this.paused = false
         this.audio.volume = this.volume

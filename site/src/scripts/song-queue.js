@@ -61,7 +61,7 @@ class SongQueue {
             AudioPlayer.instance.Pause()
             return
         }
-        AudioPlayer.instance.Play(song)
+        PlaybackController.PlaySong(song)
         NowPlaying.Update()
     }
     static GetPreviousSong() {
@@ -80,7 +80,7 @@ class SongQueue {
             AudioPlayer.Pause()
             return
         }
-        AudioPlayer.instance.Play(song)
+        PlaybackController.PlaySong(song)
         NowPlaying.Update()
     }
     static ClearSongQueue() {

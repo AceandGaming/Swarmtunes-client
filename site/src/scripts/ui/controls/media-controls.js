@@ -3,6 +3,7 @@ class MediaControls {
 
     static #Initialise() {
         AudioPlayer.instance.Audio.addEventListener("ended", () => PlaybackController.NextTrack())
+        YoutubePlayer.instance.OnEnd(() => PlaybackController.NextTrack())
         this.#initialised = true
     }
 
@@ -137,6 +138,7 @@ class MediaControls {
             }
             AudioPlayer.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
             SwarmFM.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
+            YoutubePlayer.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
         }
         if (next) {
             next.addEventListener("click", this.#OnNextClick.bind(this))

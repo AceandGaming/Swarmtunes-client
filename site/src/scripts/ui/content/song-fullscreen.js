@@ -102,10 +102,10 @@ class SongFullscreen {
         if (this.#singersText) {
             this.#singersText.textContent = singers.join(", ")
         }
-        const cover = document.createElement("img")
-        cover.crossOrigin = "anonymous"
-        cover.src = "src/assets/no-song.png"
-        cover.classList.add("cover")
+
+        this.#coverImage.onerror = () => {
+            this.#coverImage.src = coverUrl + "?retry=" + Date.now()
+        }
 
         this.#coverImage.onload = () => {
             const colour = colourThief.getColor(this.#coverImage)

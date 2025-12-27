@@ -129,7 +129,9 @@ class SwarmFM extends AudioBase {
         if (!this.paused) {
             return
         }
-        AudioPlayer.instance.Clear()
+        if (PlaybackController.HasControl != this && PlaybackController.HasControl) {
+            PlaybackController.HasControl.Clear()
+        }
 
         this.paused = false
         if (!this.hasControl) {

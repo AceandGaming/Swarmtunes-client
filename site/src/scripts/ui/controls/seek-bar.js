@@ -146,6 +146,7 @@ class SeekBar {
 
         AudioPlayer.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
         SwarmFM.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
+        YoutubePlayer.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
     }
     OnTimeUpdate(played, duration, loaded) {
         this.#seekProgress.style.width = `${(played / duration) * 100}%`
@@ -164,6 +165,7 @@ class SeekBar {
         let fraction = (event.clientX - rect.left) / rect.width;
         fraction = Math.min(1, Math.max(0, fraction));
         AudioPlayer.instance.Seek(fraction);
+        YoutubePlayer.instance.Seek(fraction);
     }
     OnSeekMobile(event) {
         if (!this.#dragging) {
@@ -173,6 +175,7 @@ class SeekBar {
         let fraction = (event.touches[0].clientX - rect.left) / rect.width;
         fraction = Math.min(1, Math.max(0, fraction));
         AudioPlayer.instance.Seek(fraction);
+        YoutubePlayer.instance.Seek(fraction);
     }
     OnSeekBarMouseDown(event) {
         this.#dragging = true

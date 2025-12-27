@@ -6,7 +6,8 @@ interface SongPrams {
     coverType: "neuro" | "evil" | "duet" | "custom",
     date?: string,
     isOriginal?: boolean,
-    coverArt?: string | null
+    coverArt?: string | null,
+    youtubeId?: string | null
 }
 
 class Song {
@@ -28,6 +29,7 @@ class Song {
     get CoverType() { return this.coverType }
     get Date() { return this.date }
     get IsOriginal() { return this.isOriginal }
+    get YoutubeId() { return this.youtubeId }
 
     get HasCustomCover() {
         return this.coverType == "custom"
@@ -58,6 +60,7 @@ class Song {
     private date: Date
     private isOriginal: boolean
     private readonly coverArt: string | null
+    private youtubeId: string | null
 
     constructor(options: SongPrams) {
         this.id = options.id
@@ -71,6 +74,7 @@ class Song {
         if (options.title === "mashup" && options.date) {
             this.title = `Mashup ${this.date.getFullYear()}`
         }
+        this.youtubeId = options.youtubeId ?? null
     }
 
     ToString() {
@@ -102,7 +106,7 @@ function OnSongClick(event: any) {
             return
         }
         // @ts-ignore
-        AudioPlayer.instance.Play(song)
+        PlaybackController.PlaySong(song)
         SongQueue.LoadSingleSong(song)
     })
 }
@@ -113,8 +117,12 @@ ContextMenu.AddCategory("song", [
         new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
             AudioPlayer.instance.Clear()
             const song = await SongRequester.GetSong(event.id)
+            if (song === undefined) {
+                console.warn("Song clicked with no song")
+                return
+            }
             SongQueue.PlayNow([song])
-            AudioPlayer.instance.Play(song)
+            PlaybackController.PlaySong(song)
         }),
         new ContextOption("Append to Queue", "src/assets/icons/playlist-add.svg", async (event) => {
             const song = await SongRequester.GetSong(event.id)

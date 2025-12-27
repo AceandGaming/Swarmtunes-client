@@ -1,14 +1,15 @@
 class PlaybackController {
     public static get HasControl(): AudioBase | null {
-        if (this.Audio.HasControl) {
-            return AudioPlayer.instance
-        }
-        else if (this.SwarmFM.HasControl) {
+        if (this.SwarmFM.HasControl) {
             return SwarmFM.instance
         }
-        else {
-            return null
+        else if (this.Audio.HasControl) {
+            return AudioPlayer.instance
         }
+        else if (this.Youtube.HasControl) {
+            return YoutubePlayer.instance
+        }
+        return null
     }
     public static get Playing(): boolean {
         const audio = PlaybackController.HasControl
@@ -21,7 +22,18 @@ class PlaybackController {
     private static get SwarmFM() {
         return SwarmFM.instance
     }
+    private static get Youtube() {
+        return YoutubePlayer.instance
+    }
 
+    public static PlaySong(song: Song) {
+        if (song.YoutubeId) {
+            this.Youtube.Play(song)
+        }
+        else {
+            this.Audio.Play(song)
+        }
+    }
     public static Play() {
         const audio = PlaybackController.HasControl
         if (audio) {
@@ -35,17 +47,21 @@ class PlaybackController {
         }
     }
     public static NextTrack() {
-        if (!this.Audio.HasControl) {
+        if (this.SwarmFM.HasControl) {
             return
         }
         SongQueue.PlayNextSong()
     }
     public static PreviousTrack() {
-        if (!this.Audio.HasControl) {
+        if (this.SwarmFM.HasControl) {
             return
         }
         if (AudioPlayer.instance.Played > 5) {
             AudioPlayer.instance.Played = 0
+            return
+        }
+        if (YoutubePlayer.instance.Played > 5) {
+            YoutubePlayer.instance.Played = 0
             return
         }
         SongQueue.PlayPreviousSong()
@@ -80,9 +96,18 @@ class PlaybackController {
             media.setActionHandler('previoustrack', () => this.PreviousTrack())
         }
         if (seeking) {
-            media.setActionHandler('seekbackward', (details) => this.Audio.Skip(details.seekOffset ?? 0))
-            media.setActionHandler('seekforward', (details) => this.Audio.Skip(-(details.seekOffset ?? 0)))
-            media.setActionHandler('seekto', (details) => this.Audio.Played = details.seekTime ?? 0)
+            media.setActionHandler('seekbackward', (details) => {
+                this.Audio.Skip(details.seekOffset ?? 0)
+                this.Youtube.Skip(details.seekOffset ?? 0)
+            })
+            media.setActionHandler('seekforward', (details) => {
+                this.Audio.Skip(details.seekOffset ?? 0)
+                this.Youtube.Skip(details.seekOffset ?? 0)
+            })
+            media.setActionHandler('seekto', (details) => {
+                this.Audio.Played = details.seekTime ?? 0
+                this.Youtube.Played = details.seekTime ?? 0
+            })
         }
     }
     public static Display(title: string, artist: string, singers: string[], coverUrl: string, swarmfm = false) {

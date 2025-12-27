@@ -10,7 +10,7 @@ function OnNowPlayingItemClick(event) {
     }
     SongQueue.SkipSong(song)
     NowPlaying.Update()
-    AudioPlayer.instance.Play(song)
+    PlaybackController.PlaySong(song)
 }
 
 class NowPlaying {

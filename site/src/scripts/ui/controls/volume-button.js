@@ -49,6 +49,7 @@ class VolumeButton {
         this.#sliderFocus = true
         AudioPlayer.instance.Volume = event.target.value
         SwarmFM.instance.Volume = event.target.value
+        YoutubePlayer.instance.Volume = event.target.value
 
         this.#UpdateIcon(event.target.value)
     }

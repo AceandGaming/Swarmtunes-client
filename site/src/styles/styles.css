@@ -182,6 +182,10 @@ main {
     gap: 5px;
 }
 
+#player {
+    display: none;
+}
+
 #content-container {
     display: flex;
     flex-direction: column;
