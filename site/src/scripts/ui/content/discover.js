@@ -22,6 +22,7 @@ async function PopulateDiscover() {
                 const errorScreen = new ErrorScreen("Failed to load content", PopulateDiscover)
                 LoadingText.Detach(discoverPage)
                 discoverPage.append(errorScreen.CreateElement())
+                ToastManager.Toast("Failed to load discover content", "error", 5)
                 return
             }
         }

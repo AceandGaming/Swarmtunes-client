@@ -89,7 +89,8 @@ class Song {
             coverType: this.coverType,
             date: this.date.toISOString(),
             isOriginal: this.isOriginal,
-            coverArt: this.coverArt
+            coverArt: this.coverArt,
+            youtubeId: this.youtubeId
         }
     }
     Copy() {
@@ -145,7 +146,13 @@ ContextMenu.AddCategory("song", [
     new ContextGroup("share", false, true, [
         new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
             const url = "https://share.swarmtunes.com/?s=" + (await Network.ShareSong(event.id))
-            navigator.clipboard.writeText(url)
+            const corutine = navigator.clipboard.writeText(url)
+            corutine.then(() => {
+                ToastManager.Toast("Copied link to clipboard")
+            })
+            corutine.catch(() => {
+                ToastManager.Toast("Failed to copy link to clipboard", "error")
+            })
         }),
         new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {
             Network.DownloadSong(event.id, true)

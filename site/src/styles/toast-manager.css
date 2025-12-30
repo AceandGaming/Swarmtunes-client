@@ -1,0 +1,10 @@
+#toast-manager {
+    position: absolute;
+    top: 55px;
+    right: 10px;
+    width: min(90vw, 300px);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}

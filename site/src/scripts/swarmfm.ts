@@ -63,6 +63,7 @@ class SwarmFM extends AudioBase {
     private paused: boolean = true
     private volume: number = 0.5
     private syncId: number | null = null
+    private toast: any | null = null
 
     constructor() {
         super()
@@ -108,6 +109,8 @@ class SwarmFM extends AudioBase {
         }
         const info = await Network.GetSwarmFMInfo()
         if (!info) {
+            // this.toast.type = "error"
+            // if (this.toast) this.toast.message = "Could not connect to SwarmFM servers"
             return
         }
         this.currentSong = info.currentSong
@@ -135,12 +138,21 @@ class SwarmFM extends AudioBase {
 
         this.paused = false
         if (!this.hasControl) {
+            this.toast = ToastManager.Toast("Loading SwarmFM info...", "info", 0)
+            this.audio.onloadeddata = () => {
+                if (this.toast) {
+                    this.toast.message = "Connected!"
+                    setTimeout(() => this.toast?.Hide(), 2000)
+                }
+            }
             this.Load()
         }
         else {
             this.audio.play()
         }
-        this.UpdateInfo()
+        this.UpdateInfo().then(() => {
+            if (this.toast) this.toast.message = "Syncing..."
+        })
         NowPlaying.Clear()
         this.audio.volume = this.volume
         if (this.syncId) {

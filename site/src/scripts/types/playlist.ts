@@ -137,7 +137,7 @@ ContextMenu.AddCategory("playlist", [
             const playlist = await PlaylistManager.LoadPlaylist(event.id)
             SongQueue.PlayNow(playlist.Songs)
             // @ts-ignore
-            AudioPlayer.instance.Play(playlist.Songs[0])
+            PlaybackController.PlaySong(playlist.Songs[0])
         })
     ]),
     new ContextGroup("manage playlist", true, false, [
@@ -150,6 +150,7 @@ ContextMenu.AddCategory("playlist", [
                 return
             }
             PlaylistManager.RemovePlaylist(event.id)
+            ToastManager.Toast("Playlist Deleted")
         })
     ]),
     new ContextGroup("playlists", true, false, [
@@ -174,7 +175,13 @@ ContextMenu.AddCategory("playlist", [
     new ContextGroup("share", false, true, [
         new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
             const url = "https://share.swarmtunes.com/?p=" + (await Network.SharePlaylist(event.id))
-            navigator.clipboard.writeText(url)
+            const corutine = navigator.clipboard.writeText(url)
+            corutine.then(() => {
+                ToastManager.Toast("Copied link to clipboard")
+            })
+            corutine.catch(() => {
+                ToastManager.Toast("Failed to copy link to clipboard", "error")
+            })
         }),
         new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {
             Network.GetPlaylistMP3s(event.id)

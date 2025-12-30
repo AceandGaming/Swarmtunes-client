@@ -104,7 +104,7 @@ class SongFullscreen {
         }
 
         this.#coverImage.onerror = () => {
-            this.#coverImage.src = coverUrl + "?retry=" + Date.now()
+            this.#coverImage.src = coverUrl + "&retry=" + Date.now()
         }
 
         this.#coverImage.onload = () => {

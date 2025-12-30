@@ -81,6 +81,9 @@ class YoutubePlayer extends AudioBase {
 
         this.CallCallbacks("play")
         this.updateId = setInterval(() => {
+            if (!this.hasControl) {
+                return
+            }
             this.CallCallbacks("timeupdate")
         }, 500)
 

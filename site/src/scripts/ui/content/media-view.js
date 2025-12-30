@@ -15,12 +15,12 @@ class MediaView {
         SongQueue.LoadSongs(MediaView._songList.songs)
         const song = SongQueue.GetSong(event.target.dataset.id)
         SongQueue.UpdateQueue(song)
-        AudioPlayer.instance.Play(SongQueue.currentSong)
+        PlaybackController.PlaySong(SongQueue.currentSong)
     }
     static OnCoverClick(event) {
         SongQueue.LoadSongs(MediaView._songList.songs)
         SongQueue.UpdateQueue()
-        AudioPlayer.instance.Play(SongQueue.currentSong)
+        PlaybackController.PlaySong(SongQueue.currentSong)
     }
     static Create() {
         const element = document.createElement("div")

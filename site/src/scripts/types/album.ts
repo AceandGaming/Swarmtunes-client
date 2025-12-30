@@ -87,7 +87,7 @@ ContextMenu.AddCategory("album", [
             const album = await Network.GetAlbum(event.id, true)
             SongQueue.PlayNow(album.songs)
             // @ts-ignore
-            AudioPlayer.instance.Play(album.songs[0])
+            PlaybackController.PlaySong(album.songs[0])
         }),
     ]),
     new ContextGroup("playlist", true, false, [

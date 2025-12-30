@@ -29,6 +29,7 @@ async function AsyncCrap() {
 let isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 if (isMobile) {
     AudioPlayer.instance.Audio.preload = "auto"
+    SwarmFM.TARGET_LATENCY = 2
     localStorage.setItem("volume", 1)
 }
 
@@ -57,6 +58,8 @@ function OnLogin(isAdmin) {
 Login.AddLoginCallback(OnLogin)
 
 function CreateUI() {
+    ToastManager.Create()
+
     if (window.innerWidth > 500) {
         CurrentSongBar.CreateDesktop()
         CreateButton()

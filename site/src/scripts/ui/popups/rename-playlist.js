@@ -32,6 +32,7 @@ class RenamePlaylistPopup extends PopupWindow {
     }
     #OnButtonClick() {
         const name = this.input.value
+        const oldName = this.playlist.Title
         if (ValidatePlaylistName(name).error) {
             return
         }
@@ -39,6 +40,7 @@ class RenamePlaylistPopup extends PopupWindow {
         this.playlist.Title = name
         PlaylistRequester.RenamePlaylist(this.playlist.Id, name)
         PlaylistTab.Populate()
+        ToastManager.Toast(`Renamed playlist "${oldName}" to "${name}"`)
     }
     Show(id) {
         if (!Network.IsLoggedIn()) {

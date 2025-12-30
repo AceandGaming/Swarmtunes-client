@@ -105,6 +105,7 @@ class Login {
             }
             this.window.Hide()
             this.CallLoginCallbacks()
+            ToastManager.Toast("Logged in as " + username)
         })
     }
     static #OnSignupButtonClick() {

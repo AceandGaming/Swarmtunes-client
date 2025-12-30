@@ -128,7 +128,7 @@ class SongQueue {
             if (this.#songQueue[i].id === id) {
                 this.#songQueue.splice(i, 1)
                 if (this.#queuePointer === i) {
-                    AudioPlayer.instance.Play(this.currentSong)
+                    PlaybackController.PlaySong(this.currentSong)
                 }
                 return
             }
@@ -141,7 +141,7 @@ class SongQueue {
             newQueue.push(this.GetSong(id))
         }
         if (newQueue[0].id !== this.currentSong.id) {
-            AudioPlayer.instance.Play(newQueue[0])
+            PlaybackController.PlaySong(newQueue[0])
         }
         const previusSongs = this.#songQueue.slice(0, this.#queuePointer)
         newQueue.splice(0, 0, ...previusSongs)

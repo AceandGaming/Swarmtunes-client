@@ -112,7 +112,7 @@ class Network {
     static async GetSwarmFMInfo() {
         const response = await fetch(`${this.swarmFMURL}/v2/player?from=swarmtunes`)
         if (!response.ok) {
-            console.error("Failed to get swarmfm info")
+            ToastManager.Toast("Could not connect to SwarmFM servers", "error")
             return
         }
         const json = await response.json()
