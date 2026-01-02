@@ -101,6 +101,7 @@ ContextMenu.AddCategory("album", [
             const album = await Network.GetAlbum(event.id, true)
             playlist.AddMultiple(album.songs)
             PlaylistRequester.AddSongToPlaylist(playlistid, album.songIds)
+            ToastManager.Toast(`Added ${album.songIds.length} songs to ${playlist.Title}`)
         }),
     ]),
     new ContextGroup("share", false, true, [

@@ -46,6 +46,29 @@ with open("site/index.html", "r") as f:
 
 print(f"Detected {len(scriptPaths)} scripts and {len(stylePaths)} styles")
 
+print("\nCompiling JS")
+externalScripts = []
+js = ""
+inlineCss = []
+
+for scriptPath in scriptPaths:
+    if scriptPath.startswith("http"):
+        externalScripts.append(scriptPath)
+    else:
+        with open(f"site/{scriptPath}", "r") as f:
+            js += f.read() + "\n"
+
+js = re.sub(r"//\s*@@release-only@@\s*", "", js)
+inlineCss = re.findall(r"/\*\s*css\s*\*/\s*`([\s\S]*?)`", js, re.DOTALL)
+jsFileName = f"main-{Hash(js)}.js"
+
+with open("mini/all.js", "w") as f:
+    f.write(js)
+print("\nCompiling Service-Worker")
+
+os.remove("mini/service-worker.js")
+
+
 print("\nCompiling CSS")
 css = ""
 for stylePath in stylePaths:
@@ -70,19 +93,25 @@ cssVars = {}
 for line in re.findall(r"--(.*?)\s*:\s*(.*?);", css):
     cssVars[line[0]] = line[1]
 print(f"Found {len(cssVars)} CSS variables")
+print(f"TODO: Fix css varibles so inline css doesn't break crap")
 
-i = 0
-for var, value in cssVars.items():
-    if len(re.findall(f"--{var}:", newCss)) <= 1:
-        print(f"Replaced {var}")
-        newCss = newCss.replace(f"var(--{var})", f"{value}")
-        newCss = newCss.replace(f"--{var}:.*?;", "")
-        continue
+# i = 0
+# for var, value in cssVars.items():
+#     if len(re.findall(f"--{var}:", newCss)) <= 1:
+#         print(f"Replaced {var}")
+#         newCss = newCss.replace(f"var(--{var})", f"{value}")
+#         newCss = newCss.replace(f"--{var}:.*?;", "")
+#         continue
 
-    newName = hex(i)[2:]
-    newCss = newCss.replace(f"--{var}:", f"--{newName}:")
-    newCss = newCss.replace(f"var(--{var})", f"var(--{newName})")
-    i += 1
+#     newName = hex(i)[2:]
+#     newCss = newCss.replace(f"--{var}:", f"--{newName}:")
+#     newCss = newCss.replace(f"var(--{var})", f"var(--{newName})")
+#     for css in inlineCss:
+#         newCss = newCss.replace(f"--{var}:", f"--{newName}:")
+#         newCss = newCss.replace(f"var(--{var})", f"var(--{newName})")
+
+#     i += 1
+
 
 
 print(f"{len(css)}b -> {len(newCss)}b")
@@ -90,27 +119,6 @@ cssFileName = f"styles-{Hash(newCss)}.css"
 
 with open("mini/src/" + cssFileName, "w") as f:
     f.write(newCss)
-
-
-print("\nCompiling JS")
-externalScripts = []
-js = ""
-
-for scriptPath in scriptPaths:
-    if scriptPath.startswith("http"):
-        externalScripts.append(scriptPath)
-    else:
-        with open(f"site/{scriptPath}", "r") as f:
-            js += f.read() + "\n"
-
-js = re.sub(r"//\s*@@release-only@@\s*", "", js)
-jsFileName = f"main-{Hash(js)}.js"
-
-with open("mini/all.js", "w") as f:
-    f.write(js)
-print("\nCompiling Service-Worker")
-
-os.remove("mini/service-worker.js")
 
 assetPaths = [
     "index.html",

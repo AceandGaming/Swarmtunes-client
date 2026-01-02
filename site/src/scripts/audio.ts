@@ -82,13 +82,19 @@ class AudioPlayer extends AudioBase {
         this.paused = false
         this.audio.volume = this.volume
         if (song) {
-            this.Load(song)
-            this.audio.oncanplay = () => {
-                if (!this.hasControl) {
-                    return
-                }
-                this.audio.play()
+            if (isMobile) {
+                this.Load(song).then(() => this.audio.play())
             }
+            else {
+                this.audio.oncanplay = () => {
+                    if (!this.hasControl) {
+                        return
+                    }
+                    this.audio.play()
+                }
+                this.Load(song)
+            }
+
         }
         else {
             if (this.audio.src === "") {

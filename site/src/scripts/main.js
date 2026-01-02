@@ -29,7 +29,7 @@ async function AsyncCrap() {
 let isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 if (isMobile) {
     AudioPlayer.instance.Audio.preload = "auto"
-    SwarmFM.TARGET_LATENCY = 2
+    SwarmFM.TARGET_LATENCY = 3
     localStorage.setItem("volume", 1)
 }
 

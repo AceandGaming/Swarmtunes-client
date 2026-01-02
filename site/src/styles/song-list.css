@@ -60,8 +60,12 @@
   transform: translateY(-50%) rotate(90deg);
   pointer-events: all;
   aspect-ratio: 1;
+  background-color: initial;
 }
 
+.song-list-item:hover > .triple-dot {
+  display: block;
+}
 
 .song-list-item > .date {
   position: absolute;

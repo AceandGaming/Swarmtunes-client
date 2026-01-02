@@ -3,6 +3,7 @@ class ContextOption {
         public name: string,
         public icon: string,
         private action: (prams: any) => void,
+        public condition?: () => boolean
     ) { }
 
     Element(prams: any) {
@@ -172,7 +173,8 @@ class ContextMenu {
 
         for (const group of groups) {
             if (map[group.name] !== undefined) {
-                map[group.name]?.options.push(...group.options)
+                const cat = map[group.name]!
+                cat.options.push(...group.options)
             }
             else {
                 map[group.name] = {
@@ -239,6 +241,9 @@ class DesktopContextMenu extends ContextMenuUI {
                 continue
             }
             for (const option of group.options) {
+                if (option.condition !== undefined && !option.condition()) {
+                    continue
+                }
                 const child = option.Element(data)
                 child.onclick = this.Hide.bind(this)
                 this.element.append(child)

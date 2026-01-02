@@ -74,6 +74,9 @@ class Playlist {
         this.songs.push(song)
         MediaView.ClearMediaId(this.Id)
     }
+    Has(song: id) {
+        return this.songIds.includes(song)
+    }
     AddMultiple(songs: Song[]) {
         for (const song of songs) {
             this.Add(song)
@@ -167,6 +170,7 @@ ContextMenu.AddCategory("playlist", [
             const otherPlaylist = await PlaylistManager.LoadPlaylist(otherId)
             otherPlaylist.AddMultiple(playlist.songs)
             PlaylistRequester.AddSongToPlaylist(otherId, playlist.songIds)
+            ToastManager.Toast(`Added ${playlist.songIds.length} songs to ${playlist.Title}`)
         }),
         new ContextOption("New Playlist", "src/assets/icons/plus.svg", (event) => {
             CreatePlaylistPopup.instance.Show()

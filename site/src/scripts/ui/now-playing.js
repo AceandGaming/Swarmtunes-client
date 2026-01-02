@@ -16,6 +16,7 @@ function OnNowPlayingItemClick(event) {
 class NowPlaying {
     static #songlist
     static #element = document.querySelector("#now-playing")
+    static sourceId = ""
 
     static Update(songs = undefined) {
         if (songs === undefined) {
@@ -52,12 +53,35 @@ class NowPlaying {
 
 ContextMenu.InheritCategory("now-playing-item", "song", [
     new ContextGroup("queue", false, false, [
-        new ContextOption("Remove", "src/assets/icons/playlist-remove.svg", (event) => {
+        new ContextOption("Remove", "src/assets/icons/trash.svg", (event) => {
             SongQueue.RemoveSong(event.id)
             NowPlaying.Update()
         }),
         new ContextOption("Clear Queue", "src/assets/icons/x-img.svg", (event) => {
             SongQueue.ClearSongQueue()
         }),
+    ]),
+    new ContextGroup("playlist", true, false, [
+        new ContextOption("Remove From Playlist", "src/assets/icons/playlist-remove.svg", async (event) => {
+            const playlistid = NowPlaying.sourceId
+            if (playlistid === undefined) {
+                return
+            }
+            const playlist = PlaylistManager.GetPlaylist(playlistid)
+
+            playlist.RemoveAtId(event.id)
+            PlaylistRequester.RemoveSongFromPlaylist(playlistid, [event.id])
+            PlaylistView.Update()
+
+            SongQueue.RemoveSong(event.id)
+            NowPlaying.Update()
+
+            ToastManager.Toast(`Removed song from '${playlist.Title}'`)
+        }, () => {
+            if (NowPlaying.sourceId.startsWith("playlist")) {
+                return true
+            }
+            return false
+        })
     ])
 ])

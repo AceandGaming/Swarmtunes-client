@@ -115,10 +115,10 @@ class YoutubePlayer extends AudioBase {
         this.callbacks.get("timeupdate").push(() => callback(this.Played, this.Duration, this.Loaded))
     }
     public OnEnd(callback: () => void): void {
-        if (!this.callbacks.has("end")) {
-            this.callbacks.set("end", [])
+        if (!this.callbacks.has("ended")) {
+            this.callbacks.set("ended", [])
         }
-        this.callbacks.get("end").push(callback)
+        this.callbacks.get("ended").push(callback)
     }
     public Seek(fraction: number): void {
         this.player.seekTo(fraction * this.Duration)

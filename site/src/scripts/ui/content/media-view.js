@@ -15,11 +15,15 @@ class MediaView {
         SongQueue.LoadSongs(MediaView._songList.songs)
         const song = SongQueue.GetSong(event.target.dataset.id)
         SongQueue.UpdateQueue(song)
+        NowPlaying.sourceId = MediaView._lastMediaId
         PlaybackController.PlaySong(SongQueue.currentSong)
     }
     static OnCoverClick(event) {
         SongQueue.LoadSongs(MediaView._songList.songs)
-        SongQueue.UpdateQueue()
+        SongQueue.PassiveUpdate()
+        SongQueue.currentSong = SongQueue.firstSong
+        NowPlaying.Update()
+        NowPlaying.sourceId = MediaView._lastMediaId
         PlaybackController.PlaySong(SongQueue.currentSong)
     }
     static Create() {
@@ -94,11 +98,11 @@ class MediaView {
     }
     static async _PopulateSongList(mediaObject, catagory = "song", onSongsLoaded = () => { }) {
         if (mediaObject.id == MediaView._lastMediaId) {
-            LoadingText.Detach(MediaView.element)
             MediaView._songList.Show()
             return
         }
         MediaView._lastMediaId = mediaObject.id
+        MediaView.element.setAttribute("data-id", mediaObject.id)
 
         function Update(songs) {
             MediaView._songList.songs = songs
@@ -115,10 +119,10 @@ class MediaView {
             }
             LoadingText.Attach(MediaView.element)
             await mediaObject.GetSongs()
+            LoadingText.Detach(MediaView.element)
             if (MediaView._lastMediaId != mediaObject.id) {
                 return
             }
-            LoadingText.Detach(MediaView.element)
             Update(mediaObject.songs)
         }
     }
@@ -139,7 +143,6 @@ class MediaView {
         MediaView._UpdateContent("Loading...", "", "src/assets/no-song.png",)
         MediaView._songList.Hide()
         MediaView._songList.songs = []
-        LoadingText.Attach(MediaView.element)
     }
     static ClearMediaId(id) {
         if (MediaView._lastMediaId == id) {
@@ -173,12 +176,12 @@ class PlaylistView {
         await MediaView._PopulateSongList(playlist, "playlist-item")
     }
     static Update() {
+        if (!MediaView.IsVisible()) {
+            return
+        }
         PlaylistView.Show(this.playlist)
     }
 }
-
-
-
 
 ContextMenu.InheritCategory("playlist-item", "song", [
     new ContextGroup("playlist", true, false, [
@@ -191,6 +194,7 @@ ContextMenu.InheritCategory("playlist-item", "song", [
             playlist.RemoveAtId(event.id)
             PlaylistRequester.RemoveSongFromPlaylist(playlistid, [event.id])
             PlaylistView.Update()
+            ToastManager.Toast(`Removed song from '${playlist.Title}'`)
         })
     ])
 ])

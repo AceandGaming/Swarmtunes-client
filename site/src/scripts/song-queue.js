@@ -14,6 +14,9 @@ class SongQueue {
             this.SkipSong(song)
         }
     }
+    static get firstSong() {
+        return this.#songQueue[0]
+    }
     static get songs() {
         return this.#songQueue
     }
@@ -22,10 +25,12 @@ class SongQueue {
     }
     static set suffleSongs(value) {
         localStorage.setItem("suffle", value)
+        const song = this.currentSong
         this.UpdateQueue()
         for (const callback of this.#callbacks) {
             callback(value)
         }
+        this.currentSong = song
     }
     static get suffleSongs() {
         return this.#suffle
@@ -93,6 +98,7 @@ class SongQueue {
     static LoadSingleSong(song) {
         this.LoadSongs([song.Copy()])
         this.#UnshuffleQueue()
+        NowPlaying.source = "none"
         NowPlaying.Update()
         PlayState.Update({ currentSong: song.id })
     }
@@ -108,8 +114,18 @@ class SongQueue {
         }
         NowPlaying.Update()
     }
+    static PassiveUpdate() {
+        if (this.#suffle) {
+            this.#ShuffleQueue()
+        }
+        else {
+            this.#UnshuffleQueue()
+        }
+    }
     static PlayNow(songs) {
-        this.#songQueue.splice(this.#queuePointer, 0, ...songs)
+        this.LoadSongs(songs)
+        this.#UnshuffleQueue()
+        this.currentSong = songs[0]
         NowPlaying.Update()
     }
     static AppendSong(song) {
@@ -170,7 +186,6 @@ class SongQueue {
         }
     }
     static #ShuffleQueue() {
-        const currentSong = this.currentSong
         const songs = CloneSongs(this.#loadedSongs)
         const newQueue = []
         while (songs.length > 0) {
@@ -180,14 +195,9 @@ class SongQueue {
         }
         this.#songQueue = CloneSongs(newQueue)
         this.#queuePointer = 0
-        this.SpliceSong(currentSong)
     }
     static #UnshuffleQueue() {
-        const currentSong = this.currentSong
         this.#songQueue = CloneSongs(this.#loadedSongs)
-        if (currentSong !== undefined) {
-            this.SkipSong(currentSong)
-        }
     }
 
     static OnShuffleChange(callback) {

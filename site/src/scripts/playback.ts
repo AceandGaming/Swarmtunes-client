@@ -27,6 +27,9 @@ class PlaybackController {
     }
 
     public static PlaySong(song: Song) {
+        if (!song) {
+            return
+        }
         if (song.YoutubeId) {
             this.Youtube.Play(song)
         }
@@ -96,14 +99,16 @@ class PlaybackController {
             media.setActionHandler('previoustrack', () => this.PreviousTrack())
         }
         if (seeking) {
-            media.setActionHandler('seekbackward', (details) => {
-                this.Audio.Skip(details.seekOffset ?? 0)
-                this.Youtube.Skip(details.seekOffset ?? 0)
-            })
-            media.setActionHandler('seekforward', (details) => {
-                this.Audio.Skip(details.seekOffset ?? 0)
-                this.Youtube.Skip(details.seekOffset ?? 0)
-            })
+            if (!isMobile) {
+                media.setActionHandler('seekbackward', (details) => {
+                    this.Audio.Skip(details.seekOffset ?? 0)
+                    this.Youtube.Skip(details.seekOffset ?? 0)
+                })
+                media.setActionHandler('seekforward', (details) => {
+                    this.Audio.Skip(details.seekOffset ?? 0)
+                    this.Youtube.Skip(details.seekOffset ?? 0)
+                })
+            }
             media.setActionHandler('seekto', (details) => {
                 this.Audio.Played = details.seekTime ?? 0
                 this.Youtube.Played = details.seekTime ?? 0

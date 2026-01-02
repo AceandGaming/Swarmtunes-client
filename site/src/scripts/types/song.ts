@@ -115,17 +115,7 @@ function OnSongClick(event: any) {
 
 ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, false, [
-        new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
-            AudioPlayer.instance.Clear()
-            const song = await SongRequester.GetSong(event.id)
-            if (song === undefined) {
-                console.warn("Song clicked with no song")
-                return
-            }
-            SongQueue.PlayNow([song])
-            PlaybackController.PlaySong(song)
-        }),
-        new ContextOption("Append to Queue", "src/assets/icons/playlist-add.svg", async (event) => {
+        new ContextOption("Append to Queue", "src/assets/icons/plus.svg", async (event) => {
             const song = await SongRequester.GetSong(event.id)
             SongQueue.AppendSong(song)
         }),
@@ -136,11 +126,17 @@ ContextMenu.AddCategory("song", [
             if (playlistid === null) {
                 return
             }
-            const playlist = PlaylistManager.GetPlaylist(playlistid)
-            await playlist.GetSongs()
             const song = await SongRequester.GetSong(event.id)
+            const playlist = PlaylistManager.GetPlaylist(playlistid)
+            if (playlist.Has(event.id)) {
+                ToastManager.Toast("Song already in playlist", "error")
+                return
+            }
+            await playlist.GetSongs()
             playlist.Add(song)
             PlaylistRequester.AddSongToPlaylist(playlistid, [event.id])
+            PlaylistView.Update()
+            ToastManager.Toast(`Added song to ${playlist.Title}`)
         })
     ]),
     new ContextGroup("share", false, true, [

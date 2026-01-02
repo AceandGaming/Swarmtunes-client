@@ -68,7 +68,6 @@ class SwarmFM extends AudioBase {
     constructor() {
         super()
         this.audio = new window.Audio()
-        this.audio.id = "swarmfm-radio"
         this.audio.preload = "none"
     }
 
@@ -98,7 +97,7 @@ class SwarmFM extends AudioBase {
             this.audio.currentTime = end - SwarmFM.TARGET_LATENCY
             this.audio.playbackRate = 1
         }
-        else {
+        else if (!isMobile) {
             const give = 20
             this.audio.playbackRate = Math.max(1, ((latency / SwarmFM.TARGET_LATENCY) + give) / (give + 1))
         }
@@ -138,7 +137,7 @@ class SwarmFM extends AudioBase {
 
         this.paused = false
         if (!this.hasControl) {
-            this.toast = ToastManager.Toast("Loading SwarmFM info...", "info", 0)
+            this.toast = ToastManager.Toast("Connecting to SwarmFM...", "info", 0)
             this.audio.onloadeddata = () => {
                 if (this.toast) {
                     this.toast.message = "Connected!"
@@ -151,7 +150,7 @@ class SwarmFM extends AudioBase {
             this.audio.play()
         }
         this.UpdateInfo().then(() => {
-            if (this.toast) this.toast.message = "Syncing..."
+            if (this.toast) this.toast.message = "Loading Audio..."
         })
         NowPlaying.Clear()
         this.audio.volume = this.volume

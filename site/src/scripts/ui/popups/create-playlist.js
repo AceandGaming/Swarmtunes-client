@@ -62,7 +62,7 @@ class CreatePlaylistPopup extends PopupWindow {
             PlaylistManager.AddPlaylist(response)
             PlaylistTab.Populate()
             this.Hide()
-            ToastManager.Toast(`Created playlist "${name}"`)
+            ToastManager.Toast(`Created playlist ${name}`)
         })
     }
     Show() {
