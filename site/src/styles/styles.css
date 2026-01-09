@@ -6,51 +6,40 @@
     --subtext-colour: #8b8b8b;
     --cover-background: #202020;
     --current-song-bar: #202020;
-    --seek-bar-background: #171717;
+    --seek-bar-background: #00000030;
     --seek-bar-played: #ffffff;
-    --seek-bar-loaded: #5b5b5b;
+    --seek-bar-loaded: #ffffff20;
     --header-tab-default: #111;
     --header-tab-active: var(--background-colour);
-    --header-tab-border: #404040;
     --header-colour: #1c1c1c;
-    --default-button-colour: #252525;
-    --default-button-hover: #303030;
-    --default-button-active: #404040;
-    --input-colour: #252525;
-    --input-colour-hover: #303030;
-    --input-border: #404040;
-    --song-item-hover: #202020;
-    --icon-default: #aaa;
-    --icon-hover: #ddd;
-    --icon-active: #fff;
+    --button-colour: #202020;
+    --textbox-fill: #252525;
+    --textbox-border: #404040;
+    --song-item-hover: #ffffff20;
+    --icon-default: #bbb;
+    --icon-hover: #eee;
+    --icon-active: #999;
     --slider-default: #aaa;
     --slider-border: #444;
     --slider-track: #444;
+    --catagory-background: #0000002a;
     overflow: hidden;
 }
 
 :root[data-theme="neuro"] {
     --background-colour: #ffa3ae;
     --background: url("../assets/neuro-bg.png");
-    --background-sub-colour: #8a4a52;
+    --background-sub-colour: #df858f;
     --header-colour: #ffb1bb;
     --current-song-bar: #ea95a0;
-    --song-item-hover: #ffffff50;
     --text-colour: #ffffff;
-    --subtext-colour: #eee;
-    --cover-background: #8a4a52;
-    --seek-bar-background: #ce838c;
-    --seek-bar-played: #ffffff;
-    --seek-bar-loaded: #ffb9c1;
-    --header-tab-default: #ce838c;
+    --subtext-colour: #fff;
+    --cover-background: #df858f;
+    --header-tab-default: #d37984;
     --header-tab-active: #ffa3ae;
-    --header-tab-border: #8a4a52;
-    --default-button-colour: #b3626c;
-    --default-button-hover: #b46770;
-    --default-button-active: none;
-    --input-colour: #ce838c;
-    --input-colour-hover: #764046;
-    --input-border: #8a4a52;
+    --button-colour: #e98591;
+    --textbox-fill: #ca6874;
+    --textbox-border: #965a61;
     --slider-default: #fff;
     --slider-border: #ffb9c1;
     --slider-track: #ffb9c1;
@@ -62,25 +51,17 @@
 :root[data-theme="evil"] {
     --background-colour: #643134;
     --background: url("../assets/evil-bg.png");
-    --background-sub-colour: #3a1c1e;
+    --background-sub-colour: #52282b;
     --header-colour: #693a3d;
     --current-song-bar: #50272a;
-    --song-item-hover: #ffffff50;
     --text-colour: #fff;
-    --subtext-colour: #eee;
-    --cover-background: #3a1c1e;
-    --seek-bar-background: #3a1c1e;
-    --seek-bar-played: #ffffff;
-    --seek-bar-loaded: #764046;
+    --subtext-colour: #ccc;
+    --cover-background: #52282b;
     --header-tab-default: #50272a;
     --header-tab-active: #643134;
-    --header-tab-border: #3a1c1e;
-    --default-button-colour: #783d42;
-    --default-button-hover: #87494e;
-    --default-button-active: #50272a;
-    --input-colour: #50272a;
-    --input-colour-hover: #764046;
-    --input-border: #965159;
+    --button-colour: #8b4147;
+    --textbox-fill: #50272a;
+    --textbox-border: #965159;
     --slider-default: #ce7680;
     --slider-border: #965159;
     --slider-track: #965159;
@@ -94,19 +75,15 @@
     --header-colour: #111;
     --header-tab-default: #0a0a0a;
     --current-song-bar: #0a0a0a;
-    --seek-bar-background: black;
     --seek-bar-played: #222;
-    --seek-bar-loaded: #111;
-    --default-button-colour: #111;
-    --default-button-hover: #1a1a1a;
-    --default-button-active: black;
+    --button-colour: #111;
     --cover-background: black;
     --icon-default: #333;
     --icon-hover: #444;
     --icon-active: #111;
 }
 
-:root[data-theme="darker"] cover-img {
+:root[data-theme="darker"] swarmtunes-cover {
     filter: brightness(0.3);
 }
 
@@ -122,13 +99,9 @@
     --icon-active: #ccc;
     --header-tab-default: #ddd;
     --header-tab-active: #fafafa;
-    --header-tab-border: #ccc;
-    --default-button-colour: #ddd;
-    --default-button-hover: #eee;
-    --default-button-active: #ccc;
-    --input-colour: #ddd;
-    --input-colour-hover: #eee;
-    --input-border: #000;
+    --button-colour: #ddd;
+    --textbox-fill: #ddd;
+    --textbox-border: #000;
     filter: brightness(3);
 }
 
@@ -230,40 +203,36 @@ img {
     pointer-events: none;
 }
 
-.cover {
-    border-radius: 15%;
-    background-color: var(--cover-background);
-}
-
 button {
     cursor: pointer;
     border: none;
-    background-color: var(--default-button-colour);
+    background-color: var(--button-colour);
     color: var(--text-colour);
     padding: 6px;
     pointer-events: all;
 }
 
 @media (hover: hover) {
-    button:hover {
-        background-color: var(--default-button-hover);
+    button:hover:not(.icon-button) {
+        filter: brightness(1.2)
     }
 }
 
-button:active {
-    background-color: var(--default-button-active);
+button:active:not(.icon-button) {
+    filter: brightness(0.95)
 }
 
 .icon-button {
     background-color: transparent;
     border-radius: 10px;
     padding: 0;
+    color: var(--icon-default);
 }
 
 .icon-button svg {
     width: 100%;
     height: 100%;
-    color: var(--icon-default);
+    color: inherit;
     background: none;
 }
 
@@ -329,8 +298,8 @@ button:active {
 
 input {
     border-radius: 10px;
-    border: 1px solid var(--input-border);
-    background-color: var(--input-colour);
+    border: 1px solid var(--textbox-border);
+    background-color: var(--textbox-fill);
     color: var(--text-colour);
     padding: 5px 10px;
 }
@@ -341,13 +310,13 @@ input::placeholder {
 
 @media (hover: hover) {
     input:hover {
-        background-color: var(--input-colour-hover);
+        filter: brightness(1.1);
     }
 }
 
 input:focus {
     outline: none;
-    background-color: var(--input-colour-hover);
+    filter: brightness(1.2);
 }
 
 p {

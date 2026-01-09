@@ -24,7 +24,7 @@
 .catagory .display {
   display: inline-flex;
   box-sizing: border-box;
-  background-color: var(--background-sub-colour);
+  background-color: var(--catagory-background);
   border-radius: 15px;
   gap: 10px;
   padding: 10px;

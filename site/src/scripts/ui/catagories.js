@@ -1,21 +1,18 @@
 function CreateCatagoryItemImage(element, source, title) {
-    const image = document.createElement("cover-img")
+    const image = document.createElement("swarmtunes-cover")
     image.src = source
 
-    image.addEventListener("onload", (event) => {
+    image.addEventListener("load", (event) => {
+        const colour = event.target.hsl
 
-        const colour = event.detail.GetColour()
+        const lightness = Math.min(colour.l, 65)
+        let backgroundDefault = `hsl(${colour.h} ${colour.s}% ${lightness - 5}%)`
+        let backgroundHover = `hsl(${colour.h} ${colour.s}% ${lightness}%)`
 
-        let backgroundDefault = `rgb(${colour[0] - 20}, ${colour[1] - 20}, ${colour[2] - 20})`
-        let backgroundHover = `rgb(${colour[0]}, ${colour[1]}, ${colour[2]})`
-        if (colour[0] > 220) {
-            backgroundDefault = `rgb(${colour[0] - 100}, ${colour[1] - 100}, ${colour[2] - 100})`
-            backgroundHover = `rgb(${colour[0] - 70}, ${colour[1] - 70}, ${colour[2] - 70})`
-        }
         element.style.backgroundColor = backgroundDefault
         element.style.borderColor = backgroundDefault
 
-        image.style.backgroundColor = `rgb(${colour[0] - 50}, ${colour[1] - 50}, ${colour[2] - 50})`
+        image.style.backgroundColor = `hsl(${colour.h} ${colour.s}% ${lightness - 20}%)`
 
 
         element.addEventListener("mouseenter", () => {

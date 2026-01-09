@@ -7,6 +7,7 @@
   background-color: #00000080;
   display: none;
   backdrop-filter: blur(6px);
+  z-index: 2;
 }
 
 .popup-window {
@@ -23,7 +24,7 @@
   justify-content: center;
 
   border-radius: 20px;
-  background: var(--background);
+  background-color: color-mix(in srgb, var(--background-colour) 70%, transparent);
   background-size: 192px;
   box-shadow: 0 5px 15px #00000080;
   min-width: 0;
@@ -113,7 +114,7 @@
     font-size: medium;
   }
 
-  .popup-window > .content input {
+  .popup-window > .content input:not([type="checkbox"]) {
     font-size: medium;
     height: 30px;
   }

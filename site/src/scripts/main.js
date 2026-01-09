@@ -2,6 +2,10 @@ let DEV_MODE = true
 //@@release-only@@ DEV_MODE = false
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=lax; path=/"
 
+window.onload = () => {
+    document.getElementById("loading-screen").classList.add("hide")
+}
+
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker
         .register("./service-worker.js")
@@ -131,7 +135,6 @@ AsyncCrap().then(() => {
 function UpdateNavigatorTime(played, duration, loaded) {
     navigator.mediaSession.setPositionState({
         duration: duration,
-        playbackRate: 1,
         position: played,
     })
 }

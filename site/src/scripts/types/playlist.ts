@@ -29,7 +29,6 @@ class Playlist {
             if (this.songsLoaded) {
                 return this.songs[0]?.Cover
             }
-            return this.songIds[0]
         }
         return this.coverType
     }

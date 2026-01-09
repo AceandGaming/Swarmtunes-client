@@ -8,8 +8,9 @@
     flex-direction: column;
     gap: 4px;
     padding: 5px 0;
+    z-index: 3;
 
-    background-color: var(--default-button-colour);
+    background-color: var(--button-colour);
     border-radius: 10px;
     border: solid 1px var(--background-sub-colour);
     box-shadow: 0 2px 10px #00000080;
@@ -31,10 +32,15 @@
     flex-direction: column;
     gap: 4px;
     padding-top: 10%;
+    z-index: 3;
 
-    background-color: var(--default-button-colour);
     border-radius: 20px 20px 0 0;
+    background-color: #00000077;
+    backdrop-filter: blur(6px);
+    /* background-color: var(--background-colour); */
     border: solid 2px var(--background-sub-colour);
+    border-bottom: none;
+    box-sizing: border-box;
 
     overflow: hidden;
 }

@@ -16,6 +16,7 @@ class MediaView {
         const song = SongQueue.GetSong(event.target.dataset.id)
         SongQueue.UpdateQueue(song)
         NowPlaying.sourceId = MediaView._lastMediaId
+        AudioPlayer.instance.PrepForSong()
         PlaybackController.PlaySong(SongQueue.currentSong)
     }
     static OnCoverClick(event) {
@@ -42,23 +43,14 @@ class MediaView {
         coverContainer.classList.add("cover-container")
         coverContainer.addEventListener("click", MediaView.OnCoverClick)
 
-        const cover = document.createElement("img")
-        cover.src = "src/assets/no-song.png"
-        cover.classList.add("loading")
+        const cover = document.createElement("swarmtunes-cover")
 
-        const loadingCover = document.createElement("img")
-        loadingCover.src = "src/assets/no-song.png"
-
-        cover.onload = () => {
-            cover.classList.remove("loading")
-            loadingCover.style.display = "none"
-        }
 
         const playIcon = document.createElement("div")
         playIcon.appendChild(LoadSVG("src/assets/icons/play.svg"))
         playIcon.classList.add("play")
 
-        coverContainer.append(cover, loadingCover, playIcon)
+        coverContainer.append(cover, playIcon)
 
         const textContainer = document.createElement("div")
         textContainer.classList.add("text-container")
@@ -80,7 +72,6 @@ class MediaView {
         MediaView._title = title
         MediaView._discription = discription
         MediaView._coverArt = cover
-        MediaView._loadingArt = loadingCover
         MediaView._actions = actions
         MediaView.element = element
 
@@ -92,8 +83,6 @@ class MediaView {
     static _UpdateContent(title, discription, coverUrl) {
         MediaView._title.innerHTML = ReplaceEmotesOfString(title)
         MediaView._discription.textContent = discription
-        MediaView._coverArt.classList.add("loading")
-        MediaView._loadingArt.style.display = "block"
         MediaView._coverArt.src = coverUrl
     }
     static async _PopulateSongList(mediaObject, catagory = "song", onSongsLoaded = () => { }) {
@@ -194,7 +183,7 @@ ContextMenu.InheritCategory("playlist-item", "song", [
             playlist.RemoveAtId(event.id)
             PlaylistRequester.RemoveSongFromPlaylist(playlistid, [event.id])
             PlaylistView.Update()
-            ToastManager.Toast(`Removed song from '${playlist.Title}'`)
+            ToastManager.Toast(`Removed from <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
         })
     ])
 ])

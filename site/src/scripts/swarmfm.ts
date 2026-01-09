@@ -8,7 +8,7 @@ class SwarmFMInfo {
 }
 class SwarmFM extends AudioBase {
     static instance = new SwarmFM()
-    static TARGET_LATENCY = 0.2
+    static TARGET_LATENCY = 1
 
     get Audio(): HTMLAudioElement {
         return this.audio
@@ -23,10 +23,7 @@ class SwarmFM extends AudioBase {
         if (!this.startTime) {
             return 0
         }
-        if (this.audio.buffered.length < 1) {
-            return 0
-        }
-        return Math.max(0, this.audio.buffered.end(this.audio.buffered.length - 1) - this.startTime)
+        return this.Played + SwarmFM.TARGET_LATENCY
     }
     get Duration(): number {
         return this.duration || 0
@@ -79,6 +76,7 @@ class SwarmFM extends AudioBase {
         if (url !== this.audio.src) {
             this.audio.volume = 0
             this.audio.src = url
+            return
         }
         else {
             this.audio.volume = this.volume
@@ -93,7 +91,7 @@ class SwarmFM extends AudioBase {
         const end = this.Played + SwarmFM.TARGET_LATENCY
         const latency = end - this.audio.currentTime
         console.log("SwarmFM latency:", latency)
-        if (latency < SwarmFM.TARGET_LATENCY / 4 || latency > SwarmFM.TARGET_LATENCY + 1) {
+        if (latency < SwarmFM.TARGET_LATENCY / 4 || latency > SwarmFM.TARGET_LATENCY + 2) {
             this.audio.currentTime = end - SwarmFM.TARGET_LATENCY
             this.audio.playbackRate = 1
         }
@@ -120,12 +118,8 @@ class SwarmFM extends AudioBase {
 
         setTimeout(
             this.UpdateInfo.bind(this),
-            (info.duration - info.position + SwarmFM.TARGET_LATENCY) * 1000
+            (info.duration - info.position + SwarmFM.TARGET_LATENCY + 1) * 1000
         )
-    }
-    Load() {
-        this.hasControl = true
-        this.UpdateInfo()
     }
     Play(): void {
         if (!this.paused) {
@@ -144,7 +138,7 @@ class SwarmFM extends AudioBase {
                     setTimeout(() => this.toast?.Hide(), 2000)
                 }
             }
-            this.Load()
+            this.hasControl = true
         }
         else {
             this.audio.play()

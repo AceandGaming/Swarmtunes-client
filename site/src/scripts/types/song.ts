@@ -72,7 +72,7 @@ class Song {
         this.isOriginal = options.isOriginal ?? false
         this.coverArt = options.coverArt ?? null
         if (options.title === "mashup" && options.date) {
-            this.title = `Mashup ${this.date.getFullYear()}`
+            this.title = `${this.date.getFullYear()} Mashup`
         }
         this.youtubeId = options.youtubeId ?? null
     }
@@ -100,7 +100,8 @@ class Song {
 
 function OnSongClick(event: any) {
     const id = event.target.dataset.id
-    AudioPlayer.instance.Clear()
+    AudioPlayer.instance.PrepForSong()
+    NowPlaying.sourceId = ""
     SongRequester.GetSong(id).then((song) => {
         if (song === undefined) {
             console.warn("Song clicked with no song")
@@ -136,7 +137,7 @@ ContextMenu.AddCategory("song", [
             playlist.Add(song)
             PlaylistRequester.AddSongToPlaylist(playlistid, [event.id])
             PlaylistView.Update()
-            ToastManager.Toast(`Added song to ${playlist.Title}`)
+            ToastManager.Toast(`Added song to <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
         })
     ]),
     new ContextGroup("share", false, true, [

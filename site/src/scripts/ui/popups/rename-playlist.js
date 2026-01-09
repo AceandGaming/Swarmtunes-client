@@ -40,7 +40,7 @@ class RenamePlaylistPopup extends PopupWindow {
         this.playlist.Title = name
         PlaylistRequester.RenamePlaylist(this.playlist.Id, name)
         PlaylistTab.Populate()
-        ToastManager.Toast(`Renamed playlist "${oldName}" to "${name}"`)
+        ToastManager.Toast(`Renamed <b>${ReplaceEmotesOfString(oldName)}</b> to <b>${ReplaceEmotesOfString(name)}</b>`, "none", 3, true)
     }
     Show(id) {
         if (!Network.IsLoggedIn()) {

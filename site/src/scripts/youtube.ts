@@ -32,10 +32,13 @@ class YoutubePlayer extends AudioBase {
     }
     set Volume(value: number) {
         this.volume = value;
-        this.player.setVolume(value * 100);
+        this.player?.setVolume(value * 100);
     }
     public get HasControl(): boolean {
         return this.hasControl
+    }
+    public get CurrentSong(): Song | undefined {
+        return this.currentSong
     }
 
     private player: any
@@ -44,14 +47,16 @@ class YoutubePlayer extends AudioBase {
     private callbacks = new Map()
     private updateId: any = null
     private volume: number = 0.5
+    private currentSong: Song | undefined
 
     constructor() {
         super();
-
     }
 
     public AttachPlayer(player: any) {
         this.player = player
+        player.g.sandbox = "allow-scripts allow-same-origin"
+        player.g.allow = ""
         player.addEventListener("onReady", () => {
             player.setVolume(this.volume * 100)
         })
@@ -70,6 +75,7 @@ class YoutubePlayer extends AudioBase {
             if (!song.YoutubeId) {
                 throw new Error("Song has no youtube id")
             }
+            this.currentSong = song
             this.player.loadVideoById(song.YoutubeId)
 
             PlaybackController.DisplaySong(song)
@@ -94,13 +100,13 @@ class YoutubePlayer extends AudioBase {
         this.paused = true
 
         this.CallCallbacks("play")
-        if (this.updateId) {
-            clearInterval(this.updateId)
-        }
     }
     public Clear(): void {
         this.Pause()
         this.hasControl = false
+        if (this.updateId) {
+            clearInterval(this.updateId)
+        }
     }
     public OnPlayPause(callback: (state: boolean) => void): void {
         if (!this.callbacks.has("play")) {

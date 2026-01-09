@@ -7,21 +7,25 @@
     height: 100%;
     pointer-events: all;
 }
+
 #current-song-bar > * {
     flex: 1 1 0;
     display: flex;
     pointer-events: none;
     position: relative;
 }
+
 #current-song-bar > *:nth-child(1) {
     justify-content: left;
     min-width: 0;
     align-items: center;
 }
+
 #current-song-bar > *:nth-child(2) {
     justify-content: center;
     flex-direction: column;
 }
+
 #current-song-bar > *:nth-child(3) {
     justify-content: center;
     align-items: center;
@@ -34,17 +38,18 @@
     right: 30px;
 }
 
-#current-song-bar .cover {
+#current-song-bar swarmtunes-cover {
     flex: 0 1 90px;
     min-width: 0;
     margin: 10px;
-    aspect-ratio: 1/1;
 }
+
 #current-song-bar .singer-wrapper {
     display: flex;
     flex-direction: column;
     height: 90%;
 }
+
 #current-song-bar .singer-wrapper span {
     white-space: pre;
 }
@@ -59,11 +64,13 @@
     white-space: nowrap;
     text-align: center;
 }
+
 #current-song-bar .title-container > * {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .seek-bar-container {
     display: flex;
     align-items: center;
@@ -73,6 +80,7 @@
     margin: 10px auto;
     color: var(--subtext-colour);
 }
+
 .seek-bar {
     position: relative;
     flex: 1;
@@ -84,9 +92,11 @@
     cursor: pointer;
     pointer-events: all;
 }
+
 .seek-bar:hover {
     height: 10px;
 }
+
 .seek-bar > * {
     position: absolute;
     top: 0;
@@ -96,12 +106,15 @@
     border-radius: 4px;
     pointer-events: none;
 }
+
 .seek-bar .progress {
     background: var(--seek-bar-played);
 }
+
 .seek-bar .loaded {
     background: var(--seek-bar-loaded);
 }
+
 @media (max-width: 850px) {
     #current-song-bar button.fullscreen {
         display: none;
@@ -112,26 +125,32 @@
     #current-song-bar .singer-wrapper {
         display: none;
     }
+
     #current-song-bar .seek-time {
         display: none;
     }
 }
+
 @media (max-width: 500px) {
     #current-song-bar {
         height: 60px;
     }
-    #current-song-bar .cover {
+
+    #current-song-bar swarmtunes-cover {
         flex: 0 1 55px;
         margin: 0;
         margin-right: 5px;
     }
+
     #current-song-bar .title-container {
         padding: 0 5px;
         text-align: left;
     }
+
     #current-song-bar > *:nth-child(1) {
         flex: 1 1 30%;
     }
+
     #current-song-bar > *:nth-child(2) {
         position: absolute;
         bottom: 0;
@@ -140,9 +159,11 @@
         justify-content: center;
         flex-direction: column;
     }
+
     #current-song-bar .seek-bar {
         height: 4px;
     }
+
     #current-song-bar .media-controls {
         margin-right: 10px;
     }

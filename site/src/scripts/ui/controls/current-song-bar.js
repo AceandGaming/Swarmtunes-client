@@ -1,8 +1,4 @@
 class CurrentSongBar {
-    static get SeekBar() {
-        return document.querySelector("#seek-bar")
-    }
-
     static #coverImage
     static #artistText
     static #titleText
@@ -10,9 +6,7 @@ class CurrentSongBar {
     static #element
 
     static #CreateCoverImage() {
-        this.#coverImage = document.createElement("img")
-        this.#coverImage.classList.add("cover")
-        this.#coverImage.src = "src/assets/no-song.png"
+        this.#coverImage = document.createElement("swarmtunes-cover")
         return this.#coverImage
     }
     static #CreateSingersWrapper() {
@@ -90,7 +84,7 @@ class CurrentSongBar {
 
         const middleContent = document.createElement("div")
         middleContent.append(
-            new SeekBar(false).element
+            new SeekBar(false, false).element
         )
 
         const rightContent = document.createElement("div")

@@ -34,7 +34,6 @@ class Album {
             if (this.songsLoaded) {
                 return this.songs[0]?.Cover
             }
-            return this.songIds[0]
         }
         return this.coverType
     }
@@ -101,7 +100,7 @@ ContextMenu.AddCategory("album", [
             const album = await Network.GetAlbum(event.id, true)
             playlist.AddMultiple(album.songs)
             PlaylistRequester.AddSongToPlaylist(playlistid, album.songIds)
-            ToastManager.Toast(`Added ${album.songIds.length} songs to ${playlist.Title}`)
+            ToastManager.Toast(`Added ${album.songIds.length} songs to <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
         }),
     ]),
     new ContextGroup("share", false, true, [

@@ -1,94 +1,6 @@
-// class SeekBar {
-//     static get element() {
-//         return this.#seekBar
-//     }
-//     static #seekBar
-//     static #seekProgress
-//     static #seekLoaded
-//     static #startTime
-//     static #endTime
-
-//     static Attach(seek, seekBar) {
-//         this.#seekBar = seekBar
-//         this.#seekProgress = seekBar.querySelector(".progress")
-//         this.#seekLoaded = seekBar.querySelector(".loaded")
-
-//         const times = seek.querySelectorAll(".seek-time")
-//         if (times.length === 2) {
-//             this.#startTime = times[0]
-//             this.#endTime = times[1]
-//         }
-
-//         this.#seekBar.addEventListener("mousedown", SeekBar.OnSeekBarMouseDown)
-//         this.#seekBar.addEventListener("touchstart", SeekBar.OnSeekBarMouseDown)
-
-//         AudioPlayer.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
-//         SwarmFM.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
-//     }
-//     static Create(showTime = false) {
-//         const seek = document.createElement("div")
-//         seek.id = "seek-bar-container"
-//         let html = `
-//                 <div class="seek-bar">
-//                     <div class="loaded"></div>
-//                     <div class="progress"></div>
-//                 </div>`
-
-//         if (showTime) {
-//             html = `
-//                 <span class="seek-time">0:00</span>`
-//                 + html +
-//                 `<span class="seek-time">0:00</span>`
-//         }
-
-//         seek.innerHTML = html
-//         this.Attach(seek, seek.querySelector("#seek-bar"))
-//         return seek
-//     }
-//     static OnTimeUpdate(played, duration, loaded) {
-//         this.#seekProgress.style.width = `${(played / duration) * 100}%`
-//         this.#seekLoaded.style.width = `${(loaded / duration) * 100}%`
-
-//         if (this.#startTime) {
-//             this.#startTime.textContent = FormatTime(played)
-//             this.#endTime.textContent = FormatTime(duration)
-//         }
-
-//         navigator.mediaSession.setPositionState({
-//             duration: duration,
-//             playbackRate: 1,
-//             position: played,
-//         });
-//     }
-
-//     static OnSeek(event) {
-//         const rect = SeekBar.element.getBoundingClientRect();
-//         let fraction = (event.clientX - rect.left) / rect.width;
-//         fraction = Math.min(1, Math.max(0, fraction));
-//         AudioPlayer.instance.Seek(fraction);
-//     }
-//     static OnSeekMobile(event) {
-//         const rect = SeekBar.element.getBoundingClientRect();
-//         let fraction = (event.touches[0].clientX - rect.left) / rect.width;
-//         fraction = Math.min(1, Math.max(0, fraction));
-//         AudioPlayer.instance.Seek(fraction);
-//     }
-//     static OnSeekBarMouseDown(event) {
-//         document.addEventListener("mousemove", SeekBar.OnSeek);
-//         document.addEventListener("touchmove", SeekBar.OnSeekMobile);
-//         document.addEventListener("mouseup", SeekBar.OnSeekBarMouseUp);
-//         document.addEventListener("touchend", SeekBar.OnSeekBarMouseUp);
-//         SeekBar.OnSeek(event);
-//     }
-//     static OnSeekBarMouseUp(event) {
-//         document.removeEventListener("mousemove", SeekBar.OnSeek);
-//         document.removeEventListener("mouseup", SeekBar.OnSeekBarMouseUp);
-//         document.removeEventListener("touchmove", SeekBar.OnSeekMobile);
-//         document.removeEventListener("touchend", SeekBar.OnSeekBarMouseUp);
-//     }
-// }
-
 class SeekBar {
+    static seekbars = []
+
     get element() {
         return this.#element
     }
@@ -100,7 +12,7 @@ class SeekBar {
     #endTime
     #dragging = false
 
-    constructor(showTime = true) {
+    constructor(showTime = true, seekable = true) {
         const seek = document.createElement("div")
         seek.classList.add("seek-bar-container")
         const seekBar = document.createElement("div")
@@ -137,16 +49,21 @@ class SeekBar {
             this.OnSeekBarMouseDown(event)
         }
 
-        seekBar.addEventListener("mousedown", Click.bind(this))
-        seekBar.addEventListener("touchstart", Click.bind(this))
-        document.addEventListener("mouseup", this.OnSeekBarMouseUp.bind(this));
-        document.addEventListener("touchend", this.OnSeekBarMouseUp.bind(this));
-        document.addEventListener("mousemove", this.OnSeek.bind(this));
-        document.addEventListener("touchmove", this.OnSeekMobile.bind(this));
+        if (seekable) {
+            seekBar.addEventListener("mousedown", Click.bind(this))
+            seekBar.addEventListener("touchstart", Click.bind(this))
+            document.addEventListener("mouseup", this.OnSeekBarMouseUp.bind(this));
+            document.addEventListener("touchend", this.OnSeekBarMouseUp.bind(this));
+            document.addEventListener("mousemove", this.OnSeek.bind(this));
+            document.addEventListener("touchmove", this.OnSeekMobile.bind(this));
+        }
+
 
         AudioPlayer.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
         SwarmFM.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
         YoutubePlayer.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
+
+        SeekBar.seekbars.push(this)
     }
     OnTimeUpdate(played, duration, loaded) {
         this.#seekProgress.style.width = `${(played / duration) * 100}%`
@@ -156,6 +73,12 @@ class SeekBar {
             this.#startTime.textContent = FormatTime(played)
             this.#endTime.textContent = FormatTime(duration)
         }
+    }
+    Clear() {
+        this.#seekProgress.style.width = "0%"
+        this.#seekLoaded.style.width = "0%"
+        this.#startTime.textContent = "0:00"
+        this.#endTime.textContent = "0:00"
     }
     OnSeek(event) {
         if (!this.#dragging) {

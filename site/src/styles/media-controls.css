@@ -51,7 +51,7 @@
     display: none;
 }
 
-.media-controls button.shuffle.active svg {
+.media-controls button.shuffle.active {
     color: #fff
 }
 

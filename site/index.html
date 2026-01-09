@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="darker">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -29,6 +29,47 @@
   <meta name="twitter:description" content="The Neuro-sama music app" />
   <meta name="twitter:image" content="/icon.png" />
 
+  <style>
+    #loading-screen {
+      position: absolute;
+      background-color: #171717;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+
+      transition: opacity 0.5s ease;
+      opacity: 1;
+    }
+
+    #loading-screen.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #loading-screen img {
+      width: 200px;
+      height: auto;
+    }
+
+    #loading-screen .loading-text {
+      font-size: 35px;
+    }
+
+
+    @media (max-width: 500px) {
+      #loading-screen {
+        flex-direction: column;
+      }
+    }
+  </style>
 
   <link rel="stylesheet" href="src/styles/styles.css" />
   <link rel="stylesheet" href="src/styles/content/discover.css" />
@@ -55,6 +96,12 @@
 <body>
   <div id="player"></div>
   <!-- This is overrided by the Youtube iFrame. God I hate this stupid api because it breaks like half my code and also adds a bunch of google's tracking crap to my site. AND I CAN'T DO ANYTHING ABOUT IT! -->
+
+  <div id="loading-screen">
+    <img src="icon.png">
+    <div class="loading-text"></div>
+  </div>
+
 
   <main>
     <div id="now-playing">

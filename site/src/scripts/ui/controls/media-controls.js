@@ -159,7 +159,7 @@ class MediaControls {
         if (!AudioPlayer.instance.HasControl) {
             return
         }
-        const currentSong = AudioPlayer.instance.CurrentSong
+        const currentSong = PlaybackController.CurrentSong
         if (!currentSong) {
             return
         }
@@ -168,8 +168,13 @@ class MediaControls {
             return
         }
         const playlist = PlaylistManager.GetPlaylist(playlistId)
+        if (playlist.Has(currentSong.id)) {
+            ToastManager.Toast("Song already in playlist", "error")
+            return
+        }
         await playlist.GetSongs()
         playlist.Add(currentSong)
+        ToastManager.Toast(`Added song to <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
     }
     static #OnPauseClick() {
         if (PlaybackController.Playing) {

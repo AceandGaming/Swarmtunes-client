@@ -225,7 +225,7 @@ class Network {
             //console.error("Invalid cover name", name)
             return "src/assets/no-song.png"
         }
-        return `${this.serverURL}/covers/${name}?size=${size}`
+        return `${this.serverURL}/covers/${encodeURIComponent(name)}?size=${512}`
     }
     static GetAudioURL(id: id) {
         return `${this.serverURL}/files/${id}`

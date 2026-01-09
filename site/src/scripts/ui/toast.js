@@ -1,5 +1,5 @@
 class ToastUI extends HTMLElement {
-    static get observedAttributes() { return ["message"], ["duration"], ["type"]; }
+    static get observedAttributes() { return ["message"], ["duration"], ["type"], ["htmlContent"]; }
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) {
             return
@@ -87,13 +87,16 @@ class ToastUI extends HTMLElement {
                 border: 1px solid var(--subtext-colour);
                 padding: 3px 10px;
             }
-            :host img {
+            :host > img {
                 height: 100%;
                 aspect-ratio: 1;
             }
             :host span {
                 white-space: normal;
                 width: 100%;
+            }
+            :host span img {
+                height: 1rem;
             }
         `
         shadow.append(style)

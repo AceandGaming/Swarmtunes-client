@@ -56,7 +56,7 @@ class AudioPlayer extends AudioBase {
     private hasControl: boolean = false
     private paused: boolean = true
     private volume: number = 0.5
-    private currentSong?: Song
+    private currentSong: Song | undefined
 
     constructor() {
         super();
@@ -64,12 +64,22 @@ class AudioPlayer extends AudioBase {
         this.audio.preload = "metadata"
     }
 
+    public async PrepForSong() {
+        this.audio.pause()
+        this.audio.src = ""
+        this.currentSong = undefined
+
+        for (const seek of SeekBar.seekbars) {
+            seek.Clear()
+        }
+    }
     public async Load(song: Song) {
         this.hasControl = true
         this.audio.volume = this.volume
         this.currentSong = song
         this.audio.src = await SongRequester.GetAudioUrl(song.Id)
         this.audio.load()
+        this.audio.currentTime = 0
         PlaybackController.DisplaySong(song)
         PlayState.Update({ currentSongId: song.Id })
         PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })

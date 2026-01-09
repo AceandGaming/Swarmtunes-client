@@ -6,15 +6,29 @@
     height: 100%;
     background: linear-gradient(var(--background-colour),
             var(--background-sub-colour));
+    --icon-default: #fff;
+    --icon-hover: #eee;
+    --icon-active: #ccc;
+    z-index: 1;
+}
+
+#song-fullscreen.high-contrast .close-button {
+    color: black;
+}
+
+#song-fullscreen h1 {
+    -webkit-text-stroke: 0.4px white;
+}
+
+#song-fullscreen h2,
+#song-fullscreen span {
+    color: white;
 }
 
 #song-fullscreen.show {
     visibility: visible;
 }
 
-#song-fullscreen.high-contrast :is(h1, h2, h3, h4, h5, h6, span) {
-    color: white;
-}
 
 #song-fullscreen .close-button {
     position: absolute;
@@ -56,7 +70,7 @@
     width: 100%;
 }
 
-#song-fullscreen .content > :first-child {
+#song-fullscreen .content > :nth-child(2) {
     flex-basis: min(50%, fit-content);
     gap: 6%;
 }
@@ -74,7 +88,7 @@
     gap: 0;
 }
 
-#song-fullscreen .cover-container img {
+#song-fullscreen .cover-container swarmtunes-cover {
     max-width: 100%;
     width: 42vh;
     height: auto;
@@ -82,10 +96,26 @@
     background-color: transparent;
 }
 
+#song-fullscreen .info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+}
+
+#song-fullscreen .info-container > * {
+    flex: 1;
+}
+
+#song-fullscreen .info-container .triple-dot {
+    aspect-ratio: 1;
+    max-width: 50px;
+}
+
 #song-fullscreen .title-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
     text-align: left;
     gap: 5px;
     overflow: hidden;
@@ -108,6 +138,10 @@
 
 #song-fullscreen .media-controls button {
     background: none;
+}
+
+#song-fullscreen .media-controls .shuffle:not(.active) {
+    color: #ffffffaa;
 }
 
 #song-fullscreen .seek-bar-container {

@@ -76,7 +76,7 @@ ContextMenu.InheritCategory("now-playing-item", "song", [
             SongQueue.RemoveSong(event.id)
             NowPlaying.Update()
 
-            ToastManager.Toast(`Removed song from '${playlist.Title}'`)
+            ToastManager.Toast(`Removed song from <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
         }, () => {
             if (NowPlaying.sourceId.startsWith("playlist")) {
                 return true

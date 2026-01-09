@@ -5,7 +5,10 @@ class SongFullscreen {
     static #titleText
     static #singersText
     static #swarmFMPanel
+    static #dateText
+    static #infoContainer
     static #content
+    static #wakeLock
 
     static Create() {
         const element = document.createElement("div")
@@ -19,6 +22,7 @@ class SongFullscreen {
         const swarmFMPlayer = document.createElement("iframe")
         swarmFMPlayer.classList.add("swarmfm-player", "hidden")
         swarmFMPlayer.src = "about:blank"
+        swarmFMPlayer.sandbox = "allow-scripts allow-same-origin"
         this.#swarmFMPanel = swarmFMPlayer
 
         const content = document.createElement("div")
@@ -27,13 +31,15 @@ class SongFullscreen {
         const controls = document.createElement("div")
         this.#content = content
 
+        const date = document.createElement("h2")
+        date.classList.add("sub-text", "date")
+        content.append(date)
+        this.#dateText = date
+
         const coverContainer = document.createElement("div")
         coverContainer.classList.add("cover-container")
 
-        const cover = document.createElement("img")
-        cover.crossOrigin = "anonymous"
-        cover.src = "src/assets/no-song.png"
-        cover.classList.add("cover")
+        const cover = document.createElement("swarmtunes-cover")
 
         const singer = document.createElement("h2")
         singer.classList.add("sub-text", "singer")
@@ -42,6 +48,10 @@ class SongFullscreen {
         this.#singersText = singer
         coverContainer.append(cover, singer)
         info.append(coverContainer)
+
+        const infoContainer = document.createElement("div")
+        infoContainer.classList.add("info-container")
+        this.#infoContainer = infoContainer
 
         const titleContainer = document.createElement("div")
         titleContainer.classList.add("title-container")
@@ -56,7 +66,14 @@ class SongFullscreen {
         this.#titleText = title
         this.#artistText = artist
         titleContainer.append(title, artist)
-        info.append(titleContainer)
+
+        const tripleDot = document.createElement("button")
+        tripleDot.append(LoadSVG('src/assets/icons/triple-dot.svg'))
+        tripleDot.classList.add('icon-button', 'triple-dot')
+        ContextMenu.AttachButton(tripleDot, infoContainer)
+
+        infoContainer.append(titleContainer, tripleDot)
+        info.append(infoContainer)
 
         const seekBar = new SeekBar()
         controls.append(seekBar.element)
@@ -78,20 +95,34 @@ class SongFullscreen {
         this.#element.classList.remove("show")
         document.querySelector("main").style.display = ""
         ShowFooter()
-        document.exitFullscreen()
+        //document.exitFullscreen()
+        if (this.#wakeLock) {
+            this.#wakeLock.release().then(() => {
+                this.#wakeLock = null
+            })
+        }
     }
     static Show() {
         this.#element.classList.add("show")
         document.querySelector("main").style.display = "none"
         HideFooter()
-        this.#element.requestFullscreen()
-        document.onfullscreenchange = () => {
-            if (!document.fullscreenElement) {
-                this.Hide()
-            }
+        // this.#element.requestFullscreen()
+        // document.onfullscreenchange = () => {
+        //     if (!document.fullscreenElement) {
+        //         this.Hide()
+        //     }
+        // }
+        if (!this.#wakeLock) {
+            const corr = navigator.wakeLock.request("screen")
+            corr.then((lock) => {
+                this.#wakeLock = lock
+            })
+            corr.catch((error) => {
+                console.error("Failed to get wake lock", error)
+            })
         }
     }
-    static Display(title, artist, singers, coverUrl) {
+    static Display(title, artist, singers, coverUrl, date) {
         this.#swarmFMPanel.classList.add("hidden")
         this.#content.classList.remove("hidden")
 
@@ -103,18 +134,17 @@ class SongFullscreen {
             this.#singersText.textContent = singers.join(", ")
         }
 
-        this.#coverImage.onerror = () => {
-            this.#coverImage.src = coverUrl + "&retry=" + Date.now()
-        }
+        this.#dateText.textContent = date
 
-        this.#coverImage.onload = () => {
-            const colour = colourThief.getColor(this.#coverImage)
+
+        this.#coverImage.addEventListener("load", (event) => {
+            const colour = event.target.hsl
             this.#element.style.background = `linear-gradient(
-                rgba(${colour[0]}, ${colour[1]}, ${colour[2]}, 1), 
-                rgba(${colour[0]}, ${colour[1]}, ${colour[2]}, 0.2)
+                hsl(${colour.h}, ${colour.s * 2}%, ${colour.l * 1.2}%),
+                hsl(${colour.h}, ${colour.s * 1.5}%, ${colour.l / 1.5}%)
             )`
-            this.#element.classList.toggle("high-contrast", colour[0] > 170)
-        }
+            this.#element.classList.toggle("high-contrast", colour.l * 1.2 > 90)
+        })
 
         this.#coverImage.src = coverUrl
     }
@@ -124,5 +154,9 @@ class SongFullscreen {
         }
         this.#swarmFMPanel.classList.remove("hidden")
         this.#content.classList.add("hidden")
+    }
+    static UpdateContextMenuInfo(id, catagory) {
+        this.#infoContainer.setAttribute("data-id", id)
+        this.#infoContainer.setAttribute("data-category", catagory)
     }
 }

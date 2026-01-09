@@ -6,7 +6,7 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     element.classList.toggle("unavaliable", unavaliable)
     element.addEventListener("click", onClickEvent)
 
-    const coverImg = document.createElement('cover-img')
+    const coverImg = document.createElement('swarmtunes-cover')
     coverImg.src = Network.GetCover(song.Cover, 64)
 
     const titleArtist = document.createElement('div')

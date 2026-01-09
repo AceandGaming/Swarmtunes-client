@@ -320,6 +320,9 @@ class MobileContextMenu extends ContextMenuUI {
                 continue
             }
             for (const option of group.options) {
+                if (option.condition !== undefined && !option.condition()) {
+                    continue
+                }
                 const child = option.Element(data)
                 child.addEventListener("click", (event) => {
                     if (this.interactable) {

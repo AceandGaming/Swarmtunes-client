@@ -15,6 +15,15 @@ class PlaybackController {
         const audio = PlaybackController.HasControl
         return audio ? !audio.Paused : false
     }
+    public static get CurrentSong(): Song | undefined {
+        if (this.Audio.HasControl) {
+            return this.Audio.CurrentSong
+        }
+        else if (this.Youtube.HasControl) {
+            return this.Youtube.CurrentSong
+        }
+        return undefined
+    }
 
     private static get Audio() {
         return AudioPlayer.instance
@@ -53,6 +62,7 @@ class PlaybackController {
         if (this.SwarmFM.HasControl) {
             return
         }
+        this.Audio.PrepForSong()
         SongQueue.PlayNextSong()
     }
     public static PreviousTrack() {
@@ -67,6 +77,7 @@ class PlaybackController {
             YoutubePlayer.instance.Played = 0
             return
         }
+        this.Audio.PrepForSong()
         SongQueue.PlayPreviousSong()
     }
     private static UpdateMetadata(title: string, artist: string, singers: string[], coverUrl: string) {
@@ -115,14 +126,14 @@ class PlaybackController {
             })
         }
     }
-    public static Display(title: string, artist: string, singers: string[], coverUrl: string, swarmfm = false) {
+    public static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string, swarmfm = false) {
         this.UpdateMetadata(title, artist, singers, coverUrl)
         CurrentSongBar.Display(title, artist, singers, coverUrl)
         if (swarmfm) {
             SongFullscreen.DisplaySwarmFM()
         }
         else {
-            SongFullscreen.Display(title, artist, singers, coverUrl)
+            SongFullscreen.Display(title, artist, singers, coverUrl, date)
         }
 
     }
@@ -131,8 +142,10 @@ class PlaybackController {
             song.Title,
             song.Artist,
             song.Singers,
-            Network.GetCover(song.Cover, 512)
+            Network.GetCover(song.Cover, 512),
+            song.Date.toDateString()
         )
+        SongFullscreen.UpdateContextMenuInfo(song.Id, "now-playing-item")
     }
     public static DisplaySwarmFMInfo(info: SwarmFMInfo) {
         let cover = Network.GetCover(info.currentSong.Cover, 512)
@@ -144,7 +157,9 @@ class PlaybackController {
             info.currentSong.Artist,
             info.currentSong.Singers,
             cover,
+            "SwarmFM Stream",
             !isMobile
         )
+        SongFullscreen.UpdateContextMenuInfo("no", "swarmfm")
     }
 }
