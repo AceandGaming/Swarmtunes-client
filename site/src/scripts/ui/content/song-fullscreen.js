@@ -22,7 +22,7 @@ class SongFullscreen {
         const swarmFMPlayer = document.createElement("iframe")
         swarmFMPlayer.classList.add("swarmfm-player", "hidden")
         swarmFMPlayer.src = "about:blank"
-        swarmFMPlayer.sandbox = "allow-scripts allow-same-origin"
+        swarmFMPlayer.sandbox = "allow-scripts"
         this.#swarmFMPanel = swarmFMPlayer
 
         const content = document.createElement("div")

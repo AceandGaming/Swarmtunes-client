@@ -1,4 +1,6 @@
 class PlayState {
+    static awaitingSong = undefined
+
     static Update({ currentSongId, played, songIds } = {}) {
         const json = localStorage.getItem("playState")
         let data = {}
@@ -15,7 +17,12 @@ class PlayState {
         if (songIds) {
             data.queue = songIds
         }
-        localStorage.setItem("playState", JSON.stringify(data))
+        try {
+            localStorage.setItem("playState", JSON.stringify(data))
+        }
+        catch (e) {
+            console.error("Failed to save play state", e)
+        }
     }
     static async Load() {
         const json = localStorage.getItem("playState")
@@ -27,6 +34,8 @@ class PlayState {
             return
         }
 
+        console.log("Loaded play state", data)
+
         if (data.currentSong == "swarmfm") {
             //SwarmFM.instance.Play()
             return
@@ -35,13 +44,26 @@ class PlayState {
         if (song === undefined) {
             return
         }
-        if (AudioPlayer.instance.CurrentSong !== undefined) {
+        if (PlaybackController.CurrentSong !== undefined) {
             return
         }
-        AudioPlayer.instance.Load(song)
-        if (data.played) {
-            AudioPlayer.instance.Played = data.played
+        PlaybackController.DisplaySong(song)
+        if (!isNewSession) {
+            PlaybackController.PlaySong(song)
+            if (data.played) {
+                let die = false //POV: You haven't implemented the ablity to remove callbacks
+                PlaybackController.OnPlayPause((state) => {
+                    if (state && !die) {
+                        die = true
+                        PlaybackController.HasControl.Played = data.played
+                    }
+                })
+            }
         }
+        else {
+            this.awaitingSong = song
+        }
+
 
         if (data.queue.length == 0) {
             return
@@ -51,7 +73,7 @@ class PlayState {
         SongQueue.UpdateQueue(song)
     }
     static Initalise() {
-        AudioPlayer.instance.OnTimeUpdate((played, duration, loaded) => {
+        PlaybackController.OnTimeUpdate((played, duration, loaded) => {
             PlayState.Update({ played: played })
         })
         this.Load()

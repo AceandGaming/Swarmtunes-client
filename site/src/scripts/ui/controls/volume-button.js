@@ -67,7 +67,11 @@ class VolumeButton {
     Hide() {
         this.menuOpen = false
         this.#volumeSlider.style.display = "none"
-        localStorage.setItem("volume", AudioPlayer.instance.Volume)
         this.#volumeButton.classList.remove("active")
+        try {
+            localStorage.setItem("volume", this.#volumeSlider.value)
+        } catch (e) {
+            console.error(e)
+        }
     }
 }

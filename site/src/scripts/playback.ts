@@ -51,6 +51,10 @@ class PlaybackController {
         if (audio) {
             audio.Play()
         }
+        else if (PlayState.awaitingSong) {
+            this.PlaySong(PlayState.awaitingSong)
+            PlayState.awaitingSong = undefined
+        }
     }
     public static Pause() {
         const audio = PlaybackController.HasControl
@@ -161,5 +165,16 @@ class PlaybackController {
             !isMobile
         )
         SongFullscreen.UpdateContextMenuInfo("no", "swarmfm")
+    }
+
+    public static OnPlayPause(callback: (state: boolean) => void) {
+        this.Audio.OnPlayPause(callback)
+        this.Youtube.OnPlayPause(callback)
+        this.SwarmFM.OnPlayPause(callback)
+    }
+    public static OnTimeUpdate(callback: (played: number, duration: number, loaded: number) => void) {
+        this.Audio.OnTimeUpdate(callback)
+        this.Youtube.OnTimeUpdate(callback)
+        this.SwarmFM.OnTimeUpdate(callback)
     }
 }

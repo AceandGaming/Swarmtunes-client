@@ -87,8 +87,11 @@ class SeekBar {
         const rect = this.#seekBar.getBoundingClientRect();
         let fraction = (event.clientX - rect.left) / rect.width;
         fraction = Math.min(1, Math.max(0, fraction));
-        AudioPlayer.instance.Seek(fraction);
-        YoutubePlayer.instance.Seek(fraction);
+
+        const player = PlaybackController.HasControl
+        if (player) {
+            player.Seek(fraction);
+        }
     }
     OnSeekMobile(event) {
         if (!this.#dragging) {

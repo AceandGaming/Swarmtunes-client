@@ -113,7 +113,12 @@ function OnChangeThemeClick() {
         currentTheme = 0;
     }
     UpdateTheme();
-    localStorage.setItem("theme", currentTheme);
+    try {
+        localStorage.setItem("theme", currentTheme);
+    }
+    catch (e) {
+        console.error("Failed to save theme", e)
+    }
 }
 
 function HideFooter() {

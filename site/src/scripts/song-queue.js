@@ -24,7 +24,12 @@ class SongQueue {
         return this.#songQueue.slice(this.#queuePointer)
     }
     static set suffleSongs(value) {
-        localStorage.setItem("suffle", value)
+        try {
+            localStorage.setItem("suffle", value)
+        }
+        catch (e) {
+            console.error("Failed to save suffle state", e)
+        }
         const song = this.currentSong
         this.UpdateQueue()
         for (const callback of this.#callbacks) {
