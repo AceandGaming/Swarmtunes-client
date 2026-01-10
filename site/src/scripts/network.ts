@@ -16,20 +16,19 @@ class Network {
     static get swarmFMURL() {
         return "https://swarmfm.boopdev.com"
     }
-    static get userToken() {
-        return sessionStorage.getItem("userToken")
-    }
     static IsLoggedIn() {
-        return this.userToken !== null
+        return this.username !== undefined
     }
     static IsAdmin() {
-        return sessionStorage.getItem("isAdmin") == "true"
+        return this.isAdmin
     }
     static IsOnline() {
         return this.isOnline
     }
 
     private static isOnline = true
+    private static isAdmin = false
+    private static username: string | undefined
 
     static async CheckOnline() {
         try {
@@ -40,47 +39,40 @@ class Network {
             this.isOnline = false
         }
     }
-    static async GetNewSession() {
-        const response = await this.SafeFetch("me/session", "GET")
+    static async GetSession() {
+        if (!this.IsOnline()) {
+            this.username = localStorage.getItem("username") || undefined
+            return
+        }
+        const response = await fetch(`${this.serverURL}/me/session`, {
+            method: "GET",
+            credentials: "include"
+        })
         if (!response.ok) {
             return
         }
         const json = await response.json()
-        let activateCallbacks = false
-        if (!this.IsLoggedIn()) {
-            activateCallbacks = true
-        }
-        sessionStorage.setItem("userToken", json["token"])
-        sessionStorage.setItem("isAdmin", json["isAdmin"])
-        if (activateCallbacks) {
-            Login.CallLoginCallbacks()
-        }
+        this.username = json["username"]
+        this.isAdmin = json["isAdmin"]
+
+        localStorage.setItem("username", this.username || "")
+
+        Login.CallLoginCallbacks()
+
     }
     static async SafeFetch(url: string, method: "GET" | "POST" | "DELETE" | "PUT" | "PATCH", body?: Json): Promise<Response> {
         const response = await fetch(`${this.serverURL}/${url}`, {
             method: method,
             headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.userToken}`,
+                "Content-Type": "application/json"
             },
-            //@@release-only@@ credentials: "include",
+            credentials: "include",
             body: JSON.stringify(body),
         })
         if (!response.ok && response.status == 401) {
-            //@@release-only@@if (response.headers.get("token-expired") == "true") {
-            //@@release-only@@    sessionStorage.removeItem("userToken")
-            //@@release-only@@    sessionStorage.removeItem("isAdmin")
-            //@@release-only@@}
-            if (response.headers.get("session-expired") == "true") {
-                sessionStorage.removeItem("userToken")
-                sessionStorage.removeItem("isAdmin")
-                await this.GetNewSession()
-                if (!this.IsLoggedIn()) {
-                    window.location.reload()
-                }
-                else {
-                    return await this.SafeFetch(url, method, body)
-                }
+            if (response.headers.get("invaild-token") == "true") {
+                //window.location.reload()
+                throw new Error("Invalid token")
             }
         }
         return response
@@ -377,11 +369,22 @@ class Network {
         return playlists
     }
     static async GetPlaylistMP3s(id: id) {
+        const response = await fetch(
+            `${this.serverURL}/files/playlist/${id}`,
+            { method: "GET", credentials: "include" }
+        )
+
+        if (!response.ok) throw new Error("Download failed")
+
+        const blob = await response.blob()
+        const url = URL.createObjectURL(blob)
+
         const a = document.createElement("a")
-        a.referrerPolicy = "no-referrer"
-        a.href = `${this.serverURL}/files/playlist/${id}?session=${this.userToken}`
+        a.href = url
+        a.download = "playlist.zip"
         a.click()
-        a.remove()
+
+        URL.revokeObjectURL(url)
     }
     static async CreatePlaylist(name: string) {
         const response = await this.Post(`playlists`, { name: name })

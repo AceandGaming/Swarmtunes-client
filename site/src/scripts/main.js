@@ -19,6 +19,7 @@ if ("serviceWorker" in navigator) {
 const colourThief = new ColorThief()
 async function AsyncCrap() {
     await Network.CheckOnline()
+    await Network.GetSession()
     await SongDatabase.Initalise()
     await PlaylistDatabase.Initalise()
 
@@ -26,7 +27,7 @@ async function AsyncCrap() {
         if (!Network.IsOnline()) {
             Network.CheckOnline()
         }
-    }, 60000)
+    }, 10000)
 }
 
 let isNewSession = !sessionStorage.getItem('visited')
@@ -42,6 +43,8 @@ if (isMobile) {
         console.error(e)
     }
 }
+
+PlaylistTab.ShowLoggedOutScreen()
 
 function OnLogin(isAdmin) {
     document.getElementById("header-login-button").textContent = "Log Out"
@@ -77,7 +80,6 @@ function CreateUI() {
         CurrentSongBar.CreateMobile()
         CreateButton(true)
     }
-    PlaylistTab.ShowLoggedOutScreen()
     PopulateSearch("")
     ContextMenu.Initalise()
 
@@ -129,13 +131,6 @@ function LoadUrlBar() {
 AsyncCrap().then(() => {
     CreateUI()
     LoadUrlBar()
-
-    if (Network.IsLoggedIn()) {
-        Login.CallLoginCallbacks()
-    }
-    else {
-        Network.GetNewSession()
-    }
 })
 
 function UpdateNavigatorTime(played, duration, loaded) {
