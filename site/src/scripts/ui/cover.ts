@@ -25,6 +25,7 @@ class Cover extends HTMLElement {
             return
         }
         this.#src = value
+        this.setAttribute("src", value)
         this.#UpdateImage()
     }
     get colour() {

@@ -55,7 +55,13 @@ class Network {
         this.username = json["username"]
         this.isAdmin = json["isAdmin"]
 
-        localStorage.setItem("username", this.username || "")
+
+        try {
+            localStorage.setItem("username", this.username || "")
+        }
+        catch (e) {
+            console.error("Failed to save username", e)
+        }
 
         Login.CallLoginCallbacks()
 
@@ -214,7 +220,7 @@ class Network {
     }
     static GetCover(name: string, size: number = 128) {
         if (!name) {
-            //console.error("Invalid cover name", name)
+            console.warn("Invalid cover name", name)
             return "src/assets/no-song.png"
         }
         return `${this.serverURL}/covers/${encodeURIComponent(name)}?size=${512}`
@@ -310,9 +316,16 @@ class Network {
             remeber: remeber
         })
         const json = await response.json()
-        if (json["token"]) {
-            sessionStorage.setItem("userToken", json["token"])
-            sessionStorage.setItem("isAdmin", json["isAdmin"])
+        if (json["success"]) {
+            this.username = username
+            this.isAdmin = json["isAdmin"]
+
+            try {
+                localStorage.setItem("username", this.username || "")
+            }
+            catch (e) {
+                console.error("Failed to save username", e)
+            }
         } else {
             return json["detail"]
         }

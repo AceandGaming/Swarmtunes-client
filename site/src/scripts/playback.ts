@@ -147,7 +147,7 @@ class PlaybackController {
             song.Artist,
             song.Singers,
             Network.GetCover(song.Cover, 512),
-            song.Date.toDateString()
+            "Released: " + song.PrettyDate
         )
         SongFullscreen.UpdateContextMenuInfo(song.Id, "now-playing-item")
     }

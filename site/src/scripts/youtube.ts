@@ -103,13 +103,19 @@ class YoutubePlayer extends AudioBase {
         if (this.player || this.loading) {
             return
         }
+        const toast = ToastManager.Toast("Fetching Youtube Player...", "info", 0)
         this.loading = true
         this.iframe.src = "https://www.youtube-nocookie.com/embed/?enablejsapi=1"
         const api = await this.LoadYTAPI() as any
 
+        toast.message = "Creating Player..."
         const player = new api.Player("youtube-player", {})
 
         player.addEventListener("onReady", () => {
+            toast.message = "Ready!"
+            setTimeout(() => {
+                toast?.Hide()
+            }, 2000)
             player.setVolume(this.volume * 100)
             this.ready = true
         })

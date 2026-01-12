@@ -1,16 +1,16 @@
 class ToastManager {
-    static #element
+    static #element: HTMLElement
 
     static Create() {
         this.#element = document.createElement("div")
         this.#element.id = "toast-manager"
         document.body.append(this.#element)
     }
-    static AddToast(toast) {
+    static AddToast(toast: ToastUI) {
         this.#element.append(toast)
     }
-    static Toast(message, type = "none", duration = 3, htmlContent = false) {
-        const toast = document.createElement("swarmtunes-toast")
+    static Toast(message: string, type: "none" | "info" | "warning" | "error" = "none", duration = 3, htmlContent = false): ToastUI {
+        const toast = document.createElement("swarmtunes-toast") as ToastUI
         toast.message = message
         toast.duration = duration
         toast.type = type
