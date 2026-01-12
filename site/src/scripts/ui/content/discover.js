@@ -32,8 +32,8 @@ async function PopulateDiscover() {
     orginalSongs.sort((a, b) => b.Date - a.Date)
     mashupSongs.sort((a, b) => b.Date - a.Date)
 
-    AddCategoryToDiscover(new AlbumCatagory("Recent Streams", albums))
-    AddCategoryToDiscover(new SongCatagory("Original Songs", orginalSongs))
+    AddCategoryToDiscover(new AlbumCatagory("Collections", albums))
+    AddCategoryToDiscover(new SongCatagory("Originals", orginalSongs))
     AddCategoryToDiscover(new SongCatagory("Mashups", mashupSongs))
 
     LoadingText.Detach(discoverPage)

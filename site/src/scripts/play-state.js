@@ -1,7 +1,7 @@
 class PlayState {
     static awaitingSong = undefined
 
-    static Update({ currentSongId, played, songIds } = {}) {
+    static Update({ currentSongId, played, songIds, playing } = {}) {
         const json = localStorage.getItem("playState")
         let data = {}
         if (json) {
@@ -16,6 +16,9 @@ class PlayState {
         }
         if (songIds) {
             data.queue = songIds
+        }
+        if (playing !== undefined) {
+            data.playing = playing
         }
         try {
             localStorage.setItem("playState", JSON.stringify(data))
@@ -48,7 +51,7 @@ class PlayState {
             return
         }
         PlaybackController.DisplaySong(song)
-        if (!isNewSession) {
+        if (!isNewSession && data.playing) {
             PlaybackController.PlaySong(song)
             if (data.played) {
                 let die = false //POV: You haven't implemented the ablity to remove callbacks
@@ -76,6 +79,9 @@ class PlayState {
         PlaybackController.OnTimeUpdate((played, duration, loaded) => {
             PlayState.Update({ played: played })
         })
+        setInterval(() => {
+            PlayState.Update({ playing: PlaybackController.Playing })
+        }, 500)
         this.Load()
     }
 }

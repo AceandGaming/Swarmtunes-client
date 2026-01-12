@@ -114,7 +114,7 @@ class Cover extends HTMLElement {
             image.src = this.#src + "&retry=" + Date.now()
             if (atempts++ > 3) {
                 image.src = "src/assets/no-song.png"
-                console.error(`Failed to load image: ${this.#src}`)
+                console.error(`Failed to load image: "${this.#src}"`)
             }
         }, 1000)
 

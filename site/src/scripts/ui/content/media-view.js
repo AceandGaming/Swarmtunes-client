@@ -5,6 +5,7 @@ class MediaView {
     _title
     _discription
     _actions
+    _songs
 
     _lastMediaId
 
@@ -63,7 +64,14 @@ class MediaView {
         actions.classList.add("actions")
 
         textContainer.append(title, discription)
-        content.append(coverContainer, textContainer, actions)
+
+        const info = document.createElement("div")
+        info.classList.add("info")
+        info.append(coverContainer, textContainer)
+
+        const spacer = document.createElement("hr")
+
+        content.append(info, actions, spacer)
 
         MediaView._songList = new SongList([], MediaView.OnItemClick, "media-item")
 
@@ -78,7 +86,24 @@ class MediaView {
         document.getElementById("content").appendChild(element)
     }
     static _PopulateActions() {
+        MediaView._actions.innerHTML = ""
 
+        const searchBox = document.createElement("input")
+        searchBox.type = "text"
+        searchBox.placeholder = "Search"
+        searchBox.addEventListener("input", (event) => {
+            const query = event.target.value
+            const matches = []
+            for (const song of MediaView._songs) {
+                if (song.title.toLowerCase().includes(query.toLowerCase())) {
+                    matches.push(song)
+                }
+            }
+            MediaView._songList.songs = matches
+            MediaView._songList.Update()
+        })
+
+        MediaView._actions.append(searchBox)
     }
     static _UpdateContent(title, discription, coverUrl) {
         MediaView._title.innerHTML = ReplaceEmotesOfString(title)
@@ -96,6 +121,7 @@ class MediaView {
         function Update(songs) {
             MediaView._songList.songs = songs
             MediaView._songList.Update()
+            MediaView._songs = songs
             onSongsLoaded()
         }
         MediaView._songList.Hide()

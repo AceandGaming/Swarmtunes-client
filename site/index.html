@@ -63,6 +63,16 @@
       font-size: 35px;
     }
 
+    #loading-screen .disclaimer {
+      position: absolute;
+      bottom: 25px;
+      max-width: 90vw;
+      font-size: 15px;
+      text-align: center;
+      white-space: pre-wrap;
+      color: grey;
+    }
+
 
     @media (max-width: 500px) {
       #loading-screen {
@@ -98,6 +108,7 @@
   <div id="loading-screen">
     <img src="icon.png">
     <div class="loading-text"></div>
+    <span class="disclaimer">Swarmtunes is a fan made site and is not associated with Vedal, Neuro-sama or SwarmFM</span>
   </div>
 
 
@@ -128,8 +139,7 @@
             </div>
           </div>
           <div id="discover">
-            <button id="swarmfm-button" title="Play SwarmFM!" onclick=OnSwarmFMButtonClick()
-              data-rightclickcategory="swarmfm"></button>
+            <button id="swarmfm-button" title="Play SwarmFM!" onclick=OnSwarmFMButtonClick() data-rightclickcategory="swarmfm"></button>
           </div>
           <div id="search">
             <input id="search-bar" type="text" placeholder="search for a song!" oninput=OnSearchValueChange(event)>
@@ -182,6 +192,7 @@
   <script src="dist/ui/popups/create-playlist.js"></script>
   <script src="dist/ui/popups/select-playlist.js"></script>
   <script src="dist/ui/popups/rename-playlist.js"></script>
+  <script src="dist/ui/popups/share-link.js"></script>
   <script src="dist/playlist-manager.js"></script>
   <script src="dist/ui/popups/confirm-action.js"></script>
   <script src="dist/audio-base.js"></script>

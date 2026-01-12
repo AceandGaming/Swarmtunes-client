@@ -251,6 +251,12 @@ button:active:not(.icon-button) {
     content: "";
 }
 
+hr {
+    width: 100%;
+    margin: 2px auto;
+    color: var(--subtext-colour);
+}
+
 .loading-text {
     width: fit-content;
     font-weight: bold;

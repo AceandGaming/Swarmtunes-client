@@ -3,7 +3,7 @@ interface AlbumPrams {
     date: string
     singers: string[]
     songIds?: id[]
-    coverType?: "neuro" | "evil" | "duet" | null
+    cover: string
 }
 
 class Album {
@@ -11,7 +11,7 @@ class Album {
     get Date() { return this.date }
     get Singers() { return this.singers }
     get SongIds() { return this.songIds }
-    get CoverType() { return this.coverType }
+    get Cover() { return this.cover }
 
     get Songs() {
         if (!this.songsLoaded) {
@@ -29,19 +29,11 @@ class Album {
     get Title() {
         return this.singers.join(" and ") + " Karaoke"
     }
-    get Cover() {
-        if (this.songIds.length === 1) {
-            if (this.songsLoaded) {
-                return this.songs[0]?.Cover
-            }
-        }
-        return this.coverType
-    }
 
     private readonly id: id
     private date: Date
     private singers: string[]
-    private coverType: "neuro" | "evil" | "duet" | null
+    private cover: string
     private songIds: id[]
     private songs: Array<Song>;
     private songsLoaded: boolean;
@@ -50,7 +42,7 @@ class Album {
         this.id = options.id
         this.date = new Date(options.date)
         this.singers = options.singers
-        this.coverType = options.coverType ?? null
+        this.cover = options.cover ?? null
         this.songIds = options.songIds ?? []
         this.songs = []
         this.songsLoaded = false

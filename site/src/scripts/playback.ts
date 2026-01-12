@@ -45,6 +45,7 @@ class PlaybackController {
         else {
             this.Audio.Play(song)
         }
+        PlayState.Update({ playing: true })
     }
     public static Play() {
         const audio = PlaybackController.HasControl

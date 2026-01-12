@@ -2,7 +2,7 @@ let DEV_MODE = true
 //@@release-only@@ DEV_MODE = false
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=lax; path=/"
 
-window.onload = () => {
+function HideLoading() {
     document.getElementById("loading-screen").classList.add("hide")
 }
 
@@ -130,6 +130,14 @@ function LoadUrlBar() {
 }
 AsyncCrap().then(() => {
     CreateUI()
+
+    if (document.readyState == "complete") {
+        HideLoading()
+    }
+    else {
+        window.addEventListener("load", HideLoading)
+    }
+
     LoadUrlBar()
 })
 
