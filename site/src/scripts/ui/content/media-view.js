@@ -191,7 +191,7 @@ class PlaylistView {
         await MediaView._PopulateSongList(playlist, "playlist-item")
     }
     static Update() {
-        if (!MediaView.IsVisible()) {
+        if (MediaView._lastMediaId != PlaylistView.playlist.Id) {
             return
         }
         PlaylistView.Show(this.playlist)

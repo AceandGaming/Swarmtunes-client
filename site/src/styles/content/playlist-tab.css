@@ -25,7 +25,7 @@
     background-color: #ffffff30;
 }
 
-@media (max-width: 550px) {
+@media (max-width: 600px) {
     #playlists-tab {
         padding-left: 0px;
         align-items: center;

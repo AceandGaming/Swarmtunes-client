@@ -149,7 +149,7 @@ class Network {
         }
 
         let coverType: "neuro" | "evil" | "duet" | "custom" = GetCoverType(current["singer"])
-        if (current["album_cover"] != null) {
+        if (current["album_cover_id"] != null) {
             coverType = "custom"
         }
         const currentSong = new Song({
@@ -158,7 +158,7 @@ class Network {
             artist: current["artist"],
             singers: ConvertSingers(current["singer"]),
             coverType: coverType,
-            coverArt: current["album_cover"],
+            coverArt: current["album_cover_id"],
         })
 
         const nextSong = new Song({

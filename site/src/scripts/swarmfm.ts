@@ -95,9 +95,12 @@ class SwarmFM extends AudioBase {
             this.audio.currentTime = end - SwarmFM.TARGET_LATENCY
             this.audio.playbackRate = 1
         }
-        else if (!isMobile) {
-            const give = 20
+        else if (!isMobile && latency > SwarmFM.TARGET_LATENCY * 1.1) {
+            const give = 15
             this.audio.playbackRate = Math.max(1, ((latency / SwarmFM.TARGET_LATENCY) + give) / (give + 1))
+        }
+        else {
+            this.audio.playbackRate = 1
         }
     }
     private async UpdateInfo() {

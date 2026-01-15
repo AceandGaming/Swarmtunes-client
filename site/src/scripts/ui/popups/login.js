@@ -133,19 +133,21 @@ class LoginPopup extends PopupWindow {
         this.CreateButton("Signup", OnSignupCallback, false)
         this.CreateButton("Login", OnLoginCallback, false)
 
-        this.usernameInput = document.createElement("input")
-        this.usernameInput.type = "text"
-        this.usernameInput.placeholder = "Username"
-        this.usernameInput.autocomplete = "username"
-        this.usernameInput.addEventListener("input", OnUsernameInput.bind(this))
-        this.content.appendChild(this.usernameInput)
-
         this.passwordInput = document.createElement("input")
         this.passwordInput.type = "password"
         this.passwordInput.placeholder = "Password"
         this.passwordInput.autocomplete = "current-password"
         this.passwordInput.addEventListener("input", OnPasswordInput.bind(this))
-        this.content.appendChild(this.passwordInput)
+        ListenForInputSubmit(this.passwordInput, OnLoginCallback.bind(this))
+
+        this.usernameInput = document.createElement("input")
+        this.usernameInput.type = "text"
+        this.usernameInput.placeholder = "Username"
+        this.usernameInput.autocomplete = "username"
+        this.usernameInput.addEventListener("input", OnUsernameInput.bind(this))
+        ListenForInputSubmit(this.usernameInput, this.passwordInput.focus.bind(this.passwordInput))
+
+        this.content.append(this.usernameInput, this.passwordInput)
 
         this.remeberMeLabel = document.createElement("label")
         this.remeberMeLabel.textContent = "Remember me"

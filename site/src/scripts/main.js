@@ -33,7 +33,10 @@ async function AsyncCrap() {
 let isNewSession = !sessionStorage.getItem('visited')
 sessionStorage.setItem('visited', 'true');
 
-let isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+let isMobile = window.matchMedia("(pointer: coarse)").matches;
+let isTablet = isMobile && (Math.min(window.screen.width, window.screen.height) >= 768)
+
+
 if (isMobile) {
     AudioPlayer.instance.Audio.preload = "auto"
     SwarmFM.TARGET_LATENCY = 3
@@ -47,10 +50,14 @@ if (isMobile) {
 PlaylistTab.ShowLoggedOutScreen()
 
 function OnLogin(isAdmin) {
-    document.getElementById("header-login-button").textContent = "Log Out"
-    document
-        .getElementById("header-login-button")
-        .setAttribute("onclick", "OnLogoutButtonClick()")
+    const loginButton = document.getElementById("header-login-button")
+    loginButton.textContent = "Log Out"
+    loginButton.onclick = async () => {
+        const confirmation = await ConfirmAction.AskUser("Are you sure you want to log out?")
+        if (confirmation) {
+            await Network.LogOut()
+        }
+    }
     PlaylistManager.GetPlaylists().then(PlaylistTab.Populate)
 
     const authElements = Array.from(
@@ -73,7 +80,7 @@ Login.AddLoginCallback(OnLogin)
 function CreateUI() {
     ToastManager.Create()
 
-    if (window.innerWidth > 500) {
+    if (window.innerWidth > 600) {
         CurrentSongBar.CreateDesktop()
         CreateButton()
     } else {

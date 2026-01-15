@@ -121,7 +121,7 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
     #current-song-bar .singer-wrapper {
         display: none;
     }
@@ -131,15 +131,16 @@
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     #current-song-bar {
         height: 60px;
     }
 
     #current-song-bar swarmtunes-cover {
-        flex: 0 1 55px;
+        flex: 0 1 53px;
         margin: 0;
         margin-right: 5px;
+        margin-left: 2px;
     }
 
     #current-song-bar .title-container {
@@ -149,6 +150,7 @@
 
     #current-song-bar > *:nth-child(1) {
         flex: 1 1 30%;
+        height: calc(100% - 5px);
     }
 
     #current-song-bar > *:nth-child(2) {
@@ -162,9 +164,18 @@
 
     #current-song-bar .seek-bar {
         height: 4px;
+        border-radius: 0;
+    }
+
+    #current-song-bar .seek-bar * {
+        border-radius: 0;
     }
 
     #current-song-bar .media-controls {
         margin-right: 10px;
+    }
+
+    .seek-bar-container {
+        max-width: none;
     }
 }

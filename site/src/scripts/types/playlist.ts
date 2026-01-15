@@ -183,7 +183,8 @@ ContextMenu.AddCategory("playlist", [
                 ToastManager.Toast("Copied link to clipboard")
             })
             corutine.catch(() => {
-                ToastManager.Toast("Failed to copy link to clipboard", "error")
+                const window = new ShareWindow(url)
+                window.Show()
             })
         }),
         new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {

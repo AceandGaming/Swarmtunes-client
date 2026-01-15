@@ -27,15 +27,30 @@
 
 #song-fullscreen.show {
     visibility: visible;
+    animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
 }
 
 
 #song-fullscreen .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 50px;
+    right: 50px;
     width: 35px;
     height: 35px;
+}
+
+#song-fullscreen .close-button .mobile {
+    display: none;
 }
 
 #song-fullscreen .swarmfm-player {
@@ -154,4 +169,20 @@
 
 #song-fullscreen .seek-bar:hover {
     height: 12px;
+}
+
+@media (max-width: 800px) {
+    #song-fullscreen .close-button {
+        top: 0px;
+        right: 50%;
+        transform: translateX(50%) scaleX(3);
+    }
+
+    #song-fullscreen .close-button .desktop {
+        display: none;
+    }
+
+    #song-fullscreen .close-button .mobile {
+        display: block;
+    }
 }

@@ -9,12 +9,21 @@ class SongFullscreen {
     static #infoContainer
     static #content
     static #wakeLock
+    static get visable() {
+        return this.#element.classList.contains("show")
+    }
 
     static Create() {
         const element = document.createElement("div")
         element.id = "song-fullscreen"
+
         const closeButton = document.createElement("button")
-        closeButton.append(LoadSVG("src/assets/icons/x.svg"))
+        const desktopIcon = LoadSVG("src/assets/icons/x.svg")
+        desktopIcon.classList.add("desktop")
+        const mobileIcon = LoadSVG("src/assets/icons/dash.svg")
+        mobileIcon.classList.add("mobile")
+
+        closeButton.append(desktopIcon, mobileIcon)
         closeButton.classList.add("close-button", "icon-button")
         closeButton.addEventListener("click", SongFullscreen.Hide.bind(SongFullscreen))
         element.appendChild(closeButton)
@@ -22,7 +31,7 @@ class SongFullscreen {
         const swarmFMPlayer = document.createElement("iframe")
         swarmFMPlayer.classList.add("swarmfm-player", "hidden")
         swarmFMPlayer.src = "about:blank"
-        swarmFMPlayer.sandbox = "allow-scripts"
+        swarmFMPlayer.sandbox = "allow-scripts allow-same-origin"
         this.#swarmFMPanel = swarmFMPlayer
 
         const content = document.createElement("div")
@@ -101,6 +110,7 @@ class SongFullscreen {
                 this.#wakeLock = null
             })
         }
+        UpdateThemeColor()
     }
     static Show() {
         this.#element.classList.add("show")
@@ -120,6 +130,10 @@ class SongFullscreen {
             corr.catch((error) => {
                 console.error("Failed to get wake lock", error)
             })
+        }
+
+        if (this.visable) {
+            UpdateThemeColor(this.#element.dataset.colour)
         }
     }
     static Display(title, artist, singers, coverUrl, date) {
@@ -144,11 +158,20 @@ class SongFullscreen {
                 hsl(${colour.h}, ${colour.s * 1.5}%, ${colour.l / 1.5}%)
             )`
             this.#element.classList.toggle("high-contrast", colour.l * 1.2 > 90)
+            this.#element.dataset.colour = `hsl(${colour.h}, ${colour.s * 2}%, ${colour.l * 1.2}%)`
+
+            if (this.visable) {
+                UpdateThemeColor(this.#element.dataset.colour)
+            }
         })
 
         this.#coverImage.src = coverUrl
     }
     static DisplaySwarmFM() {
+        this.#element.style.background = "black"
+        if (this.visable) {
+            UpdateThemeColor("black")
+        }
         if (this.#swarmFMPanel.src === "about:blank") {
             this.#swarmFMPanel.src = Network.swarmFMURL + "/player/dummy-player?from=swarmtunes&now=" + Date.now() + "&offset=" + SwarmFM.TARGET_LATENCY
         }

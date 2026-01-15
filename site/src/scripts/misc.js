@@ -131,3 +131,11 @@ function RGBToHSL(r, g, b) {
 
     return { h: h, s: s * 100, l: l * 100 };
 }
+
+function ListenForInputSubmit(input, action) {
+    input.addEventListener("keyup", (event) => {
+        if (event.key === "Enter") {
+            action()
+        }
+    })
+}

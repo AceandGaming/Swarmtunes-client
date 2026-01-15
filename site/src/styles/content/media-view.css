@@ -133,7 +133,7 @@
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 600px) {
   #media-view .cover-container {
     width: 50vw;
     margin-bottom: 5px;

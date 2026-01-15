@@ -7,6 +7,7 @@ class RenamePlaylistPopup extends PopupWindow {
         this.input.type = "text"
         this.input.placeholder = "Playlist Name"
         this.content.appendChild(this.input)
+        ListenForInputSubmit(this.input, this.#OnButtonClick.bind(this))
 
         this.error = document.createElement("p")
         this.error.style.color = "red"

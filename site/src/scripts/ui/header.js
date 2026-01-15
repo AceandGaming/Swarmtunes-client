@@ -84,6 +84,15 @@ function OnLoginButtonClick() {
 function OnLogoutButtonClick() {
     Network.LogOut();
 }
+function UpdateThemeColor(colour) {
+    if (!colour) {
+        const root = document.documentElement;
+        const styles = getComputedStyle(root);
+        colour = styles.getPropertyValue(`--header-colour`).trim();
+    }
+    const meta = document.querySelector('meta[name="theme-color"]');
+    meta.setAttribute("content", colour);
+}
 function UpdateTheme() {
     const img = document.querySelector("#change-theme-button img");
     switch (currentTheme) {
@@ -100,12 +109,7 @@ function UpdateTheme() {
             document.documentElement.dataset.theme = "evil";
             break;
     }
-    const root = document.documentElement;
-    const styles = getComputedStyle(root);
-    const colour = styles.getPropertyValue(`--header-colour`).trim();
-    const meta = document.querySelector('meta[name="theme-color"]');
-    meta.setAttribute("content", colour);
-
+    UpdateThemeColor()
 }
 function OnChangeThemeClick() {
     currentTheme++;

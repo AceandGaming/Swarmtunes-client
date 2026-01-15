@@ -121,16 +121,28 @@ class CurrentSongBar {
 
         this.#coverImage.src = coverUrl
     }
+    static GetInfo() {
+        return {
+            title: this.#titleText.textContent,
+            artist: this.#artistText.textContent,
+            singers: this.#singersText?.textContent.split("\n"),
+            coverUrl: this.#coverImage.src
+        }
+    }
 }
 
 let lastWindowWidth = window.innerWidth
 window.addEventListener("resize", () => {
-    if (window.innerWidth > 500 && lastWindowWidth <= 500) {
+    if (window.innerWidth > 600 && lastWindowWidth <= 600) {
+        const oldInfo = CurrentSongBar.GetInfo()
         CurrentSongBar.CreateDesktop()
+        CurrentSongBar.Display(oldInfo.title, oldInfo.artist, oldInfo.singers, oldInfo.coverUrl)
         CreateButton(false)
     }
-    else if (window.innerWidth <= 500 && lastWindowWidth > 500) {
+    else if (window.innerWidth <= 600 && lastWindowWidth > 600) {
+        const oldInfo = CurrentSongBar.GetInfo()
         CurrentSongBar.CreateMobile()
+        CurrentSongBar.Display(oldInfo.title, oldInfo.artist, oldInfo.singers, oldInfo.coverUrl)
         CreateButton(true)
     }
     lastWindowWidth = window.innerWidth

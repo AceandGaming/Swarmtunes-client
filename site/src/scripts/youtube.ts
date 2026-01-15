@@ -61,7 +61,9 @@ class YoutubePlayer extends AudioBase {
         iframe.id = "youtube-player"
         iframe.src = "about:blank"
         iframe.allow = "autoplay; encrypted-media"
-        iframe.style.display = "none"
+        iframe.width = "1"
+        iframe.height = "1"
+        iframe.setAttribute("playsinline", "1");
         iframe.sandbox = "allow-scripts allow-same-origin"
 
         document.body.append(iframe)
@@ -105,7 +107,7 @@ class YoutubePlayer extends AudioBase {
         }
         const toast = ToastManager.Toast("Fetching Youtube Player...", "info", 0)
         this.loading = true
-        this.iframe.src = "https://www.youtube-nocookie.com/embed/?enablejsapi=1"
+        this.iframe.src = "https://www.youtube-nocookie.com/embed/?enablejsapi=1&playsinline=1"
         const api = await this.LoadYTAPI() as any
 
         toast.message = "Creating Player..."

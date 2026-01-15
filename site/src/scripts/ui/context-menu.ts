@@ -41,7 +41,12 @@ class ContextMenu {
 
     public static Initalise() {
         if (isMobile) {
-            this.menu = new MobileContextMenu()
+            if (isTablet) {
+                this.menu = new DesktopContextMenu()
+            }
+            else {
+                this.menu = new MobileContextMenu()
+            }
 
             document.addEventListener("contextmenu", (event) => {
                 event.preventDefault()
@@ -61,8 +66,13 @@ class ContextMenu {
 
             document.addEventListener("touchend", () => {
                 clearTimeout(timer)
-                //@ts-ignore
-                this.menu.AllowTouch()
+                if (this.menu instanceof MobileContextMenu) {
+                    this.menu.AllowTouch()
+                }
+
+            })
+            document.addEventListener("touchcancel", () => {
+                clearTimeout(timer)
             })
             document.addEventListener("touchmove", (event) => {
                 if (startPos === undefined) {
@@ -75,8 +85,9 @@ class ContextMenu {
                 const distance = Math.sqrt(Math.pow(startPos.clientX - touch.clientX, 2) + Math.pow(startPos.clientY - touch.clientY, 2))
                 if (distance > 20) {
                     clearTimeout(timer)
-                    //@ts-ignore
-                    this.menu.AllowTouch()
+                    if (this.menu instanceof MobileContextMenu) {
+                        this.menu.AllowTouch()
+                    }
                 }
             })
         }
