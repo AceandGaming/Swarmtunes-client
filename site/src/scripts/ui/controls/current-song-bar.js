@@ -3,6 +3,7 @@ class CurrentSongBar {
     static #artistText
     static #titleText
     static #singersText
+    static #sourceText
     static #element
 
     static #CreateCoverImage() {
@@ -29,6 +30,13 @@ class CurrentSongBar {
         titleContainer.append(this.#titleText, this.#artistText)
         return titleContainer
     }
+    static #CreateSourceText() {
+        const sourceText = document.createElement("span")
+        sourceText.classList.add("source-text", "sub-text")
+        sourceText.textContent = ""
+        this.#sourceText = sourceText
+        return sourceText
+    }
 
     static CreateDesktop() {
         const old = document.querySelector("#current-song-bar")
@@ -48,7 +56,8 @@ class CurrentSongBar {
         const middleContent = document.createElement("div")
         middleContent.append(
             this.#CreateTitleContainer(),
-            new SeekBar().element
+            new SeekBar().element,
+            this.#CreateSourceText()
         )
 
         const rightContent = document.createElement("div")
@@ -112,7 +121,7 @@ class CurrentSongBar {
         this.#element.setAttribute("data-id", id)
         this.#element.setAttribute("data-rightclickcategory", "song")
     }
-    static Display(title, artist, singers, coverUrl) {
+    static Display(title, artist, singers, coverUrl, source) {
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
         if (this.#singersText) {
@@ -120,6 +129,15 @@ class CurrentSongBar {
         }
 
         this.#coverImage.src = coverUrl
+        if (this.#sourceText) {
+            if (source) {
+                this.#sourceText.textContent = "Source: " + source
+            }
+            else {
+                this.#sourceText.textContent = ""
+            }
+        }
+
     }
     static GetInfo() {
         return {

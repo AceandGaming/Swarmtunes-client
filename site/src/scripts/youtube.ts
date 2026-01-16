@@ -170,10 +170,14 @@ class YoutubePlayer extends AudioBase {
 
             PlaybackController.DisplaySong(song)
             PlayState.Update({ currentSongId: song.Id })
+            this.player.pauseVideo()
+        }
+        else {
+            this.player.playVideo()
         }
         this.paused = false
         this.hasControl = true
-        this.player.pauseVideo()
+
 
         this.updateId = setInterval(() => {
             if (!this.hasControl) {

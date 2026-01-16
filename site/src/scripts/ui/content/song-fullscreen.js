@@ -4,6 +4,7 @@ class SongFullscreen {
     static #artistText
     static #titleText
     static #singersText
+    static #sourceText
     static #swarmFMPanel
     static #dateText
     static #infoContainer
@@ -85,7 +86,11 @@ class SongFullscreen {
         info.append(infoContainer)
 
         const seekBar = new SeekBar()
-        controls.append(seekBar.element)
+        const sourceText = document.createElement("h2")
+        sourceText.classList.add("sub-text", "source-text")
+        sourceText.textContent = ""
+        this.#sourceText = sourceText
+
         let mediaControls
         if (isMobile) {
             mediaControls = MediaControls.Create({ skipping: true, shuffle: true, addToPlaylist: true, size: 40, gap: 10 })
@@ -93,7 +98,7 @@ class SongFullscreen {
         else {
             mediaControls = MediaControls.Create({ skipping: true, shuffle: true, volume: true, size: 40, gap: 10 })
         }
-        controls.append(mediaControls)
+        controls.append(seekBar.element, sourceText, mediaControls)
 
         content.append(info, controls)
         element.append(content, swarmFMPlayer)
@@ -136,7 +141,7 @@ class SongFullscreen {
             UpdateThemeColor(this.#element.dataset.colour)
         }
     }
-    static Display(title, artist, singers, coverUrl, date) {
+    static Display(title, artist, singers, coverUrl, date, source) {
         this.#swarmFMPanel.classList.add("hidden")
         this.#content.classList.remove("hidden")
 
@@ -149,6 +154,13 @@ class SongFullscreen {
         }
 
         this.#dateText.textContent = date
+
+        if (source) {
+            this.#sourceText.textContent = "Source: " + source
+        }
+        else {
+            this.#sourceText.textContent = ""
+        }
 
 
         this.#coverImage.addEventListener("load", (event) => {
@@ -175,6 +187,7 @@ class SongFullscreen {
         if (this.#swarmFMPanel.src === "about:blank") {
             this.#swarmFMPanel.src = Network.swarmFMURL + "/player/dummy-player?from=swarmtunes&now=" + Date.now() + "&offset=" + SwarmFM.TARGET_LATENCY
         }
+        this.#element.classList.remove("high-contrast")
         this.#swarmFMPanel.classList.remove("hidden")
         this.#content.classList.add("hidden")
     }

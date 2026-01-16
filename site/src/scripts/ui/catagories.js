@@ -31,7 +31,7 @@ function CreateCatagoryItemElement(title, id, imageSource, onClickEvent, type, o
     const element = document.createElement("div")
     element.classList.add("catagory-item", type)
     element.setAttribute("data-id", id)
-    element.setAttribute("onclick", onClickEvent)
+    element.onclick = onClickEvent
     element.setAttribute("data-category", type)
 
     const wrapper = document.createElement("div")
@@ -100,13 +100,29 @@ class Catagory {
     }
 }
 class SongCatagory extends Catagory {
+
     AddChildren(display) {
+        function OnClick(event) {
+            const id = event.target.dataset.id
+            AudioPlayer.instance.PrepForSong()
+            NowPlaying.sourceId = ""
+            SongRequester.GetSong(id).then((song) => {
+                if (song === undefined) {
+                    console.warn("Song clicked with no song")
+                    return
+                }
+                SongQueue.LoadSongs(this.items)
+                SongQueue.UpdateQueue(song)
+                PlaybackController.PlaySong(song)
+            })
+
+        }
         for (const song of this.items) {
             display.appendChild(CreateCatagoryItemElement(
                 song.Title,
                 song.Id,
                 Network.GetCover(song.Cover, 256),
-                "OnSongClick(event)",
+                OnClick.bind(this),
                 "song",
                 `<img src="src/assets/icons/note.png">`,
                 "Song"
@@ -121,7 +137,7 @@ class AlbumCatagory extends Catagory {
                 album.PrettyDate,
                 album.Id,
                 Network.GetCover(album.Cover, 256),
-                "OnAlbumClick(event)",
+                OnAlbumClick,
                 "album",
                 `<img src="src/assets/icons/disc.svg">`,
                 "Album"
@@ -136,7 +152,7 @@ class PlaylistCatagory extends Catagory {
                 playlist.Title,
                 playlist.Id,
                 Network.GetCover(playlist.Cover, 256),
-                "OnPlaylistClick(event)",
+                OnPlaylistClick,
                 "playlist",
                 `<img src="src/assets/icons/playlist.svg">`,
                 "Playlist"

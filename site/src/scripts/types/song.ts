@@ -107,7 +107,6 @@ function OnSongClick(event: any) {
             console.warn("Song clicked with no song")
             return
         }
-        // @ts-ignore
         PlaybackController.PlaySong(song)
         SongQueue.LoadSingleSong(song)
     })
