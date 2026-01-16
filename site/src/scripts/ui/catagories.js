@@ -121,7 +121,7 @@ class SongCatagory extends Catagory {
             display.appendChild(CreateCatagoryItemElement(
                 song.Title,
                 song.Id,
-                Network.GetCover(song.Cover, 256),
+                song.CoverUrl,
                 OnClick.bind(this),
                 "song",
                 `<img src="src/assets/icons/note.png">`,

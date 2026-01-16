@@ -157,8 +157,7 @@ class Network {
             title: current["name"],
             artist: current["artist"],
             singers: ConvertSingers(current["singer"]),
-            coverType: coverType,
-            coverArt: current["album_cover_id"],
+            cover: current["album_cover_id"] ?? coverType,
         })
 
         const nextSong = new Song({
@@ -166,13 +165,12 @@ class Network {
             title: next["name"],
             artist: next["artist"],
             singers: ConvertSingers(next["singer"]),
-            coverType: GetCoverType(next["singer"]),
         })
 
         const position = json["position"]
         const duration = current["duration"]
 
-        return new SwarmFMInfo(currentSong, nextSong, position, duration)
+        return new SwarmFMInfo(currentSong, nextSong, position, duration, coverType == "custom")
     }
     static async GetSong(id: id | id[]) {
         let ids = EnsureArray(id).slice()
@@ -218,7 +216,7 @@ class Network {
         const blob = await response.blob()
         return blob
     }
-    static GetCover(name: string, size: number = 128) {
+    static GetCover(name: string, size: number = 512) {
         if (!name) {
             console.warn("Invalid cover name", name)
             return "src/assets/no-song.png"

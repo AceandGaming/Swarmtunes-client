@@ -3,10 +3,9 @@ interface SongPrams {
     title: string,
     artist: string,
     singers: string[],
-    coverType: "neuro" | "evil" | "duet" | "custom",
     date?: string,
     isOriginal?: boolean,
-    coverArt?: string | null,
+    cover?: string | null,
     youtubeId?: string | null
 }
 
@@ -17,7 +16,6 @@ class Song {
             title: "Unavailable",
             artist: "offline",
             singers: ["Offline"],
-            coverType: "duet",
         })
     }
 
@@ -26,14 +24,11 @@ class Song {
     get Title() { return this.title }
     get Artist() { return this.artist }
     get Singers() { return this.singers }
-    get CoverType() { return this.coverType }
     get Date() { return this.date }
     get IsOriginal() { return this.isOriginal }
     get YoutubeId() { return this.youtubeId }
+    get CoverArt() { return this.coverArt }
 
-    get HasCustomCover() {
-        return this.coverType == "custom"
-    }
     get PrettyDate() {
         return this.date.toLocaleDateString("en-AU", {
             day: "numeric",
@@ -41,22 +36,14 @@ class Song {
             year: "numeric",
         })
     }
-    get Cover(): string {
-        if (this.HasCustomCover) {
-            if (this.coverArt == null) {
-                console.error("Song has custom cover but no cover art", `Type: ${this.coverType}, Art: ${this.coverArt}`)
-            }
-            // @ts-ignore
-            return this.coverArt
-        }
-        return this.coverType
+    get CoverUrl(): string {
+        return this.coverArt ? Network.GetCover(this.coverArt) : "src/assets/no-song.png"
     }
 
     private readonly id: id
     private title: string
     private artist: string
     private singers: string[]
-    private coverType: "neuro" | "evil" | "duet" | "custom"
     private date: Date
     private isOriginal: boolean
     private readonly coverArt: string | null
@@ -67,10 +54,9 @@ class Song {
         this.title = options.title
         this.artist = options.artist
         this.singers = options.singers
-        this.coverType = options.coverType
         this.date = options.date ? new Date(options.date) : new Date()
         this.isOriginal = options.isOriginal ?? false
-        this.coverArt = options.coverArt ?? null
+        this.coverArt = options.cover ?? null
         if (options.title === "mashup" && options.date) {
             this.title = `${this.date.getFullYear()} Mashup`
         }
@@ -86,10 +72,9 @@ class Song {
             title: this.title,
             artist: this.artist,
             singers: this.singers,
-            coverType: this.coverType,
             date: this.date.toISOString(),
             isOriginal: this.isOriginal,
-            coverArt: this.coverArt,
+            cover: this.coverArt,
             youtubeId: this.youtubeId
         }
     }

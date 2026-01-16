@@ -147,7 +147,7 @@ class PlaybackController {
             song.Title,
             song.Artist,
             song.Singers,
-            Network.GetCover(song.Cover, 512),
+            song.CoverUrl,
             "Released: " + song.PrettyDate,
             false,
             song.YoutubeId ? "Youtube" : "MP3"
@@ -155,9 +155,12 @@ class PlaybackController {
         SongFullscreen.UpdateContextMenuInfo(song.Id, "now-playing-item")
     }
     public static DisplaySwarmFMInfo(info: SwarmFMInfo) {
-        let cover = Network.GetCover(info.currentSong.Cover, 512)
-        if (info.currentSong.HasCustomCover) {
-            cover = Network.swarmFMURL + "/assets/" + info.currentSong.Cover
+        let cover
+        if (info.customArt) {
+            cover = Network.swarmFMURL + "/assets/" + info.currentSong.CoverArt
+        }
+        else {
+            cover = info.currentSong.CoverUrl
         }
         this.Display(
             info.currentSong.Title,

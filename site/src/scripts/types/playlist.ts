@@ -3,7 +3,7 @@ interface PlaylistPrams {
     title: string
     singers: String[]
     date: string
-    coverType?: "neuro" | "evil" | "duet" | null
+    cover?: "neuro" | "evil" | "duet" | null
     songIds?: id[]
 }
 
@@ -27,7 +27,7 @@ class Playlist {
     get Cover() {
         if (this.songIds.length === 1) {
             if (this.songsLoaded) {
-                return this.songs[0]?.Cover
+                return this.songs[0]?.CoverArt
             }
         }
         return this.coverType
@@ -47,7 +47,7 @@ class Playlist {
         this.title = options.title
         this.singers = options.singers
         this.date = new Date(options.date)
-        this.coverType = options.coverType ?? null
+        this.coverType = options.cover ?? null
         this.songIds = options.songIds ?? []
         this.songs = []
         this.songsLoaded = false

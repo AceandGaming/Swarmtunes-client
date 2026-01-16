@@ -3,7 +3,8 @@ class SwarmFMInfo {
         public currentSong: Song,
         public nextSong: Song,
         public position: number,
-        public duration: number
+        public duration: number,
+        public customArt: boolean
     ) { }
 }
 class SwarmFM extends AudioBase {
