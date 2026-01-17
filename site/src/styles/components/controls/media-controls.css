@@ -1,9 +1,9 @@
-.media-controls {
+swarmtunes-media-controls {
     display: flex;
     justify-content: left;
 }
 
-.media-controls button {
+swarmtunes-media-controls button {
     pointer-events: all;
     cursor: pointer;
     padding: 0;
@@ -12,50 +12,50 @@
     margin: auto 0;
 }
 
-.media-controls button.hidden {
+swarmtunes-media-controls button.hidden {
     display: none;
 }
 
-.media-controls > :first-child:not(.next) {
+swarmtunes-media-controls > :first-child:not(.next) {
     margin-right: var(--endGap)
 }
 
-.media-controls > :last-child:not(.previous) {
+swarmtunes-media-controls > :last-child:not(.previous) {
     margin-left: var(--endGap)
 }
 
-.media-controls button.next,
-.media-controls button.previous {
+swarmtunes-media-controls button.next,
+swarmtunes-media-controls button.previous {
     transform: scaleX(1.5);
     aspect-ratio: 3/2;
 }
 
-.media-controls button.play-pause {
+swarmtunes-media-controls button.play-pause {
     display: contents;
 }
 
-.media-controls button.play-pause * {
+swarmtunes-media-controls button.play-pause * {
     width: inherit;
     height: inherit;
 }
 
-.media-controls button.play-pause .pause {
+swarmtunes-media-controls button.play-pause .pause {
     display: none;
 }
 
-.media-controls button.play-pause.playing .pause {
+swarmtunes-media-controls button.play-pause.playing .pause {
     display: block;
 }
 
-.media-controls button.play-pause.playing .play {
+swarmtunes-media-controls button.play-pause.playing .play {
     display: none;
 }
 
-.media-controls button.shuffle.active {
+swarmtunes-media-controls button.shuffle.active {
     color: #fff
 }
 
-.media-controls button.shuffle.flip {
+swarmtunes-media-controls button.shuffle.flip {
     animation: shuffle-flip 0.1s linear;
 }
 

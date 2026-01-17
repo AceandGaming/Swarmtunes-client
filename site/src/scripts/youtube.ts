@@ -2,8 +2,6 @@ declare var YT: any;
 declare var onYouTubeIframeAPIReady: () => void;
 
 class YoutubePlayer extends AudioBase {
-    static instance = new YoutubePlayer()
-
     public get Audio(): HTMLAudioElement {
         throw new Error("Method not implemented.");
     }
@@ -42,6 +40,19 @@ class YoutubePlayer extends AudioBase {
     }
     public get CurrentSong(): Song | undefined {
         return this.currentSong
+    }
+    get Metadata(): Metadata | null {
+        if (!this.currentSong) {
+            return null
+        }
+        return {
+            title: this.currentSong.Title,
+            artist: this.currentSong.Artist,
+            singers: this.currentSong.Singers,
+            coverUrl: this.currentSong.CoverArt || "",
+            date: this.currentSong.PrettyDate,
+            audioSource: "Youtube"
+        }
     }
 
     private iframe: HTMLIFrameElement
@@ -148,9 +159,6 @@ class YoutubePlayer extends AudioBase {
     }
 
     public async Play(song?: Song) {
-        if (PlaybackController.HasControl != this && PlaybackController.HasControl) {
-            PlaybackController.HasControl.Clear()
-        }
         if (!this.ready) {
             await this.WaitForReady()
         }
@@ -168,8 +176,6 @@ class YoutubePlayer extends AudioBase {
             this.player.setPlaybackQuality('small');
 
 
-            PlaybackController.DisplaySong(song)
-            PlayState.Update({ currentSongId: song.Id })
             this.player.pauseVideo()
         }
         else {
@@ -192,8 +198,6 @@ class YoutubePlayer extends AudioBase {
             }
             this.CallCallbacks("timeupdate")
         }, 500)
-
-        PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })
     }
     public Pause(): void {
         this.player?.pauseVideo()

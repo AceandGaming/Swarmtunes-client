@@ -1,19 +1,15 @@
 class PlaybackController {
     public static get HasControl(): AudioBase | null {
         if (this.SwarmFM.HasControl) {
-            return SwarmFM.instance
+            return this.SwarmFM
         }
         else if (this.Audio.HasControl) {
-            return AudioPlayer.instance
+            return this.Audio
         }
         else if (this.Youtube.HasControl) {
-            return YoutubePlayer.instance
+            return this.Youtube
         }
         return null
-    }
-    public static get Playing(): boolean {
-        const audio = PlaybackController.HasControl
-        return audio ? !audio.Paused : false
     }
     public static get CurrentSong(): Song | undefined {
         if (this.Audio.HasControl) {
@@ -24,164 +20,96 @@ class PlaybackController {
         }
         return undefined
     }
+    public static get Audio() {
+        return this.audio
+    }
+    public static get SwarmFM() {
+        return this.swarmfm
+    }
+    public static get Youtube() {
+        return this.youtube
+    }
 
-    private static get Audio() {
-        return AudioPlayer.instance
-    }
-    private static get SwarmFM() {
-        return SwarmFM.instance
-    }
-    private static get Youtube() {
-        return YoutubePlayer.instance
+    public static get Playing(): boolean {
+        return this.HasControl ? !this.HasControl.Paused : false
     }
 
-    public static PlaySong(song: Song) {
-        if (!song) {
+    public static get Shuffle(): boolean {
+        return localStorage.getItem("suffle") === "true"
+    }
+    public static set Shuffle(value: boolean) {
+        localStorage.setItem("suffle", value.toString())
+    }
+
+
+
+    private static callbacks: { [key: string]: any[] } = {}
+    private static audio = new AudioPlayer()
+    private static swarmfm = new SwarmFM()
+    private static youtube = new YoutubePlayer()
+
+    private static CallCallbacks(name: string, prams: any) {
+        if (this.callbacks[name]) {
+            this.callbacks[name].forEach((callback: any) => callback(prams))
+        }
+    }
+    public static AddCallback(name: string, callback: any) {
+        if (!this.callbacks[name]) {
+            this.callbacks[name] = []
+        }
+        this.callbacks[name].push(callback)
+    }
+
+    public static NextSong() {
+        const song = SongQueue.Next()
+        this.Play(song)
+    }
+    public static PreviousSong() {
+        const song = SongQueue.Previous()
+        this.Play(song)
+    }
+    public static PlaySonglist(songlist: Song[], currentSong?: Song) {
+        SongQueue.PopulateQueue(songlist, this.Shuffle)
+        currentSong = currentSong || SongQueue.CurrentSong
+        if (!currentSong) {
+            console.warn("No current song")
             return
         }
-        if (song.YoutubeId) {
-            this.Youtube.Play(song)
+        this.Play(currentSong)
+    }
+
+    public static Play(song?: Song) {
+        if (song) {
+            if (song.YoutubeId) {
+                this.Youtube.Play(song)
+            }
+            else {
+                this.Audio.Play(song)
+            }
+            this.CallCallbacks("onSongChange", song)
         }
         else {
-            this.Audio.Play(song)
+            this.HasControl?.Play()
         }
-        PlayState.Update({ playing: true })
+        const metadata = this.HasControl?.Metadata
+        if (!metadata) {
+            return
+        }
+        MetadataDisplay.Display(this.HasControl.Metadata)
+        this.CallCallbacks("onMetadataChange", metadata)
+
+        this.CallCallbacks("onPlay", true)
     }
-    public static Play() {
-        const audio = PlaybackController.HasControl
-        if (audio) {
-            audio.Play()
+    public static PlaySwarmFM() {
+        this.SwarmFM.Play()
+        if (this.SwarmFM.Metadata) {
+            MetadataDisplay.Display(this.SwarmFM.Metadata)
+            this.CallCallbacks("onMetadataChange", this.SwarmFM.Metadata)
         }
-        else if (PlayState.awaitingSong) {
-            this.PlaySong(PlayState.awaitingSong)
-            PlayState.awaitingSong = undefined
-        }
+        this.CallCallbacks("onPlay", true)
     }
     public static Pause() {
-        const audio = PlaybackController.HasControl
-        if (audio) {
-            audio.Pause()
-        }
-    }
-    public static NextTrack() {
-        if (this.SwarmFM.HasControl) {
-            return
-        }
-        this.Audio.PrepForSong()
-        SongQueue.PlayNextSong()
-    }
-    public static PreviousTrack() {
-        if (this.SwarmFM.HasControl) {
-            return
-        }
-        if (AudioPlayer.instance.Played > 5) {
-            AudioPlayer.instance.Played = 0
-            return
-        }
-        if (YoutubePlayer.instance.Played > 5) {
-            YoutubePlayer.instance.Played = 0
-            return
-        }
-        this.Audio.PrepForSong()
-        SongQueue.PlayPreviousSong()
-    }
-    private static UpdateMetadata(title: string, artist: string, singers: string[], coverUrl: string) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-            title: title,
-            artist: artist,
-            album: singers.join(", "),
-            artwork: [{ src: coverUrl }],
-        })
-    }
-    public static UpdateMediaSession({ playPause = false, skipping = false, seeking = false }) {
-        const media = navigator.mediaSession
-
-        media.setActionHandler('play', null)
-        media.setActionHandler('pause', null)
-        media.setActionHandler('stop', null)
-        media.setActionHandler('nexttrack', null)
-        media.setActionHandler('previoustrack', null)
-        media.setActionHandler('seekbackward', null)
-        media.setActionHandler('seekforward', null)
-        media.setActionHandler('seekto', null)
-
-        if (playPause) {
-            media.setActionHandler('play', () => this.Play())
-            media.setActionHandler('pause', () => this.Pause())
-            media.setActionHandler('stop', () => this.Pause())
-        }
-        if (skipping) {
-            media.setActionHandler('nexttrack', () => this.NextTrack())
-            media.setActionHandler('previoustrack', () => this.PreviousTrack())
-        }
-        if (seeking) {
-            if (!isMobile) {
-                media.setActionHandler('seekbackward', (details) => {
-                    this.Audio.Skip(details.seekOffset ?? 0)
-                    this.Youtube.Skip(details.seekOffset ?? 0)
-                })
-                media.setActionHandler('seekforward', (details) => {
-                    this.Audio.Skip(details.seekOffset ?? 0)
-                    this.Youtube.Skip(details.seekOffset ?? 0)
-                })
-            }
-            media.setActionHandler('seekto', (details) => {
-                this.Audio.Played = details.seekTime ?? 0
-                this.Youtube.Played = details.seekTime ?? 0
-            })
-        }
-    }
-    public static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string, swarmfm = false, source: string = "MP3") {
-        this.UpdateMetadata(title, artist, singers, coverUrl)
-        CurrentSongBar.Display(title, artist, singers, coverUrl, source)
-        if (swarmfm) {
-            SongFullscreen.DisplaySwarmFM()
-        }
-        else {
-            SongFullscreen.Display(title, artist, singers, coverUrl, date, source)
-        }
-
-    }
-    public static DisplaySong(song: Song) {
-        this.Display(
-            song.Title,
-            song.Artist,
-            song.Singers,
-            song.CoverUrl,
-            "Released: " + song.PrettyDate,
-            false,
-            song.YoutubeId ? "Youtube" : "MP3"
-        )
-        SongFullscreen.UpdateContextMenuInfo(song.Id, "now-playing-item")
-    }
-    public static DisplaySwarmFMInfo(info: SwarmFMInfo) {
-        let cover
-        if (info.customArt) {
-            cover = Network.swarmFMURL + "/assets/" + info.currentSong.CoverArt
-        }
-        else {
-            cover = info.currentSong.CoverUrl
-        }
-        this.Display(
-            info.currentSong.Title,
-            info.currentSong.Artist,
-            info.currentSong.Singers,
-            cover,
-            "SwarmFM Stream",
-            !isMobile,
-            "SwarmFM"
-        )
-        SongFullscreen.UpdateContextMenuInfo("no", "swarmfm")
-    }
-
-    public static OnPlayPause(callback: (state: boolean) => void) {
-        this.Audio.OnPlayPause(callback)
-        this.Youtube.OnPlayPause(callback)
-        this.SwarmFM.OnPlayPause(callback)
-    }
-    public static OnTimeUpdate(callback: (played: number, duration: number, loaded: number) => void) {
-        this.Audio.OnTimeUpdate(callback)
-        this.Youtube.OnTimeUpdate(callback)
-        this.SwarmFM.OnTimeUpdate(callback)
+        this.HasControl?.Pause()
+        this.CallCallbacks("onPlay", false)
     }
 }

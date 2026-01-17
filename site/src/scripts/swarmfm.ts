@@ -8,7 +8,6 @@ class SwarmFMInfo {
     ) { }
 }
 class SwarmFM extends AudioBase {
-    static instance = new SwarmFM()
     static TARGET_LATENCY = 1
 
     get Audio(): HTMLAudioElement {
@@ -51,6 +50,19 @@ class SwarmFM extends AudioBase {
     }
     get HasControl(): boolean {
         return this.hasControl
+    }
+    get Metadata(): Metadata | null {
+        if (!this.currentSong) {
+            return null
+        }
+        return {
+            title: this.currentSong.Title,
+            artist: this.currentSong.Artist,
+            singers: this.currentSong.Singers,
+            coverUrl: this.currentSong.CoverArt || "",
+            date: this.currentSong.PrettyDate,
+            audioSource: "SwarmFM"
+        }
     }
 
     private audio: HTMLAudioElement

@@ -6,6 +6,7 @@ abstract class AudioBase {
     public abstract get Paused(): boolean
     public abstract get Volume(): number
     public abstract get HasControl(): boolean
+    public abstract get Metadata(): Metadata | null
 
     public abstract set Paused(value: boolean)
     public abstract set Volume(value: number)

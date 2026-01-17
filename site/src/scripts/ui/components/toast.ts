@@ -1,6 +1,7 @@
 class ToastUI extends HTMLElement {
+    //@ts-ignore
     static get observedAttributes() { return ["message"], ["duration"], ["type"], ["htmlContent"]; }
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(name: any, oldValue: any, newValue: any) {
         if (oldValue === newValue) {
             return
         }
@@ -39,7 +40,7 @@ class ToastUI extends HTMLElement {
         return this.#duration
     }
     set duration(value) {
-        this.setAttribute("duration", value);
+        this.setAttribute("duration", value.toString());
         this.#duration = value
     }
 
@@ -61,9 +62,12 @@ class ToastUI extends HTMLElement {
         return this.#htmlContent
     }
     set htmlContent(value) {
-        this.setAttribute("htmlContent", value);
+        this.setAttribute("htmlContent", value.toString());
         this.#htmlContent = value
     }
+
+    private icon!: HTMLImageElement
+    private text!: HTMLSpanElement
 
 
     connectedCallback() {

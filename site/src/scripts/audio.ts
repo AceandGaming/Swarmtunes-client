@@ -1,6 +1,4 @@
 class AudioPlayer extends AudioBase {
-    static instance = new AudioPlayer();
-
     get Audio(): HTMLAudioElement {
         return this.audio;
     }
@@ -51,6 +49,19 @@ class AudioPlayer extends AudioBase {
     get CurrentSong(): Song | undefined {
         return this.currentSong
     }
+    get Metadata(): Metadata | null {
+        if (!this.currentSong) {
+            return null
+        }
+        return {
+            title: this.currentSong.Title,
+            artist: this.currentSong.Artist,
+            singers: this.currentSong.Singers,
+            coverUrl: this.currentSong.CoverArt || "",
+            date: this.currentSong.PrettyDate,
+            audioSource: "MP3"
+        }
+    }
 
     private audio: HTMLAudioElement
     private hasControl: boolean = false
@@ -64,15 +75,6 @@ class AudioPlayer extends AudioBase {
         this.audio.preload = "metadata"
     }
 
-    public async PrepForSong() {
-        this.audio.pause()
-        this.audio.src = ""
-        this.currentSong = undefined
-
-        for (const seek of SeekBar.seekbars) {
-            seek.Clear()
-        }
-    }
     public async Load(song: Song) {
         this.hasControl = true
         this.audio.volume = this.volume
@@ -80,14 +82,8 @@ class AudioPlayer extends AudioBase {
         this.audio.src = await SongRequester.GetAudioUrl(song.Id)
         this.audio.load()
         this.audio.currentTime = 0
-        PlaybackController.DisplaySong(song)
-        PlayState.Update({ currentSongId: song.Id })
-        PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })
     }
     public Play(song?: Song): void {
-        if (PlaybackController.HasControl != this && PlaybackController.HasControl) {
-            PlaybackController.HasControl.Clear()
-        }
         this.hasControl = true
         this.paused = false
         this.audio.volume = this.volume
@@ -112,7 +108,6 @@ class AudioPlayer extends AudioBase {
             }
             this.audio.play()
         }
-        PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })
     }
     public Pause(): void {
         this.audio.pause()

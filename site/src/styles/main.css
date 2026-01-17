@@ -1,0 +1,42 @@
+html,
+body {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: clip;
+
+    background-color: var(--background-colour-dark);
+    color: var(--text-colour);
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 0;
+    text-wrap: nowrap;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.loading-text {
+    width: fit-content;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 25px;
+    clip-path: inset(0 3ch 0 0);
+    animation: l4 1s steps(4) infinite;
+}
+
+.loading-text:before {
+    content: "Loading...";
+}
