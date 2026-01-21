@@ -27,10 +27,13 @@ class Playlist {
     get Cover() {
         if (this.songIds.length === 1) {
             if (this.songsLoaded) {
-                return this.songs[0]?.CoverArt
+                return this.songs[0]?.CoverArt ?? this.coverType
             }
         }
         return this.coverType
+    }
+    get CoverUrl() {
+        return this.Cover ? Network.GetCover(this.Cover) : "src/assets/no-song.png"
     }
 
     private readonly id: id
@@ -71,7 +74,6 @@ class Playlist {
         }
         this.songIds.push(song.Id)
         this.songs.push(song)
-        MediaView.ClearMediaId(this.Id)
     }
     Has(song: id) {
         return this.songIds.includes(song)
@@ -99,7 +101,6 @@ class Playlist {
         const index = this.songIds.indexOf(song.Id)
         this.songIds.splice(index, 1)
         this.songs.splice(index, 1)
-        MediaView.ClearMediaId(this.Id)
     }
     RemoveIds(ids: id[]) {
         for (const id of ids) {
@@ -112,7 +113,6 @@ class Playlist {
         if (this.songsLoaded) {
             this.songs.splice(index, 1)
         }
-        MediaView.ClearMediaId(this.Id)
     }
 
     ToJson() {

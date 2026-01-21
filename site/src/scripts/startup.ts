@@ -1,3 +1,6 @@
+//@ts-ignore
+const colourThief = new ColorThief()
+
 let isNewSession = !sessionStorage.getItem('visited')
 sessionStorage.setItem('visited', 'true');
 

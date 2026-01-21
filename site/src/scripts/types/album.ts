@@ -29,6 +29,9 @@ class Album {
     get Title() {
         return this.singers.join(" and ") + " Karaoke"
     }
+    get CoverUrl() {
+        return this.Cover ? Network.GetCover(this.Cover) : "src/assets/no-song.png"
+    }
 
     private readonly id: id
     private date: Date

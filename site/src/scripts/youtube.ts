@@ -77,6 +77,9 @@ class YoutubePlayer extends AudioBase {
         iframe.setAttribute("playsinline", "1");
         iframe.sandbox = "allow-scripts allow-same-origin"
 
+        iframe.style.position = "absolute"
+        iframe.style.top = "-1000px" //yeet
+
         document.body.append(iframe)
 
         this.iframe = iframe

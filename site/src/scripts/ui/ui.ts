@@ -29,7 +29,7 @@ abstract class UIObject extends HTMLElement {
     public OnLoginChange(isLoggedIn: boolean): void | Promise<void> { }
     public OnConnectionChange(isOnline: boolean): void | Promise<void> { }
     public OnUILoadFailed(): void {
-        console.error("UI element failed to load")
+        console.error("UI element failed to load: ", this)
     }
 }
 class UIManager {
@@ -37,5 +37,10 @@ class UIManager {
 
     public static AddObject(object: UIObject) {
         this.uiObjects.push(object)
+        const promise = object.Initialise(false)
+        promise.catch((error) => {
+            console.error(error)
+            object.OnUILoadFailed()
+        })
     }
 }

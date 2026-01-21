@@ -51,6 +51,16 @@ hr {
     color: var(--subtext-colour);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    all: unset;
+    font: inherit;
+}
+
 h2 {
     color: var(--subtext-colour);
     font-size: 12px;

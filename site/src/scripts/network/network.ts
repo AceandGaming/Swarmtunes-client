@@ -224,7 +224,7 @@ class Network {
     static GetAudioURL(id: id) {
         return `${this.serverURL}/files/${id}`
     }
-    static async GetAllSongs({ filters = [], maxResults = 100 } = {}) {
+    static async GetAllSongs({ filters = [], maxResults = 100 }: { filters?: string[]; maxResults?: number } = {}) {
         const params = new URLSearchParams()
         params.append("filters", filters.join(","))
         params.append("maxResults", String(maxResults))
