@@ -85,7 +85,7 @@ class Song {
 
 function OnSongClick(event: any) {
     const id = event.target.dataset.id
-    AudioPlayer.instance.PrepForSong()
+    AudioPlayer.instance.Preload(id)
     NowPlaying.sourceId = ""
     SongRequester.GetSong(id).then((song) => {
         if (song === undefined) {

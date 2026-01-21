@@ -11,7 +11,7 @@ class Network {
     static get serverURL() {
         //@@release-only@@ return "https://api.swarmtunes.com"
         //return "https://dev-api.swarmtunes.com"
-        return "https://192.168.0.31"
+        return "https://api.swarmtunes.com"
     }
     static get swarmFMURL() {
         return "https://swarmfm.boopdev.com"
@@ -157,7 +157,7 @@ class Network {
             title: current["name"],
             artist: current["artist"],
             singers: ConvertSingers(current["singer"]),
-            cover: current["album_cover_id"] ?? coverType,
+            cover: current["album_cover_id"] ?? coverType
         })
 
         const nextSong = new Song({

@@ -73,13 +73,21 @@ class AudioPlayer extends AudioBase {
             seek.Clear()
         }
     }
+    public async Preload(songId: id) {
+        await this.PrepForSong()
+        this.audio.src = Network.GetAudioURL(songId)
+        this.audio.load()
+    }
     public async Load(song: Song) {
         this.hasControl = true
         this.audio.volume = this.volume
         this.currentSong = song
-        this.audio.src = await SongRequester.GetAudioUrl(song.Id)
-        this.audio.load()
-        this.audio.currentTime = 0
+        const src = await SongRequester.GetAudioUrl(song.Id)
+        if (this.audio.src !== src) {
+            this.audio.src = src
+            this.audio.currentTime = 0
+            this.audio.load()
+        }
         PlaybackController.DisplaySong(song)
         PlayState.Update({ currentSongId: song.Id })
         PlaybackController.UpdateMediaSession({ playPause: true, skipping: SongQueue.songCount > 1, seeking: true })

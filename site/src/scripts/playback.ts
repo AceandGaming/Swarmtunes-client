@@ -157,7 +157,7 @@ class PlaybackController {
     public static DisplaySwarmFMInfo(info: SwarmFMInfo) {
         let cover
         if (info.customArt) {
-            cover = Network.swarmFMURL + "/assets/" + info.currentSong.CoverArt
+            cover = Network.swarmFMURL + "/assets/album_covers/" + info.currentSong.CoverArt + ".png"
         }
         else {
             cover = info.currentSong.CoverUrl

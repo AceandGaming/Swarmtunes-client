@@ -111,7 +111,8 @@ class Cover extends HTMLElement {
 
         let atempts = 0
         this.#image.onerror = () => setTimeout(() => {
-            image.src = this.#src + "&retry=" + Date.now()
+            const hasQuery = this.#src.includes("?")
+            image.src = this.#src + (hasQuery ? "&" : "?") + "retry=" + Date.now()
             if (atempts++ > 3) {
                 image.src = "src/assets/no-song.png"
                 console.error(`Failed to load image: "${this.#src}"`)

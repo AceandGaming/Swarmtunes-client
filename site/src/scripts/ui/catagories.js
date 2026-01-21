@@ -104,7 +104,7 @@ class SongCatagory extends Catagory {
     AddChildren(display) {
         function OnClick(event) {
             const id = event.target.dataset.id
-            AudioPlayer.instance.PrepForSong()
+            AudioPlayer.instance.Preload(id)
             NowPlaying.sourceId = ""
             SongRequester.GetSong(id).then((song) => {
                 if (song === undefined) {

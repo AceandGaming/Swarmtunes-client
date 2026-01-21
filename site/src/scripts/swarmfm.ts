@@ -21,10 +21,10 @@ class SwarmFM extends AudioBase {
         return Math.max(0, (performance.now() / 1000) - this.startTime - SwarmFM.TARGET_LATENCY)
     }
     get Loaded(): number {
-        if (!this.startTime) {
-            return 0
+        if (!this.audio.buffered.length) {
+            return 0;
         }
-        return this.Played + SwarmFM.TARGET_LATENCY
+        return this.audio.buffered.end(this.audio.buffered.length - 1);
     }
     get Duration(): number {
         return this.duration || 0
@@ -66,7 +66,7 @@ class SwarmFM extends AudioBase {
     constructor() {
         super()
         this.audio = new window.Audio()
-        this.audio.preload = "none"
+        this.audio.preload = "auto"
     }
 
     private async CheckSync() {
@@ -75,16 +75,27 @@ class SwarmFM extends AudioBase {
         }
         const url = Network.GetSwarmFMSongUrl(Number(this.currentSong!.Id))
         if (url !== this.audio.src) {
+            console.log("Updating audio source")
+            for (let i = 0; i < 40; i++) { //audio fade. Sorta
+                this.audio.volume /= 1.2
+                await sleep(0.05)
+            }
             this.audio.volume = 0
             this.audio.src = url
+            this.audio.load()
             return
         }
         else {
             this.audio.volume = this.volume
         }
 
+        if (this.Loaded < 0.1) {
+            return
+        }
+
         if (!this.paused && this.audio.paused) {
             this.audio.play()
+            console.log("Replaying audio")
         }
         if (this.audio.buffered.length < 1) {
             return
@@ -93,16 +104,18 @@ class SwarmFM extends AudioBase {
         const latency = end - this.audio.currentTime
         console.log("SwarmFM latency:", latency)
         if (latency < SwarmFM.TARGET_LATENCY / 4 || latency > SwarmFM.TARGET_LATENCY + 2) {
-            this.audio.currentTime = end - SwarmFM.TARGET_LATENCY
+            console.log("Resyncing audio")
+            this.audio.currentTime = end - SwarmFM.TARGET_LATENCY + 0.3
             this.audio.playbackRate = 1
         }
         else if (!isMobile && latency > SwarmFM.TARGET_LATENCY * 1.1) {
-            const give = 15
-            this.audio.playbackRate = Math.max(1, ((latency / SwarmFM.TARGET_LATENCY) + give) / (give + 1))
+            const give = 16
+            this.audio.playbackRate = Math.max(1.02, Math.floor((((latency / SwarmFM.TARGET_LATENCY) + give) / (give + 1)) * 20) / 20)
         }
         else {
             this.audio.playbackRate = 1
         }
+        console.log("Playback rate", this.audio.playbackRate)
     }
     private async UpdateInfo() {
         if (!this.hasControl) {
@@ -122,7 +135,7 @@ class SwarmFM extends AudioBase {
 
         setTimeout(
             this.UpdateInfo.bind(this),
-            (info.duration - info.position + SwarmFM.TARGET_LATENCY + 1) * 1000
+            (info.duration - info.position - SwarmFM.TARGET_LATENCY) * 1000
         )
     }
     Play(): void {
