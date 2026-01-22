@@ -77,3 +77,20 @@ h2 {
 .require-admin {
     display: none !important;
 }
+
+st-panel-view {
+    background: var(--background);
+    overflow-x: auto;
+}
+
+st-panel-view > * {
+    width: 100%;
+    height: 100%;
+}
+
+st-discover-menu {
+    display: flex;
+    background: var(--background);
+    flex-direction: column;
+    gap: 5px;
+}

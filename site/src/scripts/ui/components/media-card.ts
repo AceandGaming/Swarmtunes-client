@@ -25,7 +25,7 @@ class MediaCard extends HTMLElement {
     }
 
     public static CreateFromMedia(media: MediaData) {
-        const element = document.createElement("swarmtunes-media-card") as MediaCard
+        const element = document.createElement("st-media-card") as MediaCard
         element.ImageSource = media.CoverUrl
         element.TitleText = media.Title
         element.media = media
@@ -65,7 +65,7 @@ class MediaCard extends HTMLElement {
             }
             :host h1 {
                 width: 100%;
-                height: 2.5em;
+                height: 1.2em;
 
                 align-content: center;
                 margin: 0;
@@ -79,7 +79,7 @@ class MediaCard extends HTMLElement {
         `
         shadow.append(style)
 
-        this.image = document.createElement("swarmtunes-cover") as Cover
+        this.image = document.createElement("st-cover") as Cover
         this.titleElement = document.createElement("h1")
 
         this.image.addEventListener("load", (event) => {
@@ -110,4 +110,4 @@ class MediaCard extends HTMLElement {
     }
 }
 
-customElements.define("swarmtunes-media-card", MediaCard)
+customElements.define("st-media-card", MediaCard)

@@ -1,65 +1,63 @@
-swarmtunes-current-song-bar {
+st-current-song-bar {
     display: flex;
-    position: absolute;
 
+    flex: 0 1 fit-content;
     width: 100%;
-    height: fit-content;
-    bottom: 0;
-    left: 0;
+    min-height: 100px;
 
     flex-direction: row;
     background-color: var(--current-song-bar);
     pointer-events: all;
 }
 
-swarmtunes-current-song-bar > * {
+st-current-song-bar > * {
     flex: 1 1 0;
     display: flex;
     pointer-events: none;
     position: relative;
 }
 
-swarmtunes-current-song-bar > *:nth-child(1) {
+st-current-song-bar > *:nth-child(1) {
     justify-content: left;
     min-width: 0;
     align-items: center;
 }
 
-swarmtunes-current-song-bar > *:nth-child(2) {
+st-current-song-bar > *:nth-child(2) {
     justify-content: center;
     flex-direction: column;
     align-items: center;
 }
 
-swarmtunes-current-song-bar > *:nth-child(3) {
+st-current-song-bar > *:nth-child(3) {
     justify-content: center;
     align-items: center;
 }
 
-swarmtunes-current-song-bar button.fullscreen {
+st-current-song-bar button.fullscreen {
     height: 25px;
     width: 25px;
     position: absolute;
     right: 30px;
 }
 
-swarmtunes-current-song-bar swarmtunes-cover {
+st-current-song-bar st-cover {
     flex: 0 1 90px;
     min-width: 0;
     margin: 10px;
 }
 
-swarmtunes-current-song-bar .singer-wrapper {
+st-current-song-bar .singer-wrapper {
     display: flex;
     flex-direction: column;
     height: 90%;
 }
 
-swarmtunes-current-song-bar .singer-wrapper span {
+st-current-song-bar .singer-wrapper span {
     white-space: pre;
 }
 
-swarmtunes-current-song-bar .title-container {
+st-current-song-bar .title-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -70,13 +68,13 @@ swarmtunes-current-song-bar .title-container {
     text-align: center;
 }
 
-swarmtunes-current-song-bar .title-container > * {
+st-current-song-bar .title-container > * {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-swarmtunes-current-song-bar .source-text {
+st-current-song-bar .source-text {
     margin-top: -9px;
 }
 
@@ -125,44 +123,44 @@ swarmtunes-current-song-bar .source-text {
 }
 
 @media (max-width: 850px) {
-    swarmtunes-current-song-bar button.fullscreen {
+    st-current-song-bar button.fullscreen {
         display: none;
     }
 }
 
 @media (max-width: 700px) {
-    swarmtunes-current-song-bar .singer-wrapper {
+    st-current-song-bar .singer-wrapper {
         display: none;
     }
 
-    swarmtunes-current-song-bar .seek-time {
+    st-current-song-bar .seek-time {
         display: none;
     }
 }
 
 @media (max-width: 600px) {
-    swarmtunes-current-song-bar {
-        height: 60px;
+    st-current-song-bar {
+        min-height: 60px;
     }
 
-    swarmtunes-current-song-bar swarmtunes-cover {
+    st-current-song-bar st-cover {
         flex: 0 1 53px;
         margin: 0;
         margin-right: 5px;
         margin-left: 2px;
     }
 
-    swarmtunes-current-song-bar .title-container {
+    st-current-song-bar .title-container {
         padding: 0 5px;
         text-align: left;
     }
 
-    swarmtunes-current-song-bar > *:nth-child(1) {
+    st-current-song-bar > *:nth-child(1) {
         flex: 1 1 30%;
         height: calc(100% - 5px);
     }
 
-    swarmtunes-current-song-bar > *:nth-child(2) {
+    st-current-song-bar > *:nth-child(2) {
         position: absolute;
         bottom: 0;
         width: 100%;
@@ -171,16 +169,16 @@ swarmtunes-current-song-bar .source-text {
         flex-direction: column;
     }
 
-    swarmtunes-current-song-bar .seek-bar {
+    st-current-song-bar .seek-bar {
         height: 4px;
         border-radius: 0;
     }
 
-    swarmtunes-current-song-bar .seek-bar * {
+    st-current-song-bar .seek-bar * {
         border-radius: 0;
     }
 
-    swarmtunes-current-song-bar .media-controls {
+    st-current-song-bar .media-controls {
         margin-right: 10px;
     }
 

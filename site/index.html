@@ -84,8 +84,9 @@
   <link rel="stylesheet" href="src/styles/themes.css" />
   <link rel="stylesheet" href="src/styles/main.css" />
   <link rel="stylesheet" href="src/styles/defaults.css" />
-  <link rel="stylesheet" href="src/styles/panels/current-song-bar.css" />
   <link rel="stylesheet" href="src/styles/components/controls/media-controls.css" />
+  <link rel="stylesheet" href="src/styles/panels/current-song-bar.css" />
+  <link rel="stylesheet" href="src/styles/panels/discover.css" />
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -93,7 +94,7 @@
 
   <div id="loading-screen">
     <img src="icon.png">
-    <div class="loading-text">Loading...</div>
+    <div class="loading-text"></div>
     <span class="disclaimer">Swarmtunes is a fan made site and is not associated with Vedal, Neuro-sama or SwarmFM</span>
   </div>
   <main>
@@ -105,16 +106,19 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="dist/utils.js"></script>
 <script src="dist/ui/ui.js"></script>
+<script src="dist/ui/components/svg.js"></script>
 <script src="dist/ui/components/cover.js"></script>
 <script src="dist/ui/components/controls/media-controls.js"></script>
 <script src="dist/ui/components/controls/seek-bar.js"></script>
 <script src="dist/ui/components/toast.js"></script>
 <script src="dist/ui/components/media-card.js"></script>
 <script src="dist/ui/components/media-card-collection.js"></script>
-<script src="dist/ui/panels/current-song-bar.js"></script>
-<script src="dist/ui/panels/tab.js"></script>
-<script src="dist/ui/panels/tab-view.js"></script>
+<script src="dist/ui/components/selectors/option-selector.js"></script>
+<script src="dist/ui/components/selectors/tab.js"></script>
+<script src="dist/ui/components/selectors/tab-bar.js"></script>
+<script src="dist/ui/panels/panel-view.js"></script>
 <script src="dist/ui/panels/main/discover.js"></script>
+<script src="dist/ui/panels/current-song-bar.js"></script>
 <script src="dist/audio-base.js"></script>
 <script src="dist/types/album.js"></script>
 <script src="dist/types/playlist.js"></script>

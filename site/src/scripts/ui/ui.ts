@@ -10,7 +10,7 @@ abstract class UIObject extends HTMLElement {
         UIManager.AddObject(this)
     }
 
-    public Initialise(isMobile: boolean): Promise<void> { return Promise.resolve() }
+    public Initialise(mobileLayout: boolean): Promise<void> { return Promise.resolve() }
     public DestroyUI(): void {
         if (!this.element.parentElement) {
             return
@@ -25,7 +25,7 @@ abstract class UIObject extends HTMLElement {
         this.element.classList.remove("show")
     }
 
-    public OnLayoutChange(isMobile: boolean): void | Promise<void> { }
+    public OnLayoutChange(mobileLayout: boolean): void | Promise<void> { }
     public OnLoginChange(isLoggedIn: boolean): void | Promise<void> { }
     public OnConnectionChange(isOnline: boolean): void | Promise<void> { }
     public OnUILoadFailed(): void {

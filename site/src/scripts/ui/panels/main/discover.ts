@@ -1,44 +1,52 @@
 class DiscoverMenu extends UIObject {
     private cardCollections: HTMLElement
+    private buttons: HTMLElement
 
     constructor() {
         super("Discover")
 
-        const shadow = this.attachShadow({ mode: "open" });
-        const style = document.createElement("style")
-        style.textContent = `
-            :host {
-                display: flex;
-                background: var(--background);
-                flex-direction: column;
-                gap: 5px;
-            }
-        `
-        shadow.append(style)
+        this.buttons = document.createElement("div")
+        this.buttons.classList.add("buttons")
+        const swarmFMButton = document.createElement("button")
+        swarmFMButton.classList.add("swarmfm-button")
+        swarmFMButton.title = "Play SwarmFM!"
+        swarmFMButton.addEventListener("click", () => {
+            PlaybackController.PlaySwarmFM()
+        })
 
-        const buttons = document.createElement("div")
-        buttons.classList.add("buttons")
+        this.buttons.append(swarmFMButton)
 
         this.cardCollections = document.createElement("div")
         this.cardCollections.classList.add("card-collections")
-
-        shadow.append(buttons, this.cardCollections)
     }
 
-    async Initialise(isMobile: boolean): Promise<void> {
+    async Initialise(mobileLayout: boolean): Promise<void> {
         const albums = await Network.GetAllAlbums()
         const orignals = await Network.GetAllSongs({ filters: ["original=true"] })
         const mashups = await Network.GetAllSongs({ filters: ["title=mashup"] })
 
-        const albumCollection = document.createElement("swarmtunes-media-card-collection") as MediaCardCollection
+        const albumCollection = document.createElement("st-media-card-collection") as MediaCardCollection
         albumCollection.PopulateWithAlbums(albums)
-        const originalCollection = document.createElement("swarmtunes-media-card-collection") as MediaCardCollection
-        originalCollection.PopulateWithSongs(orignals)
-        const mashupCollection = document.createElement("swarmtunes-media-card-collection") as MediaCardCollection
-        mashupCollection.PopulateWithSongs(mashups)
+        const albumText = document.createElement("h1")
+        albumText.textContent = "Collections"
 
-        this.cardCollections.append(albumCollection, originalCollection, mashupCollection)
+        const originalCollection = document.createElement("st-media-card-collection") as MediaCardCollection
+        originalCollection.PopulateWithSongs(orignals)
+        const originalText = document.createElement("h1")
+        originalText.textContent = "Originals"
+
+        const mashupCollection = document.createElement("st-media-card-collection") as MediaCardCollection
+        mashupCollection.PopulateWithSongs(mashups)
+        const mashupText = document.createElement("h1")
+        mashupText.textContent = "Mashups"
+
+
+        this.cardCollections.append(albumText, albumCollection, originalText, originalCollection, mashupText, mashupCollection)
+    }
+
+    connectedCallback() {
+        this.append(this.buttons, this.cardCollections)
     }
 }
 
-window.customElements.define("swarmtunes-discover-menu", DiscoverMenu)
+window.customElements.define("st-discover-menu", DiscoverMenu)

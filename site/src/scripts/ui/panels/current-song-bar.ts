@@ -18,7 +18,7 @@ class CurrentSongBar extends UIObject {
     private isMobile: boolean = false
 
     CreateCoverImage() {
-        this.coverImage = document.createElement("swarmtunes-cover") as Cover
+        this.coverImage = document.createElement("st-cover") as Cover
     }
     CreateSingersWrapper() {
         const wrapper = document.createElement("div")
@@ -71,8 +71,8 @@ class CurrentSongBar extends UIObject {
         this.CreateSourceText()
         this.CreateFullscreenButton()
 
-        this.seekBar = document.createElement("swarmtunes-seek-bar") as SeekBar
-        this.mediaControls = document.createElement("swarmtunes-media-controls") as MediaControls
+        this.seekBar = document.createElement("st-seek-bar") as SeekBar
+        this.mediaControls = document.createElement("st-media-controls") as MediaControls
     }
 
     public CreateUI(isMobile: boolean) {
@@ -126,4 +126,4 @@ class CurrentSongBar extends UIObject {
     }
 }
 
-customElements.define("swarmtunes-current-song-bar", CurrentSongBar)
+customElements.define("st-current-song-bar", CurrentSongBar)

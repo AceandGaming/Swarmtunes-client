@@ -10,7 +10,7 @@ class ToastManager {
         this.#element.append(toast)
     }
     static Toast(message: string, type: "none" | "info" | "warning" | "error" = "none", duration = 3, htmlContent = false): ToastUI {
-        const toast = document.createElement("swarmtunes-toast") as ToastUI
+        const toast = document.createElement("st-toast") as ToastUI
         toast.message = message
         toast.duration = duration
         toast.type = type

@@ -138,4 +138,4 @@ class Cover extends HTMLElement {
         return this.#colour
     }
 }
-customElements.define("swarmtunes-cover", Cover);
+customElements.define("st-cover", Cover);

@@ -88,4 +88,4 @@ class MediaCardCollection extends UIObject {
     }
 }
 
-customElements.define("swarmtunes-media-card-collection", MediaCardCollection)
+customElements.define("st-media-card-collection", MediaCardCollection)

@@ -1,0 +1,24 @@
+st-discover-menu .card-collections {
+    display: flex;
+    flex-direction: column;
+}
+
+st-discover-menu .card-collections > h1 {
+    font-weight: bold;
+    font-size: 40px;
+}
+
+st-discover-menu .card-collections > st-media-card-collection {
+    margin-bottom: 20px;
+}
+
+st-discover-menu .swarmfm-button {
+    width: 50px;
+    height: auto;
+    min-height: 50px;
+    border-radius: 50%;
+    background-image: url(../../assets/icons/swarmfm.png);
+    background-size: 45px;
+    background-repeat: no-repeat;
+    background-position: center;
+}

@@ -1,9 +1,9 @@
-swarmtunes-media-controls {
+st-media-controls {
     display: flex;
     justify-content: left;
 }
 
-swarmtunes-media-controls button {
+st-media-controls button {
     pointer-events: all;
     cursor: pointer;
     padding: 0;
@@ -12,50 +12,50 @@ swarmtunes-media-controls button {
     margin: auto 0;
 }
 
-swarmtunes-media-controls button.hidden {
+st-media-controls button.hidden {
     display: none;
 }
 
-swarmtunes-media-controls > :first-child:not(.next) {
+st-media-controls > :first-child:not(.next) {
     margin-right: var(--endGap)
 }
 
-swarmtunes-media-controls > :last-child:not(.previous) {
+st-media-controls > :last-child:not(.previous) {
     margin-left: var(--endGap)
 }
 
-swarmtunes-media-controls button.next,
-swarmtunes-media-controls button.previous {
+st-media-controls button.next,
+st-media-controls button.previous {
     transform: scaleX(1.5);
     aspect-ratio: 3/2;
 }
 
-swarmtunes-media-controls button.play-pause {
+st-media-controls button.play-pause {
     display: contents;
 }
 
-swarmtunes-media-controls button.play-pause * {
+st-media-controls button.play-pause * {
     width: inherit;
     height: inherit;
 }
 
-swarmtunes-media-controls button.play-pause .pause {
+st-media-controls button.play-pause .pause {
     display: none;
 }
 
-swarmtunes-media-controls button.play-pause.playing .pause {
+st-media-controls button.play-pause.playing .pause {
     display: block;
 }
 
-swarmtunes-media-controls button.play-pause.playing .play {
+st-media-controls button.play-pause.playing .play {
     display: none;
 }
 
-swarmtunes-media-controls button.shuffle.active {
+st-media-controls button.shuffle.active {
     color: #fff
 }
 
-swarmtunes-media-controls button.shuffle.flip {
+st-media-controls button.shuffle.flip {
     animation: shuffle-flip 0.1s linear;
 }
 

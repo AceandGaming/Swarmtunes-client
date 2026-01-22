@@ -155,4 +155,4 @@ class ToastUI extends HTMLElement {
         }
     }
 }
-customElements.define("swarmtunes-toast", ToastUI);
+customElements.define("st-toast", ToastUI);

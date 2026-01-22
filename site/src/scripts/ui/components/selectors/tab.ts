@@ -31,6 +31,9 @@ class Tab extends HTMLElement {
                 font-weight: bold;
                 cursor: pointer;
             }
+            :host.selected {
+                background-color: var(--header-tab-active);
+            }
         `
 
         shadow.append(style)
@@ -47,4 +50,4 @@ class Tab extends HTMLElement {
     }
 }
 
-customElements.define("swarmtunes-tab", Tab)
+customElements.define("st-tab", Tab)

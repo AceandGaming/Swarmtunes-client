@@ -70,4 +70,4 @@ class MediaControls extends UIObject {
     }
 }
 
-customElements.define("swarmtunes-media-controls", MediaControls)
+customElements.define("st-media-controls", MediaControls)
