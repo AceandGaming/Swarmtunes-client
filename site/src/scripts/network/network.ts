@@ -10,7 +10,7 @@ type id = string
 class Network {
     static get serverURL() {
         //@@release-only@@ return "https://api.swarmtunes.com"
-        return "https://dev-api.swarmtunes.com"
+        return "https://api.swarmtunes.com"
     }
     static get swarmFMURL() {
         return "https://swarmfm.boopdev.com"

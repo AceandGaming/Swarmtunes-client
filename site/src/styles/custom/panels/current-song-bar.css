@@ -41,6 +41,21 @@ st-current-song-bar button.fullscreen {
     right: 30px;
 }
 
+st-current-song-bar button.fullscreen > better-svg {
+    width: 100%;
+    height: 100%;
+}
+
+@media (hover: hover) {
+    st-current-song-bar button.fullscreen:hover {
+        scale: 1.2;
+    }
+}
+
+st-current-song-bar button.fullscreen:active {
+    scale: 2;
+}
+
 st-current-song-bar st-cover {
     flex: 0 1 90px;
     min-width: 0;

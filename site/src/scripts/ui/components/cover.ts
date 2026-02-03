@@ -62,6 +62,7 @@ class Cover extends HTMLElement {
                 height: 100%;
                 background-color: inherit;
                 border-radius: inherit;
+                pointer-events: none;
             }
             img.loading {
                 opacity: 0;

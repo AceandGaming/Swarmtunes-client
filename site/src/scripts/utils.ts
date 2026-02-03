@@ -1,18 +1,24 @@
+
+/**@deprecated Use component better-svg */
 function LoadSVG(path: string) {
-    let svg = document.createElement("svg")
-    fetch(path).then((response) => {
-        response.text().then((text) => {
-            text = text.replace(/\swidth=\"\d+\"/g, "").replace(/\sheight=\"\d+\"/g, "").replace(/<!--[\s\S]*?-->/g, "")
+    // let svg = document.createElement("svg")
+    // fetch(path).then((response) => {
+    //     response.text().then((text) => {
+    //         text = text.replace(/\swidth=\"\d+\"/g, "").replace(/\sheight=\"\d+\"/g, "").replace(/<!--[\s\S]*?-->/g, "")
 
-            const attributeString = Array.from(svg.attributes)
-                .map(attr => `${attr.name}="${attr.value}"`)
-                .join(" ");
-            text = text.replace(/<svg/g, "<svg " + attributeString)
+    //         const attributeString = Array.from(svg.attributes)
+    //             .map(attr => `${attr.name}="${attr.value}"`)
+    //             .join(" ");
+    //         text = text.replace(/<svg/g, "<svg " + attributeString)
 
-            svg.outerHTML = text
-        })
-    })
+    //         svg.outerHTML = text
+    //     })
+    // })
 
+    // return svg
+
+    let svg = document.createElement("better-svg") as BetterSVG
+    svg.src = path
     return svg
 }
 function RGBToHSL(r: number, g: number, b: number) {

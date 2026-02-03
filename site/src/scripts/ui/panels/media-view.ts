@@ -1,0 +1,3 @@
+class MediaView extends UIObject {
+
+}

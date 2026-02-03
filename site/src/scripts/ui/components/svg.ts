@@ -31,7 +31,7 @@ class BetterSVG extends HTMLElement {
             return
         }
         let text = await response.text()
-        text = text.replace(/\swidth=\"\d+\"/g, "").replace(/\sheight=\"\d+\"/g, "").replace(/<!--[\s\S]*?-->/g, "")
+        text = text.replace(/\swidth=\"\d+\"/g, "").replace(/\sheight=\"\d+\"/g, "").replace(/<!--[\s\S]*?-->/g, "").replace(/<svg/g, '<svg preserveAspectRatio="none"')
 
         const oldsvg = this.shadowRoot.querySelector("svg")
         if (oldsvg) {
@@ -48,9 +48,14 @@ class BetterSVG extends HTMLElement {
         style.textContent = `
             :host {
                 display: block;
+                height: 32px;
+                width: auto;
             }
             svg {
-                all: inherit;
+                height: inherit;
+                width: inherit;
+                display: block;
+                pointer-events: none;
             }
         }
         `

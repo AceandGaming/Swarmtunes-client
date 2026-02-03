@@ -20,7 +20,7 @@ class MediaCardCollection extends UIObject {
                 grid-auto-flow: column;
                 gap: 5px;
 
-                background: var(--background-colour-dark);
+                background: var(--media-card-background);
                 border-radius: 10px;
                 padding: 5px;
             }

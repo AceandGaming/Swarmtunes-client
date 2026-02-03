@@ -58,10 +58,13 @@ class MediaCard extends HTMLElement {
                 border-radius: 10px;
                 background-color: var(--colour);
                 border: 4px solid var(--colour);
+
+                transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
             }
             :host(:hover) {
                 background-color: var(--hover-colour);
                 border-color: var(--hover-colour);
+                transform: rotate(3deg);
             }
             :host h1 {
                 width: 100%;
@@ -90,7 +93,7 @@ class MediaCard extends HTMLElement {
             }
 
             this.style.setProperty("--colour", `hsl(${colour.h} ${colour.s}% ${colour.l - 5}%)`)
-            this.style.setProperty("--hover-colour", `hsl(${colour.h} ${colour.s}% ${colour.l}%)`)
+            this.style.setProperty("--hover-colour", `hsl(${colour.h} ${colour.s}% ${colour.l + 5}%)`)
             this.style.setProperty("--cover-background", `hsl(${colour.h} ${colour.s}% ${colour.l - 20}%)`)
         })
 

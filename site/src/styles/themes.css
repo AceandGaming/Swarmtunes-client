@@ -1,5 +1,7 @@
 :root {
+    --primary-colour: #ccc;
     --background-colour: #171717;
+    --lightness: 1;
     --background: var(--background-colour);
     --background-colour-dark: #111;
     --text-colour: #ffffff;
@@ -19,9 +21,11 @@
     --icon-default: #bbb;
     --icon-hover: #eee;
     --icon-active: #999;
-    --slider-default: #aaa;
+    --slider-thumb-colour: #aaa;
+    --slider-thumb-hover: #ffffff;
+    --slider-thumb-active: #666;
     --slider-border: #444;
     --slider-track: #444;
-    --catagory-background: #0000002a;
+    --media-card-background: #0000002a;
     overflow: hidden;
 }

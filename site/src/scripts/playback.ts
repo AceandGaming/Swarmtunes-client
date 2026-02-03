@@ -33,12 +33,26 @@ class PlaybackController {
     public static get Playing(): boolean {
         return this.HasControl ? !this.HasControl.Paused : false
     }
+    public static set Playing(value: boolean) {
+        if (value) {
+            this.Play()
+        }
+        else {
+            this.Pause()
+        }
+    }
 
     public static get Shuffle(): boolean {
         return localStorage.getItem("suffle") === "true"
     }
     public static set Shuffle(value: boolean) {
-        localStorage.setItem("suffle", value.toString())
+        try {
+            localStorage.setItem("suffle", value.toString())
+        }
+        catch (e) {
+            console.error("Failed to save suffle state", e)
+        }
+        this.CallCallbacks("onShuffleChange", value)
     }
 
 
