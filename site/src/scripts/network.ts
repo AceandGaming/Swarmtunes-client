@@ -105,8 +105,8 @@ class Network {
     // static async GetSwarmFMStream() {
     //     return `https://cast.sw.arm.fm/stream?from=swarmtunes?now=${Date.now()}`
     // }
-    static GetSwarmFMSongUrl(id: number) {
-        return `${this.swarmFMURL}/assets/music/${id}.mp3?from=swarmtunes`
+    static GetSwarmFMSongUrl(id: string) {
+        return `https://swarmfm-assets.boopdev.com/music/${id}.mp3?from=swarmtunes`
     }
     static async GetSwarmFMInfo() {
         const response = await fetch(`${this.swarmFMURL}/v2/player?from=swarmtunes`)

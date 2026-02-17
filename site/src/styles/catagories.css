@@ -52,6 +52,12 @@
   background-color: var(--cover-background);
   border-radius: 10px;
   border: 4px solid var(--cover-background);
+
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.catagory-item:hover {
+  transform: rotate(3deg);
 }
 
 .catagory-item * {
@@ -99,16 +105,16 @@
 }
 
 .catagory-item .overlay .hover {
-  animation: scale2 0.2s ease-out;
+  transition: width 0.2s ease-out, opacity 0s ease-out 0.2s;
+  overflow: hidden;
   opacity: 0;
   width: 0;
-  overflow: hidden;
 }
 
 .catagory-item:hover .overlay .hover {
+  transition-delay: 0s;
   width: 100%;
   opacity: 100%;
-  animation: scale 0.2s ease-out;
 }
 
 @keyframes scale {

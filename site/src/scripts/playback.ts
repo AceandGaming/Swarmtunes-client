@@ -134,12 +134,12 @@ class PlaybackController {
     public static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string, swarmfm = false, source: string = "MP3") {
         this.UpdateMetadata(title, artist, singers, coverUrl)
         CurrentSongBar.Display(title, artist, singers, coverUrl, source)
-        if (swarmfm) {
-            SongFullscreen.DisplaySwarmFM()
-        }
-        else {
-            SongFullscreen.Display(title, artist, singers, coverUrl, date, source)
-        }
+        // if (swarmfm) {
+        //     SongFullscreen.DisplaySwarmFM()
+        // }
+        // else {
+        SongFullscreen.Display(title, artist, singers, coverUrl, date, source)
+        //}
 
     }
     public static DisplaySong(song: Song) {

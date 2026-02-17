@@ -47,6 +47,7 @@ with open("site/index.html", "r") as f:
 print(f"Detected {len(scriptPaths)} scripts and {len(stylePaths)} styles")
 
 print("\nCompiling JS")
+
 externalScripts = []
 js = ""
 inlineCss = []

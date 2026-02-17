@@ -9,6 +9,7 @@
     --icon-default: #fff;
     --icon-hover: #eee;
     --icon-active: #ccc;
+    --seek-bar-background: #0000001a;
     z-index: 1;
 }
 
@@ -111,6 +112,10 @@
     background-color: transparent;
 }
 
+#song-fullscreen .cover-container .singer {
+    font-size: small;
+}
+
 #song-fullscreen .info-container {
     display: flex;
     flex-direction: row;
@@ -153,10 +158,6 @@
 
 #song-fullscreen .media-controls button {
     background: none;
-}
-
-#song-fullscreen .media-controls .shuffle:not(.active) {
-    color: #ffffffaa;
 }
 
 #song-fullscreen .source-text {

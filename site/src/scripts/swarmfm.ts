@@ -73,7 +73,7 @@ class SwarmFM extends AudioBase {
         if (!this.hasControl) {
             return
         }
-        const url = Network.GetSwarmFMSongUrl(Number(this.currentSong!.Id))
+        const url = Network.GetSwarmFMSongUrl(this.currentSong!.Id)
         if (url !== this.audio.src) {
             console.log("Updating audio source")
             for (let i = 0; i < 40; i++) { //audio fade. Sorta
