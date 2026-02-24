@@ -1,12 +1,10 @@
-type MediaData = { Title: string; CoverUrl: string };
-
 class MediaCard extends HTMLElement {
     private imageSource: string
     private titleText: string
     private image: Cover
     private titleElement: HTMLHeadingElement
     private htmlContent: boolean
-    public media: MediaData | undefined
+    public media: MediaItem | undefined
 
     get ImageSource() { return this.imageSource }
     get TitleText() { return this.titleText }
@@ -24,7 +22,7 @@ class MediaCard extends HTMLElement {
         this.Update()
     }
 
-    public static CreateFromMedia(media: MediaData) {
+    public static CreateFromMedia(media: MediaItem) {
         const element = document.createElement("st-media-card") as MediaCard
         element.ImageSource = media.CoverUrl
         element.TitleText = media.Title

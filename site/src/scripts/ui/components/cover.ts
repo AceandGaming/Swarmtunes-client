@@ -20,7 +20,7 @@ class Cover extends HTMLElement {
     get src() {
         return this.#src
     }
-    set src(value) {
+    set src(value: string) {
         if (value === this.#src) {
             return
         }

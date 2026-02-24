@@ -1,4 +1,4 @@
-song list
+
 media view
 other tabs
 search

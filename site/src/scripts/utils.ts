@@ -78,3 +78,10 @@ function RefrenceCSS(source: string) {
     link.setAttribute("href", "src/styles/" + source)
     return link
 }
+function PrettyDate(date: Date): string {
+    return date.toLocaleDateString("en-AU", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    })
+}

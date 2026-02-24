@@ -6,7 +6,7 @@ interface AlbumPrams {
     cover: string
 }
 
-class Album {
+class Album implements SongsMedia {
     get Id() { return this.id }
     get Date() { return this.date }
     get Singers() { return this.singers }
@@ -15,16 +15,12 @@ class Album {
 
     get Songs() {
         if (!this.songsLoaded) {
-            console.warn("Album songs not loaded")
+            console.error("Album songs not loaded", this)
         }
         return this.songs
     }
     get PrettyDate() {
-        return this.date.toLocaleDateString("en-AU", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-        });
+        return PrettyDate(this.date)
     }
     get Title() {
         return this.singers.join(" and ") + " Karaoke"

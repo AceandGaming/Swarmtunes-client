@@ -7,7 +7,7 @@ interface PlaylistPrams {
     songIds?: id[]
 }
 
-class Playlist {
+class Playlist implements SongsMedia {
     get Id() { return this.id }
     get Title() { return this.title }
     set Title(title) {
@@ -20,7 +20,7 @@ class Playlist {
 
     get Songs() {
         if (!this.songsLoaded) {
-            console.warn("Playlist songs not loaded")
+            console.error("Playlist songs not loaded", this)
         }
         return this.songs
     }

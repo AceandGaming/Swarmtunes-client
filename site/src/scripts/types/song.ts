@@ -1,7 +1,7 @@
 interface SongPrams {
     id: id,
     title: string,
-    artist: string,
+    artists: string[],
     singers: string[],
     date?: string,
     isOriginal?: boolean,
@@ -9,12 +9,12 @@ interface SongPrams {
     youtubeId?: string | null
 }
 
-class Song {
+class Song implements MediaItem {
     public static CreateOfflineSong(id: id) {
         return new Song({
             id,
             title: "Unavailable",
-            artist: "offline",
+            artists: ["offline"],
             singers: ["Offline"],
         })
     }
@@ -22,7 +22,7 @@ class Song {
 
     get Id() { return this.id }
     get Title() { return this.title }
-    get Artist() { return this.artist }
+    get Artist() { return this.artists.join(", ") }
     get Singers() { return this.singers }
     get Date() { return this.date }
     get IsOriginal() { return this.isOriginal }
@@ -42,7 +42,7 @@ class Song {
 
     private readonly id: id
     private title: string
-    private artist: string
+    private artists: string[]
     private singers: string[]
     private date: Date
     private isOriginal: boolean
@@ -52,7 +52,7 @@ class Song {
     constructor(options: SongPrams) {
         this.id = options.id
         this.title = options.title
-        this.artist = options.artist
+        this.artists = options.artists
         this.singers = options.singers
         this.date = options.date ? new Date(options.date) : new Date()
         this.isOriginal = options.isOriginal ?? false
@@ -64,13 +64,13 @@ class Song {
     }
 
     ToString() {
-        return `${this.title} by ${this.artist}`
+        return `${this.title} by ${this.Artist}`
     }
     ToJson() {
         return {
             id: this.id,
             title: this.title,
-            artist: this.artist,
+            artists: this.artists,
             singers: this.singers,
             date: this.date.toISOString(),
             isOriginal: this.isOriginal,
