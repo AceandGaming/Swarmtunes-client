@@ -77,6 +77,9 @@ class MediaCard extends HTMLElement {
                 text-overflow: ellipsis;
                 text-align: center;
             }
+            :host st-cover {
+                min-width: 100%;
+            }
         `
         shadow.append(style)
 

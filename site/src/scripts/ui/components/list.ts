@@ -51,7 +51,8 @@ class ListItem extends HTMLElement {
         style.textContent = `
             :host {
                 display: flex;
-                flex-direction: row;
+                height: 60px;
+                gap: 10px;
 
                 position: relative;
 
@@ -59,23 +60,37 @@ class ListItem extends HTMLElement {
                 box-sizing: border-box;
                 border-radius: 10px;
 
+                pointer-events: all;
                 cursor: pointer;
+
+                font-size: 1rem;
+            }
+            :host(:hover) {
+                background-color: var(--song-item-hover);
             }
             :host * {
                 pointer-events: none;
             }
             :host > st-cover {
-                height: 100%;
+                flex: none;
             }
             :host > div {
                 flex: 1;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
             }
-            :host .left {
+            h1, h2 {
+                all: unset
+            }
+            h2 {
+                font-size: 0.8rem;
+                color: var(--subtext-colour);
+            }
+            .left {
                 align-items: flex-start;
             }
-            :host .right {
+            .right {
                 align-items: flex-end;
             }
         `
@@ -218,3 +233,4 @@ class SongList extends List<Song> {
         return ui
     }
 }
+customElements.define("st-song-list", SongList)

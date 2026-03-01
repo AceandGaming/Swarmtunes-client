@@ -21,6 +21,26 @@ class DiscoverMenu extends UIObject {
     }
 
     async Initialise(mobileLayout: boolean): Promise<void> {
+        const albumCollection = document.createElement("st-media-card-collection") as MediaCardCollection
+        const albumText = document.createElement("h1")
+        albumText.textContent = "Collections"
+        albumText.classList.add("neuro-text")
+
+        const originalCollection = document.createElement("st-media-card-collection") as MediaCardCollection
+        const originalText = document.createElement("h1")
+        originalText.textContent = "Originals"
+        originalText.classList.add("neuro-text")
+
+        const mashupCollection = document.createElement("st-media-card-collection") as MediaCardCollection
+        const mashupText = document.createElement("h1")
+        mashupText.textContent = "Mashups"
+        mashupText.classList.add("neuro-text")
+
+        this.onload
+
+        this.cardCollections.append(albumText, albumCollection, originalText, originalCollection, mashupText, mashupCollection)
+
+
         const albumsPromise = Network.GetAllAlbums()
         const orignalsPromise = Network.GetAllSongs({ filters: ["original=true"] })
         const mashupsPromise = Network.GetAllSongs({ filters: ["title=mashup"] })
@@ -30,29 +50,14 @@ class DiscoverMenu extends UIObject {
         const orignals = values[1]
         const mashups = values[2]
 
-        const albumCollection = document.createElement("st-media-card-collection") as MediaCardCollection
         albumCollection.PopulateWithAlbums(albums)
-        const albumText = document.createElement("h1")
-        albumText.textContent = "Collections"
-        albumText.classList.add("neuro-text")
-
-        const originalCollection = document.createElement("st-media-card-collection") as MediaCardCollection
         originalCollection.PopulateWithSongs(orignals)
-        const originalText = document.createElement("h1")
-        originalText.textContent = "Originals"
-        originalText.classList.add("neuro-text")
-
-        const mashupCollection = document.createElement("st-media-card-collection") as MediaCardCollection
         mashupCollection.PopulateWithSongs(mashups)
-        const mashupText = document.createElement("h1")
-        mashupText.textContent = "Mashups"
-        mashupText.classList.add("neuro-text")
 
-
-        this.cardCollections.append(albumText, albumCollection, originalText, originalCollection, mashupText, mashupCollection)
     }
 
     connectedCallback() {
+        super.connectedCallback()
         this.append(this.buttons, this.cardCollections)
     }
 }

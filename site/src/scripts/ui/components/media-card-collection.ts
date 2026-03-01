@@ -57,34 +57,49 @@ class MediaCardCollection extends UIObject {
         throw new Error("Not implemented")
     }
 
-    public AddCard(card: MediaCard, onClick: (event: Event) => void) {
+    public AddCard(card: MediaCard, onClick: (event: Event) => void, frag?: DocumentFragment) {
         this.cards.push(card)
-        this.cardsContainer.append(card)
+        if (frag) {
+            frag.append(card)
+        }
+        else {
+            this.cardsContainer.append(card)
+        }
+
         card.addEventListener("click", onClick)
     }
     public PopulateWithSongs(songs: Song[]) {
         songs = songs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
+        const fragment = document.createDocumentFragment()
 
         for (const song of songs) {
             const card = MediaCard.CreateFromMedia(song)
-            this.AddCard(card, this.OnSongCardClick.bind(this))
+            this.AddCard(card, this.OnSongCardClick.bind(this), fragment)
         }
+
+        this.cardsContainer.append(fragment)
     }
     public PopulateWithAlbums(albums: Album[]) {
         albums = albums.sort((a, b) => b.Date.getTime() - a.Date.getTime())
+        const fragment = document.createDocumentFragment()
 
         for (const album of albums) {
             const card = MediaCard.CreateFromMedia(album)
-            this.AddCard(card, this.OnAlbumCardClick.bind(this))
+            this.AddCard(card, this.OnAlbumCardClick.bind(this), fragment)
         }
+
+        this.cardsContainer.append(fragment)
     }
     public PopulateWithPlaylists(playlists: Playlist[]) {
         playlists = playlists.sort((a, b) => b.Date.getTime() - a.Date.getTime())
+        const fragment = document.createDocumentFragment()
 
         for (const playlist of playlists) {
             const card = MediaCard.CreateFromMedia(playlist)
-            this.AddCard(card, this.OnPlaylistCardClick.bind(this))
+            this.AddCard(card, this.OnPlaylistCardClick.bind(this), fragment)
         }
+
+        this.cardsContainer.append(fragment)
     }
 }
 

@@ -100,9 +100,14 @@ h2 {
 }
 
 .neuro-text {
-    font-family: "Neuro", Helvetica, Arial, sans-serif;
+    font-family: "Neuro", "Inter", sans-serif;
     -webkit-text-stroke-color: var(--primary-colour);
     -webkit-text-stroke-width: calc(0.1px * var(--lightness));
+}
+
+.title-text {
+    font-family: "Inter", Helvetica, sans-serif;
+    font-weight: 900;
 }
 
 .hidden {

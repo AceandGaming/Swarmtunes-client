@@ -1,6 +1,6 @@
 abstract class UIObject extends HTMLElement {
     get element(): HTMLElement { return this }
-    get visible(): boolean { return this.classList.contains("show") }
+    get visible(): boolean { return !this.classList.contains("hidden") }
 
     readonly name: string = ""
 
@@ -19,10 +19,15 @@ abstract class UIObject extends HTMLElement {
     }
 
     public Show(): void {
-        this.element.classList.add("show")
+        this.element.classList.remove("hidden")
     }
     public Hide(): void {
-        this.element.classList.remove("show")
+        this.element.classList.add("hidden")
+    }
+
+    connectedCallback() {
+        const event = new Event("connected")
+        this.dispatchEvent(event)
     }
 
     public OnLayoutChange(mobileLayout: boolean): void | Promise<void> { }
@@ -37,10 +42,13 @@ class UIManager {
 
     public static AddObject(object: UIObject) {
         this.uiObjects.push(object)
-        const promise = object.Initialise(false)
-        promise.catch((error) => {
-            console.error(error)
-            object.OnUILoadFailed()
+
+        object.addEventListener("connected", () => {
+            const promise = object.Initialise(false)
+            promise.catch((error) => {
+                console.error(error)
+                object.OnUILoadFailed()
+            })
         })
     }
 }

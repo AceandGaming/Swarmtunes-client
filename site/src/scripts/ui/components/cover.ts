@@ -14,8 +14,8 @@ class Cover extends HTMLElement {
 
     #src: string = ""
     #colour = null
-    #image?: HTMLImageElement
-    #placeholder?: HTMLImageElement
+    #canvas: HTMLCanvasElement
+    #observer?: IntersectionObserver
 
     get src() {
         return this.#src
@@ -26,7 +26,9 @@ class Cover extends HTMLElement {
         }
         this.#src = value
         this.setAttribute("src", value)
-        this.#UpdateImage()
+        if (this.#observer) {
+            this.#observer.observe(this)
+        }
     }
     get colour() {
         const colour = this.#GetColour()
@@ -45,95 +47,106 @@ class Cover extends HTMLElement {
         return hsl
     }
 
-    connectedCallback() {
+    constructor() {
+        super()
         const shadow = this.attachShadow({ mode: "open" });
 
         const style = document.createElement("style")
         style.textContent = `
             :host {
-                position: relative;
+                display: inline-block;
+
                 aspect-ratio: 1;
+
                 border-radius: max(8px, 5%);
                 background-color: var(--cover-background);
+                overflow: hidden;
             }
-            img {
-                display: block;
+            :host(.loading) {
+                background:  var(--cover-background) linear-gradient(-60deg, transparent 0%, transparent 20%, #FFFFFF20 50%, transparent 80%, transparent 100%);
+                background-size: 1000% 100%;
+                animation: move 2s linear infinite;
+            }
+            canvas {
                 width: 100%;
                 height: 100%;
-                background-color: inherit;
-                border-radius: inherit;
-                pointer-events: none;
             }
-            img.loading {
-                opacity: 0;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            img.hidden {
-                display: none;
+            @keyframes move {
+                from {
+                    background-position: 0% 0%;
+                }
+                to {
+                    background-position: 100% 100%;
+                }
             }
         `
         shadow.append(style)
 
-        const placeholder = document.createElement("img")
-        placeholder.src = "src/assets/no-song.png"
+        const canvas = document.createElement("canvas")
+        this.#canvas = canvas
 
-        const image = document.createElement("img")
-        image.crossOrigin = "anonymous"
-        image.loading = "lazy"
-        image.classList.add("loading")
-        image.addEventListener("load", () => {
-            const event = new Event("load")
-            this.dispatchEvent(event)
-        })
-
-        this.#placeholder = placeholder
-        this.#image = image
-
-        this.#UpdateImage()
-
-        shadow.append(placeholder, image)
+        shadow.append(canvas)
     }
+
+    connectedCallback() {
+        this.classList.add("loading")
+        if (!this.#src) {
+            this.src = "src/assets/no-song.png"
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    this.#UpdateImage()
+                    observer.unobserve(this)
+                }
+            })
+        })
+        observer.observe(this)
+        this.#observer = observer
+    }
+
     #UpdateImage() {
-        if (!this.#image || !this.#placeholder) {
-            return
-        }
+        const canvas = this.#canvas
 
+        const event = fetch(this.#src)
+        event.then(async (response) => {
+            const blob = await response.blob()
 
-        const image = this.#image
-        const placeholder = this.#placeholder
-
-        if (this.#src == image.src) {
-            return
-        }
-
-        image.classList.add("loading")
-        placeholder.classList.remove("hidden")
-
-        image.onload = () => {
-            image.classList.remove("loading")
-            placeholder.classList.add("hidden")
-        }
-
-        let atempts = 0
-        this.#image.onerror = () => setTimeout(() => {
-            image.src = this.#src + "&retry=" + Date.now()
-            if (atempts++ > 3) {
-                image.src = "src/assets/no-song.png"
-                console.error(`Failed to load image: "${this.#src}"`)
+            const ctx = canvas.getContext("2d")
+            if (!ctx) {
+                return
             }
-        }, 1000)
 
-        image.src = this.#src
-        this.#colour = null
+            const img = new Image()
+            img.onload = () => {
+                canvas.width = img.width
+                canvas.height = img.height
+                ctx.drawImage(img, 0, 0)
+
+                this.#colour = null
+
+                this.classList.remove("loading")
+                const event = new Event("load")
+                this.dispatchEvent(event)
+            }
+            img.src = URL.createObjectURL(blob)
+        })
     }
     #GetColour(): number[] {
         if (!this.#colour) {
-            if (!this.#image || !this.#image.complete) {
+            const mini = document.createElement('canvas')
+            const ctx = mini.getContext('2d')
+            if (!ctx) {
                 return [0, 0, 0]
             }
-            this.#colour = colourThief.getColor(this.#image, 5)
+
+            mini.width = 32
+            mini.height = 32
+
+            ctx.drawImage(this.#canvas, 0, 0, 32, 32)
+
+            this.#colour = colourThief.getColor(mini, 5)
         }
         //@ts-ignore
         return this.#colour
