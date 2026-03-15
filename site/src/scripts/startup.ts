@@ -17,8 +17,8 @@ function CreateUI() {
     const header = document.createElement("st-tab-bar") as TabBar
     const TabMenu = document.createElement("st-panel-view") as PanelView
     TabMenu.Selector = header
-    TabMenu.AddPanel(document.createElement("st-media-view") as MediaView)
     TabMenu.AddPanel(document.createElement("st-discover-menu") as DiscoverMenu)
+    TabMenu.AddPanel(document.createElement("st-media-view") as MediaView)
 
     nav.append(header, TabMenu)
 
