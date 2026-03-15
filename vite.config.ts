@@ -9,6 +9,7 @@ export default defineConfig({
             '@': path.resolve(__dirname, 'src'),
             '@ts': path.resolve(__dirname, 'src/scripts'),
             '@css': path.resolve(__dirname, 'src/styles'),
+            '@assets': path.resolve(__dirname, 'src/assets'),
         },
     },
     css: {

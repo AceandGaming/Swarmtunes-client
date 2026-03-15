@@ -6,6 +6,7 @@
     position: relative;
 
     padding: 5px;
+    padding-right: 10px;
     box-sizing: border-box;
     border-radius: 10px;
 
@@ -16,18 +17,18 @@
 }
 
 :host(:hover) {
-    background-color: var(--song-item-hover);
+    background-color: #ffffff11;
 }
 
 :host * {
     pointer-events: none;
 }
 
-:host>st-cover {
+:host > st-cover {
     flex: none;
 }
 
-:host>div {
+:host > div {
     flex: 1;
     display: flex;
     flex-direction: column;

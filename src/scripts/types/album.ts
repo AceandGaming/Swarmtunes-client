@@ -1,6 +1,8 @@
 import { SongsMedia } from "./media-items";
 import Network from "@ts/network/network"
 import { PrettyDate } from "@ts/utils";
+import type { Song } from "./song";
+import { SongRequester } from "@ts/song-requester";
 
 interface AlbumPrams {
     id: id

@@ -5,7 +5,8 @@ import type { Cover } from "@ts/ui/components/cover"
 
 import "@ts/ui/components/list"
 import type { SongList } from "@ts/ui/components/list"
-import Network from "@ts/network/network"
+import { SongsMedia } from "@ts/types"
+import { PrettyDate } from "@ts/utils"
 
 export class MediaView extends UIObject {
     name = "Media View"
@@ -24,21 +25,17 @@ export class MediaView extends UIObject {
         info.classList.add("info")
 
         this.coverImage = document.createElement("st-cover") as Cover
-        this.coverImage.src = "https://api.swarmtunes.com/covers/neuro?size=512" //test
 
         const textContainer = document.createElement("div")
         textContainer.classList.add("info-text")
 
         this.titleText = document.createElement("h1")
         this.titleText.classList.add("title-text")
-        this.titleText.textContent = "Neuro-sama Karaoke" //test
 
         this.subtitleText = document.createElement("h2")
         this.subtitleText.classList.add("title-text")
-        this.subtitleText.textContent = "10th Feb 2025" //test
 
         this.infoText = document.createElement("h3")
-        this.infoText.textContent = "COLLECTION - 19 Songs - 1h 21mins" //test
 
         textContainer.append(this.titleText, this.subtitleText, this.infoText)
         info.append(this.coverImage, textContainer)
@@ -71,15 +68,24 @@ export class MediaView extends UIObject {
         this.fragment.append(header, content)
     }
 
+    public Update(info: SongsMedia) {
+        this.titleText.textContent = info.Title
+        this.subtitleText.textContent = PrettyDate(info.Date)
+        this.infoText.textContent = `DEBUG - ${info.SongIds.length} songs - ${info.Duration} seconds`
+        this.coverImage.src = info.CoverUrl
+
+        this.style.setProperty("--cover-image", `url("${info.CoverUrl}")`)
+
+        this.songlist.Clear()
+        info.GetSongs().then((songs) => {
+            this.songlist.Add(...songs)
+            this.songlist.Update()
+        })
+    }
+
     connectedCallback(): void {
         super.connectedCallback()
         this.append(this.fragment)
-    }
-
-    async Initialise(mobileLayout: boolean): Promise<void> {
-        const songs = await Network.GetAllSongs()
-        this.songlist.Add(...songs)
-        this.songlist.Update()
     }
 }
 

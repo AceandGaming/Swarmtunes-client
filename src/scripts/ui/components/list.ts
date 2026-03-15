@@ -110,6 +110,11 @@ abstract class List<T extends MediaItem> extends UIObject {
         this.Sort((a, b) => a.Title.localeCompare(b.Title))
     }
 
+    public Clear() {
+        this.items = []
+        this.Update()
+    }
+
     public Update() {
         this.itemsHolder.innerHTML = ""
         for (const item of this.items) {

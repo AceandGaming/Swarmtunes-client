@@ -3,9 +3,21 @@ import { OptionSelector } from "./option-selector";
 import "./tab";
 import type { Tab } from "./tab";
 
+import css from "@css/components/tab-bar.scss?inline"
+
 export class TabBar extends OptionSelector {
     private tabs: Tab[] = [];
     private callbacks: any[] = [];
+
+    constructor() {
+        super()
+        const shadow = this.attachShadow({ mode: "open" })
+
+        const style = document.createElement("style")
+        style.textContent = css
+
+        shadow.append(style)
+    }
 
     CallCallbacks(index: number, name: string) {
         this.callbacks.forEach(callback => callback(index, name))
@@ -26,7 +38,7 @@ export class TabBar extends OptionSelector {
             tab.addEventListener("click", () => this.SelectOption(this.tabs.indexOf(tab)))
 
             this.tabs.push(tab)
-            this.append(tab)
+            this.shadowRoot?.append(tab)
         }
     }
     AddCallback(callback: (index: number, name: string) => void): void {

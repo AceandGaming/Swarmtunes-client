@@ -38,9 +38,14 @@ export class MediaCardCollection extends UIObject {
 
         PlaybackController.PlaySonglist(songs, song)
     }
-    private OnAlbumCardClick(event: Event): never {
-        //TBD
-        throw new Error("Not implemented")
+    private OnAlbumCardClick(event: Event) {
+        const album = (event.target as MediaCard).media
+        if (!(album instanceof Album)) {
+            return
+        }
+
+        const mediaView = window.tempMediaView()
+        mediaView.Update(album)
     }
     private OnPlaylistCardClick(event: Event): never {
         //TBD

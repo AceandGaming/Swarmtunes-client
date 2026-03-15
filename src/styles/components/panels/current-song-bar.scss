@@ -95,6 +95,10 @@
     white-space: nowrap;
 }
 
+:host .title-container > h1 {
+    font-weight: bold;
+}
+
 :host .source-text {
     margin-top: -9px;
 }

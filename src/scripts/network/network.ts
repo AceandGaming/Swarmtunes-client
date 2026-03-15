@@ -1,4 +1,5 @@
 import { Song, Album, Playlist } from "@ts/types"
+import { EnsureArray } from "@ts/utils"
 
 export default class Network {
     static get serverURL() {

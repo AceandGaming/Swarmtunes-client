@@ -1,0 +1,23 @@
+:host {
+    flex: 0 1 130px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background-color: var(--header-tab-colour);
+    height: 80%;
+    min-height: fit-content;
+    border-radius: 8px 8px 0 0;
+    color: var(--text-colour);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+:host(:hover) {
+    filter: brightness(1.2);
+}
+
+:host(.selected) {
+    background-color: var(--background-colour);
+}

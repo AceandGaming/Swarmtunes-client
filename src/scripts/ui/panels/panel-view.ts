@@ -23,6 +23,10 @@ export class PanelView extends UIObject {
         this.selector.AddOptions([panel.name])
     }
 
+    public SelectPanel(index: number) {
+        this.selector?.SelectOption(index)
+    }
+
     connectedCallback() {
         if (!this.selector) {
             throw new Error("Selector not set")
