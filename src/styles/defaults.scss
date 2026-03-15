@@ -1,0 +1,125 @@
+@use "@css/_variables" as *;
+
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar:hover {
+    background-color: #000;
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--slider-thumb-colour);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    opacity: 0.8;
+    width: 1.2px;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--slider-thumb-active);
+}
+
+::-webkit-scrollbar:hover {
+    height: 5px;
+    width: 5px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background-color: var(--button-colour);
+    color: var(--text-colour);
+    padding: 6px;
+    pointer-events: all;
+}
+
+@media (hover: hover) {
+    button:hover:not(.icon-button) {
+        filter: brightness(1.2)
+    }
+}
+
+button:active:not(.icon-button) {
+    filter: brightness(0.95)
+}
+
+button:disabled {
+    filter: brightness(0.5);
+    cursor: not-allowed;
+}
+
+.icon-button {
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 0;
+    color: var(--icon-colour);
+    transition: scale 0.1s ease;
+    transform-origin: center;
+}
+
+@media (hover: hover) {
+    .icon-button:hover {
+        color: var(--icon-hover);
+        scale: 1.08;
+    }
+}
+
+.icon-button:active {
+    color: var(--icon-active);
+    scale: 1.0;
+}
+
+img {
+    pointer-events: none;
+}
+
+hr {
+    width: 100%;
+    margin: 2px auto;
+    color: var(--subtext-colour);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    all: unset;
+    font: inherit;
+}
+
+h2 {
+    color: var(--subtext-colour);
+    font-size: 12px;
+}
+
+.neuro-text {
+    font-family: $neuro-font;
+    -webkit-text-stroke-color: var(--primary-colour);
+    -webkit-text-stroke-width: calc(0.1px * var(--lightness));
+}
+
+.title-text {
+    font-family: $title-font;
+    font-weight: 900;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.require-auth {
+    display: none !important;
+}
+
+.require-admin {
+    display: none !important;
+}

@@ -1,3 +1,0 @@
-class SeekBar extends UIObject {
-
-}

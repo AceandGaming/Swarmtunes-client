@@ -1,0 +1,209 @@
+@use "@css/defaults" as *;
+
+:host {
+    display: contents;
+}
+
+:host > .content {
+    display: flex;
+
+    flex: 0 1 fit-content;
+    width: 100%;
+    min-height: 100px;
+
+    flex-direction: row;
+    background-color: var(--current-song-bar);
+    pointer-events: all;
+}
+
+:host > .content > * {
+    flex: 1 1 0;
+    display: flex;
+    pointer-events: none;
+    position: relative;
+}
+
+:host > .content > *:nth-child(1) {
+    justify-content: left;
+    min-width: 0;
+    align-items: center;
+}
+
+:host > .content > *:nth-child(2) {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+:host > .content > *:nth-child(3) {
+    justify-content: center;
+    align-items: center;
+}
+
+:host button.fullscreen {
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    right: 30px;
+}
+
+:host button.fullscreen > better-svg {
+    width: 100%;
+    height: 100%;
+}
+
+@media (hover: hover) {
+    :host button.fullscreen:hover {
+        scale: 1.2;
+    }
+}
+
+:host button.fullscreen:active {
+    scale: 2;
+}
+
+:host st-cover {
+    flex: 0 1 90px;
+    min-width: 0;
+    margin: 10px;
+}
+
+:host .singer-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+}
+
+:host .singer-wrapper span {
+    white-space: pre;
+}
+
+:host .title-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+}
+
+:host .title-container > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+:host .source-text {
+    margin-top: -9px;
+}
+
+.seek-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 450px;
+    margin: 8px auto;
+    color: var(--subtext-colour);
+}
+
+.seek-bar {
+    position: relative;
+    flex: 1;
+    height: 8px;
+    width: 100%;
+    background: var(--seek-bar-background);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.seek-bar:hover {
+    height: 10px;
+}
+
+.seek-bar > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.seek-bar .progress {
+    background: var(--seek-bar-played);
+}
+
+.seek-bar .loaded {
+    background: var(--seek-bar-loaded);
+}
+
+@media (max-width: 850px) {
+    :host button.fullscreen {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+    :host .singer-wrapper {
+        display: none;
+    }
+
+    :host .seek-time {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    :host {
+        min-height: 60px;
+    }
+
+    :host st-cover {
+        flex: 0 1 53px;
+        margin: 0;
+        margin-right: 5px;
+        margin-left: 2px;
+    }
+
+    :host .title-container {
+        padding: 0 5px;
+        text-align: left;
+    }
+
+    :host > *:nth-child(1) {
+        flex: 1 1 30%;
+        height: calc(100% - 5px);
+    }
+
+    :host > *:nth-child(2) {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 4px;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    :host .seek-bar {
+        height: 4px;
+        border-radius: 0;
+    }
+
+    :host .seek-bar * {
+        border-radius: 0;
+    }
+
+    :host .media-controls {
+        margin-right: 10px;
+    }
+
+    .seek-bar-container {
+        max-width: none;
+    }
+}

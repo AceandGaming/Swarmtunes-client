@@ -1,0 +1,16 @@
+:host {
+    display: block;
+    max-width: 100%;
+    width: fit-content;
+    overflow-x: auto;
+}
+
+.cards-container {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 5px;
+
+    background: var(--media-card-background);
+    border-radius: 10px;
+    padding: 5px;
+}

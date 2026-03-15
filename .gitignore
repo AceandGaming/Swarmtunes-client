@@ -1,5 +1,10 @@
-/node_modules
-/mini
-/site/dist
+#old
+/old
+
+#private files
 *.pem
-/.directory
+
+# vite stuff
+/dist
+/node_modules
+/dev

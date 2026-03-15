@@ -1,34 +1,37 @@
 {
   "compilerOptions": {
-    // File Layout
-    "rootDir": "./site/src/scripts",
-    "outDir": "./site/dist",
-
-    // Environment Settings
-    "target": "esnext",
-    "module": "none",
-    "allowJs": true,
-    
-
-    // Optional Libraries
-    "lib": ["es2020", "dom"],
-
-    // Source maps (optional, helpful for debugging)
-    "sourceMap": true,
-
-    // Stricter Typechecking Options
+    "jsx": "react-jsx",
+    "jsxImportSource": "react", // optional in TS 4.5+, usually safe to include
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Avoid unnecessary module stuff
-    "verbatimModuleSyntax": false,
-    "isolatedModules": false,
-    "moduleDetection": "legacy",
-    "declaration": false,
-    "declarationMap": false,
-    "noUncheckedSideEffectImports": false,
-    "types": []
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "baseUrl": ".",
+    "paths": {
+      "@ts/*": [
+        "src/scripts/*"
+      ],
+      "@css/*": [
+        "src/styles/*"
+      ],
+      "@/*": [
+        "src/*"
+      ],
+    },
+    "types": [
+      "vite/client"
+    ]
   },
-  "include": ["./site/src/scripts/**/*"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

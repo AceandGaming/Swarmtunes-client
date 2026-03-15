@@ -1,0 +1,37 @@
+@use "_themes" as *;
+
+@each $name, $theme in $themes {
+    $primary: map-get($theme, primary);
+    $background: map-get($theme, background);
+    $background-image: map-get($theme, background-image);
+    $text: map-get($theme, text);
+    $icons: map-get($theme, icons);
+    $lightness: map-get($theme, lightness);
+
+    :root[data-theme="#{$name}"] {
+        --primary-colour: #{$primary};
+        --lightness: #{$lightness};
+
+        --background-image: #{$background-image};
+        --background-colour: #{$background};
+        --background: var(--background-colour) var(--background-image);
+
+        --background-colour-dark: #{darken($background, 10%)};
+
+        --text-colour: #{$text};
+        --subtext-colour: #{darken($text, 20%)};
+
+        --header-colour: #{darken($background, 10%)};
+        --header-tab-colour: #{$background};
+
+        --current-song-bar: #{lighten($background, 2%)};
+
+        --cover-background: #{lighten($background, 10%)};
+
+        --media-card-background: #{$background};
+
+        --button-colour: #{lighten($background, 2%)};
+
+        --icon-colour: #{$icons};
+    }
+}

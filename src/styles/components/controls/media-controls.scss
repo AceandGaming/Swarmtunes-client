@@ -1,0 +1,125 @@
+@use "@css/defaults" as *;
+
+:host {
+    --endGap: 12px;
+    --size: 30px;
+    --gap: 5px;
+    --pause-scale: 1.2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap);
+}
+
+:host button {
+    flex: 0 1 auto;
+    pointer-events: all;
+    cursor: pointer;
+    height: var(--size);
+}
+
+
+:host button > better-svg {
+    width: 100%;
+    height: 100%;
+}
+
+:host button.hidden {
+    display: initial;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+
+:host button:is(.previous, .next) {
+    width: calc(var(--size) * 1.2);
+    height: calc(var(--size) * 0.8);
+}
+
+:host button:is(:first-child, :last-child) {
+    margin: 0 var(--endGap);
+}
+
+:host button.play-pause {
+    height: calc(var(--size) * var(--pause-scale));
+}
+
+:host button.play-pause .pause {
+    display: none;
+}
+
+:host button.play-pause.playing .pause {
+    display: block;
+}
+
+:host button.play-pause.playing .play {
+    display: none;
+}
+
+:host button.shuffle.active {
+    filter: drop-shadow(0 0 calc(1px * var(--lightness)) white);
+    color: white;
+}
+
+:host button.shuffle.flip {
+    animation: shuffle-flip 0.1s linear;
+}
+
+@keyframes shuffle-flip {
+    0% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+.volume-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: all;
+    transform: translateY(-2px);
+}
+
+.volume-controls.active svg {
+    color: #fff;
+}
+
+.volume-controls svg {
+    display: none;
+    width: inherit;
+    height: inherit;
+}
+
+.volume-controls svg.active {
+    display: block;
+}
+
+.volume-controls input {
+    position: absolute;
+    display: none;
+    width: 85px;
+    transform: rotate(-90deg) translateX(62px);
+    background: var(--current-song-bar);
+    cursor: grab;
+}
+
+.volume-controls input:active {
+    cursor: grabbing;
+}
+
+.volume-controls img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #00000000;
+    color: var(--text-colour);
+    cursor: pointer;
+    pointer-events: all;
+}
