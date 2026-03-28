@@ -21,7 +21,7 @@
         --background-colour-dark: #{color.adjust($background, $lightness: -10%)};
 
         --text-colour: #{$text};
-        --subtext-colour: #{color.adjust($text, $lightness: -20% / $lightness)};
+        --subtext-colour: #{color.adjust($text, $lightness: -40% / $lightness)};
 
         --header-colour: #{color.adjust($background, $lightness: 4%)};
         --header-tab-colour: #{color.adjust($background, $lightness: -5%)};
@@ -35,5 +35,7 @@
         --button-colour: #{color.adjust($background, $lightness: 2%)};
 
         --icon-colour: #{$icons};
+        --seek-bar-colour: #00000030;
+        --seek-bar-progress: linear-gradient(to right, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.9));
     }
 }

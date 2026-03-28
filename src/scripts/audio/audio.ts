@@ -2,6 +2,7 @@ import { AudioBase } from "./audio-base";
 import { Song } from "@ts/types";
 import { Device } from "@ts/device";
 import { SongRequester } from "@ts/song-requester";
+import { Metadata } from "@ts/metadata-display";
 
 export class AudioPlayer extends AudioBase {
     get Audio(): HTMLAudioElement {
@@ -60,9 +61,9 @@ export class AudioPlayer extends AudioBase {
         }
         return {
             title: this.currentSong.Title,
-            artist: this.currentSong.Artist,
+            artists: this.currentSong.Artists,
             singers: this.currentSong.Singers,
-            coverUrl: this.currentSong.CoverArt || "",
+            coverUrl: this.currentSong.CoverUrl,
             date: this.currentSong.PrettyDate,
             audioSource: "MP3"
         }

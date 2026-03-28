@@ -1,7 +1,7 @@
 import listItemCss from "@css/components/list-item.scss?inline"
 import { Cover } from "./cover"
 import { UIObject } from "../ui"
-import { MediaItem } from "@ts/types"
+import { CopySongs, MediaItem } from "@ts/types"
 import { PrettyDate } from "@ts/utils"
 import { Song } from "@ts/types"
 
@@ -84,6 +84,7 @@ customElements.define("st-list-item", ListItem)
 abstract class List<T extends MediaItem> extends UIObject {
     protected items: T[] = []
     private itemsHolder: HTMLOListElement
+    private clickCallbacks: ((item: T) => void)[] = []
 
     public Add(...items: T[]) {
         for (const item of items) {
@@ -99,6 +100,10 @@ abstract class List<T extends MediaItem> extends UIObject {
             return
         }
         this.items.splice(index, 1)
+    }
+
+    public OnItemClicked(callback: (item: T) => void) {
+        this.clickCallbacks.push(callback)
     }
 
     protected abstract CreateUIItem(item: T): ListItem
@@ -120,6 +125,7 @@ abstract class List<T extends MediaItem> extends UIObject {
         for (const item of this.items) {
             const uiItem = this.CreateUIItem(item)
             this.itemsHolder.append(uiItem)
+            uiItem.addEventListener("click", () => this.clickCallbacks.forEach(callback => callback(item)))
         }
     }
 
@@ -193,10 +199,19 @@ abstract class List<T extends MediaItem> extends UIObject {
 }
 
 export class SongList extends List<Song> {
+    public get Songs() { return CopySongs(this.items) }
     protected CreateUIItem(item: Song): ListItem {
         const ui = document.createElement("st-list-item") as ListItem
         ui.SetFromMedia(item)
-        ui.Subtitle = item.Artist
+        if (item.Singers.length === item.Artists.length) {
+            const sortedArtists = [...item.Artists].sort((a, b) => a.localeCompare(b))
+            const sortedSingers = [...item.Singers].sort((a, b) => a.localeCompare(b))
+            if (sortedArtists.every((a, i) => a === sortedSingers[i])) {
+                ui.Subtitle = item.Artists.join(", ")
+                return ui
+            }
+        }
+        ui.Subtitle = item.Artists.join(", ") + " • " + item.Singers.join(", ")
         return ui
     }
 }

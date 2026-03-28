@@ -2,7 +2,7 @@ import { UIObject } from "@ts/ui/ui"
 import { OptionSelector } from "@ts/ui/components/selectors/option-selector"
 
 export class PanelView extends UIObject {
-    private windows: UIObject[] = []
+    public windows: UIObject[] = []
     private selector?: OptionSelector
 
     public set Selector(selector: OptionSelector) {
@@ -23,8 +23,18 @@ export class PanelView extends UIObject {
         this.selector.AddOptions([panel.name])
     }
 
-    public SelectPanel(index: number) {
-        this.selector?.SelectOption(index)
+    public SelectPanel(args: { index?: number, name?: string }) {
+        if (args.index) {
+            this.selector?.SelectOption(args.index)
+        }
+        else if (args.name) {
+            for (const [index, window] of this.windows.entries()) {
+                if (window.name === args.name) {
+                    this.selector?.SelectOption(index)
+                    break
+                }
+            }
+        }
     }
 
     connectedCallback() {

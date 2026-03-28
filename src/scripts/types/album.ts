@@ -13,6 +13,7 @@ interface AlbumPrams {
 }
 
 export class Album implements SongsMedia {
+    get Type() { return "collection" }
     get Id() { return this.id }
     get Date() { return this.date }
     get Singers() { return this.singers }
@@ -29,7 +30,26 @@ export class Album implements SongsMedia {
         return PrettyDate(this.date)
     }
     get Title() {
-        return this.singers.join(" and ") + " Karaoke"
+        let text = ""
+        for (let [i, singer] of this.singers.entries()) {
+            if (i > 2) {
+                text += singer
+                text += ` (+${this.singers.length - 3} more)`
+                //text += "..."
+                return text + " Karaoke"
+            }
+
+            if (i == this.singers.length - 1) {
+                text += singer
+            }
+            else if (i == this.singers.length - 2) {
+                text += singer + " & "
+            }
+            else {
+                text += singer + ", "
+            }
+        }
+        return text + " Karaoke"
     }
     get CoverUrl() {
         return this.Cover ? Network.GetCover(this.Cover) : "src/assets/no-song.png"

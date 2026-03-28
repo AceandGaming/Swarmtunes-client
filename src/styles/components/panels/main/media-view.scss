@@ -1,4 +1,5 @@
 st-media-view {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -11,6 +12,7 @@ st-media-view header {
     grid-template-columns: repeat(2);
     height: fit-content;
     padding: 20px;
+    padding-bottom: 5px;
     gap: 20px;
 
     --cover-background: rgba(0, 0, 0, 30%);
@@ -20,55 +22,83 @@ st-media-view header .info {
     display: flex;
     flex-direction: row;
     max-height: 250px;
+    min-width: 0;
 }
 
 st-media-view header .controls {
     display: flex;
     flex-direction: row;
     height: 30px;
+    z-index: 1;
 }
 
+//Can't decide between these two:
+
+//A:
+// st-media-view::before {
+//     content: "";
+//     position: absolute;
+//     inset: 0;
+//     // height: 130%;
+//     transform: scale(1.02);
+
+//     background: var(--cover-image, var(--cover-background)) no-repeat center/cover;
+//     mask-image: linear-gradient(to bottom,
+//             rgba(0, 0, 0, 100%) calc(100% - 80px),
+//             rgba(0, 0, 0, 95%) calc(100% - 70px), rgba(0, 0, 0, 30%));
+
+//     filter: blur(5px) brightness(0.6);
+// }
+
+//B:
 st-media-view header::before {
     content: "";
     position: absolute;
     inset: 0;
-    height: 110%;
+    height: 130%;
+    transform: scale(1.02);
 
-    background: var(--cover-image, var(--cover-background));
-    background-position: center;
-    background-size: cover;
-    mask-image: linear-gradient(rgba(0, 0, 0, 40%), rgba(0, 0, 0, 35%) 70%, transparent);
+    background: var(--cover-image, var(--cover-background)) no-repeat center/cover;
+    mask-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 100%) 80%,
+            rgba(0, 0, 0, 90%) 83%,
+            rgba(0, 0, 0, 5%) 98%,
+            transparent);
 
-    filter: blur(3px);
+    filter: blur(5px) brightness(0.6);
 }
 
 st-media-view header st-cover {
+    flex: 0 0 auto;
     filter: drop-shadow(0 4px 8.5px rgba(0, 0, 0, 40%));
+    aspect-ratio: 1;
 }
 
 st-media-view .info-text {
     display: flex;
     flex-direction: column;
     padding: 10px 20px;
+    min-width: 0;
 }
 
 st-media-view .info-text * {
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 40%));
+    white-space: wrap;
 }
 
 st-media-view .info-text h1 {
-    font-size: 48px;
+    font-size: clamp(24px, 6vw, 48px);
     color: white;
 }
 
 st-media-view .info-text h2 {
-    font-size: 32px;
+    font-size: clamp(16px, 4vw, 32px);
     font-weight: bold;
     color: #FFFFFFCC;
 }
 
 st-media-view .info-text h3 {
-    font-size: 15px;
+    font-size: clamp(12px, 2vw, 15px);
     font-weight: normal;
     color: #FFFFFFCC;
 }
@@ -79,10 +109,24 @@ st-media-view main {
 }
 
 st-media-view main .sorting {
-    flex: 0 0 10px;
+    position: sticky;
+    width: 100%;
+    height: 20px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 20px;
     border-bottom: var(--subtext-colour) solid 1.5px;
+    opacity: 0.7;
 }
 
 st-media-view main st-song-list {
     padding: 20px;
+}
+
+@media (max-width: 600px) {
+    st-media-view header st-cover {
+        display: none;
+    }
 }

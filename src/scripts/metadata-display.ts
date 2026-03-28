@@ -1,13 +1,13 @@
-interface Metadata {
+export interface Metadata {
     title: string
-    artist: string
+    artists: string[]
     singers: string[]
     coverUrl: string
     date: string
     audioSource: string
 }
 
-class MetadataDisplay {
+export class MetadataDisplay {
     private static UpdateSessionMetadata(data: Metadata) {
         navigator.mediaSession.metadata = new MediaMetadata({
             title: data.title,

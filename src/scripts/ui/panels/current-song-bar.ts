@@ -1,4 +1,6 @@
 import { UIObject } from "@ts/ui/ui"
+
+import "@ts/ui/components/controls/seek-bar"
 import type { SeekBar } from "@ts/ui/components/controls/seek-bar"
 import "@ts/ui/components/controls/media-controls"
 import type { MediaControls } from "@ts/ui/components/controls/media-controls"
@@ -7,6 +9,8 @@ import type { Cover } from "@ts/ui/components/cover"
 import "../components/svg"
 
 import css from "@css/components/panels/current-song-bar.scss?inline"
+import { PlaybackController } from "@ts/playback"
+import { Metadata } from "@ts/metadata-display"
 
 export class CurrentSongBar extends UIObject {
     private titleText!: HTMLHeadingElement
@@ -27,10 +31,10 @@ export class CurrentSongBar extends UIObject {
 
     private isMobile: boolean = false
 
-    CreateCoverImage() {
+    private CreateCoverImage() {
         this.coverImage = document.createElement("st-cover") as Cover
     }
-    CreateSingersWrapper() {
+    private CreateSingersWrapper() {
         const wrapper = document.createElement("div")
         wrapper.classList.add("singer-wrapper")
         wrapper.textContent = "Covered By:"
@@ -40,7 +44,7 @@ export class CurrentSongBar extends UIObject {
 
         this.singersWrapper = wrapper
     }
-    CreateTitleContainer() {
+    private CreateTitleContainer() {
         const titleContainer = document.createElement("div")
         titleContainer.classList.add("title-container")
 
@@ -54,14 +58,14 @@ export class CurrentSongBar extends UIObject {
 
         this.titleContainer = titleContainer
     }
-    CreateSourceText() {
+    private CreateSourceText() {
         const sourceText = document.createElement("h2")
         sourceText.classList.add("source-text")
         sourceText.textContent = ""
 
         this.sourceText = sourceText
     }
-    CreateFullscreenButton() {
+    private CreateFullscreenButton() {
         const svg = document.createElement("better-svg")
         svg.src = "src/assets/icons/maximize.svg"
 
@@ -73,6 +77,13 @@ export class CurrentSongBar extends UIObject {
         //fullscreenButton.addEventListener("click", SongFullscreen.Show.bind(SongFullscreen))
 
         this.fullscreenButton = fullscreenButton
+    }
+    public Update(media: Metadata) {
+        this.coverImage.src = media.coverUrl
+        this.titleText.textContent = media.title
+        this.artistText.textContent = media.artists.join(", ")
+        this.singersText.textContent = media.singers.join(", ")
+        // this.sourceText.textContent = media.audioSource
     }
 
     constructor() {
@@ -141,9 +152,14 @@ export class CurrentSongBar extends UIObject {
 
     public async Initialise(isMobile: boolean) {
         this.isMobile = isMobile
+
+        PlaybackController.AddCallback("onMetadataChange", (media: Metadata) => {
+            this.Update(media)
+        })
     }
 
     connectedCallback() {
+        super.connectedCallback()
         this.CreateUI(this.isMobile)
     }
 }

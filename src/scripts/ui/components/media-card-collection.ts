@@ -3,6 +3,7 @@ import { Song, Album, Playlist } from "@ts/types";
 import css from "@css/components/media-card-collection.scss?inline"
 import { MediaCard } from "./media-card";
 import { PlaybackController } from "@ts/playback";
+import app from "@ts/app";
 
 export class MediaCardCollection extends UIObject {
     private cards: MediaCard[] = []
@@ -44,8 +45,7 @@ export class MediaCardCollection extends UIObject {
             return
         }
 
-        const mediaView = window.tempMediaView()
-        mediaView.Update(album)
+        app.UpdateMediaView(album)
     }
     private OnPlaylistCardClick(event: Event): never {
         //TBD
@@ -61,7 +61,7 @@ export class MediaCardCollection extends UIObject {
             this.cardsContainer.append(card)
         }
 
-        card.addEventListener("click", onClick)
+        card.addEventListener("mousedown", onClick)
     }
     public PopulateWithSongs(songs: Song[]) {
         songs = songs.sort((a, b) => b.Date.getTime() - a.Date.getTime())

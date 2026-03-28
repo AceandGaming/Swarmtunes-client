@@ -50,6 +50,20 @@ export function FormatTime(seconds: number) {
     const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
     return `${minutes}:${secs}`;
 }
+export function FormatDuration(seconds: number) {
+    if (!isFinite(seconds)) {
+        return "0s"
+    }
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+    if (minutes < 60) {
+        return `${minutes}m ${secs}s`;
+    }
+    const hours = Math.floor(minutes / 60);
+    const mins = Math.floor(minutes % 60).toString().padStart(2, '0');
+    return `${hours}h ${mins}m`;
+
+}
 export function RefrenceCSS(source: string) {
     const link = document.createElement("link")
     link.setAttribute("rel", "stylesheet")

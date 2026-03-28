@@ -62,7 +62,7 @@ export class Cover extends HTMLElement {
     connectedCallback() {
         this.classList.add("loading")
         if (!this.#src) {
-            this.src = "src/assets/no-song.png"
+            this.src = "src/assets/images/no-song.png"
         }
 
         const observer = new IntersectionObserver((entries) => {

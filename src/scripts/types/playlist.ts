@@ -10,6 +10,7 @@ interface PlaylistPrams {
 }
 
 export class Playlist implements SongsMedia {
+    get Type() { return "playlist" }
     get Id() { return this.id }
     get Title() { return this.title }
     set Title(title) {

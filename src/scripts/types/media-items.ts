@@ -3,6 +3,7 @@ export interface MediaItem {
     Title: string
     CoverUrl: string
     Date: Date
+    Type: string
 }
 export interface SongsMedia extends MediaItem {
     SongIds: id[]

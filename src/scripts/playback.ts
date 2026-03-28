@@ -1,9 +1,10 @@
 import { AudioBase, AudioPlayer, SwarmFM } from "@ts/audio";
 import type { Song } from "@ts/types";
 import { SongQueue } from "@ts/song-queue";
+import { MetadataDisplay } from "./metadata-display";
 
 export class PlaybackController {
-    public static get HasControl(): AudioBase | null {
+    private static get HasControl(): AudioBase | null {
         if (this.SwarmFM.HasControl) {
             return this.SwarmFM
         }
@@ -24,13 +25,13 @@ export class PlaybackController {
         // }
         return undefined
     }
-    public static get Audio() {
+    private static get Audio() {
         return this.audio
     }
-    public static get SwarmFM() {
+    private static get SwarmFM() {
         return this.swarmfm
     }
-    public static get Youtube() {
+    private static get Youtube() {
         //return this.youtube
         return null
     }
@@ -57,7 +58,9 @@ export class PlaybackController {
         catch (e) {
             console.error("Failed to save suffle state", e)
         }
-        this.CallCallbacks("onShuffleChange", value)
+        this.songQueue.ReShuffle(value)
+        this.CallCallbacks("onShuffle", value)
+        this.CallCallbacks("onQueueChange", this.songQueue.Queue)
     }
 
 
@@ -67,6 +70,11 @@ export class PlaybackController {
     private static swarmfm = new SwarmFM()
     private static songQueue = new SongQueue()
     //private static youtube = new YoutubePlayer()
+
+    public static OnTimeUpdate(callback: (played: number, duration: number, loaded: number) => void) {
+        this.audio.OnTimeUpdate(callback)
+        this.swarmfm.OnTimeUpdate(callback)
+    }
 
     private static CallCallbacks(name: string, prams: any) {
         if (this.callbacks[name]) {
@@ -89,7 +97,8 @@ export class PlaybackController {
         this.Play(song)
     }
     public static PlaySonglist(songlist: Song[], currentSong?: Song) {
-        this.songQueue.PopulateQueue(songlist, this.Shuffle)
+        this.songQueue.PopulateQueue(songlist, this.Shuffle, currentSong)
+        this.CallCallbacks("onQueueChange", this.songQueue.Queue)
         currentSong = currentSong || this.songQueue.CurrentSong
         if (!currentSong) {
             console.warn("No current song")
@@ -132,5 +141,12 @@ export class PlaybackController {
     public static Pause() {
         this.HasControl?.Pause()
         this.CallCallbacks("onPlay", false)
+    }
+
+    public static Seek(fraction: number) {
+        const audio = this.HasControl
+        if (audio instanceof AudioPlayer) {
+            audio.Seek(fraction)
+        }
     }
 }

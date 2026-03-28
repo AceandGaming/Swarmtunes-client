@@ -1,0 +1,29 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 400px;
+}
+
+:host .bar {
+    flex: 1;
+    height: 10px;
+    background: var(--seek-bar-colour);
+    pointer-events: all;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+:host .time {
+    color: var(--subtext-colour);
+}
+
+:host .bar::after {
+    content: "";
+    display: block;
+    background: var(--seek-bar-progress);
+    height: 100%;
+    width: var(--played, 0);
+    border-radius: 100px;
+}

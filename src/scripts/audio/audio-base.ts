@@ -1,3 +1,5 @@
+import { Metadata } from "@ts/metadata-display";
+
 export abstract class AudioBase {
     public abstract get Audio(): HTMLAudioElement
     public abstract get Played(): number

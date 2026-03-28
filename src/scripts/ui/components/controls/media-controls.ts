@@ -2,6 +2,7 @@ import { UIObject } from "@ts/ui/ui"
 import { PlaybackController } from "@ts/playback"
 import { BetterSVG } from "@ts/ui/components/svg"
 import css from "@css/components/controls/media-controls.scss?inline"
+import type { Metadata } from "@ts/metadata-display"
 
 export class MediaControls extends UIObject {
     private shuffleButton: HTMLButtonElement
@@ -28,7 +29,6 @@ export class MediaControls extends UIObject {
         }
 
         PlaybackController.Shuffle = !PlaybackController.Shuffle
-        this.shuffleButton.classList.toggle("active", PlaybackController.Shuffle)
     }
 
     constructor() {
@@ -97,14 +97,19 @@ export class MediaControls extends UIObject {
     }
 
     connectedCallback() {
-        PlaybackController.AddCallback("onSourceChange", (audioSource: string) => {
-            const isSwarmfm = audioSource == "swarmfm"
+        PlaybackController.AddCallback("onMetdataChange", (media: Metadata) => {
+            const isSwarmfm = media.audioSource == "swarmfm"
             this.shuffleButton.disabled = isSwarmfm
             this.previousButton.disabled = isSwarmfm
             this.nextButton.disabled = isSwarmfm
             this.addToPlaylistButton.disabled = isSwarmfm
         })
-
+        PlaybackController.AddCallback("onPlay", (playing: boolean) => {
+            this.playPauseButton.classList.toggle("playing", playing)
+        })
+        PlaybackController.AddCallback("onShuffle", (shuffle: boolean) => {
+            this.shuffleButton.classList.toggle("active", shuffle)
+        })
     }
 
     UpdateButtons(visibleButtons: { shuffle: boolean, skipping: boolean, volume: boolean, addToPlaylist: boolean }) {

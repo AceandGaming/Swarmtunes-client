@@ -6,7 +6,8 @@ import type { Cover } from "@ts/ui/components/cover"
 import "@ts/ui/components/list"
 import type { SongList } from "@ts/ui/components/list"
 import { SongsMedia } from "@ts/types"
-import { PrettyDate } from "@ts/utils"
+import { FormatDuration, PrettyDate } from "@ts/utils"
+import { PlaybackController } from "@ts/playback"
 
 export class MediaView extends UIObject {
     name = "Media View"
@@ -62,6 +63,7 @@ export class MediaView extends UIObject {
         sorting.textContent = "Title"
         sorting.classList.add("sorting")
         this.songlist = document.createElement("st-song-list")
+        this.songlist.OnItemClicked((song) => PlaybackController.PlaySonglist(this.songlist.Songs, song))
 
         content.append(sorting, this.songlist)
 
@@ -71,7 +73,7 @@ export class MediaView extends UIObject {
     public Update(info: SongsMedia) {
         this.titleText.textContent = info.Title
         this.subtitleText.textContent = PrettyDate(info.Date)
-        this.infoText.textContent = `DEBUG - ${info.SongIds.length} songs - ${info.Duration} seconds`
+        this.infoText.textContent = `${info.Type.toUpperCase()} • ${info.SongIds.length} songs, ${FormatDuration(info.Duration)}`
         this.coverImage.src = info.CoverUrl
 
         this.style.setProperty("--cover-image", `url("${info.CoverUrl}")`)

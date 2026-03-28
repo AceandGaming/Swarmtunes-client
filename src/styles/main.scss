@@ -63,7 +63,7 @@ nav > st-panel-view {
 
 st-panel-view {
     background: var(--background);
-    overflow-x: auto;
+    overflow-x: hidden;
 }
 
 st-panel-view > * {

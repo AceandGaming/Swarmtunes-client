@@ -15,7 +15,11 @@
 }
 
 :host(:hover) {
-    filter: brightness(1.2);
+    filter: brightness(1.3);
+}
+
+:host(:active) {
+    filter: brightness(0.8);
 }
 
 :host(.selected) {

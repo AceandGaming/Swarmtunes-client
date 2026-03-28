@@ -22,10 +22,10 @@ export class Song implements MediaItem {
         })
     }
 
-
+    get Type() { return "song" }
     get Id() { return this.id }
     get Title() { return this.title }
-    get Artist() { return this.artists.join(", ") }
+    get Artists() { return this.artists }
     get Singers() { return this.singers }
     get Date() { return this.date }
     get IsOriginal() { return this.isOriginal }
@@ -67,7 +67,7 @@ export class Song implements MediaItem {
     }
 
     ToString() {
-        return `${this.title} by ${this.Artist}`
+        return `${this.title} by ${this.Artists[0]}`
     }
     ToJson() {
         return {

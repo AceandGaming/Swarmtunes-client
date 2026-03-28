@@ -3,9 +3,9 @@ import { Song, CopySongs } from "@ts/types"
 
 export class SongQueue {
     public get Queue() {
-        return this.queue.splice(this.queuePointer, this.queue.length - 1)
+        return this.queue.slice(this.queuePointer, this.queue.length - 1)
     }
-    public get CurrentSong() {
+    public get CurrentSong(): Song | undefined {
         return this.queue[this.queuePointer]
     }
 
@@ -35,8 +35,21 @@ export class SongQueue {
             this.SkipTo(currentSong)
         }
     }
+    public ReShuffle(shuffle: boolean = true) {
+        const song = this.CurrentSong
+        this.UpdateQueue(shuffle)
+        if (song) {
+            if (shuffle) {
+                this.queue.splice(0, 0, song)
+                this.SkipTo(song)
+            }
+            else {
+                this.SkipTo(song)
+            }
+        }
+    }
     public SkipTo(song: Song) {
-        const index = this.queue.indexOf(song)
+        const index = this.queue.findIndex(s => s.Id == song.Id)
         if (index == -1) {
             console.error("Song not found in queue")
             return
@@ -62,7 +75,8 @@ export class SongQueue {
         const songsRemaining = CopySongs(this.songs)
         while (songsRemaining.length > 0) {
             const index = Math.floor(Math.random() * (songsRemaining.length - 1))
-            newQueue.push(songsRemaining.splice(index, 1))
+            newQueue.push(...songsRemaining.splice(index, 1))
         }
+        this.queue = newQueue
     }
 }
