@@ -10,6 +10,7 @@ class ListItem extends HTMLElement {
     public get Subtitle() { return this.subtitle }
     public get Date(): Date | undefined { return this.date }
     public get CoverUrl(): string | undefined { return this.coverUrl }
+    public set Compact(value: boolean) { this.classList.toggle("compact", value) }
 
     public set Title(value: string) {
         this._title = value
@@ -82,6 +83,8 @@ class ListItem extends HTMLElement {
 customElements.define("st-list-item", ListItem)
 
 abstract class List<T extends MediaItem> extends UIObject {
+    public Compact = false
+
     protected items: T[] = []
     private itemsHolder: HTMLOListElement
     private clickCallbacks: ((item: T) => void)[] = []
@@ -90,6 +93,9 @@ abstract class List<T extends MediaItem> extends UIObject {
         for (const item of items) {
             this.items.push(item)
         }
+    }
+    public Set(items: T[]) {
+        this.items = items
     }
     public Remove(item: T) {
         const index = this.items.indexOf(item)
@@ -117,7 +123,6 @@ abstract class List<T extends MediaItem> extends UIObject {
 
     public Clear() {
         this.items = []
-        this.Update()
     }
 
     public Update() {
@@ -189,6 +194,11 @@ abstract class List<T extends MediaItem> extends UIObject {
                 display: block;
                 padding-bottom: 40px;
             }
+            :host ol {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
         `
         shadow.append(style)
 
@@ -202,7 +212,9 @@ export class SongList extends List<Song> {
     public get Songs() { return CopySongs(this.items) }
     protected CreateUIItem(item: Song): ListItem {
         const ui = document.createElement("st-list-item") as ListItem
+        ui.Compact = this.Compact
         ui.SetFromMedia(item)
+        ui.dataset.id = item.Id
         if (item.Singers.length === item.Artists.length) {
             const sortedArtists = [...item.Artists].sort((a, b) => a.localeCompare(b))
             const sortedSingers = [...item.Singers].sort((a, b) => a.localeCompare(b))

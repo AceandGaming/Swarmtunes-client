@@ -90,10 +90,12 @@ export class PlaybackController {
 
     public static NextSong() {
         const song = this.songQueue.Next()
+        this.CallCallbacks("onQueueChange", this.songQueue.Queue)
         this.Play(song)
     }
     public static PreviousSong() {
         const song = this.songQueue.Previous()
+        this.CallCallbacks("onQueueChange", this.songQueue.Queue)
         this.Play(song)
     }
     public static PlaySonglist(songlist: Song[], currentSong?: Song) {

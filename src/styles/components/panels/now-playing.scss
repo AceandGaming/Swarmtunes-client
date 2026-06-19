@@ -1,0 +1,54 @@
+@use "@css/_variables" as *;
+@use "@css/defaults" as *;
+
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding-top: $header-size;
+    margin-right: 2px;
+
+    background-color: var(--background-colour);
+
+    min-width: 250px;
+    max-width: 50vw;
+}
+
+:host header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-self: center;
+    gap: 5px;
+
+    height: 35px;
+
+    padding: 10px;
+    min-width: 0;
+}
+
+:host header h1 {
+    flex: 1;
+    text-align: center;
+    font-size: 1.8rem;
+    transform: translateY(5px);
+}
+
+:host header img {
+    flex: 0 1 auto;
+    max-height: 100%;
+    min-width: 0;
+}
+
+:host st-song-list {
+    overflow-y: auto;
+    min-width: 0;
+    margin: 0 10px;
+
+    scrollbar-width: none; //firefox
+}
+
+:host st-song-list::-webkit-scrollbar {
+    display: none; //litreally everything else
+}

@@ -52,3 +52,7 @@ h2 {
 .right {
     align-items: flex-end;
 }
+
+:host(.compact) .right {
+    display: none;
+}

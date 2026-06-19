@@ -2,6 +2,7 @@ $themes: (
     dark: ( //
         primary: #ccc,
         background: #171717,
+        background-secondary: #171717,
         background-image: linear-gradient(to bottom, #171717, #111),
         text: white,
         icons: #bbb,
@@ -10,6 +11,7 @@ $themes: (
     light: ( //
         primary: #7c7c7c,
         background: #ffffff,
+        background-secondary: #ffffff,
         background-image: white,
         text: black,
         icons: #333,
@@ -19,6 +21,7 @@ $themes: (
     neuro: ( //
         primary: pink,
         background: #ffa3ae,
+        background-secondary: #dd6674,
         background-image: url("@assets/images/neuro-bg.png"),
         text: white,
         icons: #ffffff,
@@ -26,7 +29,8 @@ $themes: (
     ),
     evil: ( //
         primary: red,
-        background: #643134,
+        background: #643134, //perhaps switch to #241216 ??
+        background-secondary: #431a1c,
         background-image: url("@assets/images/evil-bg.png"),
         text: rgb(255, 255, 255),
         icons: #ddd,

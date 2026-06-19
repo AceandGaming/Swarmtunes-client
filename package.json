@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "colorthief": "^3.3.1",
+    "interactjs": "^1.10.27",
     "sortable": "^2.0.0",
     "typescript": "^5.9.3"
   },

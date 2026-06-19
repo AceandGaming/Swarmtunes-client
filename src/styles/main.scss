@@ -1,7 +1,9 @@
+@use "@css/_variables" as *;
 @use "./themes";
 @use "./defaults";
 @use "./components/panels/main/discover.scss" as *;
 @use "./components/panels/main/media-view.scss" as *;
+@use "./components/panels/main/header.scss" as *;
 
 :root {
     overflow: hidden;
@@ -50,20 +52,33 @@ body > main > nav {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    overflow: hidden
+    overflow: hidden;
+    padding: 0;
 }
 
 main > * {
     flex: 1;
 }
 
-nav > st-panel-view {
+nav > .content {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+nav > .content > st-panel-view {
     flex: 1;
 }
 
+
+
 st-panel-view {
+    padding-top: $header-size;
     background: var(--background);
     overflow-x: hidden;
+    scroll-padding-top: $header-size + 50px;
 }
 
 st-panel-view > * {

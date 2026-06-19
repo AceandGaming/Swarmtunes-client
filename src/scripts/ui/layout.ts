@@ -2,7 +2,8 @@ import '@ts/ui/panels/main/discover';
 import '@ts/ui/panels/main/media-view';
 import '@ts/ui/panels/panel-view';
 import '@ts/ui/panels/current-song-bar';
-import '@ts/ui/components/selectors/tab-bar';
+import '@ts/ui/panels/main/header';
+import '@ts/ui/panels/now-playing';
 
 export function CreateLayout() {
     const main = document.createElement("main");
@@ -10,20 +11,29 @@ export function CreateLayout() {
 
     const nav = document.createElement("nav");
 
-    const header = document.createElement("st-tab-bar");
     const panelView = document.createElement("st-panel-view");
 
-    const discover = document.createElement("st-discover-menu");
-    const mediaView = document.createElement("st-media-view");
+    const header = document.createElement("st-header");
+    panelView.Selector = header.TabBar;
 
-    panelView.Selector = header;
+    const discover = document.createElement("st-discover-menu");
     panelView.AddPanel(discover);
 
-    nav.append(header, panelView);
+    const NowPlaying = document.createElement("st-now-playing");
+
+    const content = document.createElement("div")
+    content.classList.add("content")
+
+    content.append(NowPlaying, panelView)
+
+
+    nav.append(header, content);
 
     const songbar = document.createElement("st-current-song-bar");
 
     main.append(nav, songbar);
+
+    const mediaView = document.createElement("st-media-view");
 
     return {
         root: main,

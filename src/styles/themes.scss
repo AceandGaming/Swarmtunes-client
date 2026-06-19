@@ -5,6 +5,7 @@
 @each $name, $theme in $themes {
     $primary: map.get($theme, primary);
     $background: map.get($theme, background);
+    $background-secondary: map.get($theme, background-secondary);
     $background-image: map.get($theme, background-image);
     $text: map.get($theme, text);
     $icons: map.get($theme, icons);
@@ -23,10 +24,10 @@
         --text-colour: #{$text};
         --subtext-colour: #{color.adjust($text, $lightness: -40% / $lightness)};
 
-        --header-colour: #{color.adjust($background, $lightness: 4%)};
-        --header-tab-colour: #{color.adjust($background, $lightness: -5%)};
+        --header-colour: #{color.change(color.adjust($background-secondary, $lightness: 4%), $alpha: 0.7)};
+        --header-tab-colour: #{color.adjust($background-secondary, $lightness: -5%)};
 
-        --current-song-bar: #{color.adjust($background, $lightness: 2%)};
+        --current-song-bar: #{color.adjust($background-secondary, $lightness: 2%)};
 
         --cover-background: #{color.adjust($background, $lightness: -3% / $lightness)};
 
