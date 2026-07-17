@@ -140,7 +140,7 @@ export default class SongQueue {
         NowPlaying.Update()
     }
     static AppendSong(song) {
-        this.#songQueue.push(song)
+        this.#songQueue.splice(1, 0, song)
         NowPlaying.Update()
     }
     static GetSong(id) {

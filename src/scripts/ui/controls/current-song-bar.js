@@ -2,6 +2,7 @@ import { LoadSVG } from "@ts/misc"
 import SongFullscreen from "@ts/ui/content/song-fullscreen"
 import MediaControls from "@ts/ui/controls/media-controls"
 import SeekBar from "@ts/ui/controls/seek-bar"
+import { CreateButton } from "@ts/ui/header"
 
 export default class CurrentSongBar {
     static #coverImage
@@ -61,8 +62,7 @@ export default class CurrentSongBar {
         const middleContent = document.createElement("div")
         middleContent.append(
             this.#CreateTitleContainer(),
-            new SeekBar().element,
-            this.#CreateSourceText()
+            new SeekBar().element
         )
 
         const rightContent = document.createElement("div")

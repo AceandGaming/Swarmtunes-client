@@ -76,8 +76,10 @@ export default class SeekBar {
         this.#seekLoaded.style.width = `${(loaded / duration) * 100}%`
 
         if (this.#startTime) {
+            played = Math.floor(played)
+            duration = Math.floor(duration)
             this.#startTime.textContent = FormatTime(played)
-            this.#endTime.textContent = FormatTime(duration)
+            this.#endTime.textContent = FormatTime(played - duration)
         }
     }
     Clear() {

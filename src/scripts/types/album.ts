@@ -10,6 +10,7 @@ interface AlbumPrams {
 }
 
 export class Album {
+    get Type() { return "Setlist" }
     get Id() { return this.id }
     get Date() { return this.date }
     get Singers() { return this.singers }
@@ -32,6 +33,10 @@ export class Album {
     get Title() {
         return this.singers.join(" and ") + " Karaoke"
     }
+    get CoverUrl(): string {
+        return this.Cover ? window.Network.GetCover(this.Cover) : "src/assets/no-song.png"
+    }
+
 
     private readonly id: id
     private date: Date

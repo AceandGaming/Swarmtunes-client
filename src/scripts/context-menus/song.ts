@@ -12,7 +12,7 @@ import ToastManager from "@ts/ui/toast-manager"
 
 ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, false, [
-        new ContextOption("Append to Queue", "src/assets/icons/plus.svg", async (event: { id: string }) => {
+        new ContextOption("Add to Queue", "src/assets/icons/plus.svg", async (event: { id: string }) => {
             const song = await SongRequester.GetSong(event.id)
             SongQueue.AppendSong(song)
         }),

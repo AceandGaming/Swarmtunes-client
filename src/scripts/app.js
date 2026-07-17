@@ -99,6 +99,9 @@ function OnLogin(isAdmin) {
 Login.AddLoginCallback(OnLogin)
 
 function CreateUI() {
+    window.MediaView = document.createElement("st-media-view")
+    document.body.append(window.MediaView)
+
     ToastManager.Create()
 
     if (window.innerWidth > 600) {
@@ -120,6 +123,13 @@ function CreateUI() {
     PopulateDiscover().catch((e) => {
         ShowErrorScreen()
         console.error(e)
+    }).then(() => {
+        if (document.readyState == "complete") {
+            HideLoading()
+        }
+        else {
+            window.addEventListener("load", HideLoading)
+        }
     })
 
     ShowContentWindow(document.getElementById("discover"))
@@ -156,13 +166,6 @@ function LoadUrlBar() {
 }
 AsyncCrap().then(() => {
     CreateUI()
-
-    if (document.readyState == "complete") {
-        HideLoading()
-    }
-    else {
-        window.addEventListener("load", HideLoading)
-    }
 
     LoadUrlBar()
 })

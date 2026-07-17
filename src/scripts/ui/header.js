@@ -26,10 +26,6 @@ export function CreateButton(footer = false) {
             <span>Search</span>
             <img src="src/assets/icons/search.svg">
         </button>
-        <button class="tab require-admin" data-window="admin-panel">
-            <span>Admin</span>
-            <img src="src/assets/icons/tool.svg">
-        </button>
     `
     if (footer) {
         document.querySelector("footer").append(container)

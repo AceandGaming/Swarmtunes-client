@@ -8,7 +8,7 @@
     --current-song-bar: #202020;
     --seek-bar-background: #00000030;
     --seek-bar-played: linear-gradient(to right, #ffffffee, #ffffffbb);
-    --seek-bar-loaded: #ffffff20;
+    --seek-bar-loaded: transparent;
     --header-tab-default: #111;
     --header-tab-active: var(--background-colour);
     --header-colour: #1c1c1c;
@@ -40,7 +40,7 @@
     --text-colour: #ffffff;
     --subtext-colour: #fff;
     --seek-bar-background: #0000001a;
-    --seek-bar-loaded: #ffb1bbc0;
+    /* --seek-bar-loaded: #ffb1bbc0; */
     --cover-background: #df858f;
     --header-tab-default: #d37984;
     --header-tab-active: #ffa3ae;
@@ -53,6 +53,7 @@
     --icon-default: #fff;
     --icon-hover: #eee;
     --icon-active: #ccc;
+    --catagory-background: #ffffff2a;
 }
 
 :root[data-theme="evil"] {
@@ -125,6 +126,13 @@
     --current-song-bar: white;
     --text-colour: black;
     filter: hue-rotate(180deg) contrast(2);
+}
+
+@font-face {
+    font-family: "Neuro";
+    src: url("/src/assets/first-coffie.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
 }
 
 html,

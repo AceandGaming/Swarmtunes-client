@@ -125,6 +125,7 @@
 
 #song-fullscreen .info-container > * {
     flex: 1;
+    font-weight: 900;
 }
 
 #song-fullscreen .info-container .triple-dot {

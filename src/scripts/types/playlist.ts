@@ -1,6 +1,5 @@
 import SongRequester from "@ts/song-requester"
 import type { Song } from "@ts/types/song"
-import { MediaView } from "@ts/ui/content/media-view"
 
 interface PlaylistPrams {
     id: id
@@ -12,6 +11,7 @@ interface PlaylistPrams {
 }
 
 export class Playlist {
+    get Type() { return "Playlist" }
     get Id() { return this.id }
     get Title() { return this.title }
     set Title(title) {
@@ -36,6 +36,17 @@ export class Playlist {
         }
         return this.coverType
     }
+    get PrettyDate() {
+        return this.date.toLocaleDateString("en-AU", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+        })
+    }
+    get CoverUrl(): string {
+        return this.Cover ? window.Network.GetCover(this.Cover) : "src/assets/no-song.png"
+    }
+
 
     private readonly id: id
     private title: string
@@ -75,7 +86,6 @@ export class Playlist {
         }
         this.songIds.push(song.Id)
         this.songs.push(song)
-        MediaView.ClearMediaId(this.Id)
     }
     Has(song: id) {
         return this.songIds.includes(song)
@@ -103,7 +113,6 @@ export class Playlist {
         const index = this.songIds.indexOf(song.Id)
         this.songIds.splice(index, 1)
         this.songs.splice(index, 1)
-        MediaView.ClearMediaId(this.Id)
     }
     RemoveIds(ids: id[]) {
         for (const id of ids) {
@@ -116,7 +125,6 @@ export class Playlist {
         if (this.songsLoaded) {
             this.songs.splice(index, 1)
         }
-        MediaView.ClearMediaId(this.Id)
     }
 
     ToJson() {

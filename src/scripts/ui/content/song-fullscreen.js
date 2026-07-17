@@ -174,10 +174,9 @@ export default class SongFullscreen {
         this.#coverImage.addEventListener("load", (event) => {
             const colour = event.target.hsl
             this.#element.style.background = `linear-gradient(
-                hsl(${colour.h}, ${colour.s * 2}%, ${colour.l * 1.2}%),
-                hsl(${colour.h}, ${colour.s * 1.5}%, ${colour.l / 1.5}%)
+                hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 80)}%),
+                hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.8, 40)}%)
             )`
-            this.#element.classList.toggle("high-contrast", colour.l * 1.2 > 90)
             this.#element.dataset.colour = `hsl(${colour.h}, ${colour.s * 2}%, ${colour.l * 1.2}%)`
 
             if (this.visable) {

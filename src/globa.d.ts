@@ -14,7 +14,7 @@ declare global {
         PlayState: typeof PlayState
         SongQueue: typeof SongQueue
         SongRequester: typeof SongRequester
-        MediaView: typeof MediaView
+        MediaView: MediaView
 
         isMobile: boolean
         isTablet: boolean
