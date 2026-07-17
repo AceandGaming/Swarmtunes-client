@@ -1,3 +1,6 @@
+import { LoadSVG } from "@ts/misc"
+import Network from "@ts/network"
+
 export class ContextOption {
     constructor(
         public name: string,
@@ -40,8 +43,8 @@ export class ContextMenu {
     private static menu: ContextMenuUI
 
     public static Initalise() {
-        if (isMobile) {
-            if (isTablet) {
+        if (window.isMobile) {
+            if (window.isTablet) {
                 this.menu = new DesktopContextMenu()
             }
             else {

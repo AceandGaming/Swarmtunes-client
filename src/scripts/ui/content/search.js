@@ -5,7 +5,7 @@ import { SongList } from "@ts/ui/song-list"
 
 let searchTimeout
 
-export async function PopulateSearch(searchTerm) {
+export async function PopulateSearch(searchTerm, maxResults = 10) {
     function OnNetworkFailed() {
         const errorScreen = new ErrorScreen("Failed to get search results")
         const element = errorScreen.CreateElement()
@@ -13,7 +13,7 @@ export async function PopulateSearch(searchTerm) {
         document.getElementById("search-results").append(element)
     }
     LoadingText.Attach(document.getElementById("search-results"))
-    const songs = await Network.Search(searchTerm)
+    const songs = await Network.Search(searchTerm, maxResults)
 
     const songlist = new SongList(songs)
     const element = songlist.CreateElement(true)
@@ -28,5 +28,13 @@ function OnSearchValueChange(event) {
         PopulateSearch(event.target.value)
     }, 500)
 }
+function OnSearchChange(event) {
+    if (searchTimeout) {
+        clearTimeout(searchTimeout)
+    }
+    PopulateSearch(event.target.value, 50)
+}
 
-document.getElementById("search-bar").addEventListener("keydown", OnSearchValueChange)
+const bar = document.getElementById("search-bar")
+bar.addEventListener("keydown", OnSearchValueChange)
+bar.addEventListener("change", OnSearchChange)

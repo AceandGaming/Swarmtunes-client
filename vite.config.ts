@@ -13,4 +13,14 @@ export default defineConfig({
             '@css': path.resolve(__dirname, 'src/styles'),
         },
     },
+    server: {
+        proxy: {
+            "/api": {
+                target: "https://api.swarmtunes.com",
+                changeOrigin: true,
+                secure: true,
+                rewrite: (path) => path.replace(/^\/api/, ""),
+            },
+        }
+    }
 })

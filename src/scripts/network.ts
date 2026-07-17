@@ -6,9 +6,11 @@ import { Song } from "@ts/types/song"
 import { Login } from "@ts/ui/popups/login"
 import ToastManager from "@ts/ui/toast-manager"
 
+const SERVER_URL = import.meta.env.VITE_API_URL
+
 export default class Network {
     static get serverURL() {
-        return "https://api.swarmtunes.com/v1"
+        return `${SERVER_URL}/v1`
     }
     static get swarmFMURL() {
         return "https://swarmfm.boopdev.com"
@@ -229,16 +231,17 @@ export default class Network {
         const params = new URLSearchParams()
         params.append("filters", filters.join(","))
         params.append("maxResults", String(maxResults))
-        const response = await this.Get(`songs?${params.toString()}`)
+        const response = await this.Get(`songs/?${params.toString()}`)
         const songs = []
         for (const dict of await response.json()) {
             songs.push(new Song(dict))
         }
         return songs
     }
-    static async Search(query: string) {
+    static async Search(query: string, maxResults: number = 10) {
         const params = new URLSearchParams()
         params.append("query", query)
+        params.append("maxResults", String(maxResults))
         const response = await this.QuickGet(`search?${params.toString()}`)
         const songs = []
         for (const dict of await response.json()) {
@@ -253,7 +256,7 @@ export default class Network {
         for (let i = 0; i < ids.length; i++) {
             params.append("ids", ids[i])
         }
-        const response = await this.Get(`albums?${params.toString()}`)
+        const response = await this.Get(`albums/?${params.toString()}`)
         const albums = []
         for (const dict of await response.json()) {
             albums.push(new Album(dict))
@@ -268,7 +271,7 @@ export default class Network {
     static async GetAllAlbums(...filters: string[]) {
         const params = new URLSearchParams()
         params.append("filters", filters.join(","))
-        const response = await this.Get(`albums?${params.toString()}`)
+        const response = await this.Get(`albums/?${params.toString()}`)
         const albums = []
         for (const dict of await response.json()) {
             albums.push(new Album(dict))
@@ -292,12 +295,12 @@ export default class Network {
     //     return EnsureValue(response.json()) //just a list of urls. no class
     // }
     static async SharePlaylist(id: id) {
-        const response = await this.Get(`playlists/${id}/share`)
+        const response = await this.Get(`playlists/${id}/share/`)
         const json = await response.json()
         return json["link"]
     }
     static async AddSharedPlaylist(code: string) {
-        const response = await this.Post(`playlists/shared`, { code: code })
+        const response = await this.Post(`playlists/shared/`, { code: code })
         const json = await response.json()
         const playlist = new Playlist(json["playlist"])
         return playlist
@@ -340,7 +343,7 @@ export default class Network {
         }
     }
     static async LogOut() {
-        await this.Post(`me/logout`, {})
+        await this.Post(`me/logout/`, {})
         sessionStorage.removeItem("userToken")
         sessionStorage.removeItem("isAdmin")
         window.location.reload()
@@ -352,7 +355,7 @@ export default class Network {
         for (let i = 0; i < ids.length; i++) {
             params.append("ids", ids[i])
         }
-        const response = await this.Get(`playlists?${params.toString()}`)
+        const response = await this.Get(`playlists/?${params.toString()}`)
         const playlists = []
         for (const dict of await response.json()) {
             playlists.push(new Playlist(dict))
@@ -365,7 +368,7 @@ export default class Network {
         return EnsureValue(playlists)
     }
     static async GetAllPlaylists() {
-        const response = await this.Get(`playlists`)
+        const response = await this.Get(`playlists/`)
         const playlists = []
         for (const dict of await response.json()) {
             playlists.push(new Playlist(dict))
@@ -391,7 +394,7 @@ export default class Network {
         URL.revokeObjectURL(url)
     }
     static async CreatePlaylist(name: string) {
-        const response = await this.Post(`playlists`, { name: name })
+        const response = await this.Post(`playlists/`, { name: name })
         const json = await response.json()
         if (!response.ok) {
             return { error: json["detail"] }
@@ -399,23 +402,23 @@ export default class Network {
         return new Playlist(json)
     }
     static async DeletePlaylist(playlist: id) {
-        await this.Delete(`playlists/${playlist}`)
+        await this.Delete(`playlists/${playlist}/`)
     }
     static async AddSongToPlaylist(playlist: id, songs: id[]) {
-        await this.Patch(`playlists/${playlist}/add`, {
+        await this.Patch(`playlists/${playlist}/add/`, {
             songs: EnsureArray(songs),
         })
     }
     static async RemoveSongFromPlaylist(playlist: id, songs: id[]) {
-        await this.Patch(`playlists/${playlist}/remove`, {
+        await this.Patch(`playlists/${playlist}/remove/`, {
             songs: EnsureArray(songs),
         })
     }
     static async RenamePlaylist(playlist: id, name: string) {
-        await this.Patch(`playlists/${playlist}`, { name: name })
+        await this.Patch(`playlists/${playlist}/`, { name: name })
     }
     static async UpdatePlaylist(playlist: Playlist) {
-        await this.Patch(`playlists/${playlist.Id}`, {
+        await this.Patch(`playlists/${playlist.Id}/`, {
             name: playlist.Title,
             songIds: playlist.SongIds
         })
@@ -427,7 +430,7 @@ export default class Network {
     }
 
     static GetEmoteUrl(name: string) {
-        return `${this.serverURL}/emotes/${name}`
+        return `${this.serverURL}/emotes/${name}/`
     }
 }
 
