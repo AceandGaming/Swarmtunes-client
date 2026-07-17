@@ -4,7 +4,12 @@
     "module": "commonjs",
     "checkJs": false
   },
-  "include": ["**/*.js"],
-  "exclude": ["node_modules", "mini"],
-  "type": "module"
+  "include": [
+    "**/*.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "mini"
+  ],
+  "type": "commonjs"
 }

@@ -1,20 +1,21 @@
 {
-          "name": "swarmtunes",
-          "version": "1.0.0",
-          "description": "A music player for Neuro-sama and Evil Neuro covers of songs",
-          "license": "ISC",
-          "author": "Ace",
-          "type": "commonjs",
-          "main": "src/electron.js",
-          "scripts": {
-                    "start": "electron ."
-          },
-          "devDependencies": {
-                    "electron": "^37.2.6",
-                    "typescript": "^5.9.3"
-          },
-          "dependencies": {
-                    "http-server": "^14.1.1",
-                    "vite": "^7.1.9"
-          }
+  "name": "swarmtunes-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/sortablejs": "^1.15.9",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1"
+  },
+  "dependencies": {
+    "colorthief": "^3.4.0",
+    "sortablejs": "^1.15.7"
+  }
 }

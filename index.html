@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1c1c1c" />
+
+  <title>Swarmtunes</title>
+  <link rel="icon" type="image/png" href="/icon_small.png">
+  <link rel="mask-icon" sizes="180x180" href="/icon_small.png">
+
+  <meta property="og:title" content="Swarmtunes" />
+  <meta property="og:description" content="The Neuro-sama music app" />
+  <meta property="og:image" content="/icon.png" />
+  <meta property="og:type" content="music.song">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon_filled.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Swarmtunes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="transparent">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Swarmtunes" />
+  <meta name="twitter:description" content="The Neuro-sama music app" />
+  <meta name="twitter:image" content="/icon.png" />
+
+  <style>
+    #loading-screen {
+      position: absolute;
+      background-color: #171717;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+
+      transition: opacity 0.5s ease;
+      opacity: 1;
+    }
+
+    #loading-screen.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #loading-screen img {
+      width: 200px;
+      height: auto;
+    }
+
+    #loading-screen .loading-text {
+      font-size: 35px;
+    }
+
+    #loading-screen .disclaimer {
+      position: absolute;
+      bottom: 25px;
+      max-width: 90vw;
+      font-size: 15px;
+      text-align: center;
+      white-space: pre-wrap;
+      color: grey;
+    }
+
+
+    @media (max-width: 500px) {
+      #loading-screen {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <link rel="stylesheet" href="src/styles/styles.css" />
+  <link rel="stylesheet" href="src/styles/content/discover.css" />
+  <link rel="stylesheet" href="src/styles/content/media-view.css" />
+  <link rel="stylesheet" href="src/styles/content/search.css" />
+  <link rel="stylesheet" href="src/styles/catagories.css" />
+  <link rel="stylesheet" href="src/styles/current-song-bar.css" />
+  <link rel="stylesheet" href="src/styles/media-controls.css" />
+  <link rel="stylesheet" href="src/styles/header.css" />
+  <link rel="stylesheet" href="src/styles/now-playing.css" />
+  <link rel="stylesheet" href="src/styles/context-menu.css" />
+  <link rel="stylesheet" href="src/styles/song-list.css" />
+  <link rel="stylesheet" href="src/styles/error-screen.css" />
+  <link rel="stylesheet" href="src/styles/content/playlist-tab.css" />
+  <link rel="stylesheet" href="src/styles/content/admin-panel.css" />
+  <link rel="stylesheet" href="src/styles/select-playlist.css" />
+  <link rel="stylesheet" href="src/styles/tabs.css" />
+  <link rel="stylesheet" href="src/styles/popup.css" />
+  <link rel="stylesheet" href="src/styles/content/song-fullscreen.css" />
+  <link rel="stylesheet" href="src/styles/toast-manager.css" />
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+
+  <div id="loading-screen">
+    <img src="icon.png">
+    <div class="loading-text"></div>
+    <span class="disclaimer">Swarmtunes is a fan made site and is not associated with Vedal, Neuro-sama or SwarmFM</span>
+  </div>
+
+
+  <main>
+    <div id="now-playing">
+      <div class="title">
+        <img src="src/assets/evil-cheer.webp">
+        <span>Now Playing</span>
+        <img src="src/assets/neuro-cheer.webp">
+      </div>
+    </div>
+    <div id="content-container">
+      <header>
+        <div id="header-buttons">
+          <button title="Change Theme" id="change-theme-button">
+            <img src="src/assets/icons/moon.svg" />
+          </button>
+          <button id="header-login-button">Log In</button>
+        </div>
+      </header>
+
+      <div id="content">
+        <div id="content-tabs">
+          <div id="playlists-tab">
+            <button id="new-playlist-button">Create Playlist</button>
+            <div id="playlist-grid">
+
+            </div>
+          </div>
+          <div id="discover">
+            <button id="swarmfm-button" title="Play SwarmFM!" data-rightclickcategory="swarmfm"></button>
+          </div>
+          <div id="search">
+            <input id="search-bar" type="text" placeholder="search for a song!">
+            <ol id="search-results"></ol>
+          </div>
+          <div id="admin-panel" class="require-admin">
+            <h2>Server Control</h2>
+            <button onclick="OnServerResyncButtonClick()">Resync Songs</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+
+  </footer>
+  <!-- Now that's a lot of scripts -->
+  <script type="module" src="src/main.ts"></script>
+</body>
+
+</html>

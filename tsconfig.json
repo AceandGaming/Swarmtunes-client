@@ -1,34 +1,39 @@
 {
   "compilerOptions": {
-    // File Layout
-    "rootDir": "./site/src/scripts",
-    "outDir": "./site/dist",
-
-    // Environment Settings
-    "target": "esnext",
-    "module": "none",
+    "ignoreDeprecations": "6.0",
+    "target": "es2023",
+    "module": "esnext",
+    "lib": [
+      "ES2023",
+      "DOM"
+    ],
+    "types": [
+      "vite/client"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@css/*": [
+        "src/styles/*"
+      ],
+      "@ts/*": [
+        "src/scripts/*"
+      ]
+    },
     "allowJs": true,
-    
-
-    // Optional Libraries
-    "lib": ["es2020", "dom"],
-
-    // Source maps (optional, helpful for debugging)
-    "sourceMap": true,
-
-    // Stricter Typechecking Options
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Avoid unnecessary module stuff
-    "verbatimModuleSyntax": false,
-    "isolatedModules": false,
-    "moduleDetection": "legacy",
-    "declaration": false,
-    "declarationMap": false,
-    "noUncheckedSideEffectImports": false,
-    "types": []
+    "allowArbitraryExtensions": true,
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
   },
-  "include": ["./site/src/scripts/**/*"]
+  "include": [
+    "src"
+  ]
 }
