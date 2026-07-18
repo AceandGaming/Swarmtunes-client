@@ -2,6 +2,7 @@ import AudioPlayer from "@ts/audio"
 import { CloneSongs, GetidsFromSongList } from "@ts/misc"
 import PlayState from "@ts/play-state"
 import { PlaybackController } from "@ts/playback"
+import type { Song } from "@ts/types/song"
 import { NowPlaying } from "@ts/ui/now-playing"
 
 export default class SongQueue {
@@ -31,7 +32,7 @@ export default class SongQueue {
     }
     static set suffleSongs(value) {
         try {
-            localStorage.setItem("suffle", value)
+            localStorage.setItem("suffle", value ? "true" : "false")
         }
         catch (e) {
             console.error("Failed to save suffle state", e)
@@ -53,10 +54,10 @@ export default class SongQueue {
         return localStorage.getItem("suffle") == "true"
     }
 
-    static #loadedSongs = []
-    static #songQueue = []
-    static #queuePointer = 0
-    static #callbacks = []
+    static #loadedSongs: Song[] = []
+    static #songQueue: Song[] = []
+    static #queuePointer: number = 0
+    static #callbacks: ((value: boolean) => void)[] = []
 
     static GetNextSong() {
         if (this.#songQueue.length == 0) {
@@ -73,7 +74,7 @@ export default class SongQueue {
     }
     static PlayNextSong() {
         const song = this.GetNextSong()
-        if (song === null) {
+        if (!song) {
             AudioPlayer.instance.Pause()
             return
         }
@@ -92,8 +93,8 @@ export default class SongQueue {
     }
     static PlayPreviousSong() {
         const song = this.GetPreviousSong()
-        if (song === null) {
-            AudioPlayer.Pause()
+        if (!song) {
+            AudioPlayer.instance.Pause()
             return
         }
         PlaybackController.PlaySong(song)
@@ -102,18 +103,17 @@ export default class SongQueue {
     static ClearSongQueue() {
         this.LoadSingleSong(this.currentSong)
     }
-    static LoadSongs(songs) {
+    static LoadSongs(songs: Song[]) {
         this.#loadedSongs = CloneSongs(songs)
         PlayState.Update({ songIds: GetidsFromSongList(songs) })
     }
-    static LoadSingleSong(song) {
+    static LoadSingleSong(song: Song) {
         this.LoadSongs([song.Copy()])
         this.#UnshuffleQueue()
-        NowPlaying.source = "none"
         NowPlaying.Update()
-        PlayState.Update({ currentSong: song.id })
+        PlayState.Update({ currentSongId: song.Id })
     }
-    static UpdateQueue(currentSong) {
+    static UpdateQueue(currentSong: Song | undefined = undefined) {
         if (this.#suffle) {
             this.#ShuffleQueue()
         }
@@ -133,26 +133,26 @@ export default class SongQueue {
             this.#UnshuffleQueue()
         }
     }
-    static PlayNow(songs) {
+    static PlayNow(songs: Song[]) {
         this.LoadSongs(songs)
         this.#UnshuffleQueue()
         this.currentSong = songs[0]
         NowPlaying.Update()
     }
-    static AppendSong(song) {
+    static AppendSong(song: Song) {
         this.#songQueue.splice(1, 0, song)
         NowPlaying.Update()
     }
-    static GetSong(id) {
+    static GetSong(id: id) {
         for (let i = 0; i < this.#loadedSongs.length; i++) {
-            if (this.#loadedSongs[i].id === id) {
+            if (this.#loadedSongs[i].Id === id) {
                 return this.#loadedSongs[i]
             }
         }
     }
-    static RemoveSong(id) {
+    static RemoveSong(id: id) {
         for (let i = 0; i < this.#songQueue.length; i++) {
-            if (this.#songQueue[i].id === id) {
+            if (this.#songQueue[i].Id === id) {
                 this.#songQueue.splice(i, 1)
                 if (this.#queuePointer === i) {
                     PlaybackController.PlaySong(this.currentSong)
@@ -162,13 +162,17 @@ export default class SongQueue {
         }
         console.warn("Song not found in queue")
     }
-    static OnQueueOrderChange(newOrder) {
+    static OnQueueOrderChange(newOrder: id[]) {
         const newQueue = []
         for (const id of newOrder) {
             newQueue.push(this.GetSong(id))
         }
-        if (newQueue[0].id !== this.currentSong.id) {
-            PlaybackController.PlaySong(newQueue[0])
+        const first = newQueue[0]
+        if (!first) {
+            return
+        }
+        if (first.Id !== this.currentSong.Id) {
+            PlaybackController.PlaySong(first)
         }
         const previusSongs = this.#songQueue.slice(0, this.#queuePointer)
         newQueue.splice(0, 0, ...previusSongs)
@@ -176,21 +180,21 @@ export default class SongQueue {
         this.#songQueue = CloneSongs(newQueue)
     }
 
-    static SkipSong(song) {
+    static SkipSong(song: Song) {
         for (let i = 0; i < this.#songQueue.length; i++) {
-            if (this.#songQueue[i].id === song.id) {
+            if (this.#songQueue[i].Id === song.Id) {
                 this.#queuePointer = i
                 return
             }
         }
     }
-    static SpliceSong(song) {
+    static SpliceSong(song: Song) {
         if (song === undefined) {
             return
         }
         const songQueue = this.#songQueue
         for (let i = 0; i < songQueue.length; i++) {
-            if (songQueue[i].id === song.id) {
+            if (songQueue[i].Id === song.Id) {
                 songQueue.splice(i, 1)
                 songQueue.splice(0, 0, song)
             }
@@ -200,7 +204,7 @@ export default class SongQueue {
         const songs = CloneSongs(this.#loadedSongs)
         const newQueue = []
         while (songs.length > 0) {
-            const index = Math.floor(Math.random(0) * (songs.length - 1) + 0.5)
+            const index = Math.floor(Math.random() * (songs.length - 1) + 0.5)
             newQueue.push(songs[index])
             songs.splice(index, 1)
         }
@@ -211,7 +215,7 @@ export default class SongQueue {
         this.#songQueue = CloneSongs(this.#loadedSongs)
     }
 
-    static OnShuffleChange(callback) {
+    static OnShuffleChange(callback: (enabled: boolean) => void) {
         this.#callbacks.push(callback)
     }
 }

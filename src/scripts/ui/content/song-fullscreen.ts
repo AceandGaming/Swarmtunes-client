@@ -4,20 +4,22 @@ import SwarmFM from "@ts/swarmfm"
 import { ContextMenu } from "@ts/ui/context-menu"
 import MediaControls from "@ts/ui/controls/media-controls"
 import SeekBar from "@ts/ui/controls/seek-bar"
+import type Cover from "@ts/ui/cover"
 import { ShowFooter, UpdateThemeColor, HideFooter } from "@ts/ui/header"
 
 export default class SongFullscreen {
-    static #element
-    static #coverImage
-    static #artistText
-    static #titleText
-    static #singersText
-    static #sourceText
-    static #swarmFMPanel
-    static #dateText
-    static #infoContainer
-    static #content
-    static #wakeLock
+    static #element: HTMLDivElement
+    static #coverImage: Cover
+    static #artistText: HTMLSpanElement
+    static #titleText: HTMLSpanElement
+    static #singersText: HTMLSpanElement
+    static #sourceText: HTMLSpanElement
+    static #swarmFMPanel: HTMLIFrameElement
+    static #dateText: HTMLSpanElement
+    static #infoContainer: HTMLDivElement
+    static #content: HTMLDivElement
+    static #wakeLock: WakeLockSentinel | null
+
     static get visable() {
         return this.#element.classList.contains("show")
     }
@@ -57,7 +59,7 @@ export default class SongFullscreen {
         const coverContainer = document.createElement("div")
         coverContainer.classList.add("cover-container")
 
-        const cover = document.createElement("swarmtunes-cover")
+        const cover = document.createElement("swarmtunes-cover") as Cover
 
         const singer = document.createElement("h2")
         singer.classList.add("sub-text", "singer")
@@ -100,7 +102,7 @@ export default class SongFullscreen {
         this.#sourceText = sourceText
 
         let mediaControls
-        if (isMobile) {
+        if (window.isMobile) {
             mediaControls = MediaControls.Create({ skipping: true, shuffle: true, addToPlaylist: true, size: 40, gap: 10 })
         }
         else {
@@ -111,11 +113,11 @@ export default class SongFullscreen {
         content.append(info, controls)
         element.append(content, swarmFMPlayer)
         this.#element = element
-        document.querySelector("body").prepend(element)
+        document.querySelector("body")?.prepend(element)
     }
     static Hide() {
         this.#element.classList.remove("show")
-        document.querySelector("main").style.display = ""
+        //document.querySelector("main").style.display = ""
         ShowFooter()
         //document.exitFullscreen()
         if (this.#wakeLock) {
@@ -127,7 +129,7 @@ export default class SongFullscreen {
     }
     static Show() {
         this.#element.classList.add("show")
-        document.querySelector("main").style.display = "none"
+        //document.querySelector("main").style.display = "none"
         HideFooter()
         // this.#element.requestFullscreen()
         // document.onfullscreenchange = () => {
@@ -149,7 +151,7 @@ export default class SongFullscreen {
             UpdateThemeColor(this.#element.dataset.colour)
         }
     }
-    static Display(title, artist, singers, coverUrl, date, source) {
+    static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string, source: string = "MP3") {
         this.#swarmFMPanel.classList.add("hidden")
         this.#content.classList.remove("hidden")
 
@@ -171,7 +173,7 @@ export default class SongFullscreen {
         }
 
 
-        this.#coverImage.addEventListener("load", (event) => {
+        this.#coverImage.addEventListener("load", (event: any) => {
             const colour = event.target.hsl
             this.#element.style.background = `linear-gradient(
                 hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 80)}%),
@@ -198,7 +200,7 @@ export default class SongFullscreen {
         this.#swarmFMPanel.classList.remove("hidden")
         this.#content.classList.add("hidden")
     }
-    static UpdateContextMenuInfo(id, catagory) {
+    static UpdateContextMenuInfo(id: id, catagory: string) {
         this.#infoContainer.setAttribute("data-id", id)
         this.#infoContainer.setAttribute("data-category", catagory)
     }

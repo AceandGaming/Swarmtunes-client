@@ -1,13 +1,14 @@
 import { PlaybackController } from "@ts/playback"
 import SongQueue from "@ts/song-queue"
 import SongRequester from "@ts/song-requester"
+import type { Song } from "@ts/types/song"
 
 export default class PlayState {
-    static awaitingSong = undefined
+    static awaitingSong?: Song
 
-    static Update({ currentSongId, played, songIds, playing } = {}) {
+    static Update({ currentSongId, played, songIds, playing }: { currentSongId?: string, played?: number, songIds?: string[], playing?: boolean } = {}) {
         const json = localStorage.getItem("playState")
-        let data = {}
+        let data: any = {}
         if (json) {
             data = JSON.parse(json)
         }
@@ -48,21 +49,23 @@ export default class PlayState {
             return
         }
         const song = await SongRequester.GetSong(data.currentSong)
-        if (song === undefined) {
+        if (!song) {
             return
         }
         if (PlaybackController.CurrentSong !== undefined) {
             return
         }
         PlaybackController.DisplaySong(song)
-        if (!isNewSession && data.playing) {
+        if (!window.isNewSession && data.playing) {
             PlaybackController.PlaySong(song)
             if (data.played) {
                 let die = false //POV: You haven't implemented the ablity to remove callbacks
                 PlaybackController.OnPlayPause((state) => {
                     if (state && !die) {
                         die = true
-                        PlaybackController.HasControl.Played = data.played
+                        if (PlaybackController.HasControl) {
+                            PlaybackController.HasControl.Played = data.played
+                        }
                     }
                 })
             }
@@ -80,7 +83,7 @@ export default class PlayState {
         SongQueue.UpdateQueue(song)
     }
     static Initalise() {
-        PlaybackController.OnTimeUpdate((played, duration, loaded) => {
+        PlaybackController.OnTimeUpdate((played) => {
             PlayState.Update({ played: played })
         })
         setInterval(() => {

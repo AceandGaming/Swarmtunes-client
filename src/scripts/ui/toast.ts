@@ -1,6 +1,8 @@
 export class ToastUI extends HTMLElement {
+    // @ts-ignore
     static get observedAttributes() { return ["message"], ["duration"], ["type"], ["htmlContent"] }
-    attributeChangedCallback(name, oldValue, newValue) {
+
+    attributeChangedCallback(name: any, oldValue: any, newValue: any) {
         if (oldValue === newValue) {
             return
         }
@@ -25,6 +27,8 @@ export class ToastUI extends HTMLElement {
     #type = "none"
     #htmlContent = false
     #created = false
+    icon!: HTMLImageElement
+    text!: HTMLElement
 
     get message() {
         return this.#message
@@ -39,7 +43,7 @@ export class ToastUI extends HTMLElement {
         return this.#duration
     }
     set duration(value) {
-        this.setAttribute("duration", value)
+        this.setAttribute("duration", value + "")
         this.#duration = value
     }
 
@@ -61,7 +65,7 @@ export class ToastUI extends HTMLElement {
         return this.#htmlContent
     }
     set htmlContent(value) {
-        this.setAttribute("htmlContent", value)
+        this.setAttribute("htmlContent", value ? "true" : "false")
         this.#htmlContent = value
     }
 

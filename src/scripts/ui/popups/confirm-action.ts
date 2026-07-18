@@ -1,27 +1,28 @@
 import PopupWindow from "@ts/ui/popups/popup"
 
 export default class ConfirmAction extends PopupWindow {
-    static instance
-    static AskUser(displayMessage) {
+    static instance: ConfirmAction
+
+    static AskUser(displayMessage: string) {
         const oldInstance = this.instance
         if (oldInstance) {
             document.body.removeChild(oldInstance.background)
         }
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             new ConfirmAction(displayMessage)
-            ConfirmAction.instance.window.querySelector(".cancel-button").addEventListener("click", () => {
+            ConfirmAction.instance.window.querySelector(".cancel-button")!.addEventListener("click", () => {
                 resolve(false)
             })
-            ConfirmAction.instance.window.querySelector(".confirm-button").addEventListener("click", () => {
+            ConfirmAction.instance.window.querySelector(".confirm-button")!.addEventListener("click", () => {
                 resolve(true)
             })
-            ConfirmAction.instance.window.querySelector(".close-button").addEventListener("click", () => {
+            ConfirmAction.instance.window.querySelector(".close-button")!.addEventListener("click", () => {
                 resolve(false)
             })
             ConfirmAction.instance.Show()
         })
     }
-    constructor(displayMessage) {
+    constructor(displayMessage: string) {
         super("Are you sure?")
         const discription = document.createElement("p")
         discription.innerHTML = displayMessage

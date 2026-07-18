@@ -84,10 +84,10 @@ export default class MediaControls {
                 LoadSVG("src/assets/icons/volume.svg")
             )
             buttons.append(volumeControls)
-            new VolumeButton(volumeControls, volumeControls.querySelector("#volume-slider"))
+            new VolumeButton(volumeControls, volumeControls.querySelector("#volume-slider") as HTMLInputElement)
         }
 
-        function CreateAddToPlaylistButton(callback) {
+        function CreateAddToPlaylistButton(callback: () => void) {
             const addToPlaylistButton = document.createElement("button")
             addToPlaylistButton.append(LoadSVG("src/assets/icons/playlist-add.svg"))
             addToPlaylistButton.title = "Add to Playlist"
@@ -141,13 +141,13 @@ export default class MediaControls {
         MediaControls.Attach(previousButton, playPauseButton, nextButton, shuffleButton)
         return buttons
     }
-    static Attach(previous, pause, next, shuffle, addToPlaylist) {
+    static Attach(previous?: HTMLButtonElement, pause?: HTMLButtonElement, next?: HTMLButtonElement, shuffle?: HTMLButtonElement) {
         if (previous) {
             previous.addEventListener("click", this.#OnPreviousClick.bind(this))
         }
         if (pause) {
             pause.addEventListener("click", this.#OnPauseClick.bind(this))
-            function UpdatePauseButton(button, state) {
+            function UpdatePauseButton(button: HTMLButtonElement, state: boolean) {
                 button.classList.toggle("playing", state)
             }
             AudioPlayer.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
@@ -160,7 +160,7 @@ export default class MediaControls {
         if (shuffle) {
             shuffle.addEventListener("click", this.#OnShuffleClick.bind(this, shuffle))
             shuffle.classList.toggle("active", SongQueue.suffleSongs)
-            SongQueue.OnShuffleChange((state) => {
+            SongQueue.OnShuffleChange((state: boolean) => {
                 shuffle.classList.toggle("active", state)
             })
         }
@@ -182,7 +182,7 @@ export default class MediaControls {
             return
         }
         const playlist = PlaylistManager.GetPlaylist(playlistId)
-        if (playlist.Has(currentSong.id)) {
+        if (playlist.Has(currentSong.Id)) {
             ToastManager.Toast("Song already in playlist", "error")
             return
         }
@@ -204,7 +204,7 @@ export default class MediaControls {
     static #OnPreviousClick() {
         PlaybackController.PreviousTrack()
     }
-    static #OnShuffleClick(button) {
+    static #OnShuffleClick(button: HTMLButtonElement) {
         button.classList.remove("flip")
         void button.offsetWidth
         button.classList.add("flip")

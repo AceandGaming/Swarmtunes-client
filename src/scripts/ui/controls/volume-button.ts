@@ -9,7 +9,7 @@ export default class VolumeButton {
     #sliderFocus = false
     menuOpen = false
 
-    constructor(volumeButton, volumeSlider) {
+    constructor(volumeButton: HTMLElement, volumeSlider: HTMLInputElement) {
         this.#volumeButton = volumeButton
         this.#volumeSlider = volumeSlider
 
@@ -18,7 +18,8 @@ export default class VolumeButton {
         this.#volumeSlider.addEventListener("input", this.OnSliderChange.bind(this))
         this.#volumeSlider.addEventListener("blur", this.OnSliderLooseFocus.bind(this))
 
-        const volume = localStorage.getItem("volume") || 0.75
+        const volume = Number(localStorage.getItem("volume")) || 0.75
+        // @ts-ignore
         this.#volumeSlider.value = volume
         AudioPlayer.instance.Volume = volume
         SwarmFM.instance.Volume = volume
@@ -27,7 +28,7 @@ export default class VolumeButton {
 
         AudioPlayer.instance.OnVolumeUpdate(this.#UpdateIcon.bind(this))
     }
-    OnButtonClick(event) {
+    OnButtonClick(event: any) {
         if (event.target.id === "") {
             if (this.menuOpen) {
                 this.Hide()
@@ -41,16 +42,17 @@ export default class VolumeButton {
             this.Hide()
         }
     }
-    #UpdateIcon(volume) {
+    #UpdateIcon(volume: number) {
         const icons = this.#volumeButton.querySelectorAll("svg")
         icons.forEach(icon => {
             icon.classList.remove("active")
         })
         const fraction = Math.ceil(volume * (icons.length - 1))
         icons[fraction].classList.add("active")
+        // @ts-ignore
         this.#volumeSlider.value = volume
     }
-    OnSliderChange(event) {
+    OnSliderChange(event: any) {
         this.#sliderFocus = true
         AudioPlayer.instance.Volume = event.target.value
         SwarmFM.instance.Volume = event.target.value

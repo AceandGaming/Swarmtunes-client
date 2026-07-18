@@ -14,6 +14,9 @@ ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, false, [
         new ContextOption("Add to Queue", "src/assets/icons/plus.svg", async (event: { id: string }) => {
             const song = await SongRequester.GetSong(event.id)
+            if (!song) {
+                return
+            }
             SongQueue.AppendSong(song)
         }),
     ]),
@@ -24,6 +27,9 @@ ContextMenu.AddCategory("song", [
                 return
             }
             const song = await SongRequester.GetSong(event.id)
+            if (!song) {
+                return
+            }
             const playlist = PlaylistManager.GetPlaylist(playlistid)
             if (playlist.Has(event.id)) {
                 ToastManager.Toast("Song already in playlist", "error")

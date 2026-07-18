@@ -1,7 +1,13 @@
 import { LoadSVG } from "@ts/misc"
 
-export default class PopupWindow {
-    constructor(title) {
+export default abstract class PopupWindow {
+    background: HTMLElement
+    window: HTMLElement
+    title: HTMLElement
+    content: HTMLElement
+    buttons: HTMLElement
+
+    constructor(title: string) {
         this.background = document.createElement("div")
         this.background.classList.add("popup-background")
 
@@ -29,13 +35,13 @@ export default class PopupWindow {
 
         document.body.appendChild(this.background)
     }
-    CreateButton(name, onClick, autoclose = true) {
+    CreateButton(name: string, onClick: (event: any) => void, autoclose = true) {
         const button = document.createElement("button")
         button.addEventListener("click", onClick)
         if (autoclose) {
-            button.addEventListener("click", this.Hide.bind(this))
+            button.addEventListener("click", () => this.Hide())
         }
-        button.addEventListener("click", this.SetBusy.bind(this))
+        button.addEventListener("click", () => this.SetBusy())
         button.textContent = name
         this.buttons.appendChild(button)
         return button

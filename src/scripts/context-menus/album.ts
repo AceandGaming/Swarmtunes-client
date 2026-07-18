@@ -29,14 +29,5 @@ ContextMenu.AddCategory("album", [
             PlaylistRequester.AddSongToPlaylist(playlistid, album.songIds)
             ToastManager.Toast(`Added ${album.songIds.length} songs to <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
         }),
-    ]),
-    new ContextGroup("share", false, true, [
-        // new ContextOption("Share", "src/assets/icons/share.svg", async (event) => {
-        //     const url = "https://share.swarmtunes.com/?a=" + (await Network.ShareAlbum(event.id))
-        //     navigator.clipboard.writeText(url)
-        // }),
-        new ContextOption("Export", "src/assets/icons/file-export.svg", (event) => {
-            Network.GetAlbumMP3s(event.id)
-        }),
     ])
 ])

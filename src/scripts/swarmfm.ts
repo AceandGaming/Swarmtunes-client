@@ -195,6 +195,9 @@ export default class SwarmFM extends AudioBase {
         this.hasControl = false
         this.audio.src = ""
     }
+    public Seek(time: number): void {
+        return
+    }
 
     public OnPlayPause(callback: (state: boolean) => void): void {
         this.audio.addEventListener("play", () => callback(true))

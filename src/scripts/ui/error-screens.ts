@@ -1,7 +1,13 @@
 import { Login } from "@ts/ui/popups/login"
 
 export default class ErrorScreen {
-    constructor(message, retryEvent = null, imagePath = "src/assets/neuro-cry.png", buttonText = "Retry") {
+    element!: HTMLElement
+    message: string
+    retryEvent?: () => void
+    imagePath: string
+    buttonText: string
+
+    constructor(message: string, retryEvent?: () => void, imagePath = "src/assets/neuro-cry.png", buttonText = "Retry") {
         this.message = message
         this.retryEvent = retryEvent
         this.imagePath = imagePath
@@ -9,7 +15,7 @@ export default class ErrorScreen {
     }
     OnRetryButtonClick() {
         this.element.remove()
-        this.retryEvent()
+        this.retryEvent?.()
     }
     CreateElement() {
         const element = document.createElement("div")
@@ -35,7 +41,7 @@ export default class ErrorScreen {
 }
 export class LoginRequired extends ErrorScreen {
     constructor(imagePath = "") {
-        super("Login required", () => { }, imagePath, "Login")
+        super("Login required", undefined, imagePath, "Login")
         Login.AddLoginCallback(this.OnLogin.bind(this))
     }
     OnRetryButtonClick() {

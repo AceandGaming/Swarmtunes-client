@@ -1,6 +1,7 @@
 export abstract class AudioBase {
     public abstract get Audio(): HTMLAudioElement
     public abstract get Played(): number
+    public abstract set Played(value: number)
     public abstract get Loaded(): number
     public abstract get Duration(): number
     public abstract get Paused(): boolean
@@ -13,6 +14,7 @@ export abstract class AudioBase {
     public abstract Play(...args: unknown[]): void
     public abstract Pause(): void
     public abstract Clear(): void
+    public abstract Seek(time: number): void
 
     public abstract OnPlayPause(callback: (state: boolean) => void): void
     public abstract OnTimeUpdate(callback: (played: number, duration: number, loaded: number) => void): void

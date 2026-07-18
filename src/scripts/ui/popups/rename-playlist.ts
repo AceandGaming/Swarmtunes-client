@@ -3,12 +3,17 @@ import { ListenForInputSubmit } from "@ts/misc"
 import Network from "@ts/network"
 import PlaylistManager from "@ts/playlist-manager"
 import { PlaylistRequester } from "@ts/playlist-requester"
+import type { Playlist } from "@ts/types/playlist"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
+import { ValidatePlaylistName } from "@ts/ui/popups/create-playlist"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
 
 export class RenamePlaylistPopup extends PopupWindow {
-    static instance
+    static instance: RenamePlaylistPopup
+    input: HTMLInputElement
+    error: HTMLParagraphElement
+    playlist?: Playlist
 
     constructor() {
         super("Rename playlist")
@@ -41,6 +46,10 @@ export class RenamePlaylistPopup extends PopupWindow {
         }
     }
     #OnButtonClick() {
+        if (!this.playlist) {
+            return
+        }
+
         const name = this.input.value
         const oldName = this.playlist.Title
         if (ValidatePlaylistName(name).error) {
@@ -52,14 +61,18 @@ export class RenamePlaylistPopup extends PopupWindow {
         PlaylistTab.Populate()
         ToastManager.Toast(`Renamed <b>${ReplaceEmotesOfString(oldName)}</b> to <b>${ReplaceEmotesOfString(name)}</b>`, "none", 3, true)
     }
-    Show(id) {
+    // @ts-ignore
+    Show(id: id) {
         if (!Network.IsLoggedIn()) {
             return
         }
         const playlist = PlaylistManager.GetPlaylist(id)
+        if (!playlist) {
+            throw new Error("Playlist not found")
+        }
 
         super.Show()
-        this.input.value = playlist.title
+        this.input.value = playlist.Title
         this.error.textContent = ""
 
         this.playlist = playlist

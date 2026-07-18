@@ -1,9 +1,10 @@
 import { PlaybackController } from "@ts/playback"
 import SongQueue from "@ts/song-queue"
+import type { Song } from "@ts/types/song"
 import { SongList } from "@ts/ui/song-list"
 import Sortable from "sortablejs"
 
-function OnNowPlayingItemClick(event) {
+function OnNowPlayingItemClick(event: any) {
     const id = event.target.dataset.id
     if (id === "swarmfm") {
         return
@@ -19,11 +20,10 @@ function OnNowPlayingItemClick(event) {
 }
 
 export class NowPlaying {
-    static #songlist
-    static #element = document.querySelector("#now-playing")
-    static sourceId = ""
+    static #songlist: SongList
+    static #element = document.querySelector("#now-playing") as HTMLDivElement
 
-    static Update(songs = undefined) {
+    static Update(songs: Song[] | undefined = undefined) {
         if (songs === undefined) {
             songs = SongQueue.nextSongs
         }
@@ -35,7 +35,7 @@ export class NowPlaying {
                 animation: 150,
                 dataIdAttr: "data-id"
             })
-            sortable.option("onEnd", (evt) => {
+            sortable.option("onEnd", () => {
                 SongQueue.OnQueueOrderChange(sortable.toArray())
             })
 

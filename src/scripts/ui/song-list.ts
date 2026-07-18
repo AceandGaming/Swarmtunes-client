@@ -1,9 +1,11 @@
 import { OnSongClick } from "@ts/events"
 import { LoadSVG } from "@ts/misc"
 import SongRequester from "@ts/song-requester"
+import type { Song } from "@ts/types/song"
 import { ContextMenu } from "@ts/ui/context-menu"
+import type Cover from "@ts/ui/cover"
 
-function CreateSongListItemElement(song, onClickEvent, showDate = false, catagory = "song", unavaliable = false) {
+function CreateSongListItemElement(song: Song, onClickEvent: (event: any) => void, showDate = false, catagory = "song", unavaliable = false) {
     const element = document.createElement("li")
     element.classList.add("song-list-item", "song")
     element.setAttribute("data-id", song.Id)
@@ -11,7 +13,7 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     element.classList.toggle("unavaliable", unavaliable)
     element.addEventListener("click", onClickEvent)
 
-    const coverImg = document.createElement('swarmtunes-cover')
+    const coverImg = document.createElement('swarmtunes-cover') as Cover
     coverImg.src = song.CoverUrl
 
     const titleArtist = document.createElement('div')
@@ -43,11 +45,16 @@ function CreateSongListItemElement(song, onClickEvent, showDate = false, catagor
     return element
 }
 export class SongList {
+    songs: Song[]
+    songOnClickEvent: (event: any) => void
+    catagory: string
+    showDate: boolean
+    max: number
+    element: HTMLUListElement
 
-    constructor(songs, songOnClickEvent = OnSongClick, catagory = "song", showDate = true, max = -1) {
+    constructor(songs: Song[], songOnClickEvent = OnSongClick, catagory = "song", showDate = true, max = -1) {
         if (songs == undefined || !Array.isArray(songs)) {
-            console.error("SongList must be initialized with an array of songs")
-            return
+            throw new Error("songs must be an array")
         }
         this.songs = songs
         this.songOnClickEvent = songOnClickEvent
@@ -59,16 +66,16 @@ export class SongList {
         this.element.classList.add("song-list")
     }
     SortByTitle() {
-        this.songs.sort((a, b) => a.title.localeCompare(b.title))
+        this.songs.sort((a, b) => a.Title.localeCompare(b.Title))
     }
     SortByDate() {
-        this.songs.sort((a, b) => b.jsDate - a.jsDate)
+        this.songs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
     }
-    SortByTitleDifference(title) {
+    SortByTitleDifference(title: string) {
         const titleLen = title.length
         this.songs.sort((a, b) => {
-            const aDistance = a.title.length - titleLen
-            const bDistance = b.title.length - titleLen
+            const aDistance = a.Title.length - titleLen
+            const bDistance = b.Title.length - titleLen
             return aDistance - bDistance
         })
     }
@@ -91,9 +98,12 @@ export class SongList {
         }
     }
     async UpdateAnimated() {
-        const oldBounds = {}
+        const oldBounds: any = {}
         for (const child of this.element.children) {
             const id = child.getAttribute("data-id")
+            if (!id) {
+                continue
+            }
             oldBounds[id] = child.getBoundingClientRect()
         }
 
@@ -106,8 +116,12 @@ export class SongList {
             return
         }
 
-        for (const element of this.element.children) {
+        for (const element of (this.element.children as HTMLCollectionOf<HTMLElement>)) {
             const id = element.getAttribute("data-id")
+            if (!id) {
+                continue
+            }
+
             const oldBound = oldBounds[id]
             if (oldBound === undefined) {
                 console.warn(`No old bound for ${id}`)

@@ -1,13 +1,13 @@
 import Network from "@ts/network"
 import SwarmFM from "@ts/swarmfm"
-import { AlbumCatagory, SongCatagory } from "@ts/ui/catagories"
+import { AlbumCatagory, Catagory, SongCatagory } from "@ts/ui/catagories"
 import ErrorScreen, { LoadingError } from "@ts/ui/error-screens"
 import { LoadingText } from "@ts/ui/loading"
 import ToastManager from "@ts/ui/toast-manager"
 
-const discoverPage = document.querySelector("#discover")
+const discoverPage = document.querySelector("#discover") as HTMLElement
 
-function AddCategoryToDiscover(catagory) {
+function AddCategoryToDiscover(catagory: Catagory) {
     discoverPage.appendChild(catagory.CreateElement())
 }
 
@@ -40,9 +40,9 @@ export async function PopulateDiscover() {
         }
         await new Promise(r => setTimeout(r, 2000))
     }
-    albums.sort((a, b) => b.Date - a.Date)
-    orginalSongs.sort((a, b) => b.Date - a.Date)
-    mashupSongs.sort((a, b) => b.Date - a.Date)
+    albums.sort((a, b) => b.Date.getTime() - a.Date.getTime())
+    orginalSongs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
+    mashupSongs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     AddCategoryToDiscover(new AlbumCatagory("Collections", albums))
     AddCategoryToDiscover(new SongCatagory("Originals", orginalSongs))
@@ -58,4 +58,4 @@ export function ShowErrorScreen() {
 function OnSwarmFMButtonClick() {
     SwarmFM.instance.Play()
 }
-document.getElementById("swarmfm-button").addEventListener("click", OnSwarmFMButtonClick)
+document.getElementById("swarmfm-button")?.addEventListener("click", OnSwarmFMButtonClick)

@@ -5,7 +5,7 @@ import SwarmFM from "@ts/swarmfm"
 import YoutubePlayer from "@ts/youtube"
 
 export default class SeekBar {
-    static seekbars = []
+    static seekbars: SeekBar[] = []
 
     get element() {
         return this.#element
@@ -33,10 +33,10 @@ export default class SeekBar {
 
         if (showTime) {
             const startTime = document.createElement("span")
-            startTime.class = "seek-time"
+            startTime.classList.add("seek-time")
             startTime.textContent = "0:00"
             const endTime = document.createElement("span")
-            endTime.class = "seek-time"
+            endTime.classList.add("seek-time")
             endTime.textContent = "0:00"
             seek.append(startTime, seekBar, endTime)
             this.#startTime = startTime
@@ -51,7 +51,7 @@ export default class SeekBar {
         this.#seekProgress = progress
         this.#seekLoaded = loaded
 
-        function Click(event) {
+        const Click = (event: MouseEvent | TouchEvent) => {
             this.OnSeekBarMouseDown(event)
         }
 
@@ -71,11 +71,11 @@ export default class SeekBar {
 
         SeekBar.seekbars.push(this)
     }
-    OnTimeUpdate(played, duration, loaded) {
+    OnTimeUpdate(played: number, duration: number, loaded: number) {
         this.#seekProgress.style.width = `${(played / duration) * 100}%`
         this.#seekLoaded.style.width = `${(loaded / duration) * 100}%`
 
-        if (this.#startTime) {
+        if (this.#startTime && this.#endTime) {
             played = Math.floor(played)
             duration = Math.floor(duration)
             this.#startTime.textContent = FormatTime(played)
@@ -85,10 +85,12 @@ export default class SeekBar {
     Clear() {
         this.#seekProgress.style.width = "0%"
         this.#seekLoaded.style.width = "0%"
-        this.#startTime.textContent = "0:00"
-        this.#endTime.textContent = "0:00"
+        if (this.#startTime && this.#endTime) {
+            this.#startTime.textContent = "0:00"
+            this.#endTime.textContent = "0:00"
+        }
     }
-    OnSeek(event) {
+    OnSeek(event: MouseEvent) {
         if (!this.#dragging) {
             return
         }
@@ -101,7 +103,7 @@ export default class SeekBar {
             player.Seek(fraction)
         }
     }
-    OnSeekMobile(event) {
+    OnSeekMobile(event: TouchEvent) {
         if (!this.#dragging) {
             return
         }
@@ -111,11 +113,16 @@ export default class SeekBar {
         AudioPlayer.instance.Seek(fraction)
         YoutubePlayer.instance.Seek(fraction)
     }
-    OnSeekBarMouseDown(event) {
+    OnSeekBarMouseDown(event: MouseEvent | TouchEvent) {
         this.#dragging = true
-        this.OnSeek(event)
+        if (event instanceof MouseEvent) {
+            this.OnSeek(event)
+        }
+        else if (event instanceof TouchEvent) {
+            this.OnSeekMobile(event)
+        }
     }
-    OnSeekBarMouseUp(event) {
+    OnSeekBarMouseUp() {
         this.#dragging = false
     }
 }

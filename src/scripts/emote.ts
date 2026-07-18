@@ -1,6 +1,6 @@
 import Network from "@ts/network"
 
-export function ReplaceEmotesOfString(text) {
+export function ReplaceEmotesOfString(text: string) {
     const container = document.createDocumentFragment()
     const parts = text.split(/(:[a-zA-Z0-9]+)/g)
 

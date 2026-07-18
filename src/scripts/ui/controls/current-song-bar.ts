@@ -2,18 +2,19 @@ import { LoadSVG } from "@ts/misc"
 import SongFullscreen from "@ts/ui/content/song-fullscreen"
 import MediaControls from "@ts/ui/controls/media-controls"
 import SeekBar from "@ts/ui/controls/seek-bar"
+import type Cover from "@ts/ui/cover"
 import { CreateButton } from "@ts/ui/header"
 
 export default class CurrentSongBar {
-    static #coverImage
-    static #artistText
-    static #titleText
-    static #singersText
-    static #sourceText
-    static #element
+    static #coverImage: Cover
+    static #artistText: HTMLSpanElement
+    static #titleText: HTMLSpanElement
+    static #singersText: HTMLSpanElement
+    static #sourceText: HTMLSpanElement
+    static #element: HTMLElement
 
     static #CreateCoverImage() {
-        this.#coverImage = document.createElement("swarmtunes-cover")
+        this.#coverImage = document.createElement("swarmtunes-cover") as Cover
         return this.#coverImage
     }
     static #CreateSingersWrapper() {
@@ -36,13 +37,13 @@ export default class CurrentSongBar {
         titleContainer.append(this.#titleText, this.#artistText)
         return titleContainer
     }
-    static #CreateSourceText() {
-        const sourceText = document.createElement("span")
-        sourceText.classList.add("source-text", "sub-text")
-        sourceText.textContent = ""
-        this.#sourceText = sourceText
-        return sourceText
-    }
+    // static #CreateSourceText() {
+    //     const sourceText = document.createElement("span")
+    //     sourceText.classList.add("source-text", "sub-text")
+    //     sourceText.textContent = ""
+    //     this.#sourceText = sourceText
+    //     return sourceText
+    // }
 
     static CreateDesktop() {
         const old = document.querySelector("#current-song-bar")
@@ -78,7 +79,7 @@ export default class CurrentSongBar {
 
         currentSongBar.append(leftContent, middleContent, rightContent)
         this.#element = currentSongBar
-        document.querySelector("footer").appendChild(currentSongBar)
+        document.querySelector("footer")?.appendChild(currentSongBar)
     }
 
     static CreateMobile() {
@@ -108,12 +109,12 @@ export default class CurrentSongBar {
 
         currentSongBar.append(leftContent, middleContent, rightContent)
         this.#element = currentSongBar
-        currentSongBar.addEventListener("touchstart", e => {
-            if (e.target.id === "current-song-bar") {
+        currentSongBar.addEventListener("touchstart", (e: any) => {
+            if (e.target.Id === "current-song-bar") {
                 SongFullscreen.Show()
             }
         })
-        document.querySelector("footer").appendChild(currentSongBar)
+        document.querySelector("footer")?.appendChild(currentSongBar)
     }
 
 
@@ -126,7 +127,7 @@ export default class CurrentSongBar {
         this.#element.setAttribute("data-id", id)
         this.#element.setAttribute("data-rightclickcategory", "song")
     }
-    static Display(title, artist, singers, coverUrl, source) {
+    static Display(title: string, artist: string, singers: string[], coverUrl: string, source: string = "MP3") {
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
         if (this.#singersText) {

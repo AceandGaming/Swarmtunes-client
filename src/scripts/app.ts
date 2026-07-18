@@ -17,7 +17,6 @@ import SongFullscreen from "@ts/ui/content/song-fullscreen"
 import { ContextMenu } from "@ts/ui/context-menu"
 import "@ts/context-menus"
 import CurrentSongBar from "@ts/ui/controls/current-song-bar"
-import { LoadingError } from "@ts/ui/error-screens"
 import { CreateButton, ShowContentWindow, UpdateTheme } from "@ts/ui/header"
 import ConfirmAction from "@ts/ui/popups/confirm-action"
 import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
@@ -33,7 +32,7 @@ function HideLoading() {
 
 async function AsyncCrap() {
     if (!(await Network.CheckOnline())) {
-        const loading = document.querySelector("#loading-screen")
+        const loading = document.querySelector("#loading-screen") as HTMLElement
         loading.innerHTML = "Failed to connect to server!"
         throw new Error("Failed to connect to server!")
     }
@@ -62,7 +61,7 @@ if (window.isMobile) {
     AudioPlayer.instance.Audio.preload = "auto"
     SwarmFM.TARGET_LATENCY = 3
     try {
-        localStorage.setItem("volume", 0.8)
+        localStorage.setItem("volume", 0.8 as any)
     } catch (e) {
         console.error(e)
     }
@@ -70,8 +69,8 @@ if (window.isMobile) {
 
 PlaylistTab.ShowLoggedOutScreen()
 
-function OnLogin(isAdmin) {
-    const loginButton = document.getElementById("header-login-button")
+function OnLogin(isAdmin: boolean) {
+    const loginButton = document.getElementById("header-login-button") as HTMLButtonElement
     loginButton.textContent = "Log Out"
     loginButton.onclick = async () => {
         const confirmation = await ConfirmAction.AskUser("Are you sure you want to log out?")
@@ -99,9 +98,6 @@ function OnLogin(isAdmin) {
 Login.AddLoginCallback(OnLogin)
 
 function CreateUI() {
-    window.MediaView = document.createElement("st-media-view")
-    document.body.append(window.MediaView)
-
     ToastManager.Create()
 
     if (window.innerWidth > 600) {
@@ -120,7 +116,7 @@ function CreateUI() {
     Login.CreateWindow()
     new CreatePlaylistPopup()
     new RenamePlaylistPopup()
-    PopulateDiscover().catch((e) => {
+    PopulateDiscover().catch((e: any) => {
         ShowErrorScreen()
         console.error(e)
     }).then(() => {
@@ -137,40 +133,42 @@ function CreateUI() {
     ResizeAllGridDisplays()
     PlayState.Initalise()
 }
-function LoadUrlBar() {
-    const queryString = window.location.search
-    const urlParams = new URLSearchParams(queryString)
-    const songId = urlParams.get("song")
-    const playlistLink = urlParams.get("playlist")
+// function LoadUrlBar() {
+//     const queryString = window.location.search
+//     const urlParams = new URLSearchParams(queryString)
+//     const songId = urlParams.get("song")
+//     const playlistLink = urlParams.get("playlist")
 
-    if (songId !== null) {
-        SongRequester.GetSong(songId).then((song) => {
-            SongQueue.LoadSingleSong(song)
-            PlaybackController.PlaySong(song)
-        })
-    }
-    if (playlistLink !== null) {
-        Login.AddLoginCallback(async () => {
-            const playlist = await Network.AddSharedPlaylist(playlistLink)
-            PlaylistManager.AddPlaylist(playlist)
-            PlaylistTab.Populate()
-        })
-    }
+//     if (songId !== null) {
+//         SongRequester.GetSong(songId).then((song) => {
+//             if (song) {
+//                 SongQueue.LoadSingleSong(song)
+//                 PlaybackController.PlaySong(song)
+//             }
+//         })
+//     }
+//     if (playlistLink !== null) {
+//         Login.AddLoginCallback(async () => {
+//             const playlist = await Network.AddSharedPlaylist(playlistLink)
+//             PlaylistManager.AddPlaylist(playlist)
+//             PlaylistTab.Populate()
+//         })
+//     }
 
-    const cleanUrl =
-        window.location.protocol +
-        "//" +
-        window.location.host +
-        window.location.pathname
-    window.history.replaceState({}, document.title, cleanUrl)
-}
+//     const cleanUrl =
+//         window.location.protocol +
+//         "//" +
+//         window.location.host +
+//         window.location.pathname
+//     window.history.replaceState({}, document.title, cleanUrl)
+// }
 AsyncCrap().then(() => {
     CreateUI()
 
-    LoadUrlBar()
+    //LoadUrlBar()
 })
 
-function UpdateNavigatorTime(played, duration, loaded) {
+function UpdateNavigatorTime(played: number, duration: number) {
     navigator.mediaSession.setPositionState({
         duration: duration,
         position: played,

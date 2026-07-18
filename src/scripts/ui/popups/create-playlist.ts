@@ -2,11 +2,12 @@ import { ReplaceEmotesOfString } from "@ts/emote"
 import { ListenForInputSubmit } from "@ts/misc"
 import Network from "@ts/network"
 import PlaylistManager from "@ts/playlist-manager"
+import { Playlist } from "@ts/types/playlist"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
 
-function ValidatePlaylistName(name) {
+export function ValidatePlaylistName(name: string) {
     name = name.trim()
     if (name.length > 32 || name.length <= 0) {
         return {
@@ -26,7 +27,10 @@ function ValidatePlaylistName(name) {
     }
 }
 export class CreatePlaylistPopup extends PopupWindow {
-    static instance
+    static instance: CreatePlaylistPopup
+    input: HTMLInputElement
+    error: HTMLParagraphElement
+    playlist?: Playlist
 
     constructor() {
         super("Create a playlist")
@@ -63,7 +67,7 @@ export class CreatePlaylistPopup extends PopupWindow {
         const cor = Network.CreatePlaylist(name)
         cor.catch(() => { this.SetBusy(false); this.error.textContent = "An unknown error occurred" })
         cor.then(response => {
-            if (response.error) {
+            if (!(response instanceof Playlist)) {
                 this.error.textContent = response.error
                 this.SetBusy(false)
                 return
@@ -87,4 +91,4 @@ export class CreatePlaylistPopup extends PopupWindow {
 function OnCreatePlaylistButtonClick() {
     CreatePlaylistPopup.instance.Show()
 }
-document.getElementById("new-playlist-button").addEventListener("click", OnCreatePlaylistButtonClick)
+document.getElementById("new-playlist-button")?.addEventListener("click", OnCreatePlaylistButtonClick)

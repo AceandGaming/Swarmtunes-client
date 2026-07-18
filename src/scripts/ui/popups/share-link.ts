@@ -2,7 +2,7 @@ import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
 
 export class ShareWindow extends PopupWindow {
-    constructor(link) {
+    constructor(link: string) {
         super("Copy Link")
 
         const input = document.createElement("input")

@@ -1,10 +1,11 @@
 import PlaylistManager from "@ts/playlist-manager"
+import type { Playlist } from "@ts/types/playlist"
 import { PlaylistCatagory, ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { LoginRequired } from "@ts/ui/error-screens"
 
 export default class PlaylistTab {
-    static playlistTab = document.getElementById("playlists-tab")
-    static playlists = []
+    static playlistTab: HTMLElement = document.getElementById("playlists-tab") as HTMLElement
+    static playlists: Playlist[] = []
 
     static ShowLoggedOutScreen() {
         for (let child of this.playlistTab.children) {
@@ -23,7 +24,7 @@ export default class PlaylistTab {
         const element = catagory.CreateElement()
         element.setAttribute("id", "playlist-grid")
 
-        const grid = document.getElementById("playlist-grid")
+        const grid = document.getElementById("playlist-grid") as HTMLElement
         grid.replaceWith(element)
 
         ResizeAllGridDisplays()

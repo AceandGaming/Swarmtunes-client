@@ -247,7 +247,7 @@ class DesktopContextMenu extends ContextMenuUI {
         this.y = y
         this.element.innerHTML = ""
 
-        for (const [i, group] of groups.entries()) {
+        for (const group of groups) {
             if (group.internetRequired && !Network.IsOnline()) {
                 continue
             }
@@ -326,7 +326,7 @@ class MobileContextMenu extends ContextMenuUI {
         }
         this.element.innerHTML = ""
 
-        for (const [i, group] of groups.entries()) {
+        for (const group of groups) {
             if (group.internetRequired && !Network.IsOnline()) {
                 continue
             }
@@ -338,7 +338,7 @@ class MobileContextMenu extends ContextMenuUI {
                     continue
                 }
                 const child = option.Element(data)
-                child.addEventListener("click", (event) => {
+                child.addEventListener("click", () => {
                     if (this.interactable) {
                         this.Hide()
                     }

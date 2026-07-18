@@ -1,20 +1,17 @@
-import AudioPlayer from "@ts/audio"
 import { ReplaceEmotesOfString } from "@ts/emote"
-import { OnAlbumClick, OnPlaylistClick } from "@ts/events"
 import Network from "@ts/network"
 import { PlaybackController } from "@ts/playback"
 import SongQueue from "@ts/song-queue"
-import SongRequester from "@ts/song-requester"
-import { NowPlaying } from "@ts/ui/now-playing"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import { PlaylistView, AlbumView } from "@ts/ui/content/media-view"
+import type Cover from "@ts/ui/cover"
 
 
-function CreateCatagoryItemImage(element, source, title) {
-    const image = document.createElement("swarmtunes-cover")
+function CreateCatagoryItemImage(element: HTMLElement, source: string) {
+    const image = document.createElement("swarmtunes-cover") as Cover
     image.src = source
 
-    image.addEventListener("load", (event) => {
+    image.addEventListener("load", (event: any) => {
         const colour = event.target.hsl
 
         const lightness = Math.min(colour.l, 65)
@@ -39,7 +36,7 @@ function CreateCatagoryItemImage(element, source, title) {
     image.src = source
     return image
 }
-function CreateCatagoryItemElement(title, id, imageSource, onClickEvent, type, overlay = "", overlayHover = "") {
+function CreateCatagoryItemElement(title: string, id: id, imageSource: string, onClickEvent: (event: any) => void, type: string, overlay = "", overlayHover = "") {
     const element = document.createElement("div")
     element.classList.add("catagory-item", type)
     element.setAttribute("data-id", id)
@@ -74,8 +71,12 @@ function CreateCatagoryItemElement(title, id, imageSource, onClickEvent, type, o
     return element
 }
 
-export class Catagory {
-    constructor(title, items, grid = false) {
+export abstract class Catagory {
+    title: string
+    items: any[]
+    grid: boolean
+
+    constructor(title: string, items: any[], grid = false) {
         this.title = title
         this.items = items
         this.grid = grid
@@ -107,12 +108,10 @@ export class Catagory {
         }, 200)
         return element
     }
-    AddChildren(display) {
-
-    }
+    abstract AddChildren(display: HTMLElement): void
 }
 export class SongCatagory extends Catagory {
-    AddChildren(display) {
+    AddChildren(display: HTMLElement) {
         for (const song of this.items) {
             display.appendChild(CreateCatagoryItemElement(
                 song.Title,
@@ -133,7 +132,7 @@ export class SongCatagory extends Catagory {
 
 
 export class AlbumCatagory extends Catagory {
-    AddChildren(display) {
+    AddChildren(display: HTMLElement) {
         for (const album of this.items) {
             display.appendChild(CreateCatagoryItemElement(
                 album.PrettyDate,
@@ -148,7 +147,7 @@ export class AlbumCatagory extends Catagory {
     }
 }
 export class PlaylistCatagory extends Catagory {
-    AddChildren(display) {
+    AddChildren(display: HTMLElement) {
         for (const playlist of this.items) {
             const element = CreateCatagoryItemElement(
                 playlist.Title,
@@ -172,7 +171,11 @@ export class PlaylistCatagory extends Catagory {
         }
     }
 }
-function ResizeGridDisplay(grid) {
+function ResizeGridDisplay(grid: HTMLElement) {
+    if (!grid.parentElement) {
+        return
+    }
+
     const parentWidth = grid.parentElement.offsetWidth
     if (!grid.checkVisibility()) {
         return
@@ -188,18 +191,19 @@ function ResizeGridDisplay(grid) {
 
     const gap = parseFloat(getComputedStyle(grid).gap) || 0
 
-    const childWdith = grid.children[0].offsetWidth + gap
+    const children = grid.children as HTMLCollectionOf<HTMLElement>
+    const childWdith = children[0].offsetWidth + gap
     let childrenPerRow = Math.max(Math.floor(parentWidth / childWdith), 1)
     childrenPerRow = Math.min(childrenPerRow, grid.children.length)
 
     const width = childrenPerRow * childWdith + gap + 2 //margin because js isn't instant
     grid.style.width = `${width}px`
 }
-function CheckCatagoryOverflow(catagory, wrapper) {
+function CheckCatagoryOverflow(catagory: HTMLElement, wrapper: HTMLElement) {
     catagory.classList.toggle("overflowing", wrapper.scrollWidth > wrapper.offsetWidth + wrapper.scrollLeft)
 }
 export function ResizeAllGridDisplays() {
-    const grids = document.querySelectorAll(".grid")
+    const grids = document.querySelectorAll(".grid") as NodeListOf<HTMLElement>
     for (const grid of grids) {
         ResizeGridDisplay(grid)
     }

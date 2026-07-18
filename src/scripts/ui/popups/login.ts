@@ -3,7 +3,7 @@ import Network from "@ts/network"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
 
-function ValidateUsername(username) {
+function ValidateUsername(username: string) {
     if (username.length > 32 || username.length <= 0) {
         return {
             error: true,
@@ -22,7 +22,7 @@ function ValidateUsername(username) {
         message: ""
     }
 }
-function ValidatePassword(password) {
+function ValidatePassword(password: string) {
     if (password.length > 32 || password.length <= 0) {
         return {
             error: true,
@@ -41,9 +41,14 @@ function ValidatePassword(password) {
     }
 }
 export class Login {
-    static callbacks = []
+    static callbacks: ((state: boolean) => void)[] = []
+    static usernameInput: HTMLInputElement
+    static passwordInput: HTMLInputElement
+    static error: HTMLElement
+    static remeberMeToggle: HTMLInputElement
+    static window: LoginPopup
 
-    static AddLoginCallback(callback) {
+    static AddLoginCallback(callback: (state: boolean) => void) {
         this.callbacks.push(callback)
     }
     static CallLoginCallbacks() {
@@ -132,7 +137,13 @@ export class Login {
     }
 }
 export class LoginPopup extends PopupWindow {
-    constructor(OnLoginCallback, OnSignupCallback, OnUsernameInput, OnPasswordInput) {
+    usernameInput: HTMLInputElement
+    passwordInput: HTMLInputElement
+    remeberMeToggle: HTMLInputElement
+    remeberMeLabel: HTMLLabelElement
+    error: HTMLParagraphElement
+
+    constructor(OnLoginCallback: () => void, OnSignupCallback: () => void, OnUsernameInput: () => void, OnPasswordInput: () => void) {
         super("Login")
         this.window.id = "login"
         this.CreateButton("Signup", OnSignupCallback, false)

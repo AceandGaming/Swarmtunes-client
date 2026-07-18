@@ -1,5 +1,5 @@
 export class LoadingText {
-    static Attach(element) {
+    static Attach(element: HTMLElement) {
         if (element.querySelector(".loading-text")) {
             return
         }
@@ -7,7 +7,7 @@ export class LoadingText {
         loading.classList.add("loading-text")
         element.appendChild(loading)
     }
-    static Detach(element) {
+    static Detach(element: HTMLElement) {
         const text = element.querySelector(".loading-text")
         if (text) {
             text.remove()

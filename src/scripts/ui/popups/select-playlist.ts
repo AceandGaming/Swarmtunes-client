@@ -1,27 +1,29 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import Network from "@ts/network"
 import PlaylistManager from "@ts/playlist-manager"
+import type { Playlist } from "@ts/types/playlist"
 import PopupWindow from "@ts/ui/popups/popup"
 
-function CreatePlaylistListItemElement(playlist, onClickEvent) {
+function CreatePlaylistListItemElement(playlist: Playlist, onClickEvent: (event: any) => void) {
     const element = document.createElement("li")
     element.setAttribute("data-id", playlist.Id)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
-        <img loading="lazy" src=${Network.GetCover(playlist.Cover, 64)}>
+        <img loading="lazy" src=${Network.GetCover(playlist.Cover as string, 64)}>
         <span>${ReplaceEmotesOfString(playlist.Title)}</span>
     `
     return element
 }
 export default class SelectPlaylist extends PopupWindow {
-    static instance
-    static AskUser() {
+    static instance: SelectPlaylist
+
+    static AskUser(): Promise<id | null> {
         const oldInstance = this.instance
         if (oldInstance) {
             document.body.removeChild(oldInstance.background)
         }
         return new Promise((resolve, reject) => {
-            function OnPlaylistClick(event) {
+            function OnPlaylistClick(event: any) {
                 const id = event.target.dataset.id
                 SelectPlaylist.instance.Hide()
                 if (id) {
@@ -32,14 +34,14 @@ export default class SelectPlaylist extends PopupWindow {
                 }
             }
             new SelectPlaylist(OnPlaylistClick)
-            this.instance.window.querySelector(".close-button").addEventListener("click", () => {
+            this.instance.window.querySelector(".close-button")?.addEventListener("click", () => {
                 this.instance.Hide()
                 resolve(null)
             })
             this.instance.Show()
         })
     }
-    constructor(onClickEvent) {
+    constructor(onClickEvent: (event: any) => void) {
         super("Select a playlist")
         const playlists = PlaylistManager.playlists
         const list = document.createElement("ol")

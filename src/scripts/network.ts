@@ -217,17 +217,17 @@ export default class Network {
         const blob = await response.blob()
         return blob
     }
-    static GetCover(name: string, size: number = 512) {
+    static GetCover(name?: string, size: number = 512) {
         if (!name) {
             console.warn("Invalid cover name", name)
             return "src/assets/no-song.png"
         }
-        return `${this.serverURL}/covers/${encodeURIComponent(name)}?size=${512}`
+        return `${this.serverURL}/covers/${encodeURIComponent(name)}?size=${size}`
     }
     static GetAudioURL(id: id) {
         return `${this.serverURL}/files/${id}`
     }
-    static async GetAllSongs({ filters = [], maxResults = 100 } = {}) {
+    static async GetAllSongs({ filters = [], maxResults = 100 }: { filters?: string[]; maxResults?: number } = {}) {
         const params = new URLSearchParams()
         params.append("filters", filters.join(","))
         params.append("maxResults", String(maxResults))
