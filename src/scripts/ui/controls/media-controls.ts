@@ -28,7 +28,7 @@ export default class MediaControls {
         let shuffleButton
         if (shuffle) {
             shuffleButton = document.createElement("button")
-            shuffleButton.append(LoadSVG("src/assets/icons/shuffle.svg"))
+            shuffleButton.append(LoadSVG("/icons/shuffle.svg"))
             shuffleButton.title = "Shuffle"
             shuffleButton.classList.add("shuffle", "icon-button")
             shuffleButton.style.height = `${size}px`
@@ -38,7 +38,7 @@ export default class MediaControls {
         let previousButton
         if (skipping) {
             previousButton = document.createElement("button")
-            previousButton.append(LoadSVG("src/assets/icons/track-prev.svg"))
+            previousButton.append(LoadSVG("/icons/track-prev.svg"))
             previousButton.title = "Previous Song"
             previousButton.classList.add("previous", "icon-button")
             previousButton.style.height = `${size}px`
@@ -50,10 +50,10 @@ export default class MediaControls {
         playPauseButton.classList.add("play-pause", "icon-button")
         playPauseButton.style.height = `${size * 1.4}px`
 
-        const playIcon = LoadSVG("src/assets/icons/play.svg")
+        const playIcon = LoadSVG("/icons/play.svg")
         playIcon.classList.add("play")
 
-        const pauseIcon = LoadSVG("src/assets/icons/pause.svg")
+        const pauseIcon = LoadSVG("/icons/pause.svg")
         pauseIcon.classList.add("pause")
 
         playPauseButton.append(playIcon, pauseIcon)
@@ -62,7 +62,7 @@ export default class MediaControls {
         let nextButton
         if (skipping) {
             nextButton = document.createElement("button")
-            nextButton.append(LoadSVG("src/assets/icons/track-next.svg"))
+            nextButton.append(LoadSVG("/icons/track-next.svg"))
             nextButton.title = "Next Song"
             nextButton.classList.add("next", "icon-button")
             nextButton.style.height = `${size}px`
@@ -79,9 +79,9 @@ export default class MediaControls {
             `
             volumeControls.style.height = `${size}px`
             volumeControls.append(
-                LoadSVG("src/assets/icons/volume-off.svg"),
-                LoadSVG("src/assets/icons/volume-2.svg"),
-                LoadSVG("src/assets/icons/volume.svg")
+                LoadSVG("/icons/volume-off.svg"),
+                LoadSVG("/icons/volume-2.svg"),
+                LoadSVG("/icons/volume.svg")
             )
             buttons.append(volumeControls)
             new VolumeButton(volumeControls, volumeControls.querySelector("#volume-slider") as HTMLInputElement)
@@ -89,7 +89,7 @@ export default class MediaControls {
 
         function CreateAddToPlaylistButton(callback: () => void) {
             const addToPlaylistButton = document.createElement("button")
-            addToPlaylistButton.append(LoadSVG("src/assets/icons/playlist-add.svg"))
+            addToPlaylistButton.append(LoadSVG("/icons/playlist-add.svg"))
             addToPlaylistButton.title = "Add to Playlist"
             addToPlaylistButton.classList.add("add-to-playlist", "icon-button")
             addToPlaylistButton.addEventListener("click", callback)

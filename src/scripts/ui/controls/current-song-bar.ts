@@ -68,7 +68,7 @@ export default class CurrentSongBar {
 
         const rightContent = document.createElement("div")
         const fullscreenButton = document.createElement("button")
-        fullscreenButton.append(LoadSVG("src/assets/icons/maximize.svg"))
+        fullscreenButton.append(LoadSVG("/icons/maximize.svg"))
         fullscreenButton.title = "Fullscreen"
         fullscreenButton.classList.add("fullscreen", "icon-button")
         fullscreenButton.addEventListener("click", SongFullscreen.Show.bind(SongFullscreen))

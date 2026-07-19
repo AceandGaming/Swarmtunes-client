@@ -16,7 +16,7 @@ export default abstract class PopupWindow {
         this.background.appendChild(this.window)
 
         const closeButton = document.createElement("button")
-        closeButton.append(LoadSVG("src/assets/icons/x.svg"))
+        closeButton.append(LoadSVG("/icons/x.svg"))
         closeButton.classList.add("close-button", "icon-button")
         closeButton.addEventListener("click", this.Hide.bind(this))
         this.window.appendChild(closeButton)
