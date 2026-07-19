@@ -6,6 +6,7 @@ import SongQueue from "@ts/song-queue"
 import SongRequester from "@ts/song-requester"
 import { PlaylistView } from "@ts/ui/content/media-view"
 import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
+import { EditSongPopup } from "@ts/ui/popups/edit-song"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import { ShareWindow } from "@ts/ui/popups/share-link"
 import ToastManager from "@ts/ui/toast-manager"
@@ -56,6 +57,18 @@ ContextMenu.AddCategory("song", [
         }),
         new ContextOption("Export", "src/assets/icons/file-export.svg", (event: { id: string }) => {
             Network.DownloadSong(event.id, true)
+        }),
+    ]),
+    new ContextGroup("admins", true, true, [
+        new ContextOption("Edit", "src/assets/icons/edit.svg", async (event: { id: string }) => {
+            const song = await SongRequester.GetSong(event.id)
+            if (!song) {
+                return
+            }
+            const popup = new EditSongPopup(song)
+            popup.Show()
+        }, () => {
+            return Network.IsAdmin()
         }),
     ])
 ])

@@ -101,6 +101,12 @@ export default class Cover extends HTMLElement {
                 const event = new Event("load")
                 this.dispatchEvent(event)
             }
+            img.onerror = () => {
+                this.classList.remove("loading")
+
+                const event = new Event("error")
+                this.dispatchEvent(event)
+            }
             img.src = URL.createObjectURL(blob)
         })
     }

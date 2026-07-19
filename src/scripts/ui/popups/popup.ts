@@ -58,6 +58,6 @@ export default abstract class PopupWindow {
     }
     Close() {
         this.Hide()
-        document.removeChild
+        document.removeChild(this.background)
     }
 }
