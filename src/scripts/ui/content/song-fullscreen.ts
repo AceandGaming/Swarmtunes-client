@@ -29,9 +29,9 @@ export default class SongFullscreen {
         element.id = "song-fullscreen"
 
         const closeButton = document.createElement("button")
-        const desktopIcon = LoadSVG("src/assets/icons/x.svg")
+        const desktopIcon = LoadSVG("/icons/x.svg")
         desktopIcon.classList.add("desktop")
-        const mobileIcon = LoadSVG("src/assets/icons/dash.svg")
+        const mobileIcon = LoadSVG("/icons/dash.svg")
         mobileIcon.classList.add("mobile")
 
         closeButton.append(desktopIcon, mobileIcon)
@@ -88,7 +88,7 @@ export default class SongFullscreen {
         titleContainer.append(title, artist)
 
         const tripleDot = document.createElement("button")
-        tripleDot.append(LoadSVG('src/assets/icons/triple-dot.svg'))
+        tripleDot.append(LoadSVG('/icons/triple-dot.svg'))
         tripleDot.classList.add('icon-button', 'triple-dot')
         ContextMenu.AttachButton(tripleDot, infoContainer)
 

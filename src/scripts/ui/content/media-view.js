@@ -44,7 +44,7 @@ export class MediaView {
         element.id = "media-view"
 
         const closeButton = document.createElement("button")
-        closeButton.append(LoadSVG("src/assets/icons/x.svg"))
+        closeButton.append(LoadSVG("/icons/x.svg"))
         closeButton.classList.add("close-button", "icon-button")
         closeButton.addEventListener("click", MediaView.Hide.bind(MediaView))
 
@@ -59,7 +59,7 @@ export class MediaView {
 
 
         const playIcon = document.createElement("div")
-        playIcon.appendChild(LoadSVG("src/assets/icons/play.svg"))
+        playIcon.appendChild(LoadSVG("/icons/play.svg"))
         playIcon.classList.add("play")
 
         coverContainer.append(cover, playIcon)
@@ -166,7 +166,7 @@ export class MediaView {
     static ShowLoading() {
         MediaView.element.style.display = "flex"
         HideContentTabs()
-        MediaView._UpdateContent("Loading...", "", "src/assets/no-song.png",)
+        MediaView._UpdateContent("Loading...", "", "/no-song.png",)
         MediaView._songList.Hide()
         MediaView._songList.songs = []
     }

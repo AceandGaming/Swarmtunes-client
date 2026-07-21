@@ -46,6 +46,12 @@ export function RequireAdmin() {
 export function LoadSVG(path) {
     let svg = document.createElement("svg")
     fetch(path).then((response) => {
+        const contentType = response.headers.get("content-type") || ""
+
+        if (!contentType.includes("image/svg+xml")) {
+            throw new Error("Response is not SVG. src: " + path)
+        }
+
         response.text().then((text) => {
             text = text.replace(/\swidth=\"\d+\"/g, "").replace(/\sheight=\"\d+\"/g, "").replace(/<!--[\s\S]*?-->/g, "")
 
