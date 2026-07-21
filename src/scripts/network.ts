@@ -249,6 +249,10 @@ export default class Network {
         }
         return songs
     }
+    static async UpdateSong(id: id, data: Json) {
+        const response = await this.Patch(`songs/${id}`, data)
+        return await response.json()
+    }
 
     static async GetAlbum(id: id | id[], getSongs: boolean = false) {
         const params = new URLSearchParams()
@@ -343,7 +347,7 @@ export default class Network {
         }
     }
     static async LogOut() {
-        await this.Post(`me/logout/`, {})
+        await this.Post(`me/logout`, {})
         sessionStorage.removeItem("userToken")
         sessionStorage.removeItem("isAdmin")
         window.location.reload()
@@ -422,11 +426,6 @@ export default class Network {
             name: playlist.Title,
             songIds: playlist.SongIds
         })
-    }
-
-    static async ServerResync() {
-        RequireAdmin()
-        await this.Post("resync", {})
     }
 
     static GetEmoteUrl(name: string) {

@@ -110,7 +110,7 @@ export default class CurrentSongBar {
         currentSongBar.append(leftContent, middleContent, rightContent)
         this.#element = currentSongBar
         currentSongBar.addEventListener("touchstart", (e: any) => {
-            if (e.target.Id === "current-song-bar") {
+            if (e.target.id === "current-song-bar") {
                 SongFullscreen.Show()
             }
         })

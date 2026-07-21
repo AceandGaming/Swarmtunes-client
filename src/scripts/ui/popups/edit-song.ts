@@ -13,6 +13,7 @@ export class EditSongPopup extends PopupWindow {
             target: this.content,
             props: { song }
         })
+        this.CreateButton("Cancel", () => this.Close())
         this.CreateButton("Submit", () => this.component.Submit())
     }
     Close() {

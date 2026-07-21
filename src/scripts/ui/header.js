@@ -86,7 +86,7 @@ export function OnLoginButtonClick() {
 export function OnLogoutButtonClick() {
     Network.LogOut()
 }
-document.getElementById("header-login-button").addEventListener("click", OnLoginButtonClick)
+document.getElementById("header-login-button").onclick = OnLoginButtonClick
 
 export function UpdateThemeColor(colour) {
     if (!colour) {
