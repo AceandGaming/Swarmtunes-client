@@ -16,15 +16,15 @@ export function CreateButton(footer = false) {
     container.innerHTML = `
         <button class="tab" data-window="playlists-tab">
             <span>Playlists</span>
-            <img src="/icons/layout-grid.svg">
+            <img src="src/assets/icons/layout-grid.svg">
         </button>
         <button class="tab" data-window="discover">
             <span>Discover</span>
-            <img src="/icons/web.svg">
+            <img src="src/assets/icons/web.svg">
         </button>
         <button class="tab" data-window="search">
             <span>Search</span>
-            <img src="/icons/search.svg">
+            <img src="src/assets/icons/search.svg">
         </button>
     `
     if (footer) {
@@ -46,15 +46,13 @@ export function AttachButtons() {
         }
     }
 }
-export function ShowContentWindow(contentWindow) {
+export function ShowContentWindow(window) {
     const contentTabs = document.getElementById("content-tabs")
-
     contentTabs.style.display = "block"
     for (let i = 0; i < contentTabs.children.length; i++) {
         contentTabs.children[i].style.display = "none"
     }
-
-    contentWindow.style.display = "flex"
+    window.style.display = "flex"
     MediaView.Hide()
 }
 export function HideContentTabs(window) {
@@ -67,11 +65,11 @@ export function OnTabClick(event) {
     const tab = event.target
     const windowId = tab.dataset.window
     if (windowId === undefined) {
-        throw new Error("No window id found")
+        return
     }
     const window = document.getElementById(windowId)
     if (window === undefined) {
-        throw new Error("No window found")
+        return
     }
     ShowContentWindow(window)
     const tabs = document.getElementById("tabs-container").children
@@ -103,15 +101,15 @@ export function UpdateTheme() {
     const img = document.querySelector("#change-theme-button img")
     switch (currentTheme) {
         case 0:
-            img.src = "/icons/moon.svg"
+            img.src = "src/assets/icons/moon.svg"
             document.documentElement.dataset.theme = "dark"
             break
         case 1:
-            img.src = "/icons/newero.avif"
+            img.src = "src/assets/icons/newero.avif"
             document.documentElement.dataset.theme = "neuro"
             break
         case 2:
-            img.src = "/icons/newliv.avif"
+            img.src = "src/assets/icons/newliv.avif"
             document.documentElement.dataset.theme = "evil"
             break
     }

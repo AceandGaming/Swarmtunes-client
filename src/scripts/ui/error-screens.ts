@@ -7,7 +7,7 @@ export default class ErrorScreen {
     imagePath: string
     buttonText: string
 
-    constructor(message: string, retryEvent?: () => void, imagePath = "/emotes/neuro-cry.png", buttonText = "Retry") {
+    constructor(message: string, retryEvent?: () => void, imagePath = "src/assets/neuro-cry.png", buttonText = "Retry") {
         this.message = message
         this.retryEvent = retryEvent
         this.imagePath = imagePath
