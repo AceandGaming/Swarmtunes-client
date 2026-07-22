@@ -36,7 +36,7 @@ function CreateSongListItemElement(song: Song, onClickEvent: (event: any) => voi
         date.textContent = song.PrettyDate
 
         const tripleDot = document.createElement('button')
-        tripleDot.append(LoadSVG('src/assets/icons/triple-dot.svg'))
+        tripleDot.append(LoadSVG('/icons/triple-dot.svg'))
         tripleDot.classList.add('icon-button', 'triple-dot')
         ContextMenu.AttachButton(tripleDot, element)
 

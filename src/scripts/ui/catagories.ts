@@ -123,7 +123,7 @@ export class SongCatagory extends Catagory {
                     PlaybackController.PlaySong(song)
                 },
                 "song",
-                `<img src="src/assets/icons/note.png">`,
+                `<img src="/icons/note.png">`,
                 "Song"
             ))
         }
@@ -140,7 +140,7 @@ export class AlbumCatagory extends Catagory {
                 Network.GetCover(album.Cover, 256),
                 () => AlbumView.Show(album),
                 "album",
-                `<img src="src/assets/icons/disc.svg">`,
+                `<img src="/icons/disc.svg">`,
                 "Album"
             ))
         }
@@ -155,7 +155,7 @@ export class PlaylistCatagory extends Catagory {
                 Network.GetCover(playlist.Cover, 256),
                 async () => await PlaylistView.Show(playlist),
                 "playlist",
-                `<img src="src/assets/icons/playlist.svg">`,
+                `<img src="/icons/playlist.svg">`,
                 "Playlist"
             )
 

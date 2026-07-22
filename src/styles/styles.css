@@ -33,7 +33,7 @@
 
 :root[data-theme="neuro"] {
     --background-colour: #ffa3ae;
-    --background: url("../assets/neuro-bg.png");
+    --background: url("/neuro-bg.png");
     --background-sub-colour: #df858f;
     --header-colour: #ffb1bb;
     --current-song-bar: #f9919f;
@@ -58,7 +58,7 @@
 
 :root[data-theme="evil"] {
     --background-colour: #643134;
-    --background: url("../assets/evil-bg.png");
+    --background: url("/evil-bg.png");
     --background-sub-colour: #52282b;
     --header-colour: #763c40;
     --current-song-bar: #5c292c;
@@ -130,7 +130,7 @@
 
 @font-face {
     font-family: "Neuro";
-    src: url("/src/assets/first-coffie.otf") format("opentype");
+    src: url("/first-coffie.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
 }
