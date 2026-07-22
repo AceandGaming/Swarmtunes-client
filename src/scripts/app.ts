@@ -26,6 +26,13 @@ import ToastManager from "@ts/ui/toast-manager"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
+navigator.serviceWorker.getRegistrations()
+    .then(registrations => {
+        registrations.forEach(registration => {
+            registration.unregister()
+        })
+    })
+
 function HideLoading() {
     document.getElementById("loading-screen")?.classList.add("hide")
 }

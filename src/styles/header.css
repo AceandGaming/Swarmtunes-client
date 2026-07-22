@@ -18,6 +18,10 @@ footer {
     height: 100px;
 }
 
+#tabs-container button svg {
+    height: 100%;
+}
+
 #header-buttons {
     flex: 0 1 0;
     display: flex;
@@ -28,6 +32,8 @@ footer {
     margin-right: 10px;
     height: inherit;
 }
+
+
 
 #change-theme-button {
     border-radius: 5px;
@@ -53,8 +59,12 @@ footer {
     padding: 3px 8px;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+    header {
+        height: 40px;
+    }
+
     footer {
-        height: 150px;
+        height: 130px;
     }
 }

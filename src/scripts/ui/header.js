@@ -1,3 +1,4 @@
+import { LoadSVG } from "@ts/misc"
 import Network from "@ts/network"
 import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { MediaView } from "@ts/ui/content/media-view"
@@ -13,20 +14,27 @@ export function CreateButton(footer = false) {
 
     const container = document.createElement("div")
     container.id = "tabs-container"
-    container.innerHTML = `
-        <button class="tab" data-window="playlists-tab">
-            <span>Playlists</span>
-            <img src="/icons/layout-grid.svg">
-        </button>
-        <button class="tab" data-window="discover">
-            <span>Discover</span>
-            <img src="/icons/web.svg">
-        </button>
-        <button class="tab" data-window="search">
-            <span>Search</span>
-            <img src="/icons/search.svg">
-        </button>
-    `
+
+    function AddTab(id, name, img) {
+        const button = document.createElement("button")
+        button.classList.add("tab")
+        button.dataset.window = id
+
+        const span = document.createElement("span")
+        span.textContent = name
+        button.append(span)
+
+        const svg = LoadSVG(img)
+        button.append(svg)
+
+        button.addEventListener("click", OnTabClick)
+        container.append(button)
+    }
+
+    AddTab("playlists-tab", "Playlists", "/icons/layout-grid.svg")
+    AddTab("discover", "Discover", "/icons/web.svg")
+    AddTab("search", "Search", "/icons/search.svg")
+
     if (footer) {
         document.querySelector("footer").append(container)
     } else {

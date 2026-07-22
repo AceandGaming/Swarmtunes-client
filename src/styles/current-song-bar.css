@@ -72,10 +72,6 @@
     white-space: nowrap;
 }
 
-#current-song-bar .title-container :first-child {
-    font-weight: bold;
-}
-
 .seek-bar-container {
     display: flex;
     align-items: center;

@@ -44,7 +44,7 @@ export async function PopulateDiscover() {
     orginalSongs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
     mashupSongs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
-    AddCategoryToDiscover(new AlbumCatagory("Collections", albums))
+    AddCategoryToDiscover(new AlbumCatagory("Setlists", albums))
     AddCategoryToDiscover(new SongCatagory("Originals", orginalSongs))
     AddCategoryToDiscover(new SongCatagory("Mashups", mashupSongs))
 
