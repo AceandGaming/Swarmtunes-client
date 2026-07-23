@@ -11,7 +11,7 @@ import ToastManager from "@ts/ui/toast-manager"
 
 ContextMenu.AddCategory("playlist", [
     new ContextGroup("queue", false, false, [
-        new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
+        new ContextOption("Play Now", "/icons/play.svg", async (event) => {
             const playlist = await PlaylistManager.LoadPlaylist(event.id)
             SongQueue.PlayNow(playlist.Songs)
             // @ts-ignore
@@ -19,10 +19,10 @@ ContextMenu.AddCategory("playlist", [
         })
     ]),
     new ContextGroup("manage playlist", true, false, [
-        new ContextOption("Rename", "src/assets/icons/edit.svg", (event) => {
+        new ContextOption("Rename", "/icons/edit.svg", (event) => {
             RenamePlaylistPopup.instance.Show(event.id)
         }),
-        new ContextOption("Delete", "src/assets/icons/trash.svg", async (event) => {
+        new ContextOption("Delete", "/icons/trash.svg", async (event) => {
             const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + ReplaceEmotesOfString(PlaylistManager.GetPlaylist(event.id).Title) + "</strong>")
             if (!confirmation) {
                 return
@@ -32,7 +32,7 @@ ContextMenu.AddCategory("playlist", [
         })
     ]),
     new ContextGroup("playlists", true, false, [
-        new ContextOption("Add to Other Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
+        new ContextOption("Add to Other Playlist", "/icons/playlist-add.svg", async (event) => {
             const id = event.id
             const otherId = await SelectPlaylist.AskUser()
             if (otherId === null) {
@@ -47,7 +47,7 @@ ContextMenu.AddCategory("playlist", [
             PlaylistRequester.AddSongToPlaylist(otherId, playlist.SongIds)
             ToastManager.Toast(`Added ${playlist.SongIds.length} songs to ${playlist.Title}`)
         }),
-        new ContextOption("New Playlist", "src/assets/icons/plus.svg", () => {
+        new ContextOption("New Playlist", "/icons/plus.svg", () => {
             CreatePlaylistPopup.instance.Show()
         })
     ])

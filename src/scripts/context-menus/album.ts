@@ -9,7 +9,7 @@ import ToastManager from "@ts/ui/toast-manager"
 
 ContextMenu.AddCategory("album", [
     new ContextGroup("queue", false, false, [
-        new ContextOption("Play Now", "src/assets/icons/play.svg", async (event) => {
+        new ContextOption("Play Now", "/icons/play.svg", async (event) => {
             const album = await Network.GetAlbum(event.id, true)
             SongQueue.PlayNow(album.songs)
             // @ts-ignore
@@ -17,7 +17,7 @@ ContextMenu.AddCategory("album", [
         }),
     ]),
     new ContextGroup("playlist", true, false, [
-        new ContextOption("Add Songs To Playlist", "src/assets/icons/playlist-add.svg", async (event) => {
+        new ContextOption("Add Songs To Playlist", "/icons/playlist-add.svg", async (event) => {
             const playlistid = await SelectPlaylist.AskUser()
             if (playlistid === null) {
                 return

@@ -7,7 +7,7 @@ import ToastManager from "@ts/ui/toast-manager"
 
 ContextMenu.InheritCategory("playlist-item", "song", [
     new ContextGroup("playlist", true, false, [
-        new ContextOption("Remove From Playlist", "src/assets/icons/playlist-remove.svg", async (event) => {
+        new ContextOption("Remove From Playlist", "/icons/playlist-remove.svg", async (event) => {
             const playlistid = PlaylistView.playlist.Id
             if (playlistid === undefined) {
                 return

@@ -13,7 +13,7 @@ import ToastManager from "@ts/ui/toast-manager"
 
 ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, false, [
-        new ContextOption("Add to Queue", "src/assets/icons/plus.svg", async (event: { id: string }) => {
+        new ContextOption("Add to Queue", "/icons/plus.svg", async (event: { id: string }) => {
             const song = await SongRequester.GetSong(event.id)
             if (!song) {
                 return
@@ -22,7 +22,7 @@ ContextMenu.AddCategory("song", [
         }),
     ]),
     new ContextGroup("playlist", true, false, [
-        new ContextOption("Add to Playlist", "src/assets/icons/playlist-add.svg", async (event: { id: string }) => {
+        new ContextOption("Add to Playlist", "/icons/playlist-add.svg", async (event: { id: string }) => {
             const playlistid = await SelectPlaylist.AskUser()
             if (playlistid === null) {
                 return
@@ -44,7 +44,7 @@ ContextMenu.AddCategory("song", [
         })
     ]),
     new ContextGroup("share", false, true, [
-        new ContextOption("Share", "src/assets/icons/share.svg", async (event: { id: string }) => {
+        new ContextOption("Share", "/icons/share.svg", async (event: { id: string }) => {
             const url = "https://share.swarmtunes.com/?s=" + (await Network.ShareSong(event.id))
             const corutine = navigator.clipboard.writeText(url)
             corutine.then(() => {
@@ -55,12 +55,12 @@ ContextMenu.AddCategory("song", [
                 window.Show()
             })
         }),
-        new ContextOption("Export", "src/assets/icons/file-export.svg", (event: { id: string }) => {
+        new ContextOption("Export", "/icons/file-export.svg", (event: { id: string }) => {
             Network.DownloadSong(event.id, true)
         }),
     ]),
     new ContextGroup("admins", true, true, [
-        new ContextOption("Edit", "src/assets/icons/edit.svg", async (event: { id: string }) => {
+        new ContextOption("Edit", "/icons/edit.svg", async (event: { id: string }) => {
             const song = await SongRequester.GetSong(event.id)
             if (!song) {
                 return
