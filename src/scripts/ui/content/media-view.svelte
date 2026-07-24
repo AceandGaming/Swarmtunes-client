@@ -162,7 +162,15 @@
 
     header > nav {
         grid-column: 1 / -1;
-        z-index: 1;
+        z-index: 0;
+    }
+    header > nav .search {
+        filter: opacity(0.8);
+        transition: filter 0.2s ease-in-out;
+        padding: 5px 10px;
+    }
+    header > nav .search:focus {
+        filter: opacity(1);
     }
 
     .content {
@@ -190,6 +198,10 @@
         }
         .content {
             padding: 10px 5px;
+        }
+        header > nav .search {
+            font-size: 16px;
+            height: 35px;
         }
     }
 

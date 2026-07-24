@@ -321,11 +321,11 @@ hr {
 }
 
 input {
-    border-radius: 10px;
+    border-radius: 1000px;
     border: 1px solid var(--textbox-border);
     background-color: var(--textbox-fill);
     color: var(--text-colour);
-    padding: 5px 10px;
+    padding: 5px 15px;
 }
 
 input::placeholder {
