@@ -69,8 +69,8 @@
     <header>
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         
-        <div class="cover">
-            <swarmtunes-cover src={artworkUrl} onclick={OnCoverClick} role="button" tabindex="0"></swarmtunes-cover>
+        <div class="cover" onclick={OnCoverClick} role="button" tabindex="0">
+            <swarmtunes-cover src={artworkUrl}></swarmtunes-cover>
             <div class="overlay">{@html playSvg}</div>
         </div>
         <div class="text-container">
