@@ -3,6 +3,7 @@
     import SongList from "@ts/ui/song-list.svelte"
     import "@ts/ui/cover"
     import xSvg from "@assets/icons/x.svg?raw"
+    import playSvg from "@assets/icons/play.svg?raw"
     import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
     import SongQueue from "@ts/song-queue"
     import { PlaybackController } from "@ts/playback"
@@ -45,6 +46,16 @@
         SongQueue.UpdateQueue(song)
         PlaybackController.PlaySong(song)
     }
+    function OnCoverClick() {
+        SongQueue.LoadSongs(songs)
+        if (SongQueue.suffleSongs) {
+            SongQueue.UpdateQueue()
+        }
+        else {
+            SongQueue.UpdateQueue(songs[0])
+        }
+        PlaybackController.PlaySong(SongQueue.currentSong)
+    }
 
 </script>
 
@@ -56,7 +67,12 @@
     style={`--artwork-url: url(${artworkUrl})`}
 >
     <header>
-        <swarmtunes-cover src={artworkUrl}></swarmtunes-cover>
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        
+        <div class="cover">
+            <swarmtunes-cover src={artworkUrl} onclick={OnCoverClick} role="button" tabindex="0"></swarmtunes-cover>
+            <div class="overlay">{@html playSvg}</div>
+        </div>
         <div class="text-container">
             <h1>{title}</h1>
             <h2>{subtitle}</h2>
@@ -122,12 +138,39 @@
         filter: blur(3px) brightness(0.55)
     }
 
-    header > swarmtunes-cover {
+    header > .cover {
+        position: relative;
         filter: drop-shadow(0 4px 8.5px rgba(0, 0, 0, 40%));
         aspect-ratio: 1;
         max-width: 100%;
         margin: auto;
+        cursor: pointer;
     }
+    header swarmtunes-cover {
+        transition: filter 0.1s ease-in-out;
+    }
+    header > .cover:hover swarmtunes-cover {
+        filter: brightness(0.5);
+    }
+    header > .cover .overlay {
+        position: absolute;
+        inset: 0;
+    
+        display: flex;
+        
+        align-items: center;
+        justify-content: center;
+
+        opacity: 0;
+        transform: scale(0.4);
+        
+        transition: opacity 0.1s ease-in-out, transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    header > .cover:hover .overlay {
+        opacity: 1;
+        transform: scale(0.75);
+    }
+
     header .text-container {
         display: flex;
         flex-direction: column;
@@ -187,7 +230,7 @@
         header .text-container {
             padding: 0;
         }
-        header > swarmtunes-cover {
+        header > .cover {
             display: none;
         }
     }
