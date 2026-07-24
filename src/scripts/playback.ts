@@ -1,201 +1,78 @@
-import AudioPlayer from "@ts/audio"
-import type { AudioBase } from "@ts/audio-base"
-import Network from "@ts/network"
-import PlayState from "@ts/play-state"
+import type AudioPlayer from "@ts/audio/audio"
 import SongQueue from "@ts/song-queue"
-import type { SwarmFMInfo } from "@ts/swarmfm"
-import SwarmFM from "@ts/swarmfm"
 import type { Song } from "@ts/types/song"
-import SongFullscreen from "@ts/ui/content/song-fullscreen"
-import CurrentSongBar from "@ts/ui/controls/current-song-bar"
-import YoutubePlayer from "@ts/youtube"
+import OggPlayer from "@ts/audio/ogg"
+import YoutubePlayer from "@ts/audio/youtube"
 
 export class PlaybackController {
-    public static get HasControl(): AudioBase | null {
-        if (this.SwarmFM.HasControl) {
-            return SwarmFM.instance
-        }
-        else if (this.Audio.HasControl) {
-            return AudioPlayer.instance
-        }
-        else if (this.Youtube.HasControl) {
-            return YoutubePlayer.instance
-        }
-        return null
-    }
-    public static get Playing(): boolean {
-        const audio = PlaybackController.HasControl
-        return audio ? !audio.Paused : false
-    }
-    public static get CurrentSong(): Song | undefined {
-        if (this.Audio.HasControl) {
-            return this.Audio.CurrentSong
-        }
-        else if (this.Youtube.HasControl) {
-            return this.Youtube.CurrentSong
-        }
-        return undefined
+    private queue = new SongQueue()
+
+    private player?: AudioPlayer
+    private preload?: AudioPlayer
+
+    private LoadPreloaded() {
+        this.player = this.preload
+        this.preload = undefined
     }
 
-    private static get Audio() {
-        return AudioPlayer.instance
-    }
-    private static get SwarmFM() {
-        return SwarmFM.instance
-    }
-    private static get Youtube() {
-        return YoutubePlayer.instance
-    }
-
-    public static PlaySong(song: Song) {
-        if (!song) {
-            return
-        }
+    private UpdatePlayer(song: Song): AudioPlayer {
+        let PlayerClass: typeof AudioPlayer
         if (song.YoutubeId) {
-            this.Youtube.Play(song)
+            PlayerClass = YoutubePlayer
         }
         else {
-            this.Audio.Play(song)
+            PlayerClass = OggPlayer
         }
-        PlayState.Update({ playing: true })
-    }
-    public static Play() {
-        const audio = PlaybackController.HasControl
-        if (audio) {
-            audio.Play()
-        }
-        else if (PlayState.awaitingSong) {
-            this.PlaySong(PlayState.awaitingSong)
-            PlayState.awaitingSong = undefined
-        }
-    }
-    public static Pause() {
-        const audio = PlaybackController.HasControl
-        if (audio) {
-            audio.Pause()
-        }
-    }
-    public static NextTrack() {
-        if (this.SwarmFM.HasControl) {
-            return
-        }
-        this.Audio.PrepForSong()
-        SongQueue.PlayNextSong()
-    }
-    public static PreviousTrack() {
-        if (this.SwarmFM.HasControl) {
-            return
-        }
-        if (AudioPlayer.instance.Played > 5) {
-            AudioPlayer.instance.Played = 0
-            return
-        }
-        if (YoutubePlayer.instance.Played > 5) {
-            YoutubePlayer.instance.Played = 0
-            return
-        }
-        this.Audio.PrepForSong()
-        SongQueue.PlayPreviousSong()
-    }
-    private static UpdateMetadata(title: string, artist: string, singers: string[], coverUrl: string) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-            title: title,
-            artist: artist,
-            album: singers.join(", "),
-            artwork: [{ src: coverUrl }],
-        })
-    }
-    public static UpdateMediaSession({ playPause = false, skipping = false, seeking = false }) {
-        const media = navigator.mediaSession
 
-        media.setActionHandler('play', null)
-        media.setActionHandler('pause', null)
-        media.setActionHandler('stop', null)
-        media.setActionHandler('nexttrack', null)
-        media.setActionHandler('previoustrack', null)
-        media.setActionHandler('seekbackward', null)
-        media.setActionHandler('seekforward', null)
-        media.setActionHandler('seekto', null)
+        if (!this.player || this.player.constructor !== PlayerClass) {
+            this.player?.Destroy()
+            // @ts-ignore
+            this.player = new type(
+                () => { },
+                () => { },
+                () => { },
+                () => this.Next(),
+            ) as AudioPlayer
+        }
 
-        if (playPause) {
-            media.setActionHandler('play', () => this.Play())
-            media.setActionHandler('pause', () => this.Pause())
-            media.setActionHandler('stop', () => this.Pause())
-        }
-        if (skipping) {
-            media.setActionHandler('nexttrack', () => this.NextTrack())
-            media.setActionHandler('previoustrack', () => this.PreviousTrack())
-        }
-        if (seeking) {
-            if (!window.isMobile) {
-                media.setActionHandler('seekbackward', (details) => {
-                    this.Audio.Skip(details.seekOffset ?? 0)
-                    this.Youtube.Skip(details.seekOffset ?? 0)
-                })
-                media.setActionHandler('seekforward', (details) => {
-                    this.Audio.Skip(details.seekOffset ?? 0)
-                    this.Youtube.Skip(details.seekOffset ?? 0)
-                })
-            }
-            media.setActionHandler('seekto', (details) => {
-                this.Audio.Played = details.seekTime ?? 0
-                this.Youtube.Played = details.seekTime ?? 0
-            })
-        }
-    }
-    public static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string, swarmfm = false, source: string = "MP3") {
-        this.UpdateMetadata(title, artist, singers, coverUrl)
-        CurrentSongBar.Display(title, artist, singers, coverUrl, source)
-        // if (swarmfm) {
-        //     SongFullscreen.DisplaySwarmFM()
-        // }
-        // else {
-        SongFullscreen.Display(title, artist, singers, coverUrl, date, source)
-        //}
+        this.preload = undefined
 
-    }
-    public static DisplaySong(song: Song) {
-        this.Display(
-            song.Title,
-            song.Artist,
-            song.Singers,
-            song.CoverUrl,
-            "Released: " + song.PrettyDate,
-            false,
-            song.YoutubeId ? "Youtube" : "MP3"
-        )
-        SongFullscreen.UpdateContextMenuInfo(song.Id, "now-playing-item")
-    }
-    public static DisplaySwarmFMInfo(info: SwarmFMInfo) {
-        let cover
-        if (info.customArt) {
-            cover = Network.swarmFMURL + "/assets/album_covers/" + info.currentSong.CoverArt + ".png"
-        }
-        else {
-            cover = info.currentSong.CoverUrl
-        }
-        this.Display(
-            info.currentSong.Title,
-            info.currentSong.Artist,
-            info.currentSong.Singers,
-            cover,
-            "SwarmFM Stream",
-            !window.isMobile,
-            "SwarmFM"
-        )
-        SongFullscreen.UpdateContextMenuInfo("no", "swarmfm")
+        return this.player
     }
 
-    public static OnPlayPause(callback: (state: boolean) => void) {
-        this.Audio.OnPlayPause(callback)
-        this.Youtube.OnPlayPause(callback)
-        this.SwarmFM.OnPlayPause(callback)
+    public Play() {
+        this.player?.Play()
     }
-    public static OnTimeUpdate(callback: (played: number, duration: number, loaded: number) => void) {
-        this.Audio.OnTimeUpdate(callback)
-        this.Youtube.OnTimeUpdate(callback)
-        this.SwarmFM.OnTimeUpdate(callback)
+    public Pause() {
+        this.player?.Pause()
+    }
+
+    public async Next() {
+        const nextSong = this.queue.Next()
+        if (!nextSong) {
+            return
+        }
+
+        if (this.preload) {
+            this.LoadPreloaded()
+            return
+        }
+
+        const player = this.UpdatePlayer(nextSong)
+
+        await player.Load(nextSong)
+    }
+    public async Previous() {
+        const nextSong = this.queue.Previous()
+        if (!nextSong) {
+            return
+        }
+
+        const player = this.UpdatePlayer(nextSong)
+        await player.Load(nextSong)
     }
 }
 
-window.PlaybackController = PlaybackController
+
+const playbackController = new PlaybackController()
+export default playbackController
