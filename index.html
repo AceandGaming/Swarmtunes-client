@@ -9,8 +9,8 @@
   <meta name="theme-color" content="#1c1c1c" />
 
   <title>Swarmtunes</title>
-  <link rel="icon" type="image/png" href="/icon_small.png">
-  <link rel="mask-icon" sizes="180x180" href="/icon_small.png">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="mask-icon" sizes="180x180" href="/icon.png">
 
   <meta property="og:title" content="Swarmtunes" />
   <meta property="og:description" content="The Neuro-sama music app" />
@@ -85,7 +85,6 @@
 
   <link rel="stylesheet" href="src/styles/styles.css" />
   <link rel="stylesheet" href="src/styles/content/discover.css" />
-  <link rel="stylesheet" href="src/styles/content/media-view.css" />
   <link rel="stylesheet" href="src/styles/content/search.css" />
   <link rel="stylesheet" href="src/styles/catagories.css" />
   <link rel="stylesheet" href="src/styles/current-song-bar.css" />
@@ -108,7 +107,7 @@
 <body>
 
   <div id="loading-screen">
-    <img src="icon.png">
+    <img src="/icon.png">
     <div class="loading-text"></div>
     <span class="disclaimer">Swarmtunes is a fan made site and is not associated with Vedal, Neuro-sama or SwarmFM</span>
   </div>
@@ -123,7 +122,7 @@
       </div>
     </div>
     <div id="content-container">
-      <header>
+      <header id="header">
         <div id="header-buttons">
           <button title="Change Theme" id="change-theme-button">
             <img src="/icons/moon.svg" />
@@ -152,9 +151,7 @@
     </div>
   </main>
 
-  <footer>
-
-  </footer>
+  <footer id="footer"></footer>
   <!-- Now that's a lot of scripts -->
   <script type="module" src="src/main.ts"></script>
 </body>

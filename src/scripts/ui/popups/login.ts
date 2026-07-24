@@ -45,7 +45,6 @@ export class Login {
     static usernameInput: HTMLInputElement
     static passwordInput: HTMLInputElement
     static error: HTMLElement
-    static remeberMeToggle: HTMLInputElement
     static window: LoginPopup
 
     static AddLoginCallback(callback: (state: boolean) => void) {
@@ -68,7 +67,6 @@ export class Login {
         this.passwordInput = this.window.passwordInput
         this.usernameInput = this.window.usernameInput
         this.error = this.window.error
-        this.remeberMeToggle = this.window.remeberMeToggle
     }
     static Show() {
         if (!this.window) {
@@ -104,8 +102,7 @@ export class Login {
     static #OnLoginButtonClick() {
         const username = this.usernameInput.value
         const password = this.passwordInput.value
-        const remeber = this.remeberMeToggle.checked
-        const cor = Network.Login(username, password, remeber)
+        const cor = Network.Login(username, password)
         cor.catch(() => { this.window.SetBusy(false); this.error.textContent = "An unknown error occurred" })
         cor.then(output => {
             if (typeof output === "string") {
@@ -121,8 +118,7 @@ export class Login {
     static #OnSignupButtonClick() {
         const username = this.usernameInput.value
         const password = this.passwordInput.value
-        const remeber = this.remeberMeToggle.checked
-        const cor = Network.Register(username, password, remeber)
+        const cor = Network.Register(username, password)
         cor.catch(() => { this.window.SetBusy(false); this.error.textContent = "An unknown error occurred" })
         cor.then(output => {
             if (typeof output === "string") {
@@ -139,8 +135,6 @@ export class Login {
 export class LoginPopup extends PopupWindow {
     usernameInput: HTMLInputElement
     passwordInput: HTMLInputElement
-    remeberMeToggle: HTMLInputElement
-    remeberMeLabel: HTMLLabelElement
     error: HTMLParagraphElement
 
     constructor(OnLoginCallback: () => void, OnSignupCallback: () => void, OnUsernameInput: () => void, OnPasswordInput: () => void) {
@@ -164,15 +158,6 @@ export class LoginPopup extends PopupWindow {
         ListenForInputSubmit(this.usernameInput, this.passwordInput.focus.bind(this.passwordInput))
 
         this.content.append(this.usernameInput, this.passwordInput)
-
-        this.remeberMeLabel = document.createElement("label")
-        this.remeberMeLabel.textContent = "Remember me"
-
-        this.remeberMeToggle = document.createElement("input")
-        this.remeberMeToggle.type = "checkbox"
-        this.remeberMeLabel.prepend(this.remeberMeToggle)
-
-        this.content.appendChild(this.remeberMeLabel)
 
         this.error = document.createElement("p")
         this.error.style.color = "red"

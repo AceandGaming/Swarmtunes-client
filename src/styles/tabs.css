@@ -38,7 +38,6 @@
 }
 
 @media (max-width: 600px) {
-
     #tabs-container {
         width: 90%;
         margin: 2px auto;
@@ -47,7 +46,7 @@
     .tab {
         flex: 1 1 auto;
         flex-direction: column-reverse;
-        height: 50px;
+        height: 55px;
         background-color: transparent;
         border: none;
         border-radius: 10px;

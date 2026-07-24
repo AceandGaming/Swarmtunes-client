@@ -1,4 +1,4 @@
-header {
+#header {
     position: relative;
     display: flex;
     justify-content: right;
@@ -9,7 +9,7 @@ header {
     box-shadow: 0 0 5px #00000050;
 }
 
-footer {
+#footer {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -60,11 +60,11 @@ footer {
 }
 
 @media (max-width: 600px) {
-    header {
+    #header {
         height: 40px;
     }
 
-    footer {
-        height: 130px;
+    #footer {
+        height: 135px;
     }
 }

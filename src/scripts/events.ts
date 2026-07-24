@@ -1,9 +1,8 @@
-import AudioPlayer from "@ts/audio"
 import Network from "@ts/network"
 import { PlaybackController } from "@ts/playback"
 import PlaylistManager from "@ts/playlist-manager"
 import SongQueue from "@ts/song-queue"
-import SongRequester from "@ts/song-requester"
+import type { Song } from "@ts/types/song"
 import { MediaView, AlbumView } from "@ts/ui/content/media-view"
 
 export function OnAlbumClick(event: any) {
@@ -18,17 +17,9 @@ export function OnAlbumClick(event: any) {
 }
 
 
-export function OnSongClick(event: any) {
-    const id = event.target.dataset.id
-    AudioPlayer.instance.Preload(id)
-    SongRequester.GetSong(id).then((song) => {
-        if (song === undefined) {
-            console.warn("Song clicked with no song")
-            return
-        }
-        PlaybackController.PlaySong(song)
-        SongQueue.LoadSingleSong(song)
-    })
+export function OnSongClick(song: Song) {
+    PlaybackController.PlaySong(song)
+    SongQueue.LoadSingleSong(song)
 }
 
 

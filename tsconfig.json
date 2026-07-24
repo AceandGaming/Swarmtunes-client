@@ -17,6 +17,9 @@
       ],
       "@ts/*": [
         "src/scripts/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
       ]
     },
     "allowJs": true,
@@ -34,6 +37,7 @@
     "noFallthroughCasesInSwitch": true,
   },
   "include": [
-    "src"
+    "src",
+    "src/scripts/ui/content/.media-view.js"
   ]
 }

@@ -195,7 +195,7 @@ main {
 
 @media (max-width: 600px) {
     #content {
-        height: calc(100dvh - 130px - 40px);
+        height: calc(100dvh - 135px - 40px);
     }
 }
 

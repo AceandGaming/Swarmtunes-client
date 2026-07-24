@@ -4,15 +4,11 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 export default defineConfig({
     plugins: [svelte()],
-    build: {
-        rollupOptions: {
-            treeshake: false
-        }
-    },
     resolve: {
         alias: {
             '@ts': path.resolve(__dirname, 'src/scripts'),
             '@css': path.resolve(__dirname, 'src/styles'),
+            '@assets': path.resolve(__dirname, 'src/assets'),
         },
     },
     server: {

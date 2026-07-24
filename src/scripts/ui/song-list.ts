@@ -5,13 +5,13 @@ import type { Song } from "@ts/types/song"
 import { ContextMenu } from "@ts/ui/context-menu"
 import type Cover from "@ts/ui/cover"
 
-function CreateSongListItemElement(song: Song, onClickEvent: (event: any) => void, showDate = false, catagory = "song", unavaliable = false) {
+function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => void, showDate = false, catagory = "song", unavaliable = false) {
     const element = document.createElement("li")
     element.classList.add("song-list-item", "song")
     element.setAttribute("data-id", song.Id)
     element.setAttribute("data-category", catagory)
     element.classList.toggle("unavaliable", unavaliable)
-    element.addEventListener("click", onClickEvent)
+    element.addEventListener("click", () => onClickEvent(song))
 
     const coverImg = document.createElement('swarmtunes-cover') as Cover
     coverImg.src = song.CoverUrl

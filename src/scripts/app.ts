@@ -26,15 +26,18 @@ import ToastManager from "@ts/ui/toast-manager"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
-navigator.serviceWorker.getRegistrations()
-    .then(registrations => {
-        registrations.forEach(registration => {
-            registration.unregister()
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations()
+        .then(registrations => {
+            registrations.forEach(registration => {
+                registration.unregister()
+            })
         })
-    })
+}
+
 
 function HideLoading() {
-    document.getElementById("loading-screen")?.classList.add("hide")
+    document.getElementById("loading-screen")!.classList.add("hide")
 }
 
 async function AsyncCrap() {
@@ -140,39 +143,39 @@ function CreateUI() {
     ResizeAllGridDisplays()
     PlayState.Initalise()
 }
-// function LoadUrlBar() {
-//     const queryString = window.location.search
-//     const urlParams = new URLSearchParams(queryString)
-//     const songId = urlParams.get("song")
-//     const playlistLink = urlParams.get("playlist")
+function LoadUrlBar() {
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    const songId = urlParams.get("song")
+    //const playlistLink = urlParams.get("playlist")
 
-//     if (songId !== null) {
-//         SongRequester.GetSong(songId).then((song) => {
-//             if (song) {
-//                 SongQueue.LoadSingleSong(song)
-//                 PlaybackController.PlaySong(song)
-//             }
-//         })
-//     }
-//     if (playlistLink !== null) {
-//         Login.AddLoginCallback(async () => {
-//             const playlist = await Network.AddSharedPlaylist(playlistLink)
-//             PlaylistManager.AddPlaylist(playlist)
-//             PlaylistTab.Populate()
-//         })
-//     }
+    if (songId !== null) {
+        SongRequester.GetSong(songId).then((song) => {
+            if (song) {
+                SongQueue.LoadSingleSong(song)
+                PlaybackController.PlaySong(song)
+            }
+        })
+    }
+    // if (playlistLink !== null) {
+    //     Login.AddLoginCallback(async () => {
+    //         const playlist = await Network.AddSharedPlaylist(playlistLink)
+    //         PlaylistManager.AddPlaylist(playlist)
+    //         PlaylistTab.Populate()
+    //     })
+    // }
 
-//     const cleanUrl =
-//         window.location.protocol +
-//         "//" +
-//         window.location.host +
-//         window.location.pathname
-//     window.history.replaceState({}, document.title, cleanUrl)
-// }
+    const cleanUrl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        window.location.pathname
+    window.history.replaceState({}, document.title, cleanUrl)
+}
 AsyncCrap().then(() => {
     CreateUI()
 
-    //LoadUrlBar()
+    LoadUrlBar()
 })
 
 function UpdateNavigatorTime(played: number, duration: number) {

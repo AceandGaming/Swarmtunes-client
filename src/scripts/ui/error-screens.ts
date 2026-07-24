@@ -41,7 +41,7 @@ export default class ErrorScreen {
 }
 export class LoginRequired extends ErrorScreen {
     constructor(imagePath = "") {
-        super("Login required", undefined, imagePath, "Login")
+        super("Login required", Login.Show, imagePath, "Login")
         Login.AddLoginCallback(this.OnLogin.bind(this))
     }
     OnRetryButtonClick() {

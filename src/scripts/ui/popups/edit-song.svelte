@@ -2,6 +2,7 @@
     import { Song } from "@ts/types/song"
     import { onMount } from "svelte"
     import Network from "@ts/network"
+    import "@ts/ui/cover"
 
     const { song }: {song: Song} = $props()
 

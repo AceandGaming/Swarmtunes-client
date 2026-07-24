@@ -4,16 +4,7 @@ import type { Song } from "@ts/types/song"
 import { SongList } from "@ts/ui/song-list"
 import Sortable from "sortablejs"
 
-function OnNowPlayingItemClick(event: any) {
-    const id = event.target.dataset.id
-    if (id === "swarmfm") {
-        return
-    }
-    const song = SongQueue.GetSong(id)
-    if (song === undefined) {
-        console.warn("Item clicked with no song")
-        return
-    }
+function OnNowPlayingItemClick(song: Song) {
     SongQueue.SkipSong(song)
     NowPlaying.Update()
     PlaybackController.PlaySong(song)
