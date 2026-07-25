@@ -6,7 +6,7 @@
     import playSvg from "@assets/icons/play.svg?raw"
     import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
     import SongQueue from "@ts/song-queue"
-    import { PlaybackController } from "@ts/playback"
+    import  PlaybackController  from "@ts/playback"
 
     let title = $state("Title")
     let subtitle = $state("")
@@ -42,19 +42,13 @@
     )
 
     function OnItemClick(song: Song) {
-        SongQueue.LoadSongs(songs)
-        SongQueue.UpdateQueue(song)
-        PlaybackController.PlaySong(song)
+        PlaybackController.Play({song, songs})
     }
     function OnCoverClick() {
-        SongQueue.LoadSongs(songs)
-        if (SongQueue.suffleSongs) {
-            SongQueue.UpdateQueue()
+        if (loading) {
+            return
         }
-        else {
-            SongQueue.UpdateQueue(songs[0])
-        }
-        PlaybackController.PlaySong(SongQueue.currentSong)
+        PlaybackController.Play({songs})
     }
 
 </script>

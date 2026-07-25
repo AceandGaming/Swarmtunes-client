@@ -1,5 +1,4 @@
 import Network from "@ts/network"
-import SwarmFM from "@ts/swarmfm"
 import { AlbumCatagory, Catagory, SongCatagory } from "@ts/ui/catagories"
 import ErrorScreen, { LoadingError } from "@ts/ui/error-screens"
 import { LoadingText } from "@ts/ui/loading"
@@ -55,7 +54,7 @@ export function ShowErrorScreen() {
     discoverPage.append(errorScreen.CreateElement())
 }
 
-function OnSwarmFMButtonClick() {
-    SwarmFM.instance.Play()
-}
-document.getElementById("swarmfm-button")?.addEventListener("click", OnSwarmFMButtonClick)
+// function OnSwarmFMButtonClick() {
+//     SwarmFM.instance.Play()
+// }
+// document.getElementById("swarmfm-button")?.addEventListener("click", OnSwarmFMButtonClick)

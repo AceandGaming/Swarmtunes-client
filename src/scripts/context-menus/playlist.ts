@@ -1,4 +1,5 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
+import PlaybackController from "@ts/playback"
 import PlaylistManager from "@ts/playlist-manager"
 import { PlaylistRequester } from "@ts/playlist-requester"
 import SongQueue from "@ts/song-queue"
@@ -13,9 +14,8 @@ ContextMenu.AddCategory("playlist", [
     new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "/icons/play.svg", async (event) => {
             const playlist = await PlaylistManager.LoadPlaylist(event.id)
-            SongQueue.PlayNow(playlist.Songs)
-            // @ts-ignore
-            PlaybackController.PlaySong(playlist.Songs[0])
+
+            PlaybackController.Play({ songs: playlist.Songs })
         })
     ]),
     new ContextGroup("manage playlist", true, false, [

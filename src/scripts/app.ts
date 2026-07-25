@@ -1,13 +1,11 @@
-import AudioPlayer from "@ts/audio"
 import Network from "@ts/network"
 import PlayState from "@ts/play-state"
-import { PlaybackController } from "@ts/playback"
+import PlaybackController from "@ts/playback"
 import PlaylistDatabase from "@ts/playlist-db"
 import PlaylistManager from "@ts/playlist-manager"
 import SongDatabase from "@ts/song-db"
 import SongQueue from "@ts/song-queue"
 import SongRequester from "@ts/song-requester"
-import SwarmFM from "@ts/swarmfm"
 import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { PopulateDiscover, ShowErrorScreen } from "@ts/ui/content/discover"
 import { MediaView } from "@ts/ui/content/media-view"
@@ -23,6 +21,7 @@ import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
 import { Login } from "@ts/ui/popups/login"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import ToastManager from "@ts/ui/toast-manager"
+import { NowPlaying } from "@ts/ui/now-playing"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
@@ -68,8 +67,6 @@ window.isTablet = window.isMobile && (Math.min(window.screen.width, window.scree
 
 
 if (window.isMobile) {
-    AudioPlayer.instance.Audio.preload = "auto"
-    SwarmFM.TARGET_LATENCY = 3
     try {
         localStorage.setItem("volume", 0.8 as any)
     } catch (e) {
@@ -122,6 +119,7 @@ function CreateUI() {
 
     MediaView.Create()
     SongFullscreen.Create()
+    NowPlaying.Create()
 
     Login.CreateWindow()
     new CreatePlaylistPopup()
@@ -152,8 +150,7 @@ function LoadUrlBar() {
     if (songId !== null) {
         SongRequester.GetSong(songId).then((song) => {
             if (song) {
-                SongQueue.LoadSingleSong(song)
-                PlaybackController.PlaySong(song)
+                PlaybackController.Play({ song, songs: [song] })
             }
         })
     }
@@ -178,12 +175,9 @@ AsyncCrap().then(() => {
     LoadUrlBar()
 })
 
-function UpdateNavigatorTime(played: number, duration: number) {
-    navigator.mediaSession.setPositionState({
-        duration: duration,
-        position: played,
-    })
-}
-
-AudioPlayer.instance.OnTimeUpdate(UpdateNavigatorTime)
-SwarmFM.instance.OnTimeUpdate(UpdateNavigatorTime)
+// function UpdateNavigatorTime(played: number, duration: number) {
+//     navigator.mediaSession.setPositionState({
+//         duration: duration,
+//         position: played,
+//     })
+// }

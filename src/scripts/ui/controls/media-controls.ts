@@ -1,26 +1,15 @@
-import AudioPlayer from "@ts/audio"
 import { ReplaceEmotesOfString } from "@ts/emote"
 import { LoadSVG } from "@ts/misc"
 import Network from "@ts/network"
-import { PlaybackController } from "@ts/playback"
+import PlaybackController from "@ts/playback"
 import PlaylistManager from "@ts/playlist-manager"
 import SongQueue from "@ts/song-queue"
-import SwarmFM from "@ts/swarmfm"
 import VolumeButton from "@ts/ui/controls/volume-button"
 import { Login } from "@ts/ui/popups/login"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
-import YoutubePlayer from "@ts/youtube"
 
 export default class MediaControls {
-    static #initialised = false
-
-    static #Initialise() {
-        AudioPlayer.instance.Audio.addEventListener("ended", () => PlaybackController.NextTrack())
-        YoutubePlayer.instance.OnEnd(() => PlaybackController.NextTrack())
-        this.#initialised = true
-    }
-
     static Create({ skipping = false, shuffle = false, volume = false, addToPlaylist = false, size = 25, gap = 7 }) {
         const buttons = document.createElement("div")
         buttons.classList.add("media-controls")
@@ -147,62 +136,48 @@ export default class MediaControls {
         }
         if (pause) {
             pause.addEventListener("click", this.#OnPauseClick.bind(this))
-            function UpdatePauseButton(button: HTMLButtonElement, state: boolean) {
-                button.classList.toggle("playing", state)
-            }
-            AudioPlayer.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
-            SwarmFM.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
-            YoutubePlayer.instance.OnPlayPause((state) => UpdatePauseButton(pause, state))
+
+            PlaybackController.AddCallback("playPause", (playing) => pause.classList.toggle("playing", playing))
         }
         if (next) {
             next.addEventListener("click", this.#OnNextClick.bind(this))
         }
         if (shuffle) {
             shuffle.addEventListener("click", this.#OnShuffleClick.bind(this, shuffle))
-            shuffle.classList.toggle("active", SongQueue.suffleSongs)
-            SongQueue.OnShuffleChange((state: boolean) => {
-                shuffle.classList.toggle("active", state)
+            PlaybackController.AddCallback("shuffle", (shuffling: boolean) => {
+                shuffle.classList.toggle("active", shuffling)
             })
-        }
-
-        if (!this.#initialised) {
-            this.#Initialise()
         }
     }
     static async #OnAddToPlaylistClick() {
-        if (!AudioPlayer.instance.HasControl) {
-            return
-        }
-        const currentSong = PlaybackController.CurrentSong
-        if (!currentSong) {
-            return
-        }
-        const playlistId = await SelectPlaylist.AskUser()
-        if (!playlistId) {
-            return
-        }
-        const playlist = PlaylistManager.GetPlaylist(playlistId)
-        if (playlist.Has(currentSong.Id)) {
-            ToastManager.Toast("Song already in playlist", "error")
-            return
-        }
-        await playlist.GetSongs()
-        playlist.Add(currentSong)
-        ToastManager.Toast(`Added song to <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
+        // if (!AudioPlayer.instance.HasControl) {
+        //     return
+        // }
+        // const currentSong = PlaybackController.CurrentSong
+        // if (!currentSong) {
+        //     return
+        // }
+        // const playlistId = await SelectPlaylist.AskUser()
+        // if (!playlistId) {
+        //     return
+        // }
+        // const playlist = PlaylistManager.GetPlaylist(playlistId)
+        // if (playlist.Has(currentSong.Id)) {
+        //     ToastManager.Toast("Song already in playlist", "error")
+        //     return
+        // }
+        // await playlist.GetSongs()
+        // playlist.Add(currentSong)
+        // ToastManager.Toast(`Added song to <b>${ReplaceEmotesOfString(playlist.Title)}</b>`, "none", 3, true)
     }
     static #OnPauseClick() {
-        if (PlaybackController.Playing) {
-            PlaybackController.Pause()
-        }
-        else {
-            PlaybackController.Play()
-        }
+        PlaybackController.PlayPause()
     }
     static #OnNextClick() {
-        PlaybackController.NextTrack()
+        PlaybackController.Next()
     }
     static #OnPreviousClick() {
-        PlaybackController.PreviousTrack()
+        PlaybackController.Previous()
     }
     static #OnShuffleClick(button: HTMLButtonElement) {
         button.classList.remove("flip")
@@ -212,7 +187,6 @@ export default class MediaControls {
             button.classList.remove("flip")
         })
 
-        const active = !SongQueue.suffleSongs
-        SongQueue.suffleSongs = active
+        PlaybackController.ToggleShuffle()
     }
 }

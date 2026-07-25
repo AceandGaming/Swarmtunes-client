@@ -1,7 +1,3 @@
-import AudioPlayer from "@ts/audio"
-import SwarmFM from "@ts/swarmfm"
-import YoutubePlayer from "@ts/youtube"
-
 export default class VolumeButton {
     #volumeButton
     #volumeSlider
@@ -19,14 +15,15 @@ export default class VolumeButton {
         this.#volumeSlider.addEventListener("blur", this.OnSliderLooseFocus.bind(this))
 
         const volume = Number(localStorage.getItem("volume")) || 0.75
+
         // @ts-ignore
         this.#volumeSlider.value = volume
-        AudioPlayer.instance.Volume = volume
-        SwarmFM.instance.Volume = volume
-        YoutubePlayer.instance.Volume = volume
-        this.#UpdateIcon(volume)
+        // AudioPlayer.instance.Volume = volume
+        // SwarmFM.instance.Volume = volume
+        // YoutubePlayer.instance.Volume = volume
+        // this.#UpdateIcon(volume)
 
-        AudioPlayer.instance.OnVolumeUpdate(this.#UpdateIcon.bind(this))
+        // AudioPlayer.instance.OnVolumeUpdate(this.#UpdateIcon.bind(this))
     }
     OnButtonClick(event: any) {
         if (event.target.id === "") {
@@ -54,9 +51,9 @@ export default class VolumeButton {
     }
     OnSliderChange(event: any) {
         this.#sliderFocus = true
-        AudioPlayer.instance.Volume = event.target.value
-        SwarmFM.instance.Volume = event.target.value
-        YoutubePlayer.instance.Volume = event.target.value
+        // AudioPlayer.instance.Volume = event.target.value
+        // SwarmFM.instance.Volume = event.target.value
+        // YoutubePlayer.instance.Volume = event.target.value
 
         this.#UpdateIcon(event.target.value)
     }

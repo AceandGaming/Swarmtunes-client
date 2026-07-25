@@ -1,4 +1,4 @@
-import { PlaybackController } from "@ts/playback"
+import PlaybackController from "@ts/playback"
 import SongQueue from "@ts/song-queue"
 import SongRequester from "@ts/song-requester"
 import type { Song } from "@ts/types/song"
@@ -52,24 +52,24 @@ export default class PlayState {
         if (!song) {
             return
         }
-        if (PlaybackController.CurrentSong !== undefined) {
-            return
-        }
-        PlaybackController.DisplaySong(song)
-        if (!window.isNewSession && data.playing) {
-            PlaybackController.PlaySong(song)
-            if (data.played) {
-                let die = false //POV: You haven't implemented the ablity to remove callbacks
-                PlaybackController.OnPlayPause((state) => {
-                    if (state && !die) {
-                        die = true
-                        if (PlaybackController.HasControl) {
-                            PlaybackController.HasControl.Played = data.played
-                        }
-                    }
-                })
-            }
-        }
+        // if (PlaybackController.CurrentSong !== undefined) {
+        //     return
+        // }
+        // PlaybackController.DisplaySong(song)
+        // if (!window.isNewSession && data.playing) {
+        //     PlaybackController.PlaySong(song)
+        //     if (data.played) {
+        //         let die = false //POV: You haven't implemented the ablity to remove callbacks
+        //         PlaybackController.OnPlayPause((state) => {
+        //             if (state && !die) {
+        //                 die = true
+        //                 if (PlaybackController.HasControl) {
+        //                     PlaybackController.HasControl.Played = data.played
+        //                 }
+        //             }
+        //         })
+        //     }
+        // }
         else {
             this.awaitingSong = song
         }
@@ -79,16 +79,16 @@ export default class PlayState {
             return
         }
         const songs = await SongRequester.GetSongs(data.queue)
-        SongQueue.LoadSongs(songs)
-        SongQueue.UpdateQueue(song)
+        // SongQueue.LoadSongs(songs)
+        // SongQueue.UpdateQueue(song)
     }
     static Initalise() {
-        PlaybackController.OnTimeUpdate((played) => {
+        PlaybackController.AddCallback("timeUpdate", (played) => {
             PlayState.Update({ played: played })
         })
-        setInterval(() => {
-            PlayState.Update({ playing: PlaybackController.Playing })
-        }, 500)
+        PlaybackController.AddCallback("playPause", (playing) => {
+            PlayState.Update({ playing: playing })
+        })
         this.Load()
     }
 }

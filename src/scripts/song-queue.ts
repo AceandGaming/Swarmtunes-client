@@ -30,25 +30,28 @@ export default class SongQueue {
 
     public PopulateQueue(
         songs: Song[],
-        shuffle: boolean = false,
-        currentSong?: Song,
+        shuffle: boolean = false
     ) {
         this.LoadSongs(songs)
         this.UpdateQueue(shuffle)
-        if (currentSong) {
-            this.SkipTo(currentSong)
-        }
+    }
+    public Add(song: Song) {
+        this.songs.splice(this.queuePointer + 1, 0, song)
     }
     public ReShuffle(shuffle: boolean = true) {
         const song = this.currentSong
         this.UpdateQueue(shuffle)
         if (song) {
             if (shuffle) {
-                this.songs.splice(0, 0, song)
-                this.SkipTo(song)
-            } else {
-                this.SkipTo(song)
+                const index = this.songs.findIndex(s => s.Id === song.Id)
+
+                if (index !== -1) {
+                    this.songs.splice(index, 1)
+                }
+
+                this.songs.unshift(song)
             }
+            this.SkipTo(song)
         }
     }
     public SkipTo(song: Song) {

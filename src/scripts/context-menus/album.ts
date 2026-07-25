@@ -2,18 +2,17 @@ import { ReplaceEmotesOfString } from "@ts/emote"
 import Network from "@ts/network"
 import PlaylistManager from "@ts/playlist-manager"
 import { PlaylistRequester } from "@ts/playlist-requester"
-import SongQueue from "@ts/song-queue"
 import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
+import PlaybackController from "@ts/playback"
 
 ContextMenu.AddCategory("album", [
     new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "/icons/play.svg", async (event) => {
             const album = await Network.GetAlbum(event.id, true)
-            SongQueue.PlayNow(album.songs)
-            // @ts-ignore
-            PlaybackController.PlaySong(album.songs[0])
+
+            PlaybackController.Play({ songs: album.songs })
         }),
     ]),
     new ContextGroup("playlist", true, false, [

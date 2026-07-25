@@ -1,5 +1,4 @@
 import { EnsureArray, sleep, EnsureValue, RequireAdmin } from "@ts/misc"
-import { SwarmFMInfo } from "@ts/swarmfm"
 import { Album } from "@ts/types/album"
 import { Playlist } from "@ts/types/playlist"
 import { Song } from "@ts/types/song"
@@ -171,7 +170,7 @@ export default class Network {
         const position = json["position"]
         const duration = current["duration"]
 
-        return new SwarmFMInfo(currentSong, nextSong, position, duration, coverType == "custom")
+        //return new SwarmFMInfo(currentSong, nextSong, position, duration, coverType == "custom")
     }
     static async GetSong(id: id | id[]) {
         let ids = EnsureArray(id).slice()

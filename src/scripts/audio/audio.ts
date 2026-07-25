@@ -4,6 +4,7 @@ export default abstract class AudioPlayer {
     public abstract get played(): number
     public abstract set played(value: number)
     public abstract get duration(): number
+    public abstract get isPlaying(): boolean
 
     constructor(
         onPlay: () => void,
@@ -16,4 +17,8 @@ export default abstract class AudioPlayer {
     public abstract Play(): void
     public abstract Pause(): void
     public abstract Destroy(): Promise<void> | void
+
+    public GetIframe(): HTMLIFrameElement | undefined {
+        return undefined
+    }
 }

@@ -1,16 +1,34 @@
+@property --c1 {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #000;
+}
+
+@property --c2 {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #000;
+}
+
 #song-fullscreen {
+    --c1: var(--background-colour);
+    --c2: var(--background-sub-colour);
+
+    --icon-default: #fff;
+    --icon-hover: #eee;
+    --icon-active: #ccc;
+    --seek-bar-background: #0000001a;
+
     position: absolute;
     display: block;
     visibility: hidden;
     width: 100%;
     height: 100%;
-    background: linear-gradient(var(--background-colour),
-            var(--background-sub-colour));
-    --icon-default: #fff;
-    --icon-hover: #eee;
-    --icon-active: #ccc;
-    --seek-bar-background: #0000001a;
+    background: linear-gradient(var(--c1), var(--c2));
+
     z-index: 1;
+
+    transition: --c1 0.5s ease, --c2 0.5s ease;
 }
 
 #song-fullscreen.high-contrast .close-button {
@@ -149,6 +167,10 @@
 
 #song-fullscreen .title-container > h1 {
     font-size: x-large;
+}
+
+#song-fullscreen .title-container > h2 {
+    font-size: medium;
 }
 
 

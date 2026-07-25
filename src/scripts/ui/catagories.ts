@@ -1,7 +1,6 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import Network from "@ts/network"
-import { PlaybackController } from "@ts/playback"
-import SongQueue from "@ts/song-queue"
+import PlaybackController from "@ts/playback"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import { PlaylistView, AlbumView } from "@ts/ui/content/media-view"
 import type Cover from "@ts/ui/cover"
@@ -118,9 +117,10 @@ export class SongCatagory extends Catagory {
                 song.Id,
                 song.CoverUrl,
                 () => {
-                    SongQueue.LoadSongs(this.items)
-                    SongQueue.UpdateQueue(song)
-                    PlaybackController.PlaySong(song)
+                    PlaybackController.Play({
+                        song: song,
+                        songs: this.items
+                    })
                 },
                 "song",
                 `<img src="/icons/note.png">`,

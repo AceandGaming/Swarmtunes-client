@@ -1,8 +1,5 @@
-import AudioPlayer from "@ts/audio"
 import { FormatTime } from "@ts/misc"
-import { PlaybackController } from "@ts/playback"
-import SwarmFM from "@ts/swarmfm"
-import YoutubePlayer from "@ts/youtube"
+import PlaybackController from "@ts/playback"
 
 export default class SeekBar {
     static seekbars: SeekBar[] = []
@@ -65,9 +62,7 @@ export default class SeekBar {
         }
 
 
-        AudioPlayer.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
-        SwarmFM.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
-        YoutubePlayer.instance.OnTimeUpdate(this.OnTimeUpdate.bind(this))
+        PlaybackController.AddCallback("timeUpdate", (current, duration) => this.OnTimeUpdate(current, duration, 0))
 
         SeekBar.seekbars.push(this)
     }
@@ -98,10 +93,7 @@ export default class SeekBar {
         let fraction = (event.clientX - rect.left) / rect.width
         fraction = Math.min(1, Math.max(0, fraction))
 
-        const player = PlaybackController.HasControl
-        if (player) {
-            player.Seek(fraction)
-        }
+        PlaybackController.SeekPercent(fraction)
     }
     OnSeekMobile(event: TouchEvent) {
         if (!this.#dragging) {
@@ -110,8 +102,8 @@ export default class SeekBar {
         const rect = this.#seekBar.getBoundingClientRect()
         let fraction = (event.touches[0].clientX - rect.left) / rect.width
         fraction = Math.min(1, Math.max(0, fraction))
-        AudioPlayer.instance.Seek(fraction)
-        YoutubePlayer.instance.Seek(fraction)
+
+        PlaybackController.SeekPercent(fraction)
     }
     OnSeekBarMouseDown(event: MouseEvent | TouchEvent) {
         this.#dragging = true

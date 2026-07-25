@@ -1,4 +1,6 @@
 import { LoadSVG } from "@ts/misc"
+import PlaybackController from "@ts/playback"
+import type { Song } from "@ts/types/song"
 import SongFullscreen from "@ts/ui/content/song-fullscreen"
 import MediaControls from "@ts/ui/controls/media-controls"
 import SeekBar from "@ts/ui/controls/seek-bar"
@@ -80,6 +82,10 @@ export default class CurrentSongBar {
         currentSongBar.append(leftContent, middleContent, rightContent)
         this.#element = currentSongBar
         document.querySelector("footer")?.appendChild(currentSongBar)
+
+        PlaybackController.AddCallback("loadedSong", (song: Song) => {
+            this.Display(song.Title, song.Artist, song.Singers, song.CoverUrl)
+        })
     }
 
     static CreateMobile() {
@@ -115,6 +121,10 @@ export default class CurrentSongBar {
             }
         })
         document.querySelector("footer")?.appendChild(currentSongBar)
+
+        PlaybackController.AddCallback("loadedSong", (song: Song) => {
+            this.Display(song.Title, song.Artist, song.Singers, song.CoverUrl)
+        })
     }
 
 
@@ -127,7 +137,7 @@ export default class CurrentSongBar {
         this.#element.setAttribute("data-id", id)
         this.#element.setAttribute("data-rightclickcategory", "song")
     }
-    static Display(title: string, artist: string, singers: string[], coverUrl: string, source: string = "MP3") {
+    static Display(title: string, artist: string, singers: string[], coverUrl: string) {
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
         if (this.#singersText) {
@@ -135,14 +145,6 @@ export default class CurrentSongBar {
         }
 
         this.#coverImage.src = coverUrl
-        if (this.#sourceText) {
-            if (source) {
-                this.#sourceText.textContent = "Source: " + source
-            }
-            else {
-                this.#sourceText.textContent = ""
-            }
-        }
 
     }
     static GetInfo() {

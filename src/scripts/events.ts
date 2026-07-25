@@ -1,5 +1,5 @@
 import Network from "@ts/network"
-import { PlaybackController } from "@ts/playback"
+import PlaybackController from "@ts/playback"
 import PlaylistManager from "@ts/playlist-manager"
 import SongQueue from "@ts/song-queue"
 import type { Song } from "@ts/types/song"
@@ -18,8 +18,8 @@ export function OnAlbumClick(event: any) {
 
 
 export function OnSongClick(song: Song) {
-    PlaybackController.PlaySong(song)
-    SongQueue.LoadSingleSong(song)
+    PlaybackController.Play({ song, songs: [song] })
+
 }
 
 

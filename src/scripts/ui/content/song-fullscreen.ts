@@ -1,6 +1,6 @@
-import { LoadSVG } from "@ts/misc"
-import Network from "@ts/network"
-import SwarmFM from "@ts/swarmfm"
+import { HslToHex, LoadSVG } from "@ts/misc"
+import PlaybackController from "@ts/playback"
+import type { Song } from "@ts/types/song"
 import { ContextMenu } from "@ts/ui/context-menu"
 import MediaControls from "@ts/ui/controls/media-controls"
 import SeekBar from "@ts/ui/controls/seek-bar"
@@ -114,6 +114,16 @@ export default class SongFullscreen {
         element.append(content, swarmFMPlayer)
         this.#element = element
         document.querySelector("body")?.prepend(element)
+
+        PlaybackController.AddCallback("loadedSong", (song: Song) => {
+            this.Display(
+                song.Title,
+                song.Artist,
+                song.Singers,
+                song.CoverUrl,
+                song.PrettyDate
+            )
+        })
     }
     static Hide() {
         this.#element.classList.remove("show")
@@ -148,10 +158,10 @@ export default class SongFullscreen {
         }
 
         if (this.visable) {
-            UpdateThemeColor(this.#element.dataset.colour)
+            UpdateThemeColor(HslToHex(this.#element.dataset.colour))
         }
     }
-    static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string, source: string = "MP3") {
+    static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string) {
         this.#swarmFMPanel.classList.add("hidden")
         this.#content.classList.remove("hidden")
 
@@ -165,40 +175,20 @@ export default class SongFullscreen {
 
         this.#dateText.textContent = date
 
-        if (source) {
-            this.#sourceText.textContent = "Source: " + source
-        }
-        else {
-            this.#sourceText.textContent = ""
-        }
-
-
         this.#coverImage.addEventListener("load", (event: any) => {
             const colour = event.target.hsl
-            this.#element.style.background = `linear-gradient(
-                hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 80)}%),
-                hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.8, 40)}%)
-            )`
-            this.#element.dataset.colour = `hsl(${colour.h}, ${colour.s * 2}%, ${colour.l * 1.2}%)`
+            this.#element.style = `
+                --c1: hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 80)}%);
+                --c2: hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.8, 40)}%);
+            `
+            this.#element.dataset.colour = `hsl(${colour.h}, ${colour.s}%, ${colour.l * 1.2}%)`
 
             if (this.visable) {
-                UpdateThemeColor(this.#element.dataset.colour)
+                UpdateThemeColor(HslToHex(this.#element.dataset.colour))
             }
         })
 
         this.#coverImage.src = coverUrl
-    }
-    static DisplaySwarmFM() {
-        this.#element.style.background = "black"
-        if (this.visable) {
-            UpdateThemeColor("black")
-        }
-        if (this.#swarmFMPanel.src === "about:blank") {
-            this.#swarmFMPanel.src = Network.swarmFMURL + "/player/dummy-player?from=swarmtunes&now=" + Date.now() + "&offset=" + SwarmFM.TARGET_LATENCY
-        }
-        this.#element.classList.remove("high-contrast")
-        this.#swarmFMPanel.classList.remove("hidden")
-        this.#content.classList.add("hidden")
     }
     static UpdateContextMenuInfo(id: id, catagory: string) {
         this.#infoContainer.setAttribute("data-id", id)

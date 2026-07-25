@@ -1,46 +1,41 @@
-import { PlaybackController } from "@ts/playback"
-import SongQueue from "@ts/song-queue"
+import PlaybackController from "@ts/playback"
 import type { Song } from "@ts/types/song"
 import { SongList } from "@ts/ui/song-list"
 import Sortable from "sortablejs"
 
 function OnNowPlayingItemClick(song: Song) {
-    SongQueue.SkipSong(song)
-    NowPlaying.Update()
-    PlaybackController.PlaySong(song)
+    PlaybackController.SkipTo(song)
 }
 
 export class NowPlaying {
-    static #songlist: SongList
-    static #element = document.querySelector("#now-playing") as HTMLDivElement
+    private static songlist: SongList
+    private static element = document.querySelector("#now-playing") as HTMLDivElement
 
-    static Update(songs: Song[] | undefined = undefined) {
-        if (songs === undefined) {
-            songs = SongQueue.nextSongs
-        }
-        if (this.#songlist === undefined) {
-            this.#songlist = new SongList(songs, OnNowPlayingItemClick, "now-playing-item", false, 30)
-            const element = this.#songlist.CreateElement()
+    public static Create() {
+        this.songlist = new SongList([], OnNowPlayingItemClick, "now-playing-item", false, 30)
 
-            const sortable = new Sortable(element, {
-                animation: 150,
-                dataIdAttr: "data-id"
-            })
-            sortable.option("onEnd", () => {
-                SongQueue.OnQueueOrderChange(sortable.toArray())
-            })
+        const sortable = new Sortable(this.songlist.element, {
+            animation: 150,
+            dataIdAttr: "data-id"
+        })
+        // sortable.option("onEnd", () => {
+        //     SongQueue.OnQueueOrderChange(sortable.toArray())
+        // })
 
-            this.#element.appendChild(element)
-        } else {
-            this.#songlist.songs = songs
-            this.#songlist.UpdateAnimated()
-        }
+        this.element.appendChild(this.songlist.element)
+
+        PlaybackController.AddCallback("queueChange", (songs) => this.Update(songs))
     }
-    static Clear() {
-        if (this.#songlist === undefined) {
-            return
-        }
-        this.#songlist.songs = []
-        this.#songlist.Update()
+
+    private static Update(songs: Song[]) {
+        this.songlist.songs = songs
+        this.songlist.UpdateAnimated()
     }
+    // static Clear() {
+    //     if (!this.songlist) {
+    //         return
+    //     }
+    //     this.songlist.songs = []
+    //     this.songlist.Update()
+    // }
 }

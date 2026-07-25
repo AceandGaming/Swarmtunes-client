@@ -83,7 +83,8 @@
 }
 
 .seek-bar-container span {
-    transform: translateY(2.2px);
+    /* transform: translateY(2.2px); */
+    width: 40px;
 }
 
 .seek-bar {

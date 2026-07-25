@@ -2,7 +2,6 @@ import { ReplaceEmotesOfString } from "@ts/emote"
 import Network from "@ts/network"
 import PlaylistManager from "@ts/playlist-manager"
 import { PlaylistRequester } from "@ts/playlist-requester"
-import SongQueue from "@ts/song-queue"
 import SongRequester from "@ts/song-requester"
 import { PlaylistView } from "@ts/ui/content/media-view"
 import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
@@ -10,6 +9,7 @@ import { EditSongPopup } from "@ts/ui/popups/edit-song"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import { ShareWindow } from "@ts/ui/popups/share-link"
 import ToastManager from "@ts/ui/toast-manager"
+import PlaybackController from "@ts/playback"
 
 ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, false, [
@@ -18,7 +18,8 @@ ContextMenu.AddCategory("song", [
             if (!song) {
                 return
             }
-            SongQueue.AppendSong(song)
+
+            PlaybackController.AddToQueue(song)
         }),
     ]),
     new ContextGroup("playlist", true, false, [

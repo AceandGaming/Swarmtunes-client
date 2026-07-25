@@ -115,3 +115,8 @@ export function ListenForInputSubmit(input, action) {
         }
     })
 }
+export function HslToHex(hsl) {
+    const ctx = document.createElement("canvas").getContext("2d")
+    ctx.fillStyle = hsl
+    return ctx.fillStyle
+}
