@@ -15,6 +15,14 @@ export default class OggPlayer extends AudioPlayer {
     public get isPlaying(): boolean {
         return !this.audio.paused
     }
+    public get volume(): number {
+        return this.audio.volume
+    }
+    public set volume(value: number) {
+        this.audio.volume = value
+    }
+
+
     private audio: HTMLAudioElement
 
     constructor(onPlay: () => void, onPause: () => void, onUpdate: () => void, onEnded: () => void) {
@@ -47,6 +55,9 @@ export default class OggPlayer extends AudioPlayer {
     }
     public Pause(): void {
         this.audio.pause()
+    }
+    public SetVolume(volume: number): void {
+        this.audio.volume = volume
     }
 
     public Destroy(): void {

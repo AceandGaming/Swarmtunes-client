@@ -18,7 +18,6 @@ export default class YoutubePlayer extends AudioPlayer {
 
     private iframe: HTMLIFrameElement
     private player: any
-    private volume: number = 0.5
     private paused = true
     private updateId: number
     private ready = false
@@ -38,7 +37,6 @@ export default class YoutubePlayer extends AudioPlayer {
 
         player.addEventListener("onReady", () => {
             console.log("Youtube Player Ready!")
-            player.setVolume(this.volume * 100)
             this.ready = true
         })
 
@@ -145,6 +143,9 @@ export default class YoutubePlayer extends AudioPlayer {
     }
     public Pause(): void {
         this.player.pauseVideo()
+    }
+    public SetVolume(volume: number): void {
+        this.player.setVolume(volume * 100)
     }
     public Destroy(): Promise<void> | void {
         clearInterval(this.updateId)

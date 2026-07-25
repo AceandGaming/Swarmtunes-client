@@ -64,6 +64,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
+    gap: 2px;
 }
 
 #current-song-bar .title-container > * {

@@ -6,7 +6,7 @@ interface PlaylistPrams {
     title: string
     singers: String[]
     date: string
-    cover?: "neuro" | "evil" | "duet" | null
+    cover: string
     songIds?: id[]
 }
 
@@ -28,14 +28,6 @@ export class Playlist {
         }
         return this.songs
     }
-    get Cover() {
-        if (this.songIds.length === 1) {
-            if (this.songsLoaded) {
-                return this.songs[0]?.CoverArt
-            }
-        }
-        return this.coverType
-    }
     get PrettyDate() {
         return this.date.toLocaleDateString("en-AU", {
             day: "numeric",
@@ -44,7 +36,7 @@ export class Playlist {
         })
     }
     get CoverUrl(): string {
-        return this.Cover ? window.Network.GetCover(this.Cover) : "src/assets/no-song.png"
+        return this.coverUrl
     }
 
 
@@ -52,7 +44,7 @@ export class Playlist {
     private title: string
     private singers: String[]
     private date: Date
-    private coverType: "neuro" | "evil" | "duet" | null
+    private coverUrl: string
     private songIds: id[]
     private songs: Song[]
     private songsLoaded
@@ -62,7 +54,7 @@ export class Playlist {
         this.title = options.title
         this.singers = options.singers
         this.date = new Date(options.date)
-        this.coverType = options.cover ?? null
+        this.coverUrl = options.cover
         this.songIds = options.songIds ?? []
         this.songs = []
         this.songsLoaded = false
@@ -133,7 +125,7 @@ export class Playlist {
             title: this.title,
             singers: this.singers,
             date: this.date,
-            coverType: this.coverType,
+            cover: this.coverUrl,
             songIds: this.songIds
         }
     }

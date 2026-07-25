@@ -71,7 +71,7 @@ export function InitMediaSession() {
         navigator.mediaSession.playbackState = playing ? "playing" : "paused"
     })
     PlaybackController.AddCallback("timeUpdate", (played, duration) => {
-        navigator.mediaSession.setPositionState({ position: played, duration: duration })
+        navigator.mediaSession.setPositionState({ position: Math.min(played, duration), duration: duration })
     })
     PlaybackController.AddCallback('loadedSong', (song) => {
         UpdateMediaMetadata(song)

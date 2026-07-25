@@ -1,10 +1,8 @@
 import Network from "@ts/network"
-import PlayState from "@ts/play-state"
 import PlaybackController from "@ts/playback"
 import PlaylistDatabase from "@ts/playlist-db"
 import PlaylistManager from "@ts/playlist-manager"
 import SongDatabase from "@ts/song-db"
-import SongQueue from "@ts/song-queue"
 import SongRequester from "@ts/song-requester"
 import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { PopulateDiscover, ShowErrorScreen } from "@ts/ui/content/discover"
@@ -142,7 +140,6 @@ function CreateUI() {
     ShowContentWindow(document.getElementById("discover"))
     UpdateTheme()
     ResizeAllGridDisplays()
-    PlayState.Initalise()
 }
 function LoadUrlBar() {
     const queryString = window.location.search

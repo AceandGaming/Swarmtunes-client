@@ -17,6 +17,7 @@ export default abstract class AudioPlayer {
     public abstract Play(): void
     public abstract Pause(): void
     public abstract Destroy(): Promise<void> | void
+    public abstract SetVolume(volume: number): void
 
     public GetIframe(): HTMLIFrameElement | undefined {
         return undefined

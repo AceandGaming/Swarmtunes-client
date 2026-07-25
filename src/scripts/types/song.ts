@@ -5,21 +5,11 @@ interface SongPrams {
     singers: string[],
     date?: string,
     isOriginal?: boolean,
-    cover?: string | null,
+    cover: string,
     youtubeId?: string | null
 }
 
 export class Song {
-    public static CreateOfflineSong(id: id) {
-        return new Song({
-            id,
-            title: "Unavailable",
-            artist: "offline",
-            singers: ["Offline"],
-        })
-    }
-
-
     get Id() { return this.id }
     get Title() { return this.title }
     get Artist() { return this.artist }
@@ -27,7 +17,7 @@ export class Song {
     get Date() { return this.date }
     get IsOriginal() { return this.isOriginal }
     get YoutubeId() { return this.youtubeId }
-    get CoverArt() { return this.coverArt }
+    get CoverUrl() { return this.coverUrl }
 
     get PrettyDate() {
         return this.date.toLocaleDateString("en-AU", {
@@ -36,9 +26,7 @@ export class Song {
             year: "numeric",
         })
     }
-    get CoverUrl(): string {
-        return this.coverArt ? window.Network.GetCover(this.coverArt) : "src/assets/no-song.png"
-    }
+
 
     private readonly id: id
     private title: string
@@ -46,7 +34,7 @@ export class Song {
     private singers: string[]
     private date: Date
     private isOriginal: boolean
-    private readonly coverArt: string | null
+    private coverUrl: string
     private youtubeId: string | null
 
     constructor(options: SongPrams) {
@@ -56,7 +44,7 @@ export class Song {
         this.singers = options.singers
         this.date = options.date ? new Date(options.date) : new Date()
         this.isOriginal = options.isOriginal ?? false
-        this.coverArt = options.cover ?? null
+        this.coverUrl = options.cover
         if (options.title === "mashup" && options.date) {
             this.title = `${this.date.getFullYear()} Mashup`
         }
@@ -74,7 +62,7 @@ export class Song {
             singers: this.singers,
             date: this.date.toISOString(),
             isOriginal: this.isOriginal,
-            cover: this.coverArt,
+            cover: this.coverUrl,
             youtubeId: this.youtubeId
         }
     }

@@ -11,15 +11,28 @@ type Callbacks = {
     shuffle: (shuffle: boolean) => void
     timeUpdate: (current: number, duration: number) => void
     queueChange: (queue: Song[], loaded: Song[]) => void
+    volumeChange: (volume: number) => void
 }
 
 class PlaybackController {
     public get currentSong() {
         return this.queue.currentSong
     }
+    public get volume() {
+        return this.volumeV
+    }
+    public set volume(value: number) {
+        this.volumeV = value
+        if (this.player) {
+            this.player.SetVolume(value)
+        }
+
+        this.Trigger("volumeChange", value)
+    }
 
 
     private shuffle: boolean = false
+    private volumeV: number = 0.75
 
     private queue = new SongQueue()
 
@@ -90,17 +103,27 @@ class PlaybackController {
         return this.player
     }
 
-    public async PlaySong(song: Song) {
+    private async PlaySong(song: Song) {
         const player = this.UpdatePlayer(song)
         await player.Load(song)
         this.Trigger("loadedSong", song, player.GetIframe())
+
+        player.SetVolume(this.volume)
+
+        player.Play()
+    }
+    private async PlaySwarmfm() {
+        const player = this.SwarmfmPlayer()
+        await player.Load(this.currentSong!)
+
+        player.SetVolume(this.volume)
 
         player.Play()
     }
 
     public Play({ song, songs, swarmfm = false }: { song?: Song, songs?: Song[], swarmfm?: boolean } = {}) {
         if (swarmfm) {
-            this.SwarmfmPlayer()
+            this.PlaySwarmfm()
             return
         }
 
@@ -112,12 +135,12 @@ class PlaybackController {
         }
         if (song || songs) {
             this.TriggerQueue()
+            this.PlaySong(this.currentSong!)
+        }
+        else {
+            this.player?.Play()
         }
 
-        if (!this.currentSong) {
-            return
-        }
-        this.PlaySong(this.currentSong)
     }
     public Pause() {
         this.player?.Pause()

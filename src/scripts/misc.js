@@ -19,12 +19,11 @@ export function FormatTime(seconds) {
     if (!isFinite(seconds)) {
         return "0:00"
     }
-    const sign = Math.sign(seconds)
     const absSeconds = Math.abs(seconds)
 
     const minutes = Math.floor(absSeconds / 60)
     const secs = Math.floor(absSeconds % 60).toString().padStart(2, '0')
-    return `${minutes * sign}:${secs}`
+    return `${minutes}:${secs}`
 }
 export function GetidsFromSongList(songs) {
     const ids = []

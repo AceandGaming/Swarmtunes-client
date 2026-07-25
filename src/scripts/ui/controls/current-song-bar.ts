@@ -39,13 +39,6 @@ export default class CurrentSongBar {
         titleContainer.append(this.#titleText, this.#artistText)
         return titleContainer
     }
-    // static #CreateSourceText() {
-    //     const sourceText = document.createElement("span")
-    //     sourceText.classList.add("source-text", "sub-text")
-    //     sourceText.textContent = ""
-    //     this.#sourceText = sourceText
-    //     return sourceText
-    // }
 
     static CreateDesktop() {
         const old = document.querySelector("#current-song-bar")

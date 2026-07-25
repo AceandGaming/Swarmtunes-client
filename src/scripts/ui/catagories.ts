@@ -137,7 +137,7 @@ export class AlbumCatagory extends Catagory {
             display.appendChild(CreateCatagoryItemElement(
                 album.PrettyDate,
                 album.Id,
-                Network.GetCover(album.Cover, 256),
+                album.CoverUrl,
                 () => AlbumView.Show(album),
                 "album",
                 `<img src="/icons/disc.svg">`,
@@ -152,7 +152,7 @@ export class PlaylistCatagory extends Catagory {
             const element = CreateCatagoryItemElement(
                 playlist.Title,
                 playlist.Id,
-                Network.GetCover(playlist.Cover, 256),
+                playlist.CoverUrl,
                 async () => await PlaylistView.Show(playlist),
                 "playlist",
                 `<img src="/icons/playlist.svg">`,

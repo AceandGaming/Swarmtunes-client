@@ -1,3 +1,5 @@
+import PlaybackController from "@ts/playback"
+
 export default class VolumeButton {
     #volumeButton
     #volumeSlider
@@ -14,16 +16,13 @@ export default class VolumeButton {
         this.#volumeSlider.addEventListener("input", this.OnSliderChange.bind(this))
         this.#volumeSlider.addEventListener("blur", this.OnSliderLooseFocus.bind(this))
 
-        const volume = Number(localStorage.getItem("volume")) || 0.75
+        const volume = PlaybackController.volume
 
         // @ts-ignore
         this.#volumeSlider.value = volume
-        // AudioPlayer.instance.Volume = volume
-        // SwarmFM.instance.Volume = volume
-        // YoutubePlayer.instance.Volume = volume
-        // this.#UpdateIcon(volume)
+        this.#UpdateIcon(volume)
 
-        // AudioPlayer.instance.OnVolumeUpdate(this.#UpdateIcon.bind(this))
+        PlaybackController.AddCallback("volumeChange", (v) => this.#UpdateIcon(v))
     }
     OnButtonClick(event: any) {
         if (event.target.id === "") {
@@ -51,9 +50,7 @@ export default class VolumeButton {
     }
     OnSliderChange(event: any) {
         this.#sliderFocus = true
-        // AudioPlayer.instance.Volume = event.target.value
-        // SwarmFM.instance.Volume = event.target.value
-        // YoutubePlayer.instance.Volume = event.target.value
+        PlaybackController.volume = event.target.value
 
         this.#UpdateIcon(event.target.value)
     }
@@ -71,10 +68,5 @@ export default class VolumeButton {
         this.menuOpen = false
         this.#volumeSlider.style.display = "none"
         this.#volumeButton.classList.remove("active")
-        try {
-            localStorage.setItem("volume", this.#volumeSlider.value)
-        } catch (e) {
-            console.error(e)
-        }
     }
 }

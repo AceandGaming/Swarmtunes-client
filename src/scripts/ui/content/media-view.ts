@@ -17,7 +17,7 @@ export class MediaView {
         this.mediaView.UpdateMeta(
             media.Title,
             media.PrettyDate,
-            Network.GetCover(media.Cover as string, 512)
+            media.CoverUrl
         )
         this.Show()
 

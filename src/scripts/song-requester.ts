@@ -15,11 +15,6 @@ export default class SongRequester {
         if (Network.IsOnline()) {
             songs = songs.concat(await Network.GetSong(idsToRequest) as Song[])
         }
-        else {
-            for (const id of idsToRequest) {
-                songs.push(Song.CreateOfflineSong(id))
-            }
-        }
         return songs
     }
     static async GetSong(id: id): Promise<Song | undefined> {
@@ -30,9 +25,6 @@ export default class SongRequester {
         if (song === undefined) {
             if (Network.IsOnline()) {
                 song = await Network.GetSong(id) as Song
-            }
-            else {
-                song = Song.CreateOfflineSong(id)
             }
         }
         return song

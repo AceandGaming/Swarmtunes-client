@@ -15,7 +15,7 @@ export class Album {
     get Date() { return this.date }
     get Singers() { return this.singers }
     get SongIds() { return this.songIds }
-    get Cover() { return this.cover }
+    get CoverUrl() { return this.coverUrl }
 
     get Songs() {
         if (!this.songsLoaded) {
@@ -33,24 +33,22 @@ export class Album {
     get Title() {
         return this.singers.join(" and ") + " Karaoke"
     }
-    get CoverUrl(): string {
-        return this.Cover ? window.Network.GetCover(this.Cover) : "src/assets/no-song.png"
-    }
+
 
 
     private readonly id: id
     private date: Date
     private singers: string[]
-    private cover: string
     private songIds: id[]
     private songs: Array<Song>
     private songsLoaded: boolean
+    private coverUrl: string
 
     constructor(options: AlbumPrams) {
         this.id = options.id
         this.date = new Date(options.date)
         this.singers = options.singers
-        this.cover = options.cover ?? null
+        this.coverUrl = options.cover
         this.songIds = options.songIds ?? []
         this.songs = []
         this.songsLoaded = false

@@ -114,6 +114,7 @@ export default class Network {
                 return
             }
             for (const dict of await response.json()) {
+                dict["cover"] = this.GetCover(dict["cover"])
                 songs.push(new Song(dict))
             }
             if (ids.length > 0) {
@@ -146,7 +147,7 @@ export default class Network {
     static GetCover(name?: string, size: number = 512) {
         if (!name) {
             console.warn("Invalid cover name", name)
-            return "src/assets/no-song.png"
+            return "/no-song.png"
         }
         return `${this.serverURL}/covers/${encodeURIComponent(name)}?size=${size}`
     }
@@ -160,6 +161,7 @@ export default class Network {
         const response = await this.Get(`songs/?${params.toString()}`)
         const songs = []
         for (const dict of await response.json()) {
+            dict["cover"] = this.GetCover(dict["cover"])
             songs.push(new Song(dict))
         }
         return songs
@@ -171,6 +173,7 @@ export default class Network {
         const response = await this.QuickGet(`search?${params.toString()}`)
         const songs = []
         for (const dict of await response.json()) {
+            dict["cover"] = this.GetCover(dict["cover"])
             songs.push(new Song(dict))
         }
         return songs
@@ -189,6 +192,7 @@ export default class Network {
         const response = await this.Get(`albums/?${params.toString()}`)
         const albums = []
         for (const dict of await response.json()) {
+            dict["cover"] = this.GetCover(dict["cover"])
             albums.push(new Album(dict))
         }
         if (getSongs) {
@@ -204,6 +208,7 @@ export default class Network {
         const response = await this.Get(`albums/?${params.toString()}`)
         const albums = []
         for (const dict of await response.json()) {
+            dict["cover"] = this.GetCover(dict["cover"])
             albums.push(new Album(dict))
         }
         return albums
@@ -288,6 +293,7 @@ export default class Network {
         const response = await this.Get(`playlists/?${params.toString()}`)
         const playlists = []
         for (const dict of await response.json()) {
+            dict["cover"] = this.GetCover(dict["cover"])
             playlists.push(new Playlist(dict))
         }
         if (getSongs) {
@@ -301,6 +307,7 @@ export default class Network {
         const response = await this.Get(`playlists/`)
         const playlists = []
         for (const dict of await response.json()) {
+            dict["cover"] = this.GetCover(dict["cover"])
             playlists.push(new Playlist(dict))
         }
         return playlists

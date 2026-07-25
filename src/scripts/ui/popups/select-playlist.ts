@@ -9,7 +9,7 @@ function CreatePlaylistListItemElement(playlist: Playlist, onClickEvent: (event:
     element.setAttribute("data-id", playlist.Id)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
-        <img loading="lazy" src=${Network.GetCover(playlist.Cover as string, 64)}>
+        <img loading="lazy" src=${playlist.CoverUrl}>
         <span>${ReplaceEmotesOfString(playlist.Title)}</span>
     `
     return element
