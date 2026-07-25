@@ -8,6 +8,9 @@ export default class SongQueue {
     public get currentSong(): Song | undefined {
         return this.songs[this.queuePointer]
     }
+    public get loaded() {
+        return this.loadedSongs
+    }
 
     private songs: Song[] = [];
     private loadedSongs: Song[] = [];

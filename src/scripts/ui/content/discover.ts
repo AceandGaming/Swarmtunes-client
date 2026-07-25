@@ -3,6 +3,7 @@ import { AlbumCatagory, Catagory, SongCatagory } from "@ts/ui/catagories"
 import ErrorScreen, { LoadingError } from "@ts/ui/error-screens"
 import { LoadingText } from "@ts/ui/loading"
 import ToastManager from "@ts/ui/toast-manager"
+import PlaybackController from "@ts/playback"
 
 const discoverPage = document.querySelector("#discover") as HTMLElement
 
@@ -54,7 +55,7 @@ export function ShowErrorScreen() {
     discoverPage.append(errorScreen.CreateElement())
 }
 
-// function OnSwarmFMButtonClick() {
-//     SwarmFM.instance.Play()
-// }
-// document.getElementById("swarmfm-button")?.addEventListener("click", OnSwarmFMButtonClick)
+function OnSwarmFMButtonClick() {
+    PlaybackController.Play({ swarmfm: true })
+}
+document.getElementById("swarmfm-button")?.addEventListener("click", OnSwarmFMButtonClick)

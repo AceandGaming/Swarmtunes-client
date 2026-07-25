@@ -11,9 +11,6 @@ export default class Network {
     static get serverURL() {
         return `${SERVER_URL}/v1`
     }
-    static get swarmFMURL() {
-        return "https://swarmfm.boopdev.com"
-    }
     static IsLoggedIn() {
         return this.username !== undefined
     }
@@ -102,76 +99,6 @@ export default class Network {
         return await this.SafeFetch(url, "PATCH", data)
     }
 
-    // static async GetSwarmFMStream() {
-    //     return `https://cast.sw.arm.fm/stream?from=swarmtunes?now=${Date.now()}`
-    // }
-    static GetSwarmFMSongUrl(id: string) {
-        return `https://swarmfm-assets.boopdev.com/music/${id}.mp3?from=swarmtunes`
-    }
-    static async GetSwarmFMInfo() {
-        const response = await fetch(`${this.swarmFMURL}/v2/player?from=swarmtunes`)
-        if (!response.ok) {
-            ToastManager.Toast("Could not connect to SwarmFM servers", "error")
-            return
-        }
-        const json = await response.json()
-        const current = json["current"]
-        const next = json["next"]
-
-        function ConvertSingers(singers: string[]) {
-            const result: string[] = []
-            for (const singer of singers) {
-                switch (singer) {
-                    case "neuro":
-                        result.push("Neuro-sama")
-                        break
-                    case "evil":
-                        result.push("Evil Neuro")
-                        break
-                    default:
-                        result.push(singer.charAt(0).toUpperCase() + singer.slice(1))
-                        break
-                }
-            }
-            return result
-        }
-        function GetCoverType(singers: string[]) {
-            if (singers.length > 1) {
-                return "default/duet"
-            }
-            if (singers.includes("neuro")) {
-                return "default/neuro"
-            }
-            if (singers.includes("evil")) {
-                return "default/evil"
-            }
-            return "custom"
-        }
-
-        let coverType: string = GetCoverType(current["singer"])
-        if (current["album_cover_id"] != null) {
-            coverType = "custom"
-        }
-        const currentSong = new Song({
-            id: current["id"],
-            title: current["name"],
-            artist: current["artist"],
-            singers: ConvertSingers(current["singer"]),
-            cover: current["album_cover_id"] ?? coverType
-        })
-
-        const nextSong = new Song({
-            id: next["id"],
-            title: next["name"],
-            artist: next["artist"],
-            singers: ConvertSingers(next["singer"]),
-        })
-
-        const position = json["position"]
-        const duration = current["duration"]
-
-        //return new SwarmFMInfo(currentSong, nextSong, position, duration, coverType == "custom")
-    }
     static async GetSong(id: id | id[]) {
         let ids = EnsureArray(id).slice()
         const songs = []

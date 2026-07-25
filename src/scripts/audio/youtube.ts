@@ -23,6 +23,10 @@ export default class YoutubePlayer extends AudioPlayer {
     private updateId: number
     private ready = false
 
+    public GetIframe() {
+        return this.iframe
+    }
+
     public CreatePlayer() {
         this.iframe.src = "https://www.youtube-nocookie.com/embed/?enablejsapi=1&playsinline=1"
         const api = window.YT

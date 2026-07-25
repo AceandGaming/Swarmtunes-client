@@ -3,13 +3,14 @@ import SongQueue from "@ts/song-queue"
 import type { Song } from "@ts/types/song"
 import OggPlayer from "@ts/audio/ogg"
 import YoutubePlayer from "@ts/audio/youtube"
+import SwarmFMRadio from "@ts/audio/swarmfm"
 
 type Callbacks = {
     loadedSong: (song: Song, iframe?: HTMLIFrameElement) => void
     playPause: (playing: boolean) => void
     shuffle: (shuffle: boolean) => void
     timeUpdate: (current: number, duration: number) => void
-    queueChange: (queue: Song[]) => void
+    queueChange: (queue: Song[], loaded: Song[]) => void
 }
 
 class PlaybackController {
@@ -70,14 +71,39 @@ class PlaybackController {
 
         return this.player
     }
+    private SwarmfmPlayer() {
+        if (!this.player || this.player.constructor !== SwarmFMRadio) {
+            this.player?.Destroy()
+            // @ts-ignore
+            this.player = new SwarmFMRadio(
+                () => this.Trigger("playPause", true),
+                () => this.Trigger("playPause", false),
+                () => this.OnTimeUpdate(),
+                () => this.Next(),
+                (song) => this.Trigger("loadedSong", song, this.player!.GetIframe()),
+            ) as AudioPlayer
+        }
+
+        this.preload?.Destroy()
+        this.preload = undefined
+
+        return this.player
+    }
+
     public async PlaySong(song: Song) {
         const player = this.UpdatePlayer(song)
         await player.Load(song)
         this.Trigger("loadedSong", song, player.GetIframe())
+
         player.Play()
     }
 
-    public Play({ song, songs }: { song?: Song, songs?: Song[] } = {}) {
+    public Play({ song, songs, swarmfm = false }: { song?: Song, songs?: Song[], swarmfm?: boolean } = {}) {
+        if (swarmfm) {
+            this.SwarmfmPlayer()
+            return
+        }
+
         if (songs) {
             this.queue.PopulateQueue(songs, this.shuffle)
         }
@@ -85,10 +111,13 @@ class PlaybackController {
             this.queue.SkipTo(song)
         }
         if (song || songs) {
-            this.Trigger("queueChange", this.queue.queue)
+            this.TriggerQueue()
         }
 
-        this.PlaySong(this.currentSong!)
+        if (!this.currentSong) {
+            return
+        }
+        this.PlaySong(this.currentSong)
     }
     public Pause() {
         this.player?.Pause()
@@ -125,7 +154,7 @@ class PlaybackController {
 
     public SetShuffle(shuffle: boolean) {
         this.queue.ReShuffle(shuffle)
-        this.Trigger("queueChange", this.queue.queue)
+        this.TriggerQueue()
 
         this.shuffle = shuffle
         this.Trigger("shuffle", shuffle)
@@ -139,7 +168,7 @@ class PlaybackController {
         if (!nextSong) {
             return
         }
-        this.Trigger("queueChange", this.queue.queue)
+        this.TriggerQueue()
 
         if (this.preload) {
             this.LoadPreloaded()
@@ -153,20 +182,20 @@ class PlaybackController {
         if (!nextSong) {
             return
         }
-        this.Trigger("queueChange", this.queue.queue)
+        this.TriggerQueue()
 
         this.PlaySong(nextSong)
     }
     public SkipTo(song: Song) {
         this.queue.SkipTo(song)
-        this.Trigger("queueChange", this.queue.queue)
+        this.TriggerQueue()
 
         this.UpdatePlayer(song)
         this.PlaySong(this.currentSong!)
     }
     public AddToQueue(song: Song) {
         this.queue.Add(song)
-        this.Trigger("queueChange", this.queue.queue)
+        this.TriggerQueue()
     }
 
     public AddCallback<K extends keyof Callbacks>(event: K, callback: Callbacks[K]) {
@@ -181,6 +210,9 @@ class PlaybackController {
         }
         //console.log("Trigged", event, data)
         this.callbacks[event].forEach(callback => callback(...data))
+    }
+    private TriggerQueue() {
+        this.Trigger("queueChange", this.queue.queue, this.queue.loaded)
     }
 }
 

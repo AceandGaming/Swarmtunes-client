@@ -22,6 +22,7 @@ import { Login } from "@ts/ui/popups/login"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import { NowPlaying } from "@ts/ui/now-playing"
+import { InitMediaSession } from "@ts/media-session"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
@@ -73,6 +74,8 @@ if (window.isMobile) {
         console.error(e)
     }
 }
+
+InitMediaSession()
 
 PlaylistTab.ShowLoggedOutScreen()
 
