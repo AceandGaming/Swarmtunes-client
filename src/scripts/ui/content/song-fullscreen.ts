@@ -13,8 +13,6 @@ export default class SongFullscreen {
     static #artistText: HTMLSpanElement
     static #titleText: HTMLSpanElement
     static #singersText: HTMLSpanElement
-    static #sourceText: HTMLSpanElement
-    static #swarmFMPanel: HTMLIFrameElement
     static #dateText: HTMLSpanElement
     static #infoContainer: HTMLDivElement
     static #content: HTMLDivElement
@@ -38,12 +36,6 @@ export default class SongFullscreen {
         closeButton.classList.add("close-button", "icon-button")
         closeButton.addEventListener("mousedown", SongFullscreen.Hide.bind(SongFullscreen))
         element.appendChild(closeButton)
-
-        const swarmFMPlayer = document.createElement("iframe")
-        swarmFMPlayer.classList.add("swarmfm-player", "hidden")
-        swarmFMPlayer.src = "about:blank"
-        swarmFMPlayer.sandbox = "allow-scripts allow-same-origin"
-        this.#swarmFMPanel = swarmFMPlayer
 
         const content = document.createElement("div")
         content.classList.add("content")
@@ -96,10 +88,6 @@ export default class SongFullscreen {
         info.append(infoContainer)
 
         const seekBar = new SeekBar()
-        const sourceText = document.createElement("h2")
-        sourceText.classList.add("sub-text", "source-text")
-        sourceText.textContent = ""
-        this.#sourceText = sourceText
 
         let mediaControls
         if (window.isMobile) {
@@ -108,10 +96,10 @@ export default class SongFullscreen {
         else {
             mediaControls = MediaControls.Create({ skipping: true, shuffle: true, volume: true, size: 40, gap: 10 })
         }
-        controls.append(seekBar.element, sourceText, mediaControls)
+        controls.append(seekBar.element, mediaControls)
 
         content.append(info, controls)
-        element.append(content, swarmFMPlayer)
+        element.append(content)
         this.#element = element
         document.querySelector("body")?.prepend(element)
 
@@ -162,10 +150,7 @@ export default class SongFullscreen {
         }
     }
     static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string) {
-        this.#swarmFMPanel.classList.add("hidden")
         this.#content.classList.remove("hidden")
-
-        this.#swarmFMPanel.src = "about:blank"
 
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
@@ -175,8 +160,11 @@ export default class SongFullscreen {
 
         this.#dateText.textContent = date
 
-        this.#coverImage.addEventListener("load", (event: any) => {
-            const colour = event.target.hsl
+        this.#coverImage.src = coverUrl
+
+        this.#coverImage.GetColor().then((c) => {
+            const colour = c.hsl()
+
             this.#element.style = `
                 --c1: hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 80)}%);
                 --c2: hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.8, 40)}%);
@@ -187,8 +175,6 @@ export default class SongFullscreen {
                 UpdateThemeColor(HslToHex(this.#element.dataset.colour))
             }
         })
-
-        this.#coverImage.src = coverUrl
     }
     static UpdateContextMenuInfo(id: id, catagory: string) {
         this.#infoContainer.setAttribute("data-id", id)

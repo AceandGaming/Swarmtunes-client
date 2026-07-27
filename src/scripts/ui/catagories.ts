@@ -10,8 +10,8 @@ function CreateCatagoryItemImage(element: HTMLElement, source: string) {
     const image = document.createElement("swarmtunes-cover") as Cover
     image.src = source
 
-    image.addEventListener("load", (event: any) => {
-        const colour = event.target.hsl
+    image.GetColor().then((c) => {
+        const colour = c.hsl()
 
         const lightness = Math.min(colour.l, 65)
         let backgroundDefault = `hsl(${colour.h} ${colour.s}% ${lightness - 5}%)`
@@ -32,7 +32,6 @@ function CreateCatagoryItemImage(element: HTMLElement, source: string) {
             element.style.borderColor = backgroundDefault
         })
     })
-    image.src = source
     return image
 }
 function CreateCatagoryItemElement(title: string, id: id, imageSource: string, onClickEvent: (event: any) => void, type: string, overlay = "", overlayHover = "") {

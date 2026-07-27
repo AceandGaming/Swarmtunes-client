@@ -10,7 +10,8 @@ export default class OggPlayer extends AudioPlayer {
         this.audio.currentTime = value
     }
     public get duration(): number {
-        return this.audio.duration
+        const duration = this.audio.duration
+        return (duration > 0) ? duration : 0
     }
     public get isPlaying(): boolean {
         return !this.audio.paused
