@@ -12,7 +12,7 @@
     } = $props()
 
     // svelte-ignore state_referenced_locally
-    const songList = new SongList(songs, onClick, catagory)
+    const songList = new SongList([], onClick, catagory)
 
     
     $effect(() => {
@@ -27,10 +27,6 @@
         } else {
             songList.Update()
         }
-    })
-
-    onMount(() => {
-        songList.Update()
     })
 </script>
 

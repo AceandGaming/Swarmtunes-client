@@ -85,13 +85,11 @@ export class SongList {
         this.Update()
         return this.element
     }
-    async Update() {
+    Update() {
         this.element.style.display = ""
         this.element.innerHTML = ""
-        const avaliableSongs = new Set(await SongRequester.GetAvailableSongs(this.songs.map(s => s.Id)))
         for (const [i, song] of this.songs.entries()) {
-            const avaliable = avaliableSongs.has(song.Id)
-            this.element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, this.showDate, this.catagory, !avaliable))
+            this.element.appendChild(CreateSongListItemElement(song, this.songOnClickEvent, this.showDate, this.catagory))
             if (this.max > 0 && i > this.max) {
                 break
             }
@@ -107,7 +105,7 @@ export class SongList {
             oldBounds[id] = child.getBoundingClientRect()
         }
 
-        await this.Update()
+        this.Update()
         if (oldBounds.length === 0) {
             console.warn("No old bounds")
             return
@@ -124,7 +122,7 @@ export class SongList {
 
             const oldBound = oldBounds[id]
             if (oldBound === undefined) {
-                console.warn(`No old bound for ${id}`)
+                //console.warn(`No old bound for ${id}`)
                 continue
             }
             const newBound = element.getBoundingClientRect()
