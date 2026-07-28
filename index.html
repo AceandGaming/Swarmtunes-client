@@ -11,11 +11,14 @@
   <title>Swarmtunes</title>
   <link rel="icon" type="image/png" href="/icon.png">
   <link rel="mask-icon" sizes="180x180" href="/icon.png">
+  <meta name="description" content="A music app dedicated to covers of songs made by Neuro-sama and her twin Evil">
+
+  <link rel="canonical" href="https://swarmtunes.com/">
 
   <meta property="og:title" content="Swarmtunes" />
-  <meta property="og:description" content="The Neuro-sama music app" />
+  <meta property="og:description" content="A Neuro-sama music app" />
   <meta property="og:image" content="/icon.png" />
-  <meta property="og:type" content="music.song">
+  <meta property="og:type" content="website">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/icon_filled.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,8 +29,18 @@
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Swarmtunes" />
-  <meta name="twitter:description" content="The Neuro-sama music app" />
+  <meta name="twitter:description" content="A Neuro-sama music app" />
   <meta name="twitter:image" content="/icon.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Swarmtunes",
+    "url": "https://yourdomain.com",
+    "description": "A fan-made Neuro-sama music app for songs, playlists, and SwarmFM."
+  }
+  </script>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
 
@@ -102,14 +115,12 @@
   <link rel="stylesheet" href="src/styles/content/song-fullscreen.css" />
   <link rel="stylesheet" href="src/styles/toast-manager.css" />
 </head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <body>
 
-  <div id="loading-screen">
+  <div id="loading-screen" data-nosnippet>
     <img src="/icon.png">
     <div class="loading-text"></div>
-    <!-- <span class="disclaimer">Swarmtunes is a fan made site and is not associated with Vedal, Neuro-sama or SwarmFM</span> -->
   </div>
 
 
@@ -124,6 +135,7 @@
     <div id="content-container">
       <header id="header">
         <div id="header-buttons">
+          <a href="/about" style="color: #aaa; text-decoration: none">About</a>
           <button title="Change Theme" id="change-theme-button">
             <img src="/icons/moon.svg" />
           </button>
