@@ -10,7 +10,7 @@ import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 
 export default class MediaControls {
-    static Create({ skipping = false, shuffle = false, volume = false, addToPlaylist = false, size = 25, gap = 7 }) {
+    static Create({ skipping = false, shuffle = false, volume = false, addToPlaylist = false, repeat = false, size = 25 }) {
         const buttons = document.createElement("div")
         buttons.classList.add("media-controls")
 
@@ -58,6 +58,16 @@ export default class MediaControls {
             buttons.append(nextButton)
         }
 
+        let repeatButton
+        if (repeat) {
+            repeatButton = document.createElement("button")
+            repeatButton.append(LoadSVG("/icons/repeat.svg"))
+            repeatButton.title = "Repeat"
+            repeatButton.classList.add("repeat", "icon-button")
+            repeatButton.style.height = `${size}px`
+            buttons.append(repeatButton)
+        }
+
         if (volume) {
             const volumeControls = document.createElement("button")
             volumeControls.title = "Volume"
@@ -98,39 +108,29 @@ export default class MediaControls {
             }
         }
 
-        let width = size * 1.4
-        let childCount = 1
-        if (skipping) {
-            width += size * 2 * 2
-            childCount += 2
+        const elOnLeft = shuffle ? 1 : 0
+        const elOnRight = (repeat ? 1 : 0) + (addToPlaylist ? 1 : 0) + (volume ? 1 : 0)
+        console.log(elOnLeft, elOnRight)
+
+        if (elOnLeft > elOnRight) {
+            for (let i = 0; i < elOnLeft - elOnRight; i++) {
+                const padding = document.createElement("div")
+                padding.style.width = `${size}px`
+                buttons.append(padding)
+            }
         }
-        if (shuffle) {
-            width += size
-            childCount++
-        }
-        if (volume) {
-            width += size
-            childCount++
-        }
-        if (addToPlaylist) {
-            width += size
-            childCount++
-        }
-        const lengthOdd = Math.floor(childCount / 2) * 2 + 1
-        const gapEnds = gap * 1.4
-        width += (buttons.children.length - 3) * gap + gapEnds * 2
-        if (childCount !== lengthOdd) {
-            width -= size
+        else if (elOnLeft < elOnRight) {
+            for (let i = 0; i < elOnRight - elOnLeft; i++) {
+                const padding = document.createElement("div")
+                padding.style.width = `${size}px`
+                buttons.prepend(padding)
+            }
         }
 
-        buttons.style.width = `${width}px`
-        buttons.style.gap = `${gap}px`
-        buttons.style.setProperty("--endGap", `${gapEnds}px`)
-
-        MediaControls.Attach(previousButton, playPauseButton, nextButton, shuffleButton)
+        MediaControls.Attach(previousButton, playPauseButton, nextButton, shuffleButton, repeatButton)
         return buttons
     }
-    static Attach(previous?: HTMLButtonElement, pause?: HTMLButtonElement, next?: HTMLButtonElement, shuffle?: HTMLButtonElement) {
+    static Attach(previous?: HTMLButtonElement, pause?: HTMLButtonElement, next?: HTMLButtonElement, shuffle?: HTMLButtonElement, repeat?: HTMLButtonElement) {
         if (previous) {
             previous.addEventListener("click", this.#OnPreviousClick.bind(this))
         }
@@ -146,6 +146,12 @@ export default class MediaControls {
             shuffle.addEventListener("click", this.#OnShuffleClick.bind(this, shuffle))
             PlaybackController.AddCallback("shuffle", (shuffling: boolean) => {
                 shuffle.classList.toggle("active", shuffling)
+            })
+        }
+        if (repeat) {
+            repeat.addEventListener("click", () => PlaybackController.ToggleRepeat())
+            PlaybackController.AddCallback("repeat", (repeating: boolean) => {
+                repeat.classList.toggle("active", repeating)
             })
         }
     }

@@ -91,10 +91,10 @@ export default class SongFullscreen {
 
         let mediaControls
         if (window.isMobile) {
-            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, addToPlaylist: true, size: 40, gap: 10 })
+            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, addToPlaylist: true, size: 40, repeat: true })
         }
         else {
-            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, volume: true, size: 40, gap: 10 })
+            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, volume: true, size: 40, repeat: true })
         }
         controls.append(seekBar.element, mediaControls)
 

@@ -1,27 +1,19 @@
 .media-controls {
     display: flex;
     justify-content: left;
+    gap: 5px;
 }
 
 .media-controls button {
     pointer-events: all;
     cursor: pointer;
     padding: 0;
-    background-color: var(--current-song-bar);
     aspect-ratio: 1/1;
     margin: auto 0;
 }
 
 .media-controls button.hidden {
     display: none;
-}
-
-.media-controls > :first-child:not(.next) {
-    margin-right: var(--endGap)
-}
-
-.media-controls > :last-child:not(.previous) {
-    margin-left: var(--endGap)
 }
 
 .media-controls button.next,
@@ -52,6 +44,11 @@
 }
 
 .media-controls button.shuffle.active svg {
+    filter: drop-shadow(0 0 3px white);
+    color: white;
+}
+
+.media-controls button.repeat.active svg {
     filter: drop-shadow(0 0 3px white);
     color: white;
 }

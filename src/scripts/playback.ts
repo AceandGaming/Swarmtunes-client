@@ -9,6 +9,7 @@ type Callbacks = {
     loadedSong: (song: Song, iframe?: HTMLIFrameElement) => void
     playPause: (playing: boolean) => void
     shuffle: (shuffle: boolean) => void
+    repeat: (repeat: boolean) => void
     timeUpdate: (current: number, duration: number) => void
     queueChange: (queue: Song[], loaded: Song[]) => void
     volumeChange: (volume: number) => void
@@ -32,6 +33,8 @@ class PlaybackController {
 
 
     private shuffle: boolean = false
+    private repeat: boolean = false
+
     private volumeV: number = 0.75
 
     private queue = new SongQueue()
@@ -185,8 +188,22 @@ class PlaybackController {
     public ToggleShuffle() {
         this.SetShuffle(!this.shuffle)
     }
+    public SetRepeat(repeat: boolean) {
+        this.repeat = repeat
+        this.Trigger("repeat", repeat)
+    }
+    public ToggleRepeat() {
+        this.SetRepeat(!this.repeat)
+    }
 
     public async Next() {
+        if (this.repeat) {
+            if (this.player) {
+                this.player.played = 0
+            }
+            return
+        }
+
         const nextSong = this.queue.Next()
         if (!nextSong) {
             return
@@ -201,6 +218,13 @@ class PlaybackController {
         this.PlaySong(nextSong)
     }
     public async Previous() {
+        if (this.repeat || (this.player && this.player.played > 10)) {
+            if (this.player) {
+                this.player.played = 0
+            }
+            return
+        }
+
         const nextSong = this.queue.Previous()
         if (!nextSong) {
             return

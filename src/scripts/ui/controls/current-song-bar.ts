@@ -68,7 +68,7 @@ export default class CurrentSongBar {
         fullscreenButton.classList.add("fullscreen", "icon-button")
         fullscreenButton.addEventListener("click", SongFullscreen.Show.bind(SongFullscreen))
         rightContent.append(
-            MediaControls.Create({ skipping: true, shuffle: true, volume: true }),
+            MediaControls.Create({ skipping: true, shuffle: true, volume: true, repeat: true }),
             fullscreenButton
         )
 
@@ -103,7 +103,7 @@ export default class CurrentSongBar {
 
         const rightContent = document.createElement("div")
         rightContent.append(
-            MediaControls.Create({ skipping: true })
+            MediaControls.Create({ shuffle: true })
         )
 
         currentSongBar.append(leftContent, middleContent, rightContent)

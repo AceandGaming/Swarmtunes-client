@@ -78,10 +78,6 @@ export default class YoutubePlayer extends AudioPlayer {
 
         const player = this.CreatePlayer()
 
-        player.addEventListener("onError", (event: any) => {
-            console.error("YT error code:", event.data)
-        })
-
         player.addEventListener("onStateChange", (event: any) => {
             if (this.player.getPlaylistIndex() !== 1) {
                 return
