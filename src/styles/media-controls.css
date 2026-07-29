@@ -79,6 +79,10 @@
     transform: translateY(-2px);
 }
 
+.media-controls > :is(.volume-controls, .add-to-playlist):last-child {
+    margin-left: 10px
+}
+
 .volume-controls.active svg {
     color: var(--icon-active);
 }

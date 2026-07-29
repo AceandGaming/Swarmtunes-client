@@ -103,7 +103,7 @@ export default class CurrentSongBar {
 
         const rightContent = document.createElement("div")
         rightContent.append(
-            MediaControls.Create({ shuffle: true })
+            MediaControls.Create({ skipping: true })
         )
 
         currentSongBar.append(leftContent, middleContent, rightContent)
