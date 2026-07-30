@@ -98,15 +98,6 @@ export function OnLogoutButtonClick() {
 }
 document.getElementById("header-login-button").onclick = OnLoginButtonClick
 
-export function UpdateThemeColor(colour) {
-    if (!colour) {
-        const root = document.documentElement
-        const styles = getComputedStyle(root)
-        colour = styles.getPropertyValue(`--header-colour`).trim()
-    }
-    const meta = document.querySelector('meta[name="theme-color"]')
-    meta.setAttribute("content", colour)
-}
 export function UpdateTheme() {
     const img = document.querySelector("#change-theme-button img")
     switch (currentTheme) {

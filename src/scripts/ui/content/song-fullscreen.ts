@@ -5,7 +5,7 @@ import { ContextMenu } from "@ts/ui/context-menu"
 import MediaControls from "@ts/ui/controls/media-controls"
 import SeekBar from "@ts/ui/controls/seek-bar"
 import type Cover from "@ts/ui/cover"
-import { ShowFooter, UpdateThemeColor, HideFooter } from "@ts/ui/header"
+import { ShowFooter, HideFooter } from "@ts/ui/header"
 
 export default class SongFullscreen {
     static #element: HTMLDivElement
@@ -123,7 +123,6 @@ export default class SongFullscreen {
                 this.#wakeLock = null
             })
         }
-        UpdateThemeColor()
     }
     static Show() {
         this.#element.classList.add("show")
@@ -143,10 +142,6 @@ export default class SongFullscreen {
             corr.catch((error) => {
                 console.error("Failed to get wake lock", error)
             })
-        }
-
-        if (this.visable) {
-            UpdateThemeColor(HslToHex(this.#element.dataset.colour))
         }
     }
     static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string) {
@@ -170,10 +165,6 @@ export default class SongFullscreen {
                 --c2: hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.8, 40)}%);
             `
             this.#element.dataset.colour = `hsl(${colour.h}, ${colour.s}%, ${colour.l * 1.2}%)`
-
-            if (this.visable) {
-                UpdateThemeColor(HslToHex(this.#element.dataset.colour))
-            }
         })
     }
     static UpdateContextMenuInfo(id: id, catagory: string) {
