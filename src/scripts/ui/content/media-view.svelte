@@ -5,8 +5,7 @@
     import xSvg from "@assets/icons/x.svg?raw"
     import playSvg from "@assets/icons/play.svg?raw"
     import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
-    import SongQueue from "@ts/song-queue"
-    import  PlaybackController  from "@ts/playback"
+    import PlaybackController from "@ts/playback"
 
     let title = $state("Title")
     let subtitle = $state("")
@@ -14,11 +13,19 @@
     let songs: Song[] = $state([])
     let loading = $state(true)
     let visable = $state(false)
+    let catagory = $state("song")
 
-    export function UpdateMeta(newTitle: string, newSubtitle: string, newArtworkUrl: string) {
+    export function UpdateMeta(newTitle: string, newSubtitle: string, newArtworkUrl: string, isPlaylist: boolean = false) {
         title = newTitle
         subtitle = newSubtitle
         artworkUrl = newArtworkUrl
+
+        if (isPlaylist) {
+            catagory = "playlist-item"
+        }
+        else {
+            catagory = "song"
+        }
     }
     export function UpdateSongs(newSongs: Song[]) {
         songs = newSongs
@@ -77,6 +84,7 @@
             {/if}
         </div>
         <nav>
+            <button class="icon-button play-button" onclick={OnCoverClick}>{@html playSvg}</button>
             <input class="search" bind:value={search} placeholder="Search" type="text">
         </nav>
         <button class="close icon-button" onclick={() => Hide()}>{@html xSvg}</button>
@@ -85,7 +93,7 @@
         {#if loading}
             <div class="loading-text"></div>
         {:else}
-            <SongList songs={currentSongs} catagory="playlist-item" onClick={OnItemClick}/>
+            <SongList songs={currentSongs} catagory={catagory} onClick={OnItemClick}/>
         {/if}
     </div>
 </div>
@@ -198,16 +206,27 @@
     }
 
     header > nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
         grid-column: 1 / -1;
         z-index: 0;
+        gap: 5px;
     }
     header > nav .search {
         filter: opacity(0.8);
         transition: filter 0.2s ease-in-out;
         padding: 5px 10px;
+        height: 30px;
     }
     header > nav .search:focus {
         filter: opacity(1);
+    }
+    header > nav .play-button {
+        display: none;
+
+        width: 40px;
     }
 
     .content {
@@ -226,6 +245,9 @@
         }
         header > .cover {
             display: none;
+        }
+        header > nav .play-button {
+            display: block;
         }
     }
     @media (max-width: 600px) {

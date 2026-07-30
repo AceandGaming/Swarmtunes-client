@@ -1,23 +1,30 @@
 import MediaViewSvelte from "./media-view.svelte"
 import { mount } from "svelte"
 import type { Album } from "@ts/types/album"
-import type { Playlist } from "@ts/types/playlist"
-import Network from "@ts/network"
+import { Playlist } from "@ts/types/playlist"
 
 // I imagine the Svelte Devs looking at my code like:
 // TF?
 
 export class MediaView {
+    public static get media() {
+        return this.currentMedia
+    }
+
     private static mediaView: MediaViewSvelte
+    private static currentMedia?: Album | Playlist
 
     public static Create() {
         this.mediaView = mount(MediaViewSvelte, { target: document.getElementById("content")! })
     }
     public static async Update(media: Album | Playlist) {
+        this.currentMedia = media
+
         this.mediaView.UpdateMeta(
             media.Title,
             media.PrettyDate,
-            media.CoverUrl
+            media.CoverUrl,
+            media instanceof Playlist
         )
         this.Show()
 

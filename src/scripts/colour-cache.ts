@@ -16,7 +16,10 @@ export default class ColourCache {
 
         const promise = (async () => {
             try {
-                const response = await fetch(src)
+                const response = await fetch(src, {
+                    method: "GET",
+                    credentials: "omit"
+                })
                 if (!response.ok) {
                     throw new Error(`Failed to get cover ${src}`)
                 }

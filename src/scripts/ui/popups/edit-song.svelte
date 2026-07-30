@@ -26,9 +26,9 @@
         if (newSingers != song.Singers.join(", ")) {
             metadata["singers"] = newSingers.split(", ")
         }
-        if (newCoverArt.startsWith("custom/")) {
-            metadata["customArtwork"] = newCoverArt.split("custom/")[1]
-        }
+        // if (newCoverArt.startsWith("custom/")) {
+        //     metadata["customArtwork"] = newCoverArt.split("custom/")[1]
+        // }
         if (newDate != song.Date.toISOString().split("T")[0]) {
             metadata["date"] = new Date(newDate).toISOString()
         }
@@ -42,7 +42,7 @@
         newTitle = song.Title
         newArtists = song.Artist
         newSingers = song.Singers.join(", ")
-        newCoverArt = (new URL(song.CoverUrl)).pathname
+        //newCoverArt = (new URL(song.CoverUrl)).pathname
         newDate = song.Date.toISOString().split("T")[0]
     })
 
