@@ -23,7 +23,7 @@ export function FormatTime(seconds) {
 
     const minutes = Math.floor(absSeconds / 60)
     const secs = Math.floor(absSeconds % 60).toString().padStart(2, '0')
-    return `${minutes}:${secs}`
+    return `${seconds < 0 ? "-" : ""}${minutes}:${secs}`
 }
 export function GetidsFromSongList(songs) {
     const ids = []

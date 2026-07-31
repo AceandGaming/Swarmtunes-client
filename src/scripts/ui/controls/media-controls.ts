@@ -99,8 +99,7 @@ export default class MediaControls {
         if (addToPlaylist) {
             if (!Network.IsLoggedIn()) {
                 Login.AddLoginCallback(() => {
-                    const addToPlaylist = CreateAddToPlaylistButton(this.#OnAddToPlaylistClick.bind(this))
-                    buttons.append(addToPlaylist)
+                    this.Create({ skipping, shuffle, volume, addToPlaylist, repeat, size })
                 })
             }
             else {
@@ -109,20 +108,19 @@ export default class MediaControls {
         }
 
         const elOnLeft = shuffle ? 1 : 0
-        const elOnRight = (repeat ? 1 : 0) + (addToPlaylist ? 1 : 0) + (volume ? 1 : 0)
-        console.log(elOnLeft, elOnRight)
+        const elOnRight = (repeat ? 1 : 0) + (addToPlaylist && Network.IsLoggedIn() ? 1 : 0) + (volume ? 1 : 0)
 
         if (elOnLeft > elOnRight) {
             for (let i = 0; i < elOnLeft - elOnRight; i++) {
                 const padding = document.createElement("div")
-                padding.style.width = `${size}px`
+                padding.style.minWidth = `${size}px`
                 buttons.append(padding)
             }
         }
         else if (elOnLeft < elOnRight) {
             for (let i = 0; i < elOnRight - elOnLeft; i++) {
                 const padding = document.createElement("div")
-                padding.style.width = `${size}px`
+                padding.style.minWidth = `${size}px`
                 buttons.prepend(padding)
             }
         }

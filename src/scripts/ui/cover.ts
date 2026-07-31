@@ -51,7 +51,6 @@ export default class Cover extends HTMLElement {
         this.img.classList.add("cover")
         this.img.src = "/no-song.png"
         this.img.loading = "lazy"
-        this.img.crossOrigin = "anonymous"
 
         this.loadingOverlay = document.createElement("div")
 

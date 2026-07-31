@@ -176,6 +176,7 @@
 
 #song-fullscreen .media-controls {
     margin: auto;
+    gap: 15px;
 }
 
 #song-fullscreen .media-controls button {

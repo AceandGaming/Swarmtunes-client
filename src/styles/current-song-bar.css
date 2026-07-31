@@ -123,7 +123,7 @@
     background: var(--seek-bar-loaded);
 }
 
-@media (max-width: 850px) {
+@media (max-width: 1000px) {
     #current-song-bar button.fullscreen {
         display: none;
     }
