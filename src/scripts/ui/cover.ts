@@ -20,8 +20,13 @@ export default class Cover extends HTMLElement {
     private img: HTMLImageElement
     private loadingOverlay: HTMLDivElement
     private scolour?: Color
+    private errorCount: number = 0
 
     public set src(value: string) {
+        if (!value) {
+            return
+        }
+
         this.UpdateImage(value)
         this.scolour = undefined
     }
@@ -65,8 +70,20 @@ export default class Cover extends HTMLElement {
             this.dispatchEvent(event)
         }
         this.img.onerror = () => {
-            this.img.src = "/no-song.png"
-            this.img.onerror = null
+            this.errorCount++
+            if (this.errorCount > 3) {
+                console.error("Failed to load cover", src)
+                this.img.src = "/no-song.png"
+                this.img.onerror = null
+            }
+            else {
+                console.warn("Failed to load cover", src)
+                setTimeout(() => {
+                    const url = new URL(src, window.location.href)
+                    url.searchParams.set("t", Date.now().toString())
+                    this.UpdateImage(url.href)
+                }, 1000)
+            }
         }
     }
     public async GetColor() {

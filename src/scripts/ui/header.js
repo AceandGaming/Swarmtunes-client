@@ -114,7 +114,6 @@ export function UpdateTheme() {
             document.documentElement.dataset.theme = "evil"
             break
     }
-    UpdateThemeColor()
 }
 export function OnChangeThemeClick() {
     currentTheme++
