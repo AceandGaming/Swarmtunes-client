@@ -22,10 +22,6 @@
     aspect-ratio: 3/2;
 }
 
-.media-controls button.play-pause {
-    display: contents;
-}
-
 .media-controls button.play-pause * {
     width: inherit;
     height: inherit;
