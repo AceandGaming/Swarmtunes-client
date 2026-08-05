@@ -4,6 +4,7 @@ import type { Song } from "@ts/types/song"
 import OggPlayer from "@ts/audio/ogg"
 import YoutubePlayer from "@ts/audio/youtube"
 import SwarmFMRadio from "@ts/audio/swarmfm"
+import StoredValue from "@ts/stored-value"
 
 type Callbacks = {
     loadedSong: (song: Song, iframe?: HTMLIFrameElement) => void
@@ -19,11 +20,14 @@ class PlaybackController {
     public get currentSong() {
         return this.queue.currentSong
     }
+
+    private volumeStore = new StoredValue("volume", 0.75)
+
     public get volume() {
-        return this.volumeV
+        return this.volumeStore.get()
     }
     public set volume(value: number) {
-        this.volumeV = value
+        this.volumeStore.set(value)
         if (this.player) {
             this.player.SetVolume(value)
         }
@@ -31,11 +35,24 @@ class PlaybackController {
         this.Trigger("volumeChange", value)
     }
 
+    private shuffleStore = new StoredValue("shuffle", false)
 
-    private shuffle: boolean = false
-    private repeat: boolean = false
+    public get shuffle() {
+        return this.shuffleStore.get()
+    }
+    private set shuffle(value: boolean) {
+        this.shuffleStore.set(value)
+    }
 
-    private volumeV: number = 0.75
+    private repeatStore = new StoredValue("repeat", false)
+
+    public get repeat() {
+        return this.repeatStore.get()
+    }
+    private set repeat(value: boolean) {
+        this.repeatStore.set(value)
+    }
+
 
     private queue = new SongQueue()
 
@@ -43,8 +60,6 @@ class PlaybackController {
     private preload?: AudioPlayer
 
     private callbacks: { [K in keyof Callbacks]?: Function[] } = {}
-
-
 
     private LoadPreloaded() {
         this.player = this.preload

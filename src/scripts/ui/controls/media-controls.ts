@@ -145,12 +145,14 @@ export default class MediaControls {
             PlaybackController.AddCallback("shuffle", (shuffling: boolean) => {
                 shuffle.classList.toggle("active", shuffling)
             })
+            shuffle.classList.toggle("active", PlaybackController.shuffle)
         }
         if (repeat) {
             repeat.addEventListener("click", () => PlaybackController.ToggleRepeat())
             PlaybackController.AddCallback("repeat", (repeating: boolean) => {
                 repeat.classList.toggle("active", repeating)
             })
+            repeat.classList.toggle("active", PlaybackController.repeat)
         }
     }
     static async #OnAddToPlaylistClick() {
