@@ -12,7 +12,7 @@ import { PopulateSearch } from "@ts/ui/content/search"
 import SongFullscreen from "@ts/ui/content/song-fullscreen"
 import { ContextMenu } from "@ts/ui/context-menu"
 import "@ts/context-menus"
-import CurrentSongBar from "@ts/ui/controls/current-song-bar"
+import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
 import { CreateButton, ShowContentWindow, UpdateTheme } from "@ts/ui/header"
 import ConfirmAction from "@ts/ui/popups/confirm-action"
 import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
@@ -21,6 +21,7 @@ import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import { NowPlaying } from "@ts/ui/now-playing"
 import { InitMediaSession } from "@ts/media-session"
+import { mount } from "svelte"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
@@ -108,11 +109,10 @@ Login.AddLoginCallback(OnLogin)
 function CreateUI() {
     ToastManager.Create()
 
+    mount(CurrentSongBar, { target: document.querySelector("footer")! })
     if (window.innerWidth > 600) {
-        CurrentSongBar.CreateDesktop()
         CreateButton()
     } else {
-        CurrentSongBar.CreateMobile()
         CreateButton(true)
     }
     PopulateSearch("")

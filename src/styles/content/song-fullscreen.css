@@ -28,7 +28,7 @@
 
     z-index: 1;
 
-    transition: --c1 0.5s ease, --c2 0.5s ease;
+    transition: --c1 1s ease, --c2 1s ease;
 }
 
 #song-fullscreen.high-contrast .close-button {
@@ -47,6 +47,10 @@
 #song-fullscreen.show {
     visibility: visible;
     animation: slideIn 0.2s ease-out;
+}
+
+#song-fullscreen .sub-text {
+    color: white;
 }
 
 @keyframes slideIn {
@@ -88,6 +92,10 @@
     height: 100%;
     margin: auto;
     box-sizing: border-box;
+}
+
+#song-fullscreen .content .date {
+    font-size: medium;
 }
 
 #song-fullscreen .content > div {

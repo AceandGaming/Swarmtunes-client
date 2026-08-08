@@ -17,8 +17,10 @@
   },
   "dependencies": {
     "@aceandgaming/swarmfm-api": "^1.0.2",
+    "@tabler/icons-svelte-runes": "^3.46.0",
     "colorthief": "^3.4.0",
     "sortablejs": "^1.15.7",
-    "svelte": "^5.56.6"
+    "svelte": "^5.56.6",
+    "svgo": "^4.0.2"
   }
 }

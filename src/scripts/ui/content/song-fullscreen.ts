@@ -1,9 +1,11 @@
-import { HslToHex, LoadSVG } from "@ts/misc"
+import { LoadSVG } from "@ts/misc"
 import PlaybackController from "@ts/playback"
 import type { Song } from "@ts/types/song"
 import { ContextMenu } from "@ts/ui/context-menu"
-import MediaControls from "@ts/ui/controls/media-controls"
-import SeekBar from "@ts/ui/controls/seek-bar"
+import SeekBar from "@ts/ui/controls/seek.svelte"
+import MediaControls from "@ts/ui/controls/media-controls.svelte"
+import { mount } from "svelte"
+
 import type Cover from "@ts/ui/cover"
 import { ShowFooter, HideFooter } from "@ts/ui/header"
 
@@ -87,16 +89,8 @@ export default class SongFullscreen {
         infoContainer.append(titleContainer, tripleDot)
         info.append(infoContainer)
 
-        const seekBar = new SeekBar()
-
-        let mediaControls
-        if (window.isMobile) {
-            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, addToPlaylist: true, size: 40, repeat: true })
-        }
-        else {
-            mediaControls = MediaControls.Create({ skipping: true, shuffle: true, volume: true, size: 40, repeat: true })
-        }
-        controls.append(seekBar.element, mediaControls)
+        mount(SeekBar, { target: controls, props: { thinkness: 10 } })
+        mount(MediaControls, { target: controls, props: { iconSize: 40 } })
 
         content.append(info, controls)
         element.append(content)
@@ -115,9 +109,7 @@ export default class SongFullscreen {
     }
     static Hide() {
         this.#element.classList.remove("show")
-        //document.querySelector("main").style.display = ""
         ShowFooter()
-        //document.exitFullscreen()
         if (this.#wakeLock) {
             this.#wakeLock.release().then(() => {
                 this.#wakeLock = null
@@ -126,14 +118,7 @@ export default class SongFullscreen {
     }
     static Show() {
         this.#element.classList.add("show")
-        //document.querySelector("main").style.display = "none"
         HideFooter()
-        // this.#element.requestFullscreen()
-        // document.onfullscreenchange = () => {
-        //     if (!document.fullscreenElement) {
-        //         this.Hide()
-        //     }
-        // }
         if (!this.#wakeLock) {
             const corr = navigator.wakeLock.request("screen")
             corr.then((lock) => {
@@ -161,8 +146,8 @@ export default class SongFullscreen {
             const colour = c.hsl()
 
             this.#element.style = `
-                --c1: hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 80)}%);
-                --c2: hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.8, 40)}%);
+                --c1: hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 85)}%);
+                --c2: hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.5, 40)}%);
             `
             this.#element.dataset.colour = `hsl(${colour.h}, ${colour.s}%, ${colour.l * 1.2}%)`
         })

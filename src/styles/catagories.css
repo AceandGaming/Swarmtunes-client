@@ -147,16 +147,20 @@
 
 .catagory-item > span {
   display: block;
-  margin: 0 auto;
-  max-width: 75%;
-  max-height: 40px;
-  min-height: 22px;
-  text-wrap: wrap;
-  text-align: center;
-  align-content: center;
-  text-overflow: ellipsis;
 
+  width: 75%;
+
+  margin: 0 auto;
+
+  height: auto;
+  min-height: 1lh;
+  max-height: 2lh;
   overflow: hidden;
+
+  white-space: normal;
+  overflow-wrap: normal;
+
+  text-align: center;
   color: white;
 }
 
@@ -172,7 +176,7 @@
 
   .catagory-item > span {
     font-size: 16px;
-    max-width: 90%;
+    width: 100%;
   }
 
   .catagory.overflowing::after {

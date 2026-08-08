@@ -194,6 +194,8 @@ class PlaybackController {
     }
 
     public SetShuffle(shuffle: boolean) {
+        if (this.shuffle === shuffle) return
+
         this.queue.ReShuffle(shuffle)
         this.TriggerQueue()
 
@@ -204,6 +206,8 @@ class PlaybackController {
         this.SetShuffle(!this.shuffle)
     }
     public SetRepeat(repeat: boolean) {
+        if (this.repeat === repeat) return
+
         this.repeat = repeat
         this.Trigger("repeat", repeat)
     }

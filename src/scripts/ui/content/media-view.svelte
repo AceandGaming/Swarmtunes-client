@@ -1,9 +1,9 @@
 <script lang="ts">
+    import { IconX, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
+
     import type { Song } from "@ts/types/song"
     import SongList from "@ts/ui/song-list.svelte"
     import "@ts/ui/cover"
-    import xSvg from "@assets/icons/x.svg?raw"
-    import playSvg from "@assets/icons/play.svg?raw"
     import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
     import PlaybackController from "@ts/playback"
 
@@ -72,7 +72,7 @@
         
         <div class="cover" onclick={OnCoverClick} role="button" tabindex="0">
             <swarmtunes-cover src={artworkUrl}></swarmtunes-cover>
-            <div class="overlay">{@html playSvg}</div>
+            <div class="overlay"><IconPlayerPlayFilled size="unset" /></div>
         </div>
         <div class="text-container">
             <h1>{title}</h1>
@@ -84,10 +84,10 @@
             {/if}
         </div>
         <nav>
-            <button class="icon-button play-button" onclick={OnCoverClick}>{@html playSvg}</button>
+            <button class="icon-button play-button" onclick={OnCoverClick}><IconPlayerPlayFilled size="unset" /></button>
             <input class="search" bind:value={search} placeholder="Search" type="text">
         </nav>
-        <button class="close icon-button" onclick={() => Hide()}>{@html xSvg}</button>
+        <button class="close icon-button" onclick={() => Hide()}><IconX size="unset" /></button>
     </header>
     <div class="content">
         {#if loading}

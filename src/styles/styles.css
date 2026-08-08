@@ -7,7 +7,7 @@
     --cover-background: #202020;
     --current-song-bar: #202020;
     --seek-bar-background: #00000030;
-    --seek-bar-played: #ffffffee;
+    --seek-bar-played: #ffffffdd;
     --seek-bar-loaded: transparent;
     --header-tab-default: #111;
     --header-tab-active: var(--background-colour);
@@ -232,10 +232,14 @@ button:active:not(.icon-button) {
 }
 
 .icon-button {
+    display: inline-block;
     background-color: transparent;
     border-radius: 10px;
     padding: 0;
     color: var(--icon-default);
+    aspect-ratio: 1;
+
+    transition: transform 0.1s ease, color 0.1s ease;
 }
 
 .icon-button svg {
@@ -246,18 +250,19 @@ button:active:not(.icon-button) {
 }
 
 @media (hover: hover) {
-    .icon-button:hover svg {
+    .icon-button:hover {
         color: var(--icon-hover);
+        transform: scale(1.1);
     }
 }
 
-.icon-button:active svg {
+.icon-button:active {
     color: var(--icon-active);
+    transform: scale(1);
 }
 
-.spacer {
-    flex: 1;
-    content: "";
+svg {
+    display: block;
 }
 
 hr {
@@ -374,31 +379,38 @@ p {
 /* Slider */
 input[type="range"] {
     -webkit-appearance: none;
-    background: var(--background);
-    padding: 6px;
+    appearance: none;
+
+    background-color: var(--background-colour);
+    padding: 4px 3px;
     outline: none;
     border: none;
 }
 
+input[type="range"]:hover {
+    filter: brightness(1.5);
+}
+
 /* Track */
 input[type="range"]::-webkit-slider-runnable-track {
-    height: 6px;
+    height: 5px;
     width: calc(100% - 20px);
     background: var(--slider-track);
     border-radius: 10px;
 }
 
 input[type="range"]::-moz-range-track {
-    height: 6px;
+    height: 5px;
     width: calc(100% - 20px);
     background: var(--slider-track);
     border-radius: 10px;
 }
 
+
 /* Thumb */
 input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     background: var(--slider-default);
     border: 2px solid var(--slider-border);
     border-radius: 50%;
@@ -409,8 +421,8 @@ input[type="range"]::-moz-range-thumb {
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     background: var(--slider-default);
     border: 2px solid var(--slider-border);
     border-radius: 50%;

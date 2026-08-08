@@ -1,4 +1,5 @@
 import Network from "@ts/network"
+import { optimize } from 'svgo/browser'
 
 export function OnServerResyncButtonClick() {
     Network.ServerResync()
@@ -55,7 +56,7 @@ export function LoadSVG(path) {
         }
 
         response.text().then((text) => {
-            text = text.replace(/\swidth=\"\d+\"/g, "").replace(/\sheight=\"\d+\"/g, "").replace(/<!--[\s\S]*?-->/g, "")
+            text = optimize(text).data
 
             const attributeString = Array.from(svg.attributes)
                 .map(attr => `${attr.name}="${attr.value}"`)
