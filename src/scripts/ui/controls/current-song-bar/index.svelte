@@ -5,7 +5,6 @@
     import Mobile from "./mobile.svelte"
 
     let mobileLayout = $state(window.isMobile)
-    $inspect(mobileLayout)
     
     onMount(() => {
         mobileLayout = window.innerWidth < 600
