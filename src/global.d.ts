@@ -10,15 +10,11 @@ declare global {
     interface Window {
         Network: typeof Network
         Login: typeof Login
-        PlaybackController: typeof PlaybackController
-        PlayState: typeof PlayState
-        SongQueue: typeof SongQueue
         SongRequester: typeof SongRequester
         MediaView: MediaView
 
         isMobile: boolean
         isTablet: boolean
-        isAdmin: boolean
         isNewSession: boolean
     }
 
