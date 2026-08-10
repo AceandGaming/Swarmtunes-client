@@ -1,9 +1,8 @@
-import Network from "@ts/network"
 import { AlbumCatagory, Catagory, SongCatagory } from "@ts/ui/catagories"
-import ErrorScreen, { LoadingError } from "@ts/ui/error-screens"
+import { LoadingError } from "@ts/ui/error-screens"
 import { LoadingText } from "@ts/ui/loading"
-import ToastManager from "@ts/ui/toast-manager"
 import PlaybackController from "@ts/playback"
+import { GetDiscoverPage } from "@ts/api/pages"
 
 const discoverPage = document.querySelector("#discover") as HTMLElement
 
@@ -13,40 +12,17 @@ function AddCategoryToDiscover(catagory: Catagory) {
 
 export async function PopulateDiscover() {
     LoadingText.Attach(discoverPage)
-    let albums, orginalSongs, mashupSongs = []
-    let atempts = 0
-    while (true) {
-        try {
-            const values = await Promise.all([
-                Network.GetAllAlbums(),
-                Network.GetAllSongs({ filters: ["original=true"] }),
-                Network.GetAllSongs({ filters: ["title=mashup"] })
-            ])
-            albums = values[0]
-            orginalSongs = values[1]
-            mashupSongs = values[2]
-            break
-        }
-        catch (e) {
-            atempts++
-            if (atempts > 3) {
-                console.error("Failed to get discover after 5 atempts", e)
-                const errorScreen = new ErrorScreen("Failed to load content", PopulateDiscover)
-                LoadingText.Detach(discoverPage)
-                discoverPage.append(errorScreen.CreateElement())
-                ToastManager.Toast("Failed to load discover content", "error", 5)
-                return
-            }
-        }
-        await new Promise(r => setTimeout(r, 2000))
-    }
-    albums.sort((a, b) => b.Date.getTime() - a.Date.getTime())
-    orginalSongs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
-    mashupSongs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
+    let data = await GetDiscoverPage()
 
-    AddCategoryToDiscover(new AlbumCatagory("Setlists", albums))
-    AddCategoryToDiscover(new SongCatagory("Originals", orginalSongs))
-    AddCategoryToDiscover(new SongCatagory("Mashups", mashupSongs))
+    const setlists = data.setlists.toSorted((a, b) => b.date!.getTime() - a.date!.getTime())
+    const discs = data.discs.toSorted((a, b) => b.disc! - a.disc!)
+    const orginals = data.originals.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
+    const mashups = data.mashups.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
+
+    AddCategoryToDiscover(new AlbumCatagory("Setlists", setlists))
+    AddCategoryToDiscover(new SongCatagory("Originals", orginals))
+    AddCategoryToDiscover(new SongCatagory("Mashups", mashups))
+    AddCategoryToDiscover(new AlbumCatagory("Discs", discs))
 
     LoadingText.Detach(discoverPage)
 }

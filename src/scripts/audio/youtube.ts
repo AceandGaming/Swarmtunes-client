@@ -1,5 +1,5 @@
 import AudioPlayer from "@ts/audio/audio"
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 import PlaybackController from "@ts/playback"
 
 export default class YoutubePlayer extends AudioPlayer {
@@ -121,14 +121,17 @@ export default class YoutubePlayer extends AudioPlayer {
 
     public async Load(song: Song) {
         await this.WaitForReady()
+        song = await song.GetDetailed()
 
-        if (!song.YoutubeId) {
-            throw new Error("Song has no youtube id")
+        const info = song.audioInfo!
+
+        if (!(info.type != "youtube")) {
+            throw new Error("Song is not a youtube song")
         }
 
         this.player.loadPlaylist({
             // Youtube likes to steal the MediaSession api so we make a fake playlist and read when songs are skipped
-            playlist: ["dkcz8QCcbq4", song.YoutubeId, "IUfVQ6zEAIQ"],
+            playlist: ["dkcz8QCcbq4", info.id, "IUfVQ6zEAIQ"],
             index: 1,
             startSeconds: 0
         })

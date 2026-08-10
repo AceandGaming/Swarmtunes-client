@@ -1,26 +1,12 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import { ListenForInputSubmit } from "@ts/misc"
-import Network from "@ts/network"
-import PlaylistManager from "@ts/playlist-manager"
-import { Playlist } from "@ts/types/playlist"
+import { Playlist } from "@ts/models/playlist"
+import { CreatePlaylist } from "@ts/api/playlist"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
 
 export function ValidatePlaylistName(name: string) {
-    name = name.trim()
-    if (name.length > 32 || name.length <= 0) {
-        return {
-            error: true,
-            message: "Invalid playlist length"
-        }
-    }
-    if (!/^[0-9A-Za-z_ :]+$/.test(name)) {
-        return {
-            error: true,
-            message: "Name contains invalid characters"
-        }
-    }
     return {
         error: false,
         message: ""
@@ -64,24 +50,16 @@ export class CreatePlaylistPopup extends PopupWindow {
     }
     #OnButtonClick() {
         const name = this.input.value
-        const cor = Network.CreatePlaylist(name)
-        cor.catch(() => { this.SetBusy(false); this.error.textContent = "An unknown error occurred" })
+        const cor = CreatePlaylist(name)
+        cor.catch((e) => { this.SetBusy(false); this.error.textContent = e.message })
         cor.then(response => {
-            if (!(response instanceof Playlist)) {
-                this.error.textContent = response.error
-                this.SetBusy(false)
-                return
-            }
-            PlaylistManager.AddPlaylist(response)
+            //PlaylistManager.AddPlaylist(response)
             PlaylistTab.Populate()
             this.Hide()
             ToastManager.Toast(`Created playlist <b>${ReplaceEmotesOfString(name)}</b>`, "none", 3, true)
         })
     }
     Show() {
-        if (!Network.IsLoggedIn() || !Network.IsOnline()) {
-            return
-        }
         super.Show()
         this.input.value = ""
         this.error.textContent = ""

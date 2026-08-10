@@ -1,9 +1,11 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
-import Network from "@ts/network"
 import PlaybackController from "@ts/playback"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import { PlaylistView, AlbumView } from "@ts/ui/content/media-view"
 import type Cover from "@ts/ui/cover"
+import type { Song } from "@ts/models/song"
+import type { Collection } from "@ts/models/collection"
+import type { Playlist } from "@ts/models/playlist"
 
 
 function CreateCatagoryItemImage(element: HTMLElement, source: string) {
@@ -110,11 +112,11 @@ export abstract class Catagory {
 }
 export class SongCatagory extends Catagory {
     AddChildren(display: HTMLElement) {
-        for (const song of this.items) {
+        for (const song of (this.items as Song[])) {
             display.appendChild(CreateCatagoryItemElement(
-                song.Title,
-                song.Id,
-                song.CoverUrl,
+                song.title,
+                song.id,
+                song.artwork,
                 () => {
                     PlaybackController.Play({
                         song: song,
@@ -132,11 +134,11 @@ export class SongCatagory extends Catagory {
 
 export class AlbumCatagory extends Catagory {
     AddChildren(display: HTMLElement) {
-        for (const album of this.items) {
+        for (const album of (this.items as Collection[])) {
             display.appendChild(CreateCatagoryItemElement(
-                album.PrettyDate,
-                album.Id,
-                album.CoverUrl,
+                album.title,
+                album.id,
+                album.artwork,
                 () => AlbumView.Show(album),
                 "album",
                 `<img src="/icons/disc.svg">`,
@@ -147,11 +149,11 @@ export class AlbumCatagory extends Catagory {
 }
 export class PlaylistCatagory extends Catagory {
     AddChildren(display: HTMLElement) {
-        for (const playlist of this.items) {
+        for (const playlist of (this.items as Playlist[])) {
             const element = CreateCatagoryItemElement(
-                playlist.Title,
-                playlist.Id,
-                playlist.CoverUrl,
+                playlist.title,
+                playlist.id,
+                playlist.artwork,
                 async () => await PlaylistView.Show(playlist),
                 "playlist",
                 `<img src="/icons/playlist.svg">`,
@@ -161,7 +163,7 @@ export class PlaylistCatagory extends Catagory {
             const renameButton = document.createElement("button")
             renameButton.classList.add("rename-button")
             renameButton.onclick = (event) => {
-                RenamePlaylistPopup.instance.Show(playlist.Id)
+                RenamePlaylistPopup.instance.Show(playlist.id)
                 event.stopPropagation()
             }
             renameButton.title = "Rename Playlist"

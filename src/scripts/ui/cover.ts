@@ -1,6 +1,5 @@
 import css from "@css/cover.css?inline"
 import ColourCache from "@ts/colour-cache"
-import Network from "@ts/network"
 import type { Color } from "colorthief"
 
 export default class Cover extends HTMLElement {

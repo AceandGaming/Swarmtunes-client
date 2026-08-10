@@ -1,4 +1,4 @@
-import Network from "@ts/network"
+import { Search } from "@ts/api/song"
 import { LoadingText } from "@ts/ui/loading"
 import { SongList } from "@ts/ui/song-list"
 
@@ -11,7 +11,7 @@ export async function PopulateSearch(searchTerm: string, maxResults = 10) {
     }
 
     LoadingText.Attach(resultsEl)
-    const songs = await Network.Search(searchTerm, maxResults)
+    const songs = await Search(searchTerm, maxResults)
 
     const songlist = new SongList(songs)
     const element = songlist.CreateElement(true)

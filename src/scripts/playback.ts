@@ -1,6 +1,6 @@
 import type AudioPlayer from "@ts/audio/audio"
 import SongQueue from "@ts/song-queue"
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 import OggPlayer from "@ts/audio/ogg"
 import YoutubePlayer from "@ts/audio/youtube"
 import SwarmFMRadio from "@ts/audio/swarmfm"
@@ -77,9 +77,11 @@ class PlaybackController {
         )
     }
 
-    private UpdatePlayer(song: Song): AudioPlayer {
+    private async UpdatePlayer(song: Song): Promise<AudioPlayer> {
         let PlayerClass: typeof AudioPlayer
-        if (song.YoutubeId) {
+        song = await song.GetDetailed()
+
+        if (song.audioInfo!.type === "youtube") {
             PlayerClass = YoutubePlayer
         }
         else {
@@ -122,7 +124,7 @@ class PlaybackController {
     }
 
     private async PlaySong(song: Song) {
-        const player = this.UpdatePlayer(song)
+        const player = await this.UpdatePlayer(song)
         await player.Load(song)
         this.Trigger("loadedSong", song, player.GetIframe())
 
@@ -256,7 +258,6 @@ class PlaybackController {
         this.queue.SkipTo(song)
         this.TriggerQueue()
 
-        this.UpdatePlayer(song)
         this.PlaySong(this.currentSong!)
     }
     public AddToQueue(song: Song) {

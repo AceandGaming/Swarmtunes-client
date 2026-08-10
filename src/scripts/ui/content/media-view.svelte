@@ -1,7 +1,7 @@
 <script lang="ts">
     import { IconX, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
 
-    import type { Song } from "@ts/types/song"
+    import type { Song } from "@ts/models/song"
     import SongList from "@ts/ui/song-list.svelte"
     import "@ts/ui/cover"
     import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
@@ -45,7 +45,7 @@
 
     let search: string = $state("")
     let currentSongs: Song[] = $derived(
-        songs.filter(song => song.Title.toLowerCase().includes(search.toLowerCase()))
+        songs.filter(song => song.title.toLowerCase().includes(search.toLowerCase()))
     )
 
     function OnItemClick(song: Song) {

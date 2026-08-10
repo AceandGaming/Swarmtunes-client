@@ -1,6 +1,6 @@
 import { LoadSVG } from "@ts/misc"
 import PlaybackController from "@ts/playback"
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 import { ContextMenu } from "@ts/ui/context-menu"
 import SeekBar from "@ts/ui/controls/seek.svelte"
 import MediaControls from "@ts/ui/controls/media-controls.svelte"
@@ -99,12 +99,13 @@ export default class SongFullscreen {
 
         PlaybackController.AddCallback("loadedSong", (song: Song) => {
             this.Display(
-                song.Title,
-                song.Artist,
-                song.Singers,
-                song.CoverUrl,
-                song.PrettyDate
+                song.title,
+                song.displayArtists,
+                song.displaySingers,
+                song.artwork,
+                song.displayDate
             )
+
         })
     }
     static Hide() {
@@ -129,13 +130,13 @@ export default class SongFullscreen {
             })
         }
     }
-    static Display(title: string, artist: string, singers: string[], coverUrl: string, date: string) {
+    static Display(title: string, artist: string, singers: string, coverUrl: string, date: string) {
         this.#content.classList.remove("hidden")
 
         this.#titleText.textContent = title
         this.#artistText.textContent = artist
         if (this.#singersText) {
-            this.#singersText.textContent = singers.join(", ")
+            this.#singersText.textContent = singers
         }
 
         this.#dateText.textContent = date

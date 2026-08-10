@@ -1,4 +1,8 @@
-import Network from "@ts/network"
+import { V1_API_URL } from "@ts/api/network"
+
+export function GetEmoteUrl(emote: string) {
+    return `${V1_API_URL}/emotes/${emote}`
+}
 
 export function ReplaceEmotesOfString(text: string) {
     const container = document.createDocumentFragment()
@@ -7,7 +11,7 @@ export function ReplaceEmotesOfString(text: string) {
     for (let part of parts) {
         if (/^:[a-zA-Z0-9]+$/.test(part)) {
             const emote = document.createElement("img")
-            emote.src = Network.GetEmoteUrl(part.slice(1))
+            emote.src = GetEmoteUrl(part.slice(1))
             emote.alt = part
             emote.className = "emote"
             container.appendChild(emote)

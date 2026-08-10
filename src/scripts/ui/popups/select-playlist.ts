@@ -1,16 +1,14 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
-import Network from "@ts/network"
-import PlaylistManager from "@ts/playlist-manager"
-import type { Playlist } from "@ts/types/playlist"
+import type { Playlist } from "@ts/models/playlist"
 import PopupWindow from "@ts/ui/popups/popup"
 
 function CreatePlaylistListItemElement(playlist: Playlist, onClickEvent: (event: any) => void) {
     const element = document.createElement("li")
-    element.setAttribute("data-id", playlist.Id)
+    element.setAttribute("data-id", playlist.id)
     element.addEventListener("click", onClickEvent)
     element.innerHTML = `
-        <img loading="lazy" src=${playlist.CoverUrl}>
-        <span>${ReplaceEmotesOfString(playlist.Title)}</span>
+        <img loading="lazy" src=${playlist.coverUrl}>
+        <span>${ReplaceEmotesOfString(playlist.title)}</span>
     `
     return element
 }

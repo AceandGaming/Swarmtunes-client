@@ -1,4 +1,4 @@
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 import EditSong from "@ts/ui/popups/edit-song.svelte"
 import PopupWindow from "@ts/ui/popups/popup"
 import { mount, unmount } from "svelte"

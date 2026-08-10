@@ -1,20 +1,23 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import PlaybackController from "@ts/playback"
-import PlaylistManager from "@ts/playlist-manager"
-import { PlaylistRequester } from "@ts/playlist-requester"
 import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
 import ConfirmAction from "@ts/ui/popups/confirm-action"
 import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
+import { GetSongsOfPlaylist, GetPlaylist, DeletePlaylist, AddSongsToPlaylist } from "@ts/api/playlist"
+import PlaylistStore from "@ts/playlist-store"
 
 ContextMenu.AddCategory("playlist", [
     new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "/icons/play.svg", async (event) => {
-            const playlist = await PlaylistManager.LoadPlaylist(event.id)
+            const playlist = await PlaylistStore.Get(event.id)
+            if (!playlist) {
+                return
+            }
 
-            PlaybackController.Play({ songs: playlist.Songs })
+            PlaybackController.Play({ songs: await playlist.GetSongs() })
         })
     ]),
     new ContextGroup("manage playlist", true, false, [
@@ -22,11 +25,17 @@ ContextMenu.AddCategory("playlist", [
             RenamePlaylistPopup.instance.Show(event.id)
         }),
         new ContextOption("Delete", "/icons/trash.svg", async (event) => {
-            const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + ReplaceEmotesOfString(PlaylistManager.GetPlaylist(event.id).Title) + "</strong>")
+            const playlist = await PlaylistStore.Get(event.id)
+            if (!playlist) {
+                return
+            }
+
+            const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + ReplaceEmotesOfString(playlist.title) + "</strong>")
             if (!confirmation) {
                 return
             }
-            PlaylistManager.RemovePlaylist(event.id)
+            DeletePlaylist(playlist.id)
+            PlaylistStore.Delete(playlist.id)
             ToastManager.Toast("Playlist Deleted")
         })
     ]),
@@ -40,11 +49,14 @@ ContextMenu.AddCategory("playlist", [
             if (id === otherId) {
                 return
             }
-            const playlist = await PlaylistManager.LoadPlaylist(id)
-            const otherPlaylist = await PlaylistManager.LoadPlaylist(otherId)
-            otherPlaylist.AddMultiple(playlist.Songs)
-            PlaylistRequester.AddSongToPlaylist(otherId, playlist.SongIds)
-            ToastManager.Toast(`Added ${playlist.SongIds.length} songs to ${playlist.Title}`)
+            const songIds = await GetSongsOfPlaylist(id)
+            const otherPlaylist = await PlaylistStore.Get(otherId)
+            if (!otherPlaylist) {
+                return
+            }
+
+            AddSongsToPlaylist(otherId, songIds)
+            ToastManager.Toast(`Added ${songIds.length} songs to ${ReplaceEmotesOfString(otherPlaylist.title)}`, "none", 3, true)
         }),
         new ContextOption("New Playlist", "/icons/plus.svg", () => {
             CreatePlaylistPopup.instance.Show()

@@ -1,8 +1,7 @@
 <script lang="ts">
     //wrapper for song-list.ts
-    import { onMount } from "svelte"
     import { SongList } from "@ts/ui/song-list"
-    import type { Song } from "@ts/types/song"
+    import type { Song } from "@ts/models/song"
 
     let { songs, animate = false, onClick, catagory }: {
         songs: Song[], 

@@ -1,7 +1,7 @@
 import MediaViewSvelte from "./media-view.svelte"
 import { mount } from "svelte"
-import type { Album } from "@ts/types/album"
-import { Playlist } from "@ts/types/playlist"
+import type { Collection as Album } from "@ts/models/collection"
+import { Playlist } from "@ts/models/playlist"
 
 // I imagine the Svelte Devs looking at my code like:
 // TF?
@@ -21,11 +21,13 @@ export class MediaView {
         this.currentMedia = media
 
         this.mediaView.UpdateMeta(
-            media.Title,
-            media.PrettyDate,
-            media.CoverUrl,
+            media.title,
+            media.displayDate ?? "",
+            media.artwork,
             media instanceof Playlist
         )
+
+
         this.Show()
 
         this.mediaView.SetLoading(true)

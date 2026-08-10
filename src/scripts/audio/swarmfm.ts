@@ -1,9 +1,8 @@
 import SwarmFMApi from '@aceandgaming/swarmfm-api'
 import type { SwarmFMMetadata } from '@aceandgaming/swarmfm-api'
 import AudioPlayer from '@ts/audio/audio'
-import Network from '@ts/network'
-
-import { Song } from '@ts/types/song'
+import { Song } from '@ts/models/song'
+import { GetCoverUrl } from '@ts/api/song'
 
 export default class SwarmFMRadio extends AudioPlayer {
     public get played(): number {
@@ -58,21 +57,21 @@ export default class SwarmFMRadio extends AudioPlayer {
                     name = "evil"
                 }
 
-                CoverUrl = Network.GetCover(`default/${name}`)
+                CoverUrl = GetCoverUrl(`default/${name}`)
             }
             else {
                 CoverUrl = `https://swarmfm-assets.boopdev.com/album_covers/${c.album_cover_id}.png`
             }
 
-            const song = new Song({
-                id: "swarmfm",
-                title: c.name,
-                artist: c.artist,
-                singers: singers,
-                date: "2022-01-01",
-                isOriginal: false,
-                cover: CoverUrl
-            })
+            const song = new Song(
+                "swarmfm",
+                c.name,
+                undefined,
+                [{ name: c.artist }],
+                singers.map(a => ({ name: a })),
+                {},
+                new Date(Date.now())
+            )
 
             onMetadata(song)
         })
