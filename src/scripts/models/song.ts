@@ -89,19 +89,6 @@ export class Song {
         }
     }
 
-    public get artwork() {
-        //temp
-        const artworks = Object.fromEntries(Object.entries(this.artworks).map(([key, value]) => [key, `${key}/${value}`]))
-        const art = (
-            artworks["custom"]
-            || artworks["default"]
-            || artworks["disc"]
-            || artworks["plush"]
-        )
-
-        return GetCoverUrl(art)
-    }
-
     public constructor(
         public readonly id: id,
         public readonly title: string,
@@ -150,6 +137,18 @@ export class Song {
         SongCache.Set(this.id, song)
 
         return song
+    }
+    public GetArtwork(size: "small" | "medium" | "large" = "medium") {
+        //temp
+        const artworks = Object.fromEntries(Object.entries(this.artworks).map(([key, value]) => [key, `${key}/${value}`]))
+        const art = (
+            artworks["custom"]
+            || artworks["default"]
+            || artworks["disc"]
+            || artworks["plush"]
+        )
+
+        return GetCoverUrl(art, size)
     }
 
     public Copy() {

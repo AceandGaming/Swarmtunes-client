@@ -1,7 +1,7 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import { ListenForInputSubmit } from "@ts/misc"
 import { Playlist } from "@ts/models/playlist"
-import { CreatePlaylist } from "@ts/api/playlist"
+import PlaylistProvider from "@ts/playlist-provider"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
@@ -50,9 +50,9 @@ export class CreatePlaylistPopup extends PopupWindow {
     }
     #OnButtonClick() {
         const name = this.input.value
-        const cor = CreatePlaylist(name)
+        const cor = PlaylistProvider.CreatePlaylist(name)
         cor.catch((e) => { this.SetBusy(false); this.error.textContent = e.message })
-        cor.then(response => {
+        cor.then(() => {
             //PlaylistManager.AddPlaylist(response)
             PlaylistTab.Populate()
             this.Hide()

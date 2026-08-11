@@ -1,4 +1,4 @@
-import { GetSongsOfPlaylist } from "@ts/api/playlist"
+import { GetItemsOfPlaylist } from "@ts/api/playlist"
 import { GetCoverUrl } from "@ts/api/song"
 import type { Song } from "@ts/models/song"
 import SongProvider from "@ts/song-provider"
@@ -27,22 +27,9 @@ export class Playlist {
             year: "numeric",
         })
     }
-
-    public get artwork() {
-        //temp
-        const artworks = Object.fromEntries(Object.entries(this.artworks).map(([key, value]) => [key, `${key}/${value}`]))
-        const art = (
-            artworks["custom"]
-            || artworks["default"]
-            || artworks["disc"]
-            || artworks["plush"]
-        )
-
-        return GetCoverUrl(art)
-    }
     public get songCount() {
-        if (this.songIds) {
-            return this.songIds.length
+        if (this.items) {
+            return this.items.length
         }
         return this._songCount
     }
@@ -56,7 +43,7 @@ export class Playlist {
         public readonly type: PlaylistType,
         private readonly _songCount: number,
         public readonly seconds: number,
-        private songIds?: id[]
+        private items?: { song: id, dateAdded: Date }[]
     ) { }
 
     public static FromDict(dict: PlaylistDict) {
@@ -72,29 +59,52 @@ export class Playlist {
     }
 
     public GetSongIds() {
-        return this.songIds ?? []
+        return this.items ? this.items.map((item) => item.song) : []
     }
-    public async GetSongs(): Promise<Song[]> {
-        if (this.songIds == undefined) {
-            this.songIds = await GetSongsOfPlaylist(this.id)
+    public async LoadSongs() {
+        if (this.items) {
+            return
         }
 
-        return await SongProvider.GetMany(this.songIds ?? [])
+        const items = await GetItemsOfPlaylist(this.id)
+        this.items = items.map((item) => ({ song: item.songId, dateAdded: new Date(item.dateAdded) }))
+        this.items.sort((a, b) => a.dateAdded.getTime() - b.dateAdded.getTime())
+    }
+    public async GetSongs(): Promise<Song[]> {
+        await this.LoadSongs()
+
+        return await SongProvider.GetMany(this.GetSongIds())
+    }
+
+    public GetArtwork(size: "small" | "medium" | "large" = "medium") {
+        //temp
+        const artworks = Object.fromEntries(Object.entries(this.artworks).map(([key, value]) => [key, `${key}/${value}`]))
+        const art = (
+            artworks["custom"]
+            || artworks["default"]
+            || artworks["disc"]
+            || artworks["plush"]
+        )
+
+        return GetCoverUrl(art, size)
     }
 
 
     public AddSong(id: id) {
-        if (!this.songIds) {
+        if (!this.items) {
             throw new Error("Playlist's songs have not been loaded yet")
         }
+        if (this.items.find((item) => item.song == id)) {
+            return
+        }
 
-        this.songIds.push(id)
+        this.items.push({ song: id, dateAdded: new Date() })
     }
     public RemoveSong(id: id) {
-        if (!this.songIds) {
+        if (!this.items) {
             throw new Error("Playlist's songs have not been loaded yet")
         }
 
-        this.songIds = this.songIds.filter((songId) => songId !== id)
+        this.items = this.items.filter((item) => item.song != id)
     }
 }

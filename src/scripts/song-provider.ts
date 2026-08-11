@@ -3,7 +3,11 @@ import { Song } from "@ts/models/song"
 import SongCache from "@ts/song-cache"
 
 export default class SongProvider {
-    public static async GetMany(ids: id[]): Promise<Song[]> {
+    public static async GetMany(ids: id[], retainOrder = false): Promise<Song[]> {
+        if (ids.length == 0) {
+            return []
+        }
+
         const songs = []
         const missing = []
         for (const id of ids) {
@@ -23,7 +27,11 @@ export default class SongProvider {
             }
         }
 
-        console.log(`Loaded ${songs.length} songs. Missing ${missing.length}, Cached ${songs.length - missing.length}`)
+        console.log(`Loaded ${songs.length}/${ids.length}, Fetched ${missing.length}, Cached ${ids.length - missing.length}`)
+
+        if (!retainOrder) {
+            return songs.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
+        }
 
         return songs
     }

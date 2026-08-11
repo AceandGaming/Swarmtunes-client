@@ -23,8 +23,8 @@ export class MediaView {
         this.mediaView.UpdateMeta(
             media.title,
             media.displayDate ?? "",
-            media.artwork,
-            media instanceof Playlist
+            media.GetArtwork("medium"),
+            media instanceof Playlist,
         )
 
 

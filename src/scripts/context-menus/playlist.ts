@@ -6,13 +6,14 @@ import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
-import { GetSongsOfPlaylist, GetPlaylist, DeletePlaylist, AddSongsToPlaylist } from "@ts/api/playlist"
-import PlaylistStore from "@ts/playlist-store"
+import PlaylistProvider from "@ts/playlist-provider"
+import { GetItemsOfPlaylist } from "@ts/api/playlist"
+import PlaylistTab from "@ts/ui/content/playlist-tab"
 
 ContextMenu.AddCategory("playlist", [
     new ContextGroup("queue", false, false, [
         new ContextOption("Play Now", "/icons/play.svg", async (event) => {
-            const playlist = await PlaylistStore.Get(event.id)
+            const playlist = await PlaylistProvider.Get(event.id)
             if (!playlist) {
                 return
             }
@@ -25,7 +26,7 @@ ContextMenu.AddCategory("playlist", [
             RenamePlaylistPopup.instance.Show(event.id)
         }),
         new ContextOption("Delete", "/icons/trash.svg", async (event) => {
-            const playlist = await PlaylistStore.Get(event.id)
+            const playlist = await PlaylistProvider.Get(event.id)
             if (!playlist) {
                 return
             }
@@ -34,8 +35,8 @@ ContextMenu.AddCategory("playlist", [
             if (!confirmation) {
                 return
             }
-            DeletePlaylist(playlist.id)
-            PlaylistStore.Delete(playlist.id)
+            await PlaylistProvider.DeletePlaylist(playlist.id)
+            PlaylistTab.Populate()
             ToastManager.Toast("Playlist Deleted")
         })
     ]),
@@ -49,13 +50,13 @@ ContextMenu.AddCategory("playlist", [
             if (id === otherId) {
                 return
             }
-            const songIds = await GetSongsOfPlaylist(id)
-            const otherPlaylist = await PlaylistStore.Get(otherId)
+            const songIds = (await GetItemsOfPlaylist(id)).map((item) => item.songId)
+            const otherPlaylist = await PlaylistProvider.Get(otherId)
             if (!otherPlaylist) {
                 return
             }
 
-            AddSongsToPlaylist(otherId, songIds)
+            await PlaylistProvider.AddSongsToPlaylist(otherId, songIds)
             ToastManager.Toast(`Added ${songIds.length} songs to ${ReplaceEmotesOfString(otherPlaylist.title)}`, "none", 3, true)
         }),
         new ContextOption("New Playlist", "/icons/plus.svg", () => {

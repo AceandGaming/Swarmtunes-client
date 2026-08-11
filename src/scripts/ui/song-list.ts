@@ -13,7 +13,7 @@ function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => voi
     element.addEventListener("click", () => onClickEvent(song))
 
     const coverImg = document.createElement('swarmtunes-cover') as Cover
-    coverImg.src = song.artwork
+    coverImg.src = song.GetArtwork("small")
 
     const titleArtist = document.createElement('div')
     titleArtist.className = 'title-artist'

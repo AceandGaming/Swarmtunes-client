@@ -11,12 +11,12 @@
 
 <div class="current-song-bar">
     <div class="left">
-        <swarmtunes-cover src={PlaybackState.currentSong?.artwork}></swarmtunes-cover>
+        <swarmtunes-cover src={PlaybackState.currentSong?.GetArtwork()}></swarmtunes-cover>
 
         <div>
             <span>Covered By:</span>
             {#if (PlaybackState.currentSong)} 
-                <span class="sub-text">{PlaybackState.currentSong.singers.join("\n")}</span>
+                <span class="sub-text">{PlaybackState.currentSong.singers.map((singer) => singer.name).join("\n")}</span>
             {/if}
         </div>
     </div>

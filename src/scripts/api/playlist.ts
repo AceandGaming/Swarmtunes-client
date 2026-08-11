@@ -1,6 +1,5 @@
 import { Playlist } from "@ts/models/playlist"
 import { Get, Post, Patch, Delete } from "./network"
-import { Song } from "@ts/models/song"
 
 export async function GetPlaylist(id: id): Promise<Playlist> {
     const json = await Get(`/playlists/${id}`)
@@ -22,9 +21,9 @@ export async function GetPlaylists(ids?: id[]): Promise<Playlist[]> {
     return json.map(Playlist.FromDict)
 }
 
-export async function GetSongsOfPlaylist(id: id): Promise<id[]> {
+export async function GetItemsOfPlaylist(id: id): Promise<{ songId: id, dateAdded: string }[]> {
     const json = await Get(`/playlists/${id}/songs`)
-    return json.map((item: any) => item.songId)
+    return json
 }
 
 export async function AddSongsToPlaylist(playlistId: id, songIds: id[]) {

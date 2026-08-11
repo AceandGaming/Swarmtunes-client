@@ -5,7 +5,7 @@ import PlaylistTab from "@ts/ui/content/playlist-tab"
 import { ValidatePlaylistName } from "@ts/ui/popups/create-playlist"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
-import { GetPlaylist } from "@ts/api/playlist"
+import PlaylistProvider from "@ts/playlist-provider"
 
 export class RenamePlaylistPopup extends PopupWindow {
     static instance: RenamePlaylistPopup
@@ -54,14 +54,15 @@ export class RenamePlaylistPopup extends PopupWindow {
             return
         }
         this.Hide()
-        //this.playlist.title = name
-        //PlaylistRequester.RenamePlaylist(this.playlist.Id, name)
-        PlaylistTab.Populate()
+
+        PlaylistProvider.RenamePlaylist(this.playlist.id, name).then(() => {
+            PlaylistTab.Populate()
+        })
         ToastManager.Toast(`Renamed <b>${ReplaceEmotesOfString(oldName)}</b> to <b>${ReplaceEmotesOfString(name)}</b>`, "none", 3, true)
     }
     // @ts-ignore
     async Show(id: id) {
-        const playlist = await GetPlaylist(id)
+        const playlist = await PlaylistProvider.Get(id)
         if (!playlist) {
             throw new Error("Playlist not found")
         }

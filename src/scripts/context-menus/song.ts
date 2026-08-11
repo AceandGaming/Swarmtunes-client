@@ -3,7 +3,8 @@ import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import PlaybackController from "@ts/playback"
-import { AddSongsToPlaylist } from "@ts/api/playlist"
+import PlaylistProvider from "@ts/playlist-provider"
+import { MediaView } from "@ts/ui/content/media-view"
 
 ContextMenu.AddCategory("song", [
     new ContextGroup("queue", false, false, [
@@ -24,11 +25,14 @@ ContextMenu.AddCategory("song", [
             }
 
             try {
-                await AddSongsToPlaylist(playlistid, [event.id])
+                await PlaylistProvider.AddSongsToPlaylist(playlistid, [event.id])
             }
             catch (e) {
                 ToastManager.Toast("Failed to add song to playlist", "error")
                 console.error(e)
+            }
+            if (MediaView.media?.id == playlistid) {
+                MediaView.Update(await PlaylistProvider.Get(playlistid))
             }
 
             ToastManager.Toast(`Added song to playlist`)

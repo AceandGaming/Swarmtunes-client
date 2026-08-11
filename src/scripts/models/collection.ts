@@ -26,24 +26,6 @@ export class Collection {
             year: "numeric",
         })
     }
-    public get artwork() {
-        const artworks = Object.fromEntries(Object.entries(this.artworks).map(([key, value]) => [key, `${key}/${value}`]))
-
-        let art
-        if (this.disc) {
-            art = artworks["disc"]
-        }
-        else {
-            art = (
-                artworks["custom"]
-                || artworks["default"]
-                || artworks["disc"]
-                || artworks["plush"]
-            )
-        }
-
-        return GetCoverUrl(art)
-    }
 
     public get songCount() {
         if (this.songIds) {
@@ -75,6 +57,24 @@ export class Collection {
             dict.songCount,
             dict.seconds
         )
+    }
+    public GetArtwork(size: "small" | "medium" | "large" = "medium") {
+        //temp
+        const artworks = Object.fromEntries(Object.entries(this.artworks).map(([key, value]) => [key, `${key}/${value}`]))
+        let art
+        if (this.disc != undefined) {
+            art = artworks["disc"]
+        }
+        else {
+            art = (
+                artworks["custom"]
+                || artworks["default"]
+                || artworks["disc"]
+                || artworks["plush"]
+            )
+        }
+
+        return GetCoverUrl(art, size)
     }
 
     public GetSongIds() {

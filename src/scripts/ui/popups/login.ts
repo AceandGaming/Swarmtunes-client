@@ -125,9 +125,10 @@ export class Login {
         console.log("Checking login")
         try {
             const user = await GetMe()
+            console.log("Logged in", user)
             this.CallLoginCallbacks(user.role === "admin")
         }
-        catch { }
+        catch { console.log("Not logged in") }
     }
 }
 export class LoginPopup extends PopupWindow {

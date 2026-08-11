@@ -16,7 +16,7 @@ export default class PlaylistTab {
         this.playlistTab.append(element)
     }
     static async Populate() {
-        const playlists = await PlaylistStore.GetAll()
+        const playlists = PlaylistStore.GetAll()
 
         const catagory = new PlaylistCatagory("", playlists, true)
         const element = catagory.CreateElement()
@@ -26,8 +26,5 @@ export default class PlaylistTab {
         grid.replaceWith(element)
 
         ResizeAllGridDisplays()
-    }
-    static OnPlaylistLoaded() {
-        this.Populate()
     }
 }

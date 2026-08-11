@@ -23,26 +23,32 @@ class PlaylistStore {
         this.playlists.delete(id)
     }
 
-    public AddSongsToPlaylist(id: id, songIds: id[]) {
+    public async AddSongsToPlaylist(id: id, songIds: id[]) {
         const playlist = this.Get(id)
-
-        if (playlist) {
-            for (const songId of songIds) {
-                playlist.AddSong(songId)
-            }
-            this.Set(id, playlist)
+        if (!playlist) {
+            return
         }
+
+        await playlist.LoadSongs()
+
+        for (const songId of songIds) {
+            playlist.AddSong(songId)
+        }
+        this.Set(id, playlist)
     }
 
-    public RemoveSongsToPlaylist(id: id, songIds: id[]) {
+    public async RemoveSongsToPlaylist(id: id, songIds: id[]) {
         const playlist = this.Get(id)
-
-        if (playlist) {
-            for (const songId of songIds) {
-                playlist.RemoveSong(songId)
-            }
-            this.Set(id, playlist)
+        if (!playlist) {
+            return
         }
+
+        await playlist.LoadSongs()
+
+        for (const songId of songIds) {
+            playlist.RemoveSong(songId)
+        }
+        this.Set(id, playlist)
     }
 }
 

@@ -116,7 +116,7 @@ export class SongCatagory extends Catagory {
             display.appendChild(CreateCatagoryItemElement(
                 song.title,
                 song.id,
-                song.artwork,
+                song.GetArtwork(),
                 () => {
                     PlaybackController.Play({
                         song: song,
@@ -138,7 +138,7 @@ export class AlbumCatagory extends Catagory {
             display.appendChild(CreateCatagoryItemElement(
                 album.title,
                 album.id,
-                album.artwork,
+                album.GetArtwork(),
                 () => AlbumView.Show(album),
                 "album",
                 `<img src="/icons/disc.svg">`,
@@ -153,7 +153,7 @@ export class PlaylistCatagory extends Catagory {
             const element = CreateCatagoryItemElement(
                 playlist.title,
                 playlist.id,
-                playlist.artwork,
+                playlist.GetArtwork(),
                 async () => await PlaylistView.Show(playlist),
                 "playlist",
                 `<img src="/icons/playlist.svg">`,

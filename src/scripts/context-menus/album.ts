@@ -2,8 +2,8 @@ import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import PlaybackController from "@ts/playback"
-import { AddSongsToPlaylist } from "@ts/api/playlist"
 import { GetCollection, GetSongsOfCollection } from "@ts/api/collection"
+import PlaylistProvider from "@ts/playlist-provider"
 
 ContextMenu.AddCategory("album", [
     new ContextGroup("queue", false, false, [
@@ -25,7 +25,7 @@ ContextMenu.AddCategory("album", [
             try {
                 const songIds = await GetSongsOfCollection(event.id)
 
-                await AddSongsToPlaylist(playlistid, songIds)
+                await PlaylistProvider.AddSongsToPlaylist(playlistid, songIds)
                 ToastManager.Toast(`Added ${songIds.length} songs to playlist`, "none", 3, true)
             } catch (e) {
                 ToastManager.Toast("Failed to add songs to playlist", "error")

@@ -1,5 +1,5 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
-import { RemoveSongsFromPlaylist } from "@ts/api/playlist"
+import PlaylistProvider from "@ts/playlist-provider"
 import { Playlist } from "@ts/models/playlist"
 import { MediaView } from "@ts/ui/content/media-view"
 import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
@@ -13,7 +13,7 @@ ContextMenu.InheritCategory("playlist-item", "song", [
                 return
             }
 
-            RemoveSongsFromPlaylist(media.id, [event.id])
+            await PlaylistProvider.RemoveSongsFromPlaylist(media.id, [event.id])
             MediaView.Update(media)
 
             ToastManager.Toast(`Removed from <b>${ReplaceEmotesOfString(media.title)}</b>`, "none", 3, true)
