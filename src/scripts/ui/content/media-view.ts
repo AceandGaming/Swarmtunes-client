@@ -10,9 +10,13 @@ export class MediaView {
     public static get media() {
         return this.currentMedia
     }
+    public static get isVisible() {
+        return this.visible
+    }
 
     private static mediaView: MediaViewSvelte
     private static currentMedia?: Album | Playlist
+    private static visible = false
 
     public static Create() {
         this.mediaView = mount(MediaViewSvelte, { target: document.getElementById("content")! })
@@ -38,11 +42,11 @@ export class MediaView {
 
     public static Hide() {
         this.mediaView.Hide()
-
+        this.visible = false
     }
     public static Show() {
         this.mediaView.Show()
-
+        this.visible = true
     }
 
     /**@deprecated*/

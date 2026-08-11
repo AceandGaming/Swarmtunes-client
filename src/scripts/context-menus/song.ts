@@ -31,7 +31,7 @@ ContextMenu.AddCategory("song", [
                 ToastManager.Toast("Failed to add song to playlist", "error")
                 console.error(e)
             }
-            if (MediaView.media?.id == playlistid) {
+            if (MediaView.media?.id == playlistid && MediaView.isVisible) {
                 MediaView.Update(await PlaylistProvider.Get(playlistid))
             }
 

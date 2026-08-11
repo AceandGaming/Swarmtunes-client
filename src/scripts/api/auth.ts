@@ -16,5 +16,5 @@ export function GetMe(): Promise<User> {
     return Get("/me")
 }
 export function Logout() {
-    Post("/logout", {})
+    return Post("/logout", {})
 }

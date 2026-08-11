@@ -66,9 +66,12 @@ function OnLogin(isAdmin: boolean) {
     loginButton.textContent = "Log Out"
     loginButton.onclick = async () => {
         const confirmation = await ConfirmAction.AskUser("Are you sure you want to log out?")
-        if (confirmation) {
-            await Logout()
+        if (!confirmation) {
+            return
         }
+
+        await Logout()
+        location.reload()
     }
     GetPlaylists().then(playlists => {
         PlaylistStore.Init(playlists)

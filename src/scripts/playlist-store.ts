@@ -50,6 +50,10 @@ class PlaylistStore {
         }
         this.Set(id, playlist)
     }
+
+    public Clear() {
+        this.playlists.clear()
+    }
 }
 
 const playlistStore = new PlaylistStore()
