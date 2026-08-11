@@ -1,7 +1,7 @@
-import PlaylistManager from "@ts/playlist-manager"
-import type { Playlist } from "@ts/types/playlist"
+import type { Playlist } from "@ts/models/playlist"
 import { PlaylistCatagory, ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { LoginRequired } from "@ts/ui/error-screens"
+import PlaylistStore from "@ts/playlist-store"
 
 export default class PlaylistTab {
     static playlistTab: HTMLElement = document.getElementById("playlists-tab") as HTMLElement
@@ -15,11 +15,9 @@ export default class PlaylistTab {
         const element = errorScreen.CreateElement()
         this.playlistTab.append(element)
     }
-    static Populate() {
-        const playlists = PlaylistManager.playlists
-        if (playlists.length == 0) {
-            return
-        }
+    static async Populate() {
+        const playlists = PlaylistStore.GetAll()
+
         const catagory = new PlaylistCatagory("", playlists, true)
         const element = catagory.CreateElement()
         element.setAttribute("id", "playlist-grid")
@@ -28,8 +26,5 @@ export default class PlaylistTab {
         grid.replaceWith(element)
 
         ResizeAllGridDisplays()
-    }
-    static OnPlaylistLoaded() {
-        this.Populate()
     }
 }

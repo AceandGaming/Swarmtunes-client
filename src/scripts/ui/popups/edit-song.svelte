@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { Song } from "@ts/types/song"
+    import { Song } from "@ts/models/song"
     import { onMount } from "svelte"
-    import Network from "@ts/network"
+    import { GetCoverUrl } from "@ts/api/song"
     import "@ts/ui/cover"
 
     const { song }: {song: Song} = $props()
@@ -16,41 +16,41 @@
     $inspect(newDate)
 
     export function Submit() {
-        const metadata: Json = {}
-        if (newTitle != song.Title) {
+        const metadata: any = {}
+        if (newTitle != song.title) {
             metadata["title"] = newTitle
         }
-        if (newArtists != song.Artist) {
+        if (newArtists != song.artists.join(", ")) {
             metadata["artists"] = newArtists.split(", ")
         }
-        if (newSingers != song.Singers.join(", ")) {
+        if (newSingers != song.singers.join(", ")) {
             metadata["singers"] = newSingers.split(", ")
         }
         // if (newCoverArt.startsWith("custom/")) {
         //     metadata["customArtwork"] = newCoverArt.split("custom/")[1]
         // }
-        if (newDate != song.Date.toISOString().split("T")[0]) {
+        if (newDate != song.dateReleased.toISOString().split("T")[0]) {
             metadata["date"] = new Date(newDate).toISOString()
         }
         // Currently the client has no idea if it's claimed or not. So we just set it regardless
         metadata["copyrightStatus"] = ["active", "copyright_claimed"][newStatus]
 
-        Network.UpdateSong(song.Id, metadata)
+        //Network.UpdateSong(song.Id, metadata)
     }
 
     onMount(() => {
-        newTitle = song.Title
-        newArtists = song.Artist
-        newSingers = song.Singers.join(", ")
+        newTitle = song.title
+        newArtists = song.artists.join(", ")
+        newSingers = song.singers.join(", ")
         //newCoverArt = (new URL(song.CoverUrl)).pathname
-        newDate = song.Date.toISOString().split("T")[0]
+        newDate = song.dateReleased.toISOString().split("T")[0]
     })
 
 </script>
 
 <div class="edit-song">
     <div class="cover-container">
-        <swarmtunes-cover src={Network.GetCover(newCoverArt, 256)}></swarmtunes-cover>
+        <swarmtunes-cover src={GetCoverUrl(newCoverArt)}></swarmtunes-cover>
 
         <input type="text" bind:value={newCoverArt} placeholder="Cover URL">
     </div>

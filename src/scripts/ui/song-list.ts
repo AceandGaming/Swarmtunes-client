@@ -1,30 +1,29 @@
 import { OnSongClick } from "@ts/events"
 import { LoadSVG } from "@ts/misc"
-import SongRequester from "@ts/song-requester"
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 import { ContextMenu } from "@ts/ui/context-menu"
 import type Cover from "@ts/ui/cover"
 
-function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => void, showDate = false, catagory = "song", unavaliable = false) {
+function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => void, showDate = false, catagory = "song") {
     const element = document.createElement("li")
     element.classList.add("song-list-item", "song")
-    element.setAttribute("data-id", song.Id)
+    element.setAttribute("data-id", song.id)
     element.setAttribute("data-category", catagory)
-    element.classList.toggle("unavaliable", unavaliable)
-    element.addEventListener("click", () => onClickEvent(song))
+    element.classList.toggle("unavaliable", !song.audioInfo.playable)
+    element.addEventListener("click", () => (song.audioInfo.playable) && onClickEvent(song))
 
     const coverImg = document.createElement('swarmtunes-cover') as Cover
-    coverImg.src = song.CoverUrl
+    coverImg.src = song.GetArtwork("small")
 
     const titleArtist = document.createElement('div')
     titleArtist.className = 'title-artist'
 
     const titleSpan = document.createElement('span')
-    titleSpan.textContent = song.Title
+    titleSpan.textContent = song.displayTitle
 
     const artistSpan = document.createElement('span')
     artistSpan.className = 'sub-text'
-    artistSpan.textContent = song.Artist
+    artistSpan.textContent = song.displayArtists
 
     titleArtist.append(titleSpan, artistSpan)
 
@@ -33,7 +32,7 @@ function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => voi
     if (showDate) {
         const date = document.createElement('span')
         date.className = 'sub-text date'
-        date.textContent = song.PrettyDate
+        date.textContent = song.displayDate
 
         const tripleDot = document.createElement('button')
         tripleDot.append(LoadSVG('/icons/triple-dot.svg'))
@@ -65,17 +64,11 @@ export class SongList {
         this.element = document.createElement("ol")
         this.element.classList.add("song-list")
     }
-    SortByTitle() {
-        this.songs.sort((a, b) => a.Title.localeCompare(b.Title))
-    }
-    SortByDate() {
-        this.songs.sort((a, b) => b.Date.getTime() - a.Date.getTime())
-    }
     SortByTitleDifference(title: string) {
         const titleLen = title.length
         this.songs.sort((a, b) => {
-            const aDistance = a.Title.length - titleLen
-            const bDistance = b.Title.length - titleLen
+            const aDistance = a.title.length - titleLen
+            const bDistance = b.title.length - titleLen
             return aDistance - bDistance
         })
     }

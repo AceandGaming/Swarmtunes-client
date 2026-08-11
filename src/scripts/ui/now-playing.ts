@@ -1,5 +1,5 @@
 import PlaybackController from "@ts/playback"
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 import { SongList } from "@ts/ui/song-list"
 import Sortable from "sortablejs"
 

@@ -1,5 +1,4 @@
 import { LoadSVG } from "@ts/misc"
-import Network from "@ts/network"
 
 export class ContextOption {
     constructor(
@@ -248,12 +247,12 @@ class DesktopContextMenu extends ContextMenuUI {
         this.element.innerHTML = ""
 
         for (const group of groups) {
-            if (group.internetRequired && !Network.IsOnline()) {
-                continue
-            }
-            if (group.accountRequired && !Network.IsLoggedIn()) {
-                continue
-            }
+            // if (group.internetRequired && !Network.IsOnline()) {
+            //     continue
+            // }
+            // if (group.accountRequired && !Network.IsLoggedIn()) {
+            //     continue
+            // }
             for (const option of group.options) {
                 if (option.condition !== undefined && !option.condition()) {
                     continue
@@ -327,12 +326,12 @@ class MobileContextMenu extends ContextMenuUI {
         this.element.innerHTML = ""
 
         for (const group of groups) {
-            if (group.internetRequired && !Network.IsOnline()) {
-                continue
-            }
-            if (group.accountRequired && !Network.IsLoggedIn()) {
-                continue
-            }
+            // if (group.internetRequired && !Network.IsOnline()) {
+            //     continue
+            // }
+            // if (group.accountRequired && !Network.IsLoggedIn()) {
+            //     continue
+            // }
             for (const option of group.options) {
                 if (option.condition !== undefined && !option.condition()) {
                     continue

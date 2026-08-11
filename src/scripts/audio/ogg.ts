@@ -1,6 +1,6 @@
 import AudioPlayer from "@ts/audio/audio"
-import type { Song } from "@ts/types/song"
-import SongRequester from "@ts/song-requester"
+import type { Song } from "@ts/models/song"
+import SongProvider from "@ts/song-provider"
 
 export default class OggPlayer extends AudioPlayer {
     public get played(): number {
@@ -39,7 +39,7 @@ export default class OggPlayer extends AudioPlayer {
 
 
     public async Load(song: Song) {
-        const url = await SongRequester.GetAudioUrl(song.Id)
+        const url = await SongProvider.GetAudioUrl(song.id)
 
         this.audio.src = url
     }

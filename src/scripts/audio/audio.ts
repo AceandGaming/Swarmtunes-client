@@ -1,4 +1,4 @@
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 
 export default abstract class AudioPlayer {
     public abstract get played(): number

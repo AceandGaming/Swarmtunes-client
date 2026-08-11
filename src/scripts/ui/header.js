@@ -1,8 +1,9 @@
+// @ts-check
 import { LoadSVG } from "@ts/misc"
-import Network from "@ts/network"
 import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { MediaView } from "@ts/ui/content/media-view"
 import { Login } from "@ts/ui/popups/login"
+import { Logout } from "@ts/api/auth"
 
 let currentTheme = Number(localStorage.getItem("theme") ?? 0)
 
@@ -93,9 +94,7 @@ export function OnTabClick(event) {
 export function OnLoginButtonClick() {
     Login.Show()
 }
-export function OnLogoutButtonClick() {
-    Network.LogOut()
-}
+
 document.getElementById("header-login-button").onclick = OnLoginButtonClick
 
 export function UpdateTheme() {

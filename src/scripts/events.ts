@@ -1,7 +1,4 @@
-import Network from "@ts/network"
 import PlaybackController from "@ts/playback"
-import PlaylistManager from "@ts/playlist-manager"
-import SongQueue from "@ts/song-queue"
 import type { Song } from "@ts/types/song"
 import { MediaView, AlbumView } from "@ts/ui/content/media-view"
 
@@ -25,7 +22,7 @@ export function OnSongClick(song: Song) {
 
 export function OnPlaylistClick(event: any) {
     const id = event.target.dataset.id
-    PlaylistManager.DisplayPlaylist(id)
+    MediaView.Display(id)
 }
 
 

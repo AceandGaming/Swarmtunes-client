@@ -1,13 +1,11 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import { ListenForInputSubmit } from "@ts/misc"
-import Network from "@ts/network"
-import PlaylistManager from "@ts/playlist-manager"
-import { PlaylistRequester } from "@ts/playlist-requester"
-import type { Playlist } from "@ts/types/playlist"
+import type { Playlist } from "@ts/models/playlist"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
 import { ValidatePlaylistName } from "@ts/ui/popups/create-playlist"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
+import PlaylistProvider from "@ts/playlist-provider"
 
 export class RenamePlaylistPopup extends PopupWindow {
     static instance: RenamePlaylistPopup
@@ -51,28 +49,26 @@ export class RenamePlaylistPopup extends PopupWindow {
         }
 
         const name = this.input.value
-        const oldName = this.playlist.Title
+        const oldName = this.playlist.title
         if (ValidatePlaylistName(name).error) {
             return
         }
         this.Hide()
-        this.playlist.Title = name
-        PlaylistRequester.RenamePlaylist(this.playlist.Id, name)
-        PlaylistTab.Populate()
+
+        PlaylistProvider.RenamePlaylist(this.playlist.id, name).then(() => {
+            PlaylistTab.Populate()
+        })
         ToastManager.Toast(`Renamed <b>${ReplaceEmotesOfString(oldName)}</b> to <b>${ReplaceEmotesOfString(name)}</b>`, "none", 3, true)
     }
     // @ts-ignore
-    Show(id: id) {
-        if (!Network.IsLoggedIn()) {
-            return
-        }
-        const playlist = PlaylistManager.GetPlaylist(id)
+    async Show(id: id) {
+        const playlist = await PlaylistProvider.Get(id)
         if (!playlist) {
             throw new Error("Playlist not found")
         }
 
         super.Show()
-        this.input.value = playlist.Title
+        this.input.value = playlist.title
         this.error.textContent = ""
 
         this.playlist = playlist

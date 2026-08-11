@@ -1,7 +1,7 @@
 import { ListenForInputSubmit } from "@ts/misc"
-import Network from "@ts/network"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
+import { Login as NetLogin, Signup as NetSignup, GetMe } from "@ts/api/auth"
 
 function ValidateUsername(username: string) {
     if (username.length > 32 || username.length <= 0) {
@@ -50,8 +50,7 @@ export class Login {
     static AddLoginCallback(callback: (state: boolean) => void) {
         this.callbacks.push(callback)
     }
-    static CallLoginCallbacks() {
-        const isAdmin = Network.IsAdmin()
+    static CallLoginCallbacks(isAdmin: boolean = false) {
         for (const callback of this.callbacks) {
             callback(isAdmin)
         }
@@ -102,34 +101,34 @@ export class Login {
     static #OnLoginButtonClick() {
         const username = this.usernameInput.value
         const password = this.passwordInput.value
-        const cor = Network.Login(username, password)
-        cor.catch(() => { this.window.SetBusy(false); this.error.textContent = "An unknown error occurred" })
-        cor.then(output => {
-            if (typeof output === "string") {
-                this.error.textContent = output
-                this.window.SetBusy(false)
-                return
-            }
+        const cor = NetLogin(username, password)
+        cor.catch((e) => { this.window.SetBusy(false); this.error.textContent = e.message })
+        cor.then(user => {
             this.window.Hide()
-            this.CallLoginCallbacks()
+            this.CallLoginCallbacks(user.role === "admin")
             ToastManager.Toast("Logged in as " + username)
         })
     }
     static #OnSignupButtonClick() {
         const username = this.usernameInput.value
         const password = this.passwordInput.value
-        const cor = Network.Register(username, password)
-        cor.catch(() => { this.window.SetBusy(false); this.error.textContent = "An unknown error occurred" })
-        cor.then(output => {
-            if (typeof output === "string") {
-                this.error.textContent = output
-                this.window.SetBusy(false)
-                return
-            }
+        const cor = NetSignup(username, password)
+        cor.catch((e) => { this.window.SetBusy(false); this.error.textContent = e.message })
+        cor.then(user => {
             this.window.Hide()
-            this.CallLoginCallbacks()
+            this.CallLoginCallbacks(user.role === "admin")
             ToastManager.Toast("Logged in as " + username)
         })
+    }
+
+    static async CheckLogin() {
+        console.log("Checking login")
+        try {
+            const user = await GetMe()
+            console.log("Logged in", user)
+            this.CallLoginCallbacks(user.role === "admin")
+        }
+        catch { console.log("Not logged in") }
     }
 }
 export class LoginPopup extends PopupWindow {

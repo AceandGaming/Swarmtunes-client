@@ -1,5 +1,4 @@
 import * as colourThief from 'colorthief'
-import Network from "@ts/network"
 
 export default class ColourCache {
     private static cache = new Map<string, colourThief.Color>();

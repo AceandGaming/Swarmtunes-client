@@ -1,9 +1,8 @@
 import SwarmFMApi from '@aceandgaming/swarmfm-api'
 import type { SwarmFMMetadata } from '@aceandgaming/swarmfm-api'
 import AudioPlayer from '@ts/audio/audio'
-import Network from '@ts/network'
-
-import { Song } from '@ts/types/song'
+import { Song } from '@ts/models/song'
+import { GetCoverUrl } from '@ts/api/song'
 
 export default class SwarmFMRadio extends AudioPlayer {
     public get played(): number {
@@ -44,7 +43,7 @@ export default class SwarmFMRadio extends AudioPlayer {
             const hasNeuro = c.singer.includes("neuro")
             const hasEvil = c.singer.includes("evil")
 
-            let CoverUrl
+            let coverUrl
 
             if (!c.album_cover_id) {
                 let name
@@ -58,21 +57,28 @@ export default class SwarmFMRadio extends AudioPlayer {
                     name = "evil"
                 }
 
-                CoverUrl = Network.GetCover(`default/${name}`)
+                coverUrl = GetCoverUrl(`default/${name}`)
             }
             else {
-                CoverUrl = `https://swarmfm-assets.boopdev.com/album_covers/${c.album_cover_id}.png`
+                coverUrl = `https://swarmfm-assets.boopdev.com/album_covers/${c.album_cover_id}.png`
             }
 
-            const song = new Song({
-                id: "swarmfm",
-                title: c.name,
-                artist: c.artist,
-                singers: singers,
-                date: "2022-01-01",
-                isOriginal: false,
-                cover: CoverUrl
-            })
+            const song = new Song(
+                "swarmfm",
+                c.name,
+                undefined,
+                [{ name: c.artist }],
+                singers.map(a => ({ name: a })),
+                {},
+                new Date(Date.now()),
+                "cover",
+                c.duration,
+                true,
+                "swarmfm",
+                "",
+                false,
+                coverUrl
+            )
 
             onMetadata(song)
         })
@@ -80,8 +86,9 @@ export default class SwarmFMRadio extends AudioPlayer {
         document.body.append(this.iframe)
         this.iframe.style = `
             position: absolute;
-            left: 1000px;
-            top: 1000px;
+            top: 0;
+            z-index: -100;
+            pointer-events: none;
         `
     }
 

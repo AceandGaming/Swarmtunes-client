@@ -1,20 +1,7 @@
-import Network from "@ts/network"
 import { optimize } from 'svgo/browser'
 
 export function OnServerResyncButtonClick() {
     Network.ServerResync()
-}
-export function EnsureArray(arrayOrValue) {
-    if (Array.isArray(arrayOrValue)) {
-        return arrayOrValue
-    }
-    return [arrayOrValue]
-}
-export function EnsureValue(array) {
-    if (array.length === 1) {
-        return array[0]
-    }
-    return array
 }
 export function FormatTime(seconds) {
     if (!isFinite(seconds)) {
@@ -101,7 +88,7 @@ export async function* CursorIterator(store) {
 export function CloneSongs(songs) {
     const newSongs = []
     for (const song of songs) {
-        newSongs.push(song.Copy())
+        newSongs.push(song)
     }
     return newSongs
 }

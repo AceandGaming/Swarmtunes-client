@@ -1,5 +1,5 @@
 import PlaybackController from "@ts/playback"
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 
 function UpdateMediaMetadata(song: Song) {
     if (!navigator.mediaSession) {
@@ -7,11 +7,11 @@ function UpdateMediaMetadata(song: Song) {
     }
 
     navigator.mediaSession.metadata = new MediaMetadata({
-        title: song.Title,
-        artist: song.Artist,
-        album: song.Singers.join(", "),
+        title: song.title,
+        artist: song.displayArtists,
+        album: song.displaySingers,
         artwork: [
-            { src: song.CoverUrl },
+            { src: song.GetArtwork() },
         ]
     })
 }

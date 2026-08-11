@@ -1,5 +1,5 @@
 import { CloneSongs } from "@ts/misc"
-import type { Song } from "@ts/types/song"
+import type { Song } from "@ts/models/song"
 
 export default class SongQueue {
     public get queue() {
@@ -46,7 +46,7 @@ export default class SongQueue {
         this.UpdateQueue(shuffle)
         if (song) {
             if (shuffle) {
-                const index = this.songs.findIndex(s => s.Id === song.Id)
+                const index = this.songs.findIndex(s => s.id === song.id)
 
                 if (index !== -1) {
                     this.songs.splice(index, 1)
@@ -58,7 +58,7 @@ export default class SongQueue {
         }
     }
     public SkipTo(song: Song) {
-        const index = this.songs.findIndex((s) => s.Id == song.Id)
+        const index = this.songs.findIndex((s) => s.id == song.id)
         if (index == -1) {
             console.error("Song not found in queue")
             return

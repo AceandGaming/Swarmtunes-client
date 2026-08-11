@@ -17,6 +17,7 @@
 .song-list-item.unavaliable {
   filter: grayscale(100%) brightness(70%);
   color: var(--subtext-colour);
+  cursor: not-allowed;
 }
 
 

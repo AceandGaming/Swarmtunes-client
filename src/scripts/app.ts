@@ -1,9 +1,4 @@
-import Network from "@ts/network"
 import PlaybackController from "@ts/playback"
-import PlaylistDatabase from "@ts/playlist-db"
-import PlaylistManager from "@ts/playlist-manager"
-import SongDatabase from "@ts/song-db"
-import SongRequester from "@ts/song-requester"
 import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { PopulateDiscover, ShowErrorScreen } from "@ts/ui/content/discover"
 import { MediaView } from "@ts/ui/content/media-view"
@@ -22,6 +17,10 @@ import ToastManager from "@ts/ui/toast-manager"
 import { NowPlaying } from "@ts/ui/now-playing"
 import { InitMediaSession } from "@ts/media-session"
 import { mount } from "svelte"
+import { Logout } from "@ts/api/auth"
+import SongProvider from "@ts/song-provider"
+import { GetPlaylists } from "@ts/api/playlist"
+import PlaylistStore from "@ts/playlist-store"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
@@ -40,23 +39,7 @@ function HideLoading() {
 }
 
 async function AsyncCrap() {
-    if (!(await Network.CheckOnline())) {
-        const loading = document.querySelector("#loading-screen") as HTMLElement
-        loading.innerHTML = "Failed to connect to server!"
-        throw new Error("Failed to connect to server!")
-    }
-
-    await Promise.all([
-        Network.GetSession(),
-        SongDatabase.Initalise(),
-        PlaylistDatabase.Initalise()
-    ])
-
-    setInterval(() => {
-        if (!Network.IsOnline()) {
-            Network.CheckOnline()
-        }
-    }, 60000)
+    await Login.CheckLogin()
 }
 
 window.isNewSession = !sessionStorage.getItem('visited')
@@ -83,11 +66,17 @@ function OnLogin(isAdmin: boolean) {
     loginButton.textContent = "Log Out"
     loginButton.onclick = async () => {
         const confirmation = await ConfirmAction.AskUser("Are you sure you want to log out?")
-        if (confirmation) {
-            await Network.LogOut()
+        if (!confirmation) {
+            return
         }
+
+        await Logout()
+        location.reload()
     }
-    PlaylistManager.GetPlaylists().then(PlaylistTab.Populate)
+    GetPlaylists().then(playlists => {
+        PlaylistStore.Init(playlists)
+        PlaylistTab.Populate()
+    })
 
     const authElements = Array.from(
         document.getElementsByClassName("require-auth")
@@ -148,7 +137,7 @@ function LoadUrlBar() {
     //const playlistLink = urlParams.get("playlist")
 
     if (songId !== null) {
-        SongRequester.GetSong(songId).then((song) => {
+        SongProvider.Get(songId).then((song) => {
             if (song) {
                 PlaybackController.Play({ song, songs: [song] })
             }

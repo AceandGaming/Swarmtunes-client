@@ -17,14 +17,6 @@ declare global {
         isTablet: boolean
         isNewSession: boolean
     }
-
-    type Json =
-        | string
-        | number
-        | boolean
-        | null
-        | Json[]
-        | { [key: string]: Json }
     type id = string
 
     var YT: any
