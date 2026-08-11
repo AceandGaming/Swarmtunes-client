@@ -102,7 +102,7 @@ export default class SongFullscreen {
                 song.title,
                 song.displayArtists,
                 song.displaySingers,
-                song.artwork,
+                song.GetArtwork("large"),
                 song.displayDate
             )
 

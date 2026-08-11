@@ -43,7 +43,7 @@ export default class SwarmFMRadio extends AudioPlayer {
             const hasNeuro = c.singer.includes("neuro")
             const hasEvil = c.singer.includes("evil")
 
-            let CoverUrl
+            let coverUrl
 
             if (!c.album_cover_id) {
                 let name
@@ -57,10 +57,10 @@ export default class SwarmFMRadio extends AudioPlayer {
                     name = "evil"
                 }
 
-                CoverUrl = GetCoverUrl(`default/${name}`)
+                coverUrl = GetCoverUrl(`default/${name}`)
             }
             else {
-                CoverUrl = `https://swarmfm-assets.boopdev.com/album_covers/${c.album_cover_id}.png`
+                coverUrl = `https://swarmfm-assets.boopdev.com/album_covers/${c.album_cover_id}.png`
             }
 
             const song = new Song(
@@ -70,7 +70,14 @@ export default class SwarmFMRadio extends AudioPlayer {
                 [{ name: c.artist }],
                 singers.map(a => ({ name: a })),
                 {},
-                new Date(Date.now())
+                new Date(Date.now()),
+                "cover",
+                c.duration,
+                true,
+                "swarmfm",
+                "",
+                false,
+                coverUrl
             )
 
             onMetadata(song)
@@ -79,8 +86,9 @@ export default class SwarmFMRadio extends AudioPlayer {
         document.body.append(this.iframe)
         this.iframe.style = `
             position: absolute;
-            left: 1000px;
-            top: 1000px;
+            top: 0;
+            z-index: -100;
+            pointer-events: none;
         `
     }
 

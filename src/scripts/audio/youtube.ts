@@ -69,8 +69,9 @@ export default class YoutubePlayer extends AudioPlayer {
         iframe.sandbox = "allow-scripts allow-same-origin"
         iframe.style = `
             position: absolute;
-            left: 1000px;
-            top: 1000px;
+            top: 0;
+            z-index: -100;
+            pointer-events: none;
         `
 
         document.body.append(iframe)
@@ -121,11 +122,9 @@ export default class YoutubePlayer extends AudioPlayer {
 
     public async Load(song: Song) {
         await this.WaitForReady()
-        song = await song.GetDetailed()
 
-        const info = song.audioInfo!
-
-        if (!(info.type != "youtube")) {
+        const info = song.audioInfo
+        if (info.type != "youtube") {
             throw new Error("Song is not a youtube song")
         }
 

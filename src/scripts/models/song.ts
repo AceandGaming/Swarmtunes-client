@@ -1,3 +1,4 @@
+import type ShoppingBagDiscount from "@tabler/icons-svelte-runes/icons/shopping-bag-discount"
 import { GetCoverUrl, GetSong } from "@ts/api/song"
 import SongCache from "@ts/song-cache"
 
@@ -7,18 +8,7 @@ interface Artist {
 }
 
 type SongType = "original" | "collab" | "cover" | "mashup"
-type SongDetails = {
-    type: SongType
-
-    seconds: number
-
-    playable: boolean
-    audioType: string
-    audioId: string
-    drmProtected: boolean
-}
-
-type SongLiteDict = {
+type SongDict = {
     id: id,
     title: string,
     titleOriginal?: string,
@@ -28,8 +18,7 @@ type SongLiteDict = {
     artworks: Record<string, string>,
 
     dateReleased: string
-}
-type SongDetailsDict = {
+
     type: SongType
 
     seconds: number
@@ -39,7 +28,6 @@ type SongDetailsDict = {
     audioId: string
     drmProtected: boolean
 }
-type SongFullDict = SongLiteDict & SongDetailsDict
 
 
 export class Song {
@@ -53,10 +41,7 @@ export class Song {
         return this.singers.map(a => a.name).join(", ")
     }
     public get displayCredits() {
-        if (!this.details) {
-            return `${this.displayArtists} • ${this.displaySingers}`
-        }
-        switch (this.details.type) {
+        switch (this.type) {
             case "original":
             case "mashup":
                 return this.displayArtists
@@ -78,14 +63,11 @@ export class Song {
     }
 
     public get audioInfo() {
-        if (!this.details) {
-            return undefined
-        }
         return {
-            playable: this.details.playable,
-            type: this.details.audioType,
-            id: this.details.audioId,
-            drmProtected: this.details.drmProtected
+            playable: this.playable,
+            type: this.audioType,
+            id: this.audioId,
+            drmProtected: this.drmProtected
         }
     }
 
@@ -97,48 +79,36 @@ export class Song {
         public readonly singers: Artist[],
         public readonly artworks: Record<string, string>,
         public readonly dateReleased: Date,
-        private readonly details?: SongDetails
+        public readonly type: SongType,
+        public readonly seconds: number,
+        private readonly playable: boolean,
+        private readonly audioType: string,
+        private readonly audioId: string,
+        private readonly drmProtected: boolean,
+        private readonly artworkOverride?: string
     ) { }
-    public static FromDict(dict: SongLiteDict | SongFullDict) {
-        if ("type" in dict) {
-            return new Song(
-                dict.id,
-                dict.title,
-                dict.titleOriginal,
-                dict.artists,
-                dict.singers,
-                dict.artworks,
-                new Date(dict.dateReleased), {
-                type: dict.type,
-                seconds: dict.seconds,
-                playable: dict.playable,
-                audioType: dict.audioType,
-                audioId: dict.audioId,
-                drmProtected: dict.drmProtected
-            })
-        } else {
-            return new Song(
-                dict.id,
-                dict.title,
-                dict.title,
-                dict.artists,
-                dict.singers,
-                dict.artworks,
-                new Date(dict.dateReleased)
-            )
-        }
-    }
-    public async GetDetailed() {
-        if (this.details) {
-            return this
-        }
-
-        const song = await GetSong(this.id)
-        SongCache.Set(this.id, song)
-
-        return song
+    public static FromDict(dict: SongDict) {
+        return new Song(
+            dict.id,
+            dict.title,
+            dict.titleOriginal,
+            dict.artists,
+            dict.singers,
+            dict.artworks,
+            new Date(dict.dateReleased),
+            dict.type,
+            dict.seconds,
+            dict.playable,
+            dict.audioType,
+            dict.audioId,
+            dict.drmProtected
+        )
     }
     public GetArtwork(size: "small" | "medium" | "large" = "medium") {
+        if (this.artworkOverride) {
+            return this.artworkOverride
+        }
+
         //temp
         const artworks = Object.fromEntries(Object.entries(this.artworks).map(([key, value]) => [key, `${key}/${value}`]))
         const art = (
@@ -149,17 +119,5 @@ export class Song {
         )
 
         return GetCoverUrl(art, size)
-    }
-
-    public Copy() {
-        return new Song(
-            this.id,
-            this.title,
-            this.title,
-            this.artists,
-            this.singers,
-            this.artworks,
-            this.dateReleased
-        )
     }
 }

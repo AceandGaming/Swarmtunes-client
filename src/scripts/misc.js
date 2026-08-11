@@ -88,7 +88,7 @@ export async function* CursorIterator(store) {
 export function CloneSongs(songs) {
     const newSongs = []
     for (const song of songs) {
-        newSongs.push(song.Copy())
+        newSongs.push(song)
     }
     return newSongs
 }

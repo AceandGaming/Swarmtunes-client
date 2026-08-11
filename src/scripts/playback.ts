@@ -79,7 +79,6 @@ class PlaybackController {
 
     private async UpdatePlayer(song: Song): Promise<AudioPlayer> {
         let PlayerClass: typeof AudioPlayer
-        song = await song.GetDetailed()
 
         if (song.audioInfo!.type === "youtube") {
             PlayerClass = YoutubePlayer
@@ -124,6 +123,11 @@ class PlaybackController {
     }
 
     private async PlaySong(song: Song) {
+        if (!song.audioInfo.playable) {
+            this.Next()
+            return
+        }
+
         const player = await this.UpdatePlayer(song)
         await player.Load(song)
         this.Trigger("loadedSong", song, player.GetIframe())

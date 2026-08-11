@@ -19,11 +19,11 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div class="current-song-bar" onclick={OnClick} role="presentation">
     <div class="left">
-        <swarmtunes-cover src={PlaybackState.currentSong?.artwork}></swarmtunes-cover>
+        <swarmtunes-cover src={PlaybackState.currentSong?.GetArtwork("small")}></swarmtunes-cover>
         
         <div class="info">
             <span>{PlaybackState.currentSong?.title || "Title"}</span>
-            <span class="sub-text">{PlaybackState.currentSong?.displayCredits || "Artists"}</span>
+            <span class="sub-text">{PlaybackState.currentSong?.displayArtists || "Artists"}</span>
         </div>
     </div>
     <div class="bottom">
