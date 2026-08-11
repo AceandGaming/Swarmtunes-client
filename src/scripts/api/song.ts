@@ -1,5 +1,5 @@
 import { Song } from "@ts/models/song"
-import { Get, API_URL, Post } from "./network"
+import { Get, API_URL, Post, V1_API_URL } from "./network"
 
 
 export async function GetSong(id: id): Promise<Song> {
@@ -37,6 +37,20 @@ export async function ExportSong(id: id) {
     a.remove()
 }
 
+export async function ShareSongV1(id: id) {
+    const response = await fetch(`${V1_API_URL}/songs/${id}/share`)
+    if (!response.ok) {
+        throw new Error("Failed to get share link")
+    }
+
+    const json = await response.json()
+    if (!json.link) {
+        throw new Error("Failed to get share link")
+    }
+
+    return json.link
+}
+
 export async function Search(query: string, limit = 10): Promise<Song[]> {
     const params = new URLSearchParams({
         q: query,
@@ -61,3 +75,4 @@ export function GetCoverUrl(path?: string, size: "small" | "medium" | "large" = 
 
     return `${API_URL}/covers/${path}?size=${size}`
 }
+

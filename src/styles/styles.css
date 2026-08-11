@@ -78,56 +78,6 @@
     --icon-active: #924a4e;
 }
 
-:root[data-theme="darker"] {
-    --background-colour: black;
-    --background-sub-colour: black;
-    --text-colour: #555;
-    --subtext-colour: #333;
-    --header-colour: #111;
-    --header-tab-default: #0a0a0a;
-    --current-song-bar: #0a0a0a;
-    --seek-bar-played: #222;
-    --button-colour: #111;
-    --cover-background: black;
-    --icon-default: #333;
-    --icon-hover: #444;
-    --icon-active: #111;
-}
-
-:root[data-theme="darker"] swarmtunes-cover {
-    filter: brightness(0.3);
-}
-
-:root[data-theme="light"] {
-    --background-colour: #fafafa;
-    --background-sub-colour: #zzzzzz;
-    --text-colour: black;
-    --subtext-colour: black;
-    --header-colour: white;
-    --current-song-bar: white;
-    --icon-default: #222;
-    --icon-hover: #888;
-    --icon-active: #ccc;
-    --header-tab-default: #ddd;
-    --header-tab-active: #fafafa;
-    --button-colour: #ddd;
-    --textbox-fill: #ddd;
-    --textbox-border: #000;
-    filter: brightness(3);
-}
-
-:root[data-theme="bad eyesight"] {
-    filter: blur(10px) grayscale(80%) sepia(10%) contrast(0.9);
-}
-
-:root[data-theme="what"] {
-    --background-colour: rgb(107, 167, 110);
-    --header-colour: white;
-    --current-song-bar: white;
-    --text-colour: black;
-    filter: hue-rotate(180deg) contrast(2);
-}
-
 @font-face {
     font-family: "Neuro";
     src: url("/first-coffie.otf") format("opentype");

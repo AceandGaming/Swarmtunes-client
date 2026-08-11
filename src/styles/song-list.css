@@ -39,7 +39,7 @@
 
 .song-list-item > .title-artist {
   display: flex;
-  max-width: calc(100% - 100px);
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   margin-left: 8px;

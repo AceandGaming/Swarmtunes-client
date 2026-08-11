@@ -183,6 +183,7 @@ class PlaybackController {
         }
 
         this.player.played = time
+        this.Trigger("timeUpdate", time, this.player.duration)
     }
     public SeekPercent(percent: number) {
         if (!this.player) {
@@ -190,6 +191,7 @@ class PlaybackController {
         }
 
         this.player.played = this.player.duration * percent
+        this.Trigger("timeUpdate", this.player.duration * percent, this.player.duration)
     }
     public SeekSkip(relitive: number) {
         if (!this.player) {
@@ -197,6 +199,7 @@ class PlaybackController {
         }
 
         this.player.played += relitive
+        this.Trigger("timeUpdate", this.player.played, this.player.duration)
     }
 
     public SetShuffle(shuffle: boolean) {

@@ -151,8 +151,10 @@
     header swarmtunes-cover {
         transition: filter 0.1s ease-in-out;
     }
-    header > .cover:hover swarmtunes-cover {
-        filter: brightness(0.5);
+    @media (hover: hover) {
+        header > .cover:hover swarmtunes-cover {
+            filter: brightness(0.5);
+        }
     }
     header > .cover .overlay {
         position: absolute;

@@ -114,7 +114,10 @@ export default class YoutubePlayer extends AudioPlayer {
                 PlaybackController.Previous()
             }
 
-            onUpdate()
+            if (this.player.getPlayerState() == 1) {
+                onUpdate()
+            }
+
         }, 500)
     }
 

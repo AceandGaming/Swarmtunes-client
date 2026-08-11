@@ -24,7 +24,7 @@ function OnSearchValueChange(event: any) {
     }
     searchTimeout = setTimeout(() => {
         PopulateSearch(event.target.value)
-    }, 500)
+    }, 200)
 }
 function OnSearchChange(event: any) {
     if (searchTimeout) {
@@ -33,6 +33,7 @@ function OnSearchChange(event: any) {
     PopulateSearch(event.target.value, 50)
 }
 
-const bar = document.getElementById("search-bar")
-bar?.addEventListener("keydown", OnSearchValueChange)
-bar?.addEventListener("change", OnSearchChange)
+const bar = document.getElementById("search-bar") as HTMLInputElement
+bar.value = ""
+bar.addEventListener("keydown", OnSearchValueChange)
+bar.addEventListener("change", OnSearchChange)

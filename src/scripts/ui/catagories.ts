@@ -136,13 +136,13 @@ export class AlbumCatagory extends Catagory {
     AddChildren(display: HTMLElement) {
         for (const album of (this.items as Collection[])) {
             display.appendChild(CreateCatagoryItemElement(
-                album.title,
+                album.displayDate ?? album.title,
                 album.id,
                 album.GetArtwork(),
                 () => AlbumView.Show(album),
                 "album",
                 `<img src="/icons/disc.svg">`,
-                "Album"
+                "Collection"
             ))
         }
     }

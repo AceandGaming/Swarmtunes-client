@@ -14,8 +14,7 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                //target: "https://api.swarmtunes.com",
-                target: "http://localhost:8000",
+                target: "https://api.swarmtunes.com",
                 changeOrigin: true,
                 secure: true,
                 rewrite: (path) => path.replace(/^\/api/, ""),

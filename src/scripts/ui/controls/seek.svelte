@@ -10,9 +10,20 @@
     let bar: HTMLDivElement
     let seeking = false
 
-    function OnSeek(event: MouseEvent) {
+    function OnSeek(event: MouseEvent | TouchEvent) {
+        let x
+        if (event instanceof MouseEvent) {
+            x = event.clientX
+        }
+        else if (event instanceof TouchEvent) {
+            x = event.changedTouches[0].clientX
+        }
+        else {
+            return
+        }
         const rect = bar.getBoundingClientRect()
-        let fraction = (event.clientX - rect.left) / rect.width
+        
+        let fraction = (x - rect.left) / rect.width
         fraction = Math.min(1, Math.max(0, fraction))
 
         PlaybackState.SeekPercent(fraction)
@@ -23,7 +34,15 @@
                 OnSeek(event)
             }
         })
+        document.addEventListener("touchmove", (event) => {
+            if (seeking) {
+                OnSeek(event)
+            }
+        })
         document.addEventListener("mouseup", () => {
+            seeking = false
+        })
+        document.addEventListener("touchend", () => {
             seeking = false
         })
     })
@@ -41,6 +60,10 @@
         class="bar"
         bind:this={bar}
         onmousedown={(e) => {
+            seeking = true
+            OnSeek(e)
+        }}
+        ontouchstart={(e) => {
             seeking = true
             OnSeek(e)
         }}
