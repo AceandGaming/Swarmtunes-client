@@ -5,12 +5,15 @@ export default class ColourCache {
     private static pending = new Map<string, Promise<colourThief.Color>>();
 
     static GetColour(src: string): Promise<colourThief.Color> {
-        if (this.cache.has(src)) {
-            return Promise.resolve(this.cache.get(src)!)
+        const url = new URL(src)
+        const value = url.pathname
+
+        if (this.cache.has(value)) {
+            return Promise.resolve(this.cache.get(value)!)
         }
 
-        if (this.pending.has(src)) {
-            return this.pending.get(src)!
+        if (this.pending.has(value)) {
+            return this.pending.get(value)!
         }
 
         const promise = (async () => {
@@ -31,14 +34,14 @@ export default class ColourCache {
                     throw new Error(`Failed to extract colour for ${src}`)
                 }
 
-                this.cache.set(src, color)
+                this.cache.set(value, color)
                 return color
             } finally {
-                this.pending.delete(src)
+                this.pending.delete(value)
             }
         })()
 
-        this.pending.set(src, promise)
+        this.pending.set(value, promise)
         return promise
     }
 }

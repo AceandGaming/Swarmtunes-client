@@ -4,7 +4,7 @@ import { PopulateDiscover, ShowErrorScreen } from "@ts/ui/content/discover"
 import { MediaView } from "@ts/ui/content/media-view"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
 import { PopulateSearch } from "@ts/ui/content/search"
-import SongFullscreen from "@ts/ui/content/song-fullscreen"
+import SongFullscreen from "@ts/ui/content/fullscreen.svelte"
 import { ContextMenu } from "@ts/ui/context-menu"
 import "@ts/context-menus"
 import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
@@ -108,7 +108,7 @@ function CreateUI() {
     ContextMenu.Initalise()
 
     MediaView.Create()
-    SongFullscreen.Create()
+    mount(SongFullscreen, { target: document.body })
     NowPlaying.Create()
 
     Login.CreateWindow()

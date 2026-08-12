@@ -7,13 +7,19 @@
     let showSlider = $state(false)
 
     onMount(() => {
-        document.addEventListener("mousedown", (event) => {
+        function OnClick(event: MouseEvent) {
             if (volumeButton.contains(event.target as Node)) {
                 return
             }
 
             showSlider = false
-        })
+        }
+
+        document.addEventListener("mousedown", OnClick)
+
+        return () => {
+            document.removeEventListener("mousedown", OnClick)
+        }
     })
     
 </script>

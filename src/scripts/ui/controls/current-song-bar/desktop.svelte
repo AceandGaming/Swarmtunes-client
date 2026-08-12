@@ -4,7 +4,7 @@
     import PlaybackState from "@ts/playback.svelte"
     import Seek from "@ts/ui/controls/seek.svelte"
     import MediaControls from "@ts/ui/controls/media-controls.svelte"
-    import SongFullscreen from "@ts/ui/content/song-fullscreen";
+    import SongFullscreen from "@ts/ui/content/fullscreen.svelte.ts"
     import VolumeButton from "@ts/ui/controls/volume-button.svelte";
     import "@ts/ui/cover"
 </script>

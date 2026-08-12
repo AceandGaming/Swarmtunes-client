@@ -2,12 +2,12 @@
     import PlaybackState from "@ts/playback.svelte"
     import Seek from "@ts/ui/controls/seek.svelte"
     import MediaControls from "@ts/ui/controls/media-controls.svelte"
-    import SongFullscreen from "@ts/ui/content/song-fullscreen";
+    import SongFullscreen from "@ts/ui/content/fullscreen.svelte.ts";
     import "@ts/ui/cover"
 
     let controls: HTMLDivElement
 
-    function OnClick(event: MouseEvent) {
+    function OnClick(event: TouchEvent) {
         if (controls.contains(event.target as Node)) {
             return
         }
@@ -17,7 +17,7 @@
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
-<div class="current-song-bar" onclick={OnClick} role="presentation">
+<div class="current-song-bar" ontouchend={OnClick} ontouchmove={OnClick} role="presentation">
     <div class="left">
         <swarmtunes-cover src={PlaybackState.currentSong?.GetArtwork("small")}></swarmtunes-cover>
         
