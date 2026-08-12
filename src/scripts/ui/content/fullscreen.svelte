@@ -143,6 +143,7 @@
 
         position: fixed;
         inset: 0;
+        z-index: 10;
 
         display: grid;
         padding: var(--gap);
