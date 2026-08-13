@@ -96,10 +96,10 @@
 </div>
 
 <style>
-    * {
+    #fullscreen * {
         box-sizing: border-box;
     }
-    :global(*) {
+    #fullscreen :global(*) {
         color: white !important;
     }
 
