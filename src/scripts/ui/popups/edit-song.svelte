@@ -2,7 +2,7 @@
     import { Song } from "@ts/models/song"
     import { onMount } from "svelte"
     import { GetCoverUrl } from "@ts/api/song"
-    import "@ts/ui/cover"
+    import "@ts/ui/cover.svelte"
 
     const { song }: {song: Song} = $props()
 

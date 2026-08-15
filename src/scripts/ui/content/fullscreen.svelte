@@ -1,27 +1,31 @@
 <script lang="ts">
     import { IconPlaylistAdd, IconX } from "@tabler/icons-svelte-runes";
-    import  Cover  from "@ts/ui/cover"
+    import Cover from "@ts/ui/cover.svelte"
     import Seek from "@ts/ui/controls/seek.svelte";
     import MediaControls from "@ts/ui/controls/media-controls.svelte";
     import Playback from "@ts/playback.svelte"
     import fullscreen from "./fullscreen.svelte.ts"
     import { onMount } from "svelte";
-
-    let cover: Cover
+    import type { Color } from "colorthief"
+    
+    let colour: Color | undefined = $state()
 
     let topColour = $state("var(--background)");
     let bottomColour = $state("var(--background)");
+
+    $effect(() => {
+        if (!colour) {
+            return
+        }
+        const hsl = colour.hsl()
+        topColour = `hsl(${hsl.h}, ${hsl.s * 2}%, ${Math.min(hsl.l * 1.2, 80)}%)`
+        bottomColour = `hsl(${hsl.h}, ${hsl.s * 1.5}%, ${Math.min(hsl.l / 1.5, 40)}%)`
+    })
 
     let offset = $state(0)
     let startOffset = 0
 
     onMount(() => {
-        async function OnLoad() {
-            const colour = (await cover.GetColor()).hsl()
-
-            topColour = `hsl(${colour.h}, ${colour.s * 2}%, ${Math.min(colour.l * 1.2, 80)}%)`
-            bottomColour = `hsl(${colour.h}, ${colour.s * 1.5}%, ${Math.min(colour.l / 1.5, 40)}%)`
-        }
         function TouchStart(e: TouchEvent) {
             offset = 0
             startOffset = e.touches[0].clientY
@@ -43,16 +47,12 @@
             }
             offset = 0
         }
-    
-        cover.addEventListener("load", OnLoad)
 
         window.addEventListener("touchstart", TouchStart)
         window.addEventListener("touchmove", TouchMove)
         window.addEventListener("touchend", TouchEnd)
 
         return () => {
-            cover.removeEventListener("load", OnLoad)
-
             window.removeEventListener("touchstart", TouchStart)
             window.removeEventListener("touchmove", TouchMove)
             window.removeEventListener("touchend", TouchEnd)
@@ -74,7 +74,7 @@
 >
     <div class="date">{Playback.currentSong?.displayDate ?? ""}</div>
     <div class="art-container">
-        <swarmtunes-cover bind:this={cover} src={Playback.currentSong?.GetArtwork("large")}></swarmtunes-cover>
+        <Cover item={Playback.currentSong} bind:colour />
         
         <span style="font-size: medium; font-weight: bold">{Playback.currentSong?.displaySingers ?? ""}</span>
     </div>
@@ -219,7 +219,7 @@
 
         gap: 20px;
     }
-    .art-container swarmtunes-cover {
+    .art-container > :global(.cover){
         max-width: 100%;
         max-height: 100%;
 
@@ -273,7 +273,7 @@
             display: block;
         }
 
-        .art-container swarmtunes-cover {
+        .art-container > :global(.cover) {
             width: auto;
             height: 100%;
         }

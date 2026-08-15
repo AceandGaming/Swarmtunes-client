@@ -3,7 +3,7 @@
 
     import type { Song } from "@ts/models/song"
     import SongList from "@ts/ui/song-list.svelte"
-    import "@ts/ui/cover"
+    import Cover from "@ts/ui/cover.svelte"
     import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
     import PlaybackController from "@ts/playback"
 
@@ -71,7 +71,7 @@
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         
         <div class="cover" onclick={OnCoverClick} role="button" tabindex="0">
-            <swarmtunes-cover src={artworkUrl}></swarmtunes-cover>
+            <Cover item={{GetArtwork: () => artworkUrl}} class="cover-image"/>
             <div class="overlay"><IconPlayerPlayFilled size="unset" /></div>
         </div>
         <div class="text-container">
@@ -148,11 +148,13 @@
         margin: auto;
         cursor: pointer;
     }
-    header swarmtunes-cover {
+    header :global(.cover-image) {
+        width: 100%;
+        height: 100%;
         transition: filter 0.1s ease-in-out;
     }
     @media (hover: hover) {
-        header > .cover:hover swarmtunes-cover {
+        header > .cover:hover :global(.cover-image) {
             filter: brightness(0.5);
         }
     }

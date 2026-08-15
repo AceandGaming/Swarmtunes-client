@@ -1,4 +1,3 @@
-import "@ts/ui/cover"
 import "@ts/ui/toast"
 import "@ts/ui/toast-manager"
 import "@ts/ui/catagories"

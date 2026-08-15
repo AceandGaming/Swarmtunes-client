@@ -5,7 +5,7 @@ export default class ColourCache {
     private static pending = new Map<string, Promise<colourThief.Color>>();
 
     static GetColour(src: string): Promise<colourThief.Color> {
-        const url = new URL(src)
+        const url = new URL(src, window.location.href)
         const value = url.pathname
 
         if (this.cache.has(value)) {

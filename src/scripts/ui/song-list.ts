@@ -2,7 +2,7 @@ import { OnSongClick } from "@ts/events"
 import { LoadSVG } from "@ts/misc"
 import type { Song } from "@ts/models/song"
 import { ContextMenu } from "@ts/ui/context-menu"
-import type Cover from "@ts/ui/cover"
+import Cover from "@ts/ui/cover"
 
 function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => void, showDate = false, catagory = "song") {
     const element = document.createElement("li")

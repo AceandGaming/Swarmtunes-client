@@ -2,10 +2,10 @@ import { ReplaceEmotesOfString } from "@ts/emote"
 import PlaybackController from "@ts/playback"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import { PlaylistView, AlbumView } from "@ts/ui/content/media-view"
-import type Cover from "@ts/ui/cover"
 import type { Song } from "@ts/models/song"
 import type { Collection } from "@ts/models/collection"
 import type { Playlist } from "@ts/models/playlist"
+import type Cover from "@ts/ui/cover"
 
 
 function CreateCatagoryItemImage(element: HTMLElement, source: string) {

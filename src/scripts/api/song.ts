@@ -68,11 +68,7 @@ export function GetSongAudioUrl(id: id) {
     return `${API_URL}/songs/${id}/audio`
 }
 
-export function GetCoverUrl(path?: string, size: "small" | "medium" | "large" = "medium") {
-    if (!path) {
-        return "/no-song.png"
-    }
-
+export function GetCoverUrl(path: string, size: "small" | "medium" | "large" = "medium") {
     return `${API_URL}/covers/${path}?size=${size}`
 }
 

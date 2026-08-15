@@ -2,6 +2,9 @@ import css from "@css/cover.css?inline"
 import ColourCache from "@ts/colour-cache"
 import type { Color } from "colorthief"
 
+/**
+ * @deprecated Use the Svelte <Cover> component instead.
+ */
 export default class Cover extends HTMLElement {
     static get observedAttributes() { return ["src"] }
 

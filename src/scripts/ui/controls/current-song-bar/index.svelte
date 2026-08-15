@@ -1,5 +1,4 @@
 <script lang="ts">
-    import "@ts/ui/cover"
     import { onMount } from "svelte";
     import Desktop from "./desktop.svelte"
     import Mobile from "./mobile.svelte"

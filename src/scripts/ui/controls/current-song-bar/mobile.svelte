@@ -3,7 +3,7 @@
     import Seek from "@ts/ui/controls/seek.svelte"
     import MediaControls from "@ts/ui/controls/media-controls.svelte"
     import SongFullscreen from "@ts/ui/content/fullscreen.svelte.ts";
-    import "@ts/ui/cover"
+    import Cover from "@ts/ui/cover.svelte"
 
     let controls: HTMLDivElement
 
@@ -19,7 +19,7 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div class="current-song-bar" ontouchend={OnClick} ontouchmove={OnClick} role="presentation">
     <div class="left">
-        <swarmtunes-cover src={PlaybackState.currentSong?.GetArtwork("small")}></swarmtunes-cover>
+        <Cover item={PlaybackState.currentSong} />
         
         <div class="info">
             <span>{PlaybackState.currentSong?.title || "Title"}</span>
@@ -61,10 +61,10 @@
         align-items: center;
 
         gap: 5px;
+        min-width: 0;
     }
-    .left swarmtunes-cover {
+    .left :global(.cover) {
         height: 100%;
-        aspect-ratio: 1;
     }
     .left .info {
         width: 80%;

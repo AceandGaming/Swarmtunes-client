@@ -6,12 +6,12 @@
     import MediaControls from "@ts/ui/controls/media-controls.svelte"
     import SongFullscreen from "@ts/ui/content/fullscreen.svelte.ts"
     import VolumeButton from "@ts/ui/controls/volume-button.svelte";
-    import "@ts/ui/cover"
+    import Cover from "@ts/ui/cover.svelte"
 </script>
 
 <div class="current-song-bar">
     <div class="left">
-        <swarmtunes-cover src={PlaybackState.currentSong?.GetArtwork()}></swarmtunes-cover>
+        <Cover item={PlaybackState.currentSong} />
 
         <div>
             <span>Covered By:</span>
