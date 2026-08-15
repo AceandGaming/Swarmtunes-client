@@ -2,7 +2,7 @@
     import PlaybackState from "@ts/playback.svelte"
     import { IconPlayerTrackNextFilled, IconPlayerTrackPrevFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconPlaylistAdd, IconRepeat, IconArrowsShuffle } from "@tabler/icons-svelte-runes";
 
-    let { extraButtons = true, iconSize = 24, gap = 5} = $props()
+    let { extraButtons = true, iconSize = 24, gap = 5, class: className = "media-controls"} = $props()
     let shuffleFlipping = $state(false)
 
 </script>
@@ -20,7 +20,7 @@
 {/snippet}
 
 <div 
-    class="media-controls" 
+    class={className}
     style:--size="{iconSize}px"
     style:--gap="{gap}px"
 >

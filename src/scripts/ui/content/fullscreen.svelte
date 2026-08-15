@@ -8,10 +8,13 @@
     import { onMount } from "svelte";
     import type { Color } from "colorthief"
     
+    let fullscreenElement: HTMLDivElement
     let colour: Color | undefined = $state()
 
     let topColour = $state("var(--background)");
     let bottomColour = $state("var(--background)");
+
+    let wakeLock: any
 
     $effect(() => {
         if (!colour) {
@@ -20,6 +23,50 @@
         const hsl = colour.hsl()
         topColour = `hsl(${hsl.h}, ${hsl.s * 2}%, ${Math.min(hsl.l * 1.2, 80)}%)`
         bottomColour = `hsl(${hsl.h}, ${hsl.s * 1.5}%, ${Math.min(hsl.l / 1.5, 40)}%)`
+    })
+
+    async function UpdateWakeLock() {
+        if (!('wakeLock' in navigator)) {
+            console.warn('Screen Wake Lock API not supported.');
+            return
+        }
+        if (document.visibilityState !== 'visible') {
+            return
+        }
+
+        if (fullscreen.visible) {
+            if (wakeLock) {
+                return
+            }
+            console.log("Requesting wake lock")
+
+            wakeLock = await navigator.wakeLock.request('screen')
+            wakeLock.addEventListener('release', () => {
+                console.log("Wake lock released")
+                wakeLock = undefined
+                if (fullscreen.visible) {
+                    UpdateWakeLock()
+                }
+            })
+            console.log("Wake lock acquired")
+        }
+        else {
+            console.log("Releasing wake lock")
+            wakeLock?.release()
+            wakeLock = undefined
+        }
+    }
+
+    $effect(() => {
+        UpdateWakeLock()
+        if (fullscreen.visible) {
+            fullscreenElement.requestFullscreen()
+        }
+        else {
+            if (document.fullscreenElement === fullscreenElement) {
+                document.exitFullscreen()
+            }
+        }
     })
 
     let offset = $state(0)
@@ -47,12 +94,21 @@
             }
             offset = 0
         }
+        function FullscreenChange() {
+            if (document.fullscreenElement != fullscreenElement) {
+                fullscreen.Hide()
+            }
+        }
 
+        document.addEventListener("fullscreenchange", FullscreenChange)
+        document.addEventListener("visibilitychange", UpdateWakeLock)
         window.addEventListener("touchstart", TouchStart)
         window.addEventListener("touchmove", TouchMove)
         window.addEventListener("touchend", TouchEnd)
 
         return () => {
+            document.removeEventListener("fullscreenchange", FullscreenChange)
+            document.removeEventListener("visibilitychange", UpdateWakeLock)
             window.removeEventListener("touchstart", TouchStart)
             window.removeEventListener("touchmove", TouchMove)
             window.removeEventListener("touchend", TouchEnd)
@@ -71,6 +127,8 @@
     style:--tc={topColour}
     style:--bc={bottomColour}
     style:--offset={`${offset}px`}
+
+    bind:this={fullscreenElement}
 >
     <div class="date">{Playback.currentSong?.displayDate ?? ""}</div>
     <div class="art-container">
@@ -86,10 +144,8 @@
         </div>
         <button class="add-to-playlist icon-button"><IconPlaylistAdd size="unset"/></button>
     </div>
-    <div class="controls">
-        <Seek thinkness={10} />
-        <MediaControls iconSize={40} />
-    </div>
+    <Seek thinkness={10} />
+    <MediaControls iconSize={40} />
 
     <button class="close icon-button" onclick={fullscreen.Hide}><IconX size={40} /></button>
     <div class="dragger" ontouchend={fullscreen.Hide}><span></span></div>
@@ -110,7 +166,7 @@
     }
     .dragger {
         position: absolute;
-        top: var(--gap);
+        top: 0;
         left: 50%;
         transform: translateX(-50%);
 
@@ -139,7 +195,7 @@
     }
 
     #fullscreen {
-        --gap: clamp(30px, 8vmin, 80px);
+        --gap: clamp(30px, 8vw, 80px);
 
         position: fixed;
         inset: 0;
@@ -154,12 +210,13 @@
         transform: translateY(100vh);
         transition: --tc 1s ease, --bc 1s ease, transform 0.2s ease;
         
-        grid-template-rows: auto 1fr auto;
-        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 2fr auto 1fr;
+        grid-template-columns: auto 1fr;
         grid-template-areas:
         "date date"
         "art info"
-        "art controls";
+        "art controls"
+        "art seek";
     }
     #fullscreen.visible {
         transform: translateY(var(--offset));
@@ -181,6 +238,9 @@
 
         display: flex;
         flex-direction: row;
+
+        align-items: center;
+
         gap: 10px;
     }
     .info-container .info {
@@ -220,24 +280,21 @@
         gap: 20px;
     }
     .art-container > :global(.cover){
-        max-width: 100%;
-        max-height: 100%;
-
-        height: 100%;
+        width: min(40vw, 80dvh - var(--gap));
     }
 
-    .controls {
+    #fullscreen > :global(.seek) {
+        grid-area: seek;
+    }
+    #fullscreen > :global(.media-controls) {
         grid-area: controls;
-
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap);
-    }
-    .controls > :global(:last-child) {
-        margin: auto;
     }
 
-    @media (max-width: 700px) or (max-height: 700px) {
+    @media (max-width: 500px) or (max-height: 500px) {
+        #fullscreen {
+            --gap: clamp(10px, 1dvh, 80px);
+            padding: max(var(--gap), 4dvh) var(--gap);
+        }
         .close {
             display: none;
         }
@@ -251,19 +308,39 @@
         .info-container .artists {
             font-size: medium;
         }
+        .art-container {
+            gap: 2px;
+        }
     }
 
-    @media (aspect-ratio < 1) {
+    @media (aspect-ratio < 1.4) {
         #fullscreen {
-            padding: 8vh var(--gap);
+            --gap: clamp(30px, 8vmin, 80px);
+
+            grid-template-rows: auto 1fr 1fr auto;
+            grid-template-columns: auto 1fr;
+            grid-template-areas:
+            "date date"
+            "art info"
+            "art controls"
+            "seek seek";
+        }
+    }
+
+    @media (aspect-ratio < 0.9) {
+        #fullscreen {
+
             background: linear-gradient(to bottom, var(--tc), var(--bc));
 
-            grid-template-rows: auto 45vh auto 1fr;
-            grid-template-columns: 1fr;
+            justify-content: center;
+
+            grid-template-rows: repeat(5, auto);
+            grid-template-columns: min-content;
             grid-template-areas:
             "date"
             "art"
             "info"
+            "seek"
             "controls";
         }
         .info-container .info {
@@ -273,9 +350,8 @@
             display: block;
         }
 
-        .art-container > :global(.cover) {
-            width: auto;
-            height: 100%;
+        .art-container > :global(.cover){
+            width: min(45vh, 80vw);
         }
     }
 </style>

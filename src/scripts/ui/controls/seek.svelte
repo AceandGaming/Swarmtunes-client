@@ -3,7 +3,7 @@
     import { FormatTime } from "@ts/misc"
     import { onMount } from "svelte";
 
-    let { showText = true, thinkness = 8 } = $props()
+    let { showText = true, thinkness = 8, class: className = "seek" } = $props()
 
     let playedPercent = $derived(PlaybackState.played / PlaybackState.duration || 0)
 
@@ -49,7 +49,7 @@
 </script>
 
 <div 
-    class="seek"
+    class={className}
     style:--played={`${(playedPercent * 100)}%`}
     style:--thinkness={`${thinkness}px`}
 >
