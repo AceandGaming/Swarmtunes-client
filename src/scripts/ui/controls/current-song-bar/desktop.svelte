@@ -69,7 +69,7 @@
         display: block;
         white-space: pre-line;
     }
-    .left swarmtunes-cover {
+    .left :global(.cover) {
         height: 100%;
         aspect-ratio: 1;
     }

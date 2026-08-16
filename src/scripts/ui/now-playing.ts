@@ -12,7 +12,7 @@ export class NowPlaying {
     private static element = document.querySelector("#now-playing") as HTMLDivElement
 
     public static Create() {
-        this.songlist = new SongList([], OnNowPlayingItemClick, "now-playing-item", false, 30)
+        this.songlist = new SongList([], OnNowPlayingItemClick, "song", false, 30)
 
         const sortable = new Sortable(this.songlist.element, {
             animation: 150,

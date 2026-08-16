@@ -1,59 +1,62 @@
-import SongProvider from "@ts/song-provider"
-import { ContextGroup, ContextMenu, ContextOption } from "@ts/ui/context-menu"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import PlaybackController from "@ts/playback"
 import PlaylistProvider from "@ts/playlist-provider"
-import { MediaView } from "@ts/ui/content/media-view"
 import { ShareSongV1, ExportSong } from "@ts/api/song"
 import { ShareWindow } from "@ts/ui/popups/share-link"
+import { ContextMenuGroup, type ContextMenuOption } from "@ts/context-menu.svelte"
+import { IconPlus, IconShare3, IconPlaylistAdd, IconFileExport } from "@tabler/icons-svelte-runes"
+import type { Song } from "@ts/models/song"
 
-ContextMenu.AddCategory("song", [
-    new ContextGroup("queue", false, false, [
-        new ContextOption("Add to Queue", "/icons/plus.svg", async (event: { id: string }) => {
-            const song = await SongProvider.Get(event.id)
-            if (!song) {
-                return
-            }
 
-            PlaybackController.AddToQueue(song)
-        }),
-    ]),
-    new ContextGroup("playlist", true, false, [
-        new ContextOption("Add to Playlist", "/icons/playlist-add.svg", async (event: { id: string }) => {
-            const playlistid = await SelectPlaylist.AskUser()
-            if (playlistid === null) {
-                return
-            }
+export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
+    return [
+        {
+            label: "Add to Queue",
+            group: ContextMenuGroup.Queue,
+            icon: IconPlus,
+            Action: () => PlaybackController.AddToQueue(song)
+        },
+        {
+            label: "Add to Playlist",
+            group: ContextMenuGroup.Playlist,
+            icon: IconPlaylistAdd,
+            Action: async () => {
+                const playlistid = await SelectPlaylist.AskUser()
+                if (!playlistid) {
+                    return
+                }
 
-            try {
-                await PlaylistProvider.AddSongsToPlaylist(playlistid, [event.id])
+                try {
+                    await PlaylistProvider.AddSongsToPlaylist(playlistid, [song.id])
+                    ToastManager.Toast(`Added song to playlist`, "none", 3, true)
+                } catch (e) {
+                    ToastManager.Toast("Failed to add songs to playlist", "error")
+                    console.error(e)
+                }
             }
-            catch (e) {
-                ToastManager.Toast("Failed to add song to playlist", "error")
-                console.error(e)
+        },
+        {
+            label: "Share",
+            group: ContextMenuGroup.Share,
+            icon: IconShare3,
+            Action: async () => {
+                const url = "https://share.swarmtunes.com/?s=" + (await ShareSongV1(song.id))
+                const corutine = navigator.clipboard.writeText(url)
+                corutine.then(() => {
+                    ToastManager.Toast("Copied link to clipboard")
+                })
+                corutine.catch(() => {
+                    const window = new ShareWindow(url)
+                    window.Show()
+                })
             }
-            if (MediaView.media?.id == playlistid && MediaView.isVisible) {
-                MediaView.Update(await PlaylistProvider.Get(playlistid))
-            }
-
-            ToastManager.Toast(`Added song to playlist`)
-        })
-    ]),
-    new ContextGroup("share", false, true, [
-        new ContextOption("Share", "/icons/share.svg", async (event: { id: string }) => {
-            const url = "https://share.swarmtunes.com/?s=" + (await ShareSongV1(event.id))
-            const corutine = navigator.clipboard.writeText(url)
-            corutine.then(() => {
-                ToastManager.Toast("Copied link to clipboard")
-            })
-            corutine.catch(() => {
-                const window = new ShareWindow(url)
-                window.Show()
-            })
-        }),
-        new ContextOption("Export", "/icons/file-export.svg", (event: { id: string }) => {
-            ExportSong(event.id)
-        }),
-    ])
-])
+        },
+        {
+            label: "Export",
+            group: ContextMenuGroup.Share,
+            icon: IconFileExport,
+            Action: () => ExportSong(song.id)
+        }
+    ]
+}

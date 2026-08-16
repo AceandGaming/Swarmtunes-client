@@ -5,8 +5,7 @@ import { MediaView } from "@ts/ui/content/media-view"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
 import { PopulateSearch } from "@ts/ui/content/search"
 import SongFullscreen from "@ts/ui/content/fullscreen.svelte"
-import { ContextMenu } from "@ts/ui/context-menu"
-import "@ts/context-menus"
+import ContextMenu from "@ts/ui/content-menu/index.svelte"
 import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
 import { CreateButton, ShowContentWindow, UpdateTheme } from "@ts/ui/header"
 import ConfirmAction from "@ts/ui/popups/confirm-action"
@@ -105,7 +104,8 @@ function CreateUI() {
         CreateButton(true)
     }
     PopulateSearch("")
-    ContextMenu.Initalise()
+    mount(ContextMenu, { target: document.body })
+    document.addEventListener("contextmenu", (e) => e.preventDefault())
 
     MediaView.Create()
     mount(SongFullscreen, { target: document.body })

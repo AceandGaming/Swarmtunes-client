@@ -80,11 +80,14 @@ export class Collection {
     public GetSongIds() {
         return this.songIds ?? []
     }
-    public async GetSongs(): Promise<Song[]> {
+    public async LoadSongs() {
         if (this.songIds == undefined) {
             this.songIds = await GetSongsOfCollection(this.id)
         }
+    }
+    public async GetSongs(): Promise<Song[]> {
+        await this.LoadSongs()
 
-        return await SongProvider.GetMany(this.songIds ?? [])
+        return await SongProvider.GetMany(this.GetSongIds())
     }
 }

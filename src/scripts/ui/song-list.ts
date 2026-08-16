@@ -1,8 +1,13 @@
-import { OnSongClick } from "@ts/events"
 import { LoadSVG } from "@ts/misc"
 import type { Song } from "@ts/models/song"
-import { ContextMenu } from "@ts/ui/context-menu"
 import Cover from "@ts/ui/cover"
+import PlaybackController from "@ts/playback"
+import { ShowContextMenu } from "@ts/context-menus/legacy"
+import { MobileHold } from "@ts/mobile-hold"
+
+export function OnSongClick(song: Song) {
+    PlaybackController.Play({ song, songs: [song] })
+}
 
 function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => void, showDate = false, catagory = "song") {
     const element = document.createElement("li")
@@ -37,10 +42,18 @@ function CreateSongListItemElement(song: Song, onClickEvent: (song: Song) => voi
         const tripleDot = document.createElement('button')
         tripleDot.append(LoadSVG('/icons/triple-dot.svg'))
         tripleDot.classList.add('icon-button', 'triple-dot')
-        ContextMenu.AttachButton(tripleDot, element)
+        //ContextMenu.AttachButton(tripleDot, element)
 
         element.append(date, tripleDot)
     }
+
+    element.addEventListener("contextmenu", (e) => {
+        ShowContextMenu(song.id, catagory, e.clientX, e.clientY)
+    })
+    MobileHold(element, (e) => {
+        ShowContextMenu(song.id, catagory, e.touches[0].clientX, e.touches[0].clientY)
+    })
+
     return element
 }
 export class SongList {

@@ -6,7 +6,8 @@ import type { Song } from "@ts/models/song"
 import type { Collection } from "@ts/models/collection"
 import type { Playlist } from "@ts/models/playlist"
 import type Cover from "@ts/ui/cover"
-
+import { ShowContextMenu } from "@ts/context-menus/legacy"
+import { MobileHold } from "@ts/mobile-hold"
 
 function CreateCatagoryItemImage(element: HTMLElement, source: string) {
     const image = document.createElement("swarmtunes-cover") as Cover
@@ -68,6 +69,14 @@ function CreateCatagoryItemElement(title: string, id: id, imageSource: string, o
     span.innerHTML = ReplaceEmotesOfString(title)
     element.appendChild(span)
 
+    element.addEventListener("contextmenu", (e) => {
+        ShowContextMenu(id, type, e.clientX, e.clientY)
+    })
+    MobileHold(element, (e) => {
+        ShowContextMenu(id, type, e.touches[0].clientX, e.touches[0].clientY)
+    })
+
+
     return element
 }
 
@@ -106,6 +115,7 @@ export abstract class Catagory {
         setTimeout(() => {
             CheckCatagoryOverflow(element, wrapper)
         }, 200)
+
         return element
     }
     abstract AddChildren(display: HTMLElement): void
