@@ -1,6 +1,5 @@
 <script lang="ts">
     import PlaybackState from "@ts/playback.svelte"
-    import { FormatTime } from "@ts/misc"
     import { onMount } from "svelte";
 
     let { showText = true, thinkness = 8, class: className = "seek" } = $props()
@@ -27,6 +26,16 @@
         fraction = Math.min(1, Math.max(0, fraction))
 
         PlaybackState.SeekPercent(fraction)
+    }
+    function FormatTime(seconds: number) {
+        if (!isFinite(seconds)) {
+            return "0:00"
+        }
+        const absSeconds = Math.abs(seconds)
+
+        const minutes = Math.floor(absSeconds / 60)
+        const secs = Math.floor(absSeconds % 60).toString().padStart(2, '0')
+        return `${seconds < 0 ? "-" : ""}${minutes}:${secs}`
     }
     onMount(() => {
         document.addEventListener("mousemove", (event) => {

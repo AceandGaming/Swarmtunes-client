@@ -1,9 +1,7 @@
-// @ts-check
 import { LoadSVG } from "@ts/misc"
 import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { MediaView } from "@ts/ui/content/media-view"
 import { Login } from "@ts/ui/popups/login"
-import { Logout } from "@ts/api/auth"
 
 let currentTheme = Number(localStorage.getItem("theme") ?? 0)
 
@@ -45,7 +43,7 @@ export function CreateButton(footer = false) {
 }
 
 
-export function AttachButtons() {
+function AttachButtons() {
     const header = document.getElementById("tabs-container")
     const tabs = header.children
     for (let i = 0; i < tabs.length; i++) {
@@ -72,7 +70,7 @@ export function HideContentTabs(window) {
 export function ShowContentTabs() {
     document.getElementById("content-tabs").style.display = "block"
 }
-export function OnTabClick(event) {
+function OnTabClick(event) {
     const tab = event.target
     const windowId = tab.dataset.window
     if (windowId === undefined) {
@@ -91,7 +89,7 @@ export function OnTabClick(event) {
     ResizeAllGridDisplays()
 }
 
-export function OnLoginButtonClick() {
+function OnLoginButtonClick() {
     Login.Show()
 }
 
@@ -114,7 +112,7 @@ export function UpdateTheme() {
             break
     }
 }
-export function OnChangeThemeClick() {
+function OnChangeThemeClick() {
     currentTheme++
     if (currentTheme > 2) {
         currentTheme = 0
@@ -128,10 +126,3 @@ export function OnChangeThemeClick() {
     }
 }
 document.getElementById("change-theme-button").addEventListener("click", OnChangeThemeClick)
-
-export function HideFooter() {
-    document.querySelector("footer").style.display = "none"
-}
-export function ShowFooter() {
-    document.querySelector("footer").style.display = "flex"
-}

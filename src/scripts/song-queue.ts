@@ -1,4 +1,3 @@
-import { CloneSongs } from "@ts/misc"
 import type { Song } from "@ts/models/song"
 
 export default class SongQueue {
@@ -72,16 +71,16 @@ export default class SongQueue {
     }
 
     private LoadSongs(songs: Song[]) {
-        this.loadedSongs = CloneSongs(songs)
+        this.loadedSongs = [...songs]
         this.queuePointer = 0
     }
     private UpdateQueue(shuffle: boolean = false) {
         if (!shuffle) {
-            this.songs = CloneSongs(this.loadedSongs)
+            this.songs = [...this.loadedSongs]
             return
         }
         const newQueue = []
-        const songsRemaining = CloneSongs(this.loadedSongs)
+        const songsRemaining = [...this.loadedSongs]
         while (songsRemaining.length > 0) {
             const index = Math.floor(Math.random() * (songsRemaining.length - 1))
             newQueue.push(...songsRemaining.splice(index, 1))

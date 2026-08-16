@@ -32,7 +32,7 @@ export const state = new MenuState()
 export default class ContextMenu {
     public static Show({ options, x, y }: { options: ContextMenuOption[], x: number, y: number }) {
         state.visible = true
-        state.options = options.sort((a, b) => (a.group ?? 0) - (b.group ?? 0))
+        state.options = [...options].sort((a, b) => (a.group ?? 0) - (b.group ?? 0))
         state.x = x
         state.y = y
     }

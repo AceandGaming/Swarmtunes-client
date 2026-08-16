@@ -3,7 +3,6 @@ import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { PopulateDiscover, ShowErrorScreen } from "@ts/ui/content/discover"
 import { MediaView } from "@ts/ui/content/media-view"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
-import { PopulateSearch } from "@ts/ui/content/search"
 import SongFullscreen from "@ts/ui/content/fullscreen.svelte"
 import ContextMenu from "@ts/ui/content-menu/index.svelte"
 import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
@@ -103,7 +102,6 @@ function CreateUI() {
     } else {
         CreateButton(true)
     }
-    PopulateSearch("")
     mount(ContextMenu, { target: document.body })
     document.addEventListener("contextmenu", (e) => e.preventDefault())
 
