@@ -59,14 +59,6 @@
 
     $effect(() => {
         UpdateWakeLock()
-        if (fullscreen.visible) {
-            fullscreenElement.requestFullscreen()
-        }
-        else {
-            if (document.fullscreenElement === fullscreenElement) {
-                document.exitFullscreen()
-            }
-        }
     })
 
     let offset = $state(0)
@@ -351,7 +343,7 @@
         }
 
         .art-container > :global(.cover){
-            width: min(45vh, 80vw);
+            width: min(45vh, 90vw);
         }
     }
 </style>
