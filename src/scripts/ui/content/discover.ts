@@ -6,8 +6,6 @@ import { LoadingText } from "@ts/ui/loading"
 import PlaybackController from "@ts/playback"
 import { GetDiscoverPage } from "@ts/api/pages"
 
-import { IconDisc, IconPlaylist } from "@tabler/icons-svelte-runes"
-
 const discoverPage = document.querySelector("#discover") as HTMLElement
 
 function AddTitle(text: string) {
@@ -25,11 +23,6 @@ export async function PopulateDiscover() {
     const discs = data.discs.toSorted((a, b) => b.disc! - a.disc!)
     const orginals = data.originals.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
     const mashups = data.mashups.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
-
-    // AddCategoryToDiscover(new AlbumCatagory("Setlists", setlists))
-    // AddCategoryToDiscover(new SongCatagory("Originals", orginals))
-    // AddCategoryToDiscover(new SongCatagory("Mashups", mashups))
-    // AddCategoryToDiscover(new AlbumCatagory("Discs", discs))
 
     AddTitle("Setlists")
     mount(ItemCards, { target: discoverPage, props: { items: setlists } })

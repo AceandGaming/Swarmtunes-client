@@ -103,8 +103,8 @@
     }
 
     .card {
-        flex: 0;
-        min-width: clamp(100px, 22vw, 180px);
+        flex: 0 0 auto;
+        width: clamp(100px, 22vw, 180px);
 
         display: flex;
         flex-direction: column;
