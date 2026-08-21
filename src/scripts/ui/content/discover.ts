@@ -1,13 +1,20 @@
-import { AlbumCatagory, Catagory, SongCatagory } from "@ts/ui/catagories"
+import ItemCards from "@ts/ui/item-cards.svelte"
+import { mount } from "svelte"
+
 import { LoadingError } from "@ts/ui/error-screens"
 import { LoadingText } from "@ts/ui/loading"
 import PlaybackController from "@ts/playback"
 import { GetDiscoverPage } from "@ts/api/pages"
 
+import { IconDisc, IconPlaylist } from "@tabler/icons-svelte-runes"
+
 const discoverPage = document.querySelector("#discover") as HTMLElement
 
-function AddCategoryToDiscover(catagory: Catagory) {
-    discoverPage.appendChild(catagory.CreateElement())
+function AddTitle(text: string) {
+    const title = document.createElement("h1")
+    title.classList.add("title")
+    title.textContent = text
+    discoverPage.append(title)
 }
 
 export async function PopulateDiscover() {
@@ -19,10 +26,22 @@ export async function PopulateDiscover() {
     const orginals = data.originals.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
     const mashups = data.mashups.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
 
-    AddCategoryToDiscover(new AlbumCatagory("Setlists", setlists))
-    AddCategoryToDiscover(new SongCatagory("Originals", orginals))
-    AddCategoryToDiscover(new SongCatagory("Mashups", mashups))
-    AddCategoryToDiscover(new AlbumCatagory("Discs", discs))
+    // AddCategoryToDiscover(new AlbumCatagory("Setlists", setlists))
+    // AddCategoryToDiscover(new SongCatagory("Originals", orginals))
+    // AddCategoryToDiscover(new SongCatagory("Mashups", mashups))
+    // AddCategoryToDiscover(new AlbumCatagory("Discs", discs))
+
+    AddTitle("Setlists")
+    mount(ItemCards, { target: discoverPage, props: { items: setlists } })
+
+    AddTitle("Originals")
+    mount(ItemCards, { target: discoverPage, props: { items: orginals } })
+
+    AddTitle("Mashups")
+    mount(ItemCards, { target: discoverPage, props: { items: mashups } })
+
+    AddTitle("Discs")
+    mount(ItemCards, { target: discoverPage, props: { items: discs } })
 
     LoadingText.Detach(discoverPage)
 }

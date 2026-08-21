@@ -19,6 +19,9 @@ export class Collection {
     public get displayTitle() {
         return this.title
     }
+    public get shortTitle() {
+        return this.displayDate
+    }
     public get displayDate() {
         return this.date?.toLocaleDateString("en-AU", {
             day: "numeric",

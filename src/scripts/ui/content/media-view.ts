@@ -1,7 +1,6 @@
 import MediaViewSvelte from "./media-view.svelte"
 import { mount } from "svelte"
-import type { Collection as Album } from "@ts/models/collection"
-import { Playlist } from "@ts/models/playlist"
+import { Song, Playlist, Collection as Album } from "@ts/models"
 
 // I imagine the Svelte Devs looking at my code like:
 // TF?
@@ -15,13 +14,13 @@ export class MediaView {
     }
 
     private static mediaView: MediaViewSvelte
-    private static currentMedia?: Album | Playlist
+    private static currentMedia?: Album | Playlist | Song
     private static visible = false
 
     public static Create() {
         this.mediaView = mount(MediaViewSvelte, { target: document.getElementById("content")! })
     }
-    public static async Update(media: Album | Playlist) {
+    public static async Update(media: Album | Playlist | Song) {
         this.currentMedia = media
 
         this.mediaView.UpdateMeta(
@@ -35,6 +34,11 @@ export class MediaView {
         this.Show()
 
         this.mediaView.SetLoading(true)
+        if (media instanceof Song) {
+            this.mediaView.UpdateSongs([media])
+            this.mediaView.SetLoading(false)
+            return
+        }
         const songs = await media.GetSongs()
         this.mediaView.UpdateSongs(songs)
         this.mediaView.SetLoading(false)

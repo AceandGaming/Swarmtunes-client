@@ -1,5 +1,4 @@
 import PlaybackController from "@ts/playback"
-import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { PopulateDiscover, ShowErrorScreen } from "@ts/ui/content/discover"
 import { MediaView } from "@ts/ui/content/media-view"
 import PlaylistTab from "@ts/ui/content/playlist-tab"
@@ -122,10 +121,6 @@ function CreateUI() {
     UpdateTheme()
 
 }
-function CreatePostUI() {
-    ResizeAllGridDisplays()
-}
-
 function LoadUrlBar() {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
@@ -159,7 +154,5 @@ CreateUI()
 HideLoading()
 
 InitLogin().then(() => {
-    CreatePostUI()
-
     LoadUrlBar()
 })

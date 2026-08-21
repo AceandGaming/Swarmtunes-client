@@ -77,6 +77,8 @@
         position: fixed;
         bottom: 0;
 
+        z-index: 5;
+
         display: block;
         width: 100vw;
         min-height: 30dvh;

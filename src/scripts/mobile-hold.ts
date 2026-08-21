@@ -1,9 +1,16 @@
 export function MobileHold(element: HTMLElement, onHold: (e: TouchEvent) => void, holdSeconds = 0.5) {
     let timeout: ReturnType<typeof setTimeout> | undefined
     let startPos: { x: number, y: number } | undefined
+    let active = false
 
     function TouchStart(e: TouchEvent) {
-        timeout = setTimeout(() => onHold(e), holdSeconds * 1000)
+        active = false
+        timeout = setTimeout(() => {
+            e.stopPropagation()
+            active = true
+            onHold(e)
+
+        }, holdSeconds * 1000)
         startPos = { x: e.touches[0].clientX, y: e.touches[0].clientY }
     }
     function Clear() {
@@ -27,7 +34,13 @@ export function MobileHold(element: HTMLElement, onHold: (e: TouchEvent) => void
     }
 
     element.addEventListener("touchstart", TouchStart)
-    element.addEventListener("touchend", Clear)
+    element.addEventListener("touchend", (e) => {
+        if (active) {
+            e.stopPropagation()
+            e.preventDefault()
+        }
+        Clear()
+    })
     element.addEventListener("touchcancel", Clear)
     element.addEventListener("touchmove", TouchMove)
 
@@ -36,5 +49,12 @@ export function MobileHold(element: HTMLElement, onHold: (e: TouchEvent) => void
         element.removeEventListener("touchend", Clear)
         element.removeEventListener("touchcancel", Clear)
         element.removeEventListener("touchmove", TouchMove)
+    }
+}
+
+export function MobileHoldSvelte(onHold: (e: TouchEvent) => void, holdSeconds = 0.5) {
+    return (element: HTMLElement) => {
+        const cleanup = MobileHold(element, onHold, holdSeconds)
+        return cleanup
     }
 }

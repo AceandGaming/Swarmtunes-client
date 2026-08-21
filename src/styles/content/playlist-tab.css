@@ -6,6 +6,11 @@
     margin-bottom: 20px;
 }
 
+#playlists-tab {
+    padding: 20px;
+    padding-bottom: 0;
+}
+
 #playlists-tab .catagory-item .rename-button {
     position: absolute;
     right: -3px;

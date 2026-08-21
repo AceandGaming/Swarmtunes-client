@@ -1,6 +1,5 @@
 import "@ts/ui/toast"
 import "@ts/ui/toast-manager"
-import "@ts/ui/catagories"
 import "@ts/ui/popups/popup"
 import "@ts/misc"
 import "@ts/ui/now-playing"

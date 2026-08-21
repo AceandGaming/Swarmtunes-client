@@ -112,6 +112,9 @@
         background-color: var(--cover-background);
 
         object-fit: cover;
+
+        width: var(--size, auto);
+        height: var(--size, auto);
     }
     img.loading {
         background: var(--cover-background) linear-gradient(-60deg, transparent 0%, transparent 20%, #FFFFFF20 50%, transparent 80%, transparent 100%);

@@ -62,7 +62,7 @@ function CreatePlaybackState() {
             Controller.Seek(val)
         },
 
-        Play: () => Controller.Play(),
+        Play: (...args: Parameters<typeof Controller.Play>) => Controller.Play(...args),
         Pause: () => Controller.Pause(),
         PlayPause: () => Controller.PlayPause(),
         Next: () => Controller.Next(),

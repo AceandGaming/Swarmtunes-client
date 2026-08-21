@@ -1,7 +1,8 @@
 import type { Playlist } from "@ts/models/playlist"
-import { PlaylistCatagory, ResizeAllGridDisplays } from "@ts/ui/catagories"
+import ItemCards from "@ts/ui/item-cards.svelte"
 import { LoginRequired } from "@ts/ui/error-screens"
 import PlaylistStore from "@ts/playlist-store"
+import { mount } from "svelte"
 
 export default class PlaylistTab {
     static playlistTab: HTMLElement = document.getElementById("playlists-tab") as HTMLElement
@@ -18,13 +19,9 @@ export default class PlaylistTab {
     static async Populate() {
         const playlists = PlaylistStore.GetAll()
 
-        const catagory = new PlaylistCatagory("", playlists, true)
-        const element = catagory.CreateElement()
-        element.setAttribute("id", "playlist-grid")
+        document.querySelector("#playlists-tab .item-cards")?.remove()
+        const catagory = mount(ItemCards, { target: this.playlistTab, props: { items: playlists, grid: true } })
 
-        const grid = document.getElementById("playlist-grid") as HTMLElement
-        grid.replaceWith(element)
 
-        ResizeAllGridDisplays()
     }
 }

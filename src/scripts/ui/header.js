@@ -1,5 +1,4 @@
 import { LoadSVG } from "@ts/misc"
-import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { MediaView } from "@ts/ui/content/media-view"
 import LoginPopup from "@ts/ui/popups/login"
 
