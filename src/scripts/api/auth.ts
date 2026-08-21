@@ -1,6 +1,6 @@
 import { Post, Get } from "./network"
 
-type User = {
+export type User = {
     id: string,
     username: string,
     role: "user" | "admin"

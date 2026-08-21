@@ -1,4 +1,5 @@
-import { Login } from "@ts/ui/popups/login"
+import { OnLogin } from "@ts/login.svelte.ts"
+import LoginPopup from "@ts/ui/popups/login"
 
 export default class ErrorScreen {
     element!: HTMLElement
@@ -41,14 +42,15 @@ export default class ErrorScreen {
 }
 export class LoginRequired extends ErrorScreen {
     constructor(imagePath = "") {
-        super("Login required", Login.Show, imagePath, "Login")
-        Login.AddLoginCallback(this.OnLogin.bind(this))
+        super("Login required", LoginPopup.Show, imagePath, "Login")
+        OnLogin((user) => {
+            if (user) {
+                this.element.remove()
+            }
+        })
     }
     OnRetryButtonClick() {
-        Login.Show()
-    }
-    OnLogin() {
-        this.element.remove()
+        LoginPopup.Show()
     }
 }
 export class LoadingError extends ErrorScreen {

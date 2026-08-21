@@ -1,7 +1,7 @@
 import { LoadSVG } from "@ts/misc"
 import { ResizeAllGridDisplays } from "@ts/ui/catagories"
 import { MediaView } from "@ts/ui/content/media-view"
-import { Login } from "@ts/ui/popups/login"
+import LoginPopup from "@ts/ui/popups/login"
 
 let currentTheme = Number(localStorage.getItem("theme") ?? 0)
 
@@ -90,7 +90,7 @@ function OnTabClick(event) {
 }
 
 function OnLoginButtonClick() {
-    Login.Show()
+    LoginPopup.Show()
 }
 
 document.getElementById("header-login-button").onclick = OnLoginButtonClick

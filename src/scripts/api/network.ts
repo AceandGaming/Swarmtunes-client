@@ -4,7 +4,7 @@ const API_VERSION = 2
 export const API_URL = `${SERVER_URL}/v${API_VERSION}`
 export const V1_API_URL = `${SERVER_URL}/v1`
 
-class HttpError extends Error {
+export class HttpError extends Error {
     constructor(
         public code: string,
         message: string,

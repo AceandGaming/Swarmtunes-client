@@ -9,13 +9,13 @@ import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
 import { CreateButton, ShowContentWindow, UpdateTheme } from "@ts/ui/header"
 import ConfirmAction from "@ts/ui/popups/confirm-action"
 import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
-import { Login } from "@ts/ui/popups/login"
+import { Initialize as InitLogin, auth } from "@ts/login.svelte.ts"
 import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import { NowPlaying } from "@ts/ui/now-playing"
 import { InitMediaSession } from "@ts/media-session"
 import { mount } from "svelte"
-import { Logout } from "@ts/api/auth"
+import { Logout, OnLogin as AddLoginCallback } from "@ts/login.svelte.ts"
 import SongProvider from "@ts/song-provider"
 import { GetPlaylists } from "@ts/api/playlist"
 import PlaylistStore from "@ts/playlist-store"
@@ -34,10 +34,6 @@ if ("serviceWorker" in navigator) {
 
 function HideLoading() {
     document.getElementById("loading-screen")!.classList.add("hide")
-}
-
-async function AsyncCrap() {
-    await Login.CheckLogin()
 }
 
 window.isNewSession = !sessionStorage.getItem('visited')
@@ -91,7 +87,13 @@ function OnLogin(isAdmin: boolean) {
         }
     }
 }
-Login.AddLoginCallback(OnLogin)
+AddLoginCallback((user) => {
+    if (!user) {
+        return
+    }
+
+    OnLogin(user.role === "admin")
+})
 
 function CreateUI() {
     ToastManager.Create()
@@ -109,25 +111,21 @@ function CreateUI() {
     mount(SongFullscreen, { target: document.body })
     NowPlaying.Create()
 
-    Login.CreateWindow()
     new CreatePlaylistPopup()
     new RenamePlaylistPopup()
     PopulateDiscover().catch((e: any) => {
         ShowErrorScreen()
         console.error(e)
-    }).then(() => {
-        if (document.readyState == "complete") {
-            HideLoading()
-        }
-        else {
-            window.addEventListener("load", HideLoading)
-        }
     })
 
     ShowContentWindow(document.getElementById("discover"))
     UpdateTheme()
+
+}
+function CreatePostUI() {
     ResizeAllGridDisplays()
 }
+
 function LoadUrlBar() {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
@@ -156,15 +154,12 @@ function LoadUrlBar() {
         window.location.pathname
     window.history.replaceState({}, document.title, cleanUrl)
 }
-AsyncCrap().then(() => {
-    CreateUI()
+
+CreateUI()
+HideLoading()
+
+InitLogin().then(() => {
+    CreatePostUI()
 
     LoadUrlBar()
 })
-
-// function UpdateNavigatorTime(played: number, duration: number) {
-//     navigator.mediaSession.setPositionState({
-//         duration: duration,
-//         position: played,
-//     })
-// }
