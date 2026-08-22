@@ -1,21 +1,18 @@
 <script lang="ts">
     import PlaylistStore from "@ts/playlist-store.svelte.ts"
     import ItemCards from "@ts/ui/item-cards.svelte"
-    import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
     import { auth } from "@ts/login.svelte.ts"
-    import LoginPopup from "@ts/ui/popups/login"
-    
-    $inspect(PlaylistStore.GetAll())
+    import { ShowLogin, CreatePlaylist } from "@ts/ui/popup.svelte.ts"
 </script>
 
 <div id="playlists-tab">
     {#if auth.loggedIn}
-        <button onclick={() => CreatePlaylistPopup.instance.Show()}>Create Playlist</button>
+        <button onclick={() => CreatePlaylist()}>Create Playlist</button>
         <ItemCards items={PlaylistStore.GetAll()} grid={true} />
     {:else}
         <div class="error-screen">
             <span>Login Required</span>
-            <button onclick={() => LoginPopup.Show()}>Login</button>
+            <button onclick={() => ShowLogin()}>Login</button>
         </div>
     {/if}
 </div>

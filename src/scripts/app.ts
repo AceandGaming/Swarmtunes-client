@@ -4,10 +4,7 @@ import SongFullscreen from "@ts/ui/content/fullscreen.svelte"
 import ContextMenu from "@ts/ui/content-menu/index.svelte"
 import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
 import { CreateButton, ShowContentWindow, UpdateTheme } from "@ts/ui/header"
-import ConfirmAction from "@ts/ui/popups/confirm-action"
-import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
 import { Initialize as InitLogin, auth } from "@ts/login.svelte.ts"
-import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import { NowPlaying } from "@ts/ui/now-playing"
 import { InitMediaSession } from "@ts/media-session"
@@ -19,6 +16,9 @@ import PlaylistStore from "@ts/playlist-store.svelte.ts"
 import Search from "@ts/ui/content/search.svelte"
 import PlaylistTab from "@ts/ui/content/playlists-tab.svelte"
 import Discover from "@ts/ui/content/discover.svelte"
+import LoginPopup from "@ts/ui/popups/login.svelte"
+import PopupRoot from "@ts/ui/popups/popup-root.svelte"
+import { ConfirmAction } from "@ts/ui/popup.svelte"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
@@ -57,7 +57,7 @@ function OnLogin(isAdmin: boolean) {
     const loginButton = document.getElementById("header-login-button") as HTMLButtonElement
     loginButton.textContent = "Log Out"
     loginButton.onclick = async () => {
-        const confirmation = await ConfirmAction.AskUser("Are you sure you want to log out?")
+        const confirmation = await ConfirmAction("Are you sure you want to log out?")
         if (!confirmation) {
             return
         }
@@ -95,6 +95,8 @@ AddLoginCallback((user) => {
 function CreateUI() {
     ToastManager.Create()
 
+    mount(PopupRoot, { target: document.body })
+
     const contentTabs = document.getElementById("content-tabs")!
     mount(Search, { target: contentTabs })
     mount(PlaylistTab, { target: contentTabs })
@@ -114,8 +116,8 @@ function CreateUI() {
     mount(SongFullscreen, { target: document.body })
     NowPlaying.Create()
 
-    new CreatePlaylistPopup()
-    new RenamePlaylistPopup()
+    // new CreatePlaylistPopup()
+    // new RenamePlaylistPopup()
 
     ShowContentWindow(document.getElementById("discover"))
     UpdateTheme()

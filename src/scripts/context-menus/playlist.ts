@@ -1,14 +1,11 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import PlaybackController from "@ts/playback"
-import ConfirmAction from "@ts/ui/popups/confirm-action"
-import { CreatePlaylistPopup } from "@ts/ui/popups/create-playlist"
-import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
-import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import PlaylistProvider from "@ts/playlist-provider"
 import { ContextMenuGroup, type ContextMenuOption } from "@ts/context-menu.svelte"
 import type { Playlist } from "@ts/models/playlist"
 import { IconPlus, IconPlaylistAdd, IconTrash, IconEdit, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
+import * as Popups from "@ts/ui/popup.svelte.ts"
 
 export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption[] {
     return [
@@ -21,14 +18,14 @@ export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption
             label: "Rename",
             group: ContextMenuGroup.Edit,
             icon: IconEdit,
-            Action: () => RenamePlaylistPopup.instance.Show(playlist.id) //This should take in a playlist not id
+            Action: () => Popups.RenamePlaylist(playlist)
         },
         {
             label: "Delete",
             group: ContextMenuGroup.Edit,
             icon: IconTrash,
             Action: async () => {
-                const confirmation = await ConfirmAction.AskUser("You are about to delete <strong>" + ReplaceEmotesOfString(playlist.title) + "</strong>")
+                const confirmation = await Popups.ConfirmAction(`You are about to delete\n${playlist.title}`)
                 if (!confirmation) {
                     return
                 }
@@ -41,15 +38,14 @@ export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption
             group: ContextMenuGroup.Playlist,
             icon: IconPlaylistAdd,
             Action: async () => {
-                const otherId = await SelectPlaylist.AskUser()
-                if (!otherId || playlist.id === otherId) {
+                const otherPlaylist = await Popups.SelectPlaylist()
+                if (!otherPlaylist || playlist.id === otherPlaylist.id) {
                     return
                 }
                 const songIds = playlist.GetSongIds()
-                const otherPlaylist = await PlaylistProvider.Get(otherId)
 
                 try {
-                    await PlaylistProvider.AddSongsToPlaylist(otherId, songIds)
+                    await PlaylistProvider.AddSongsToPlaylist(otherPlaylist.id, songIds)
                     ToastManager.Toast(`Added ${songIds.length} songs to ${ReplaceEmotesOfString(otherPlaylist.title)}`, "none", 3, true)
                 }
                 catch (e) {
@@ -62,7 +58,7 @@ export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption
             label: "New Playlist",
             group: ContextMenuGroup.Playlist,
             icon: IconPlus,
-            Action: () => CreatePlaylistPopup.instance.Show()
+            Action: () => Popups.CreatePlaylist()
         }
     ]
 }

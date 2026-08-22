@@ -25,13 +25,6 @@ export function LoadSVG(path: string) {
 
     return svg
 }
-export function ListenForInputSubmit(input: HTMLInputElement, action: () => void) {
-    input.addEventListener("keyup", (event) => {
-        if (event.key === "Enter") {
-            action()
-        }
-    })
-}
 
 export function flipNoScale(node: Element, { from, to }: { from: DOMRect; to: DOMRect }, params: FlipParams = {}): AnimationConfig {
     const dx = from.left - to.left

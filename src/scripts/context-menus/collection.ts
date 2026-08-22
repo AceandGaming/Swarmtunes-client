@@ -1,10 +1,11 @@
-import SelectPlaylist from "@ts/ui/popups/select-playlist"
+// import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import PlaybackController from "@ts/playback"
 import PlaylistProvider from "@ts/playlist-provider"
 import type { Collection } from "@ts/models/collection"
 import { ContextMenuGroup, type ContextMenuOption } from "@ts/context-menu.svelte"
 import { IconPlaylistAdd, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
+import { SelectPlaylist } from "@ts/ui/popup.svelte.ts"
 
 export function CreateCollectionContextMenu(collection: Collection): ContextMenuOption[] {
     return [
@@ -18,7 +19,7 @@ export function CreateCollectionContextMenu(collection: Collection): ContextMenu
             group: ContextMenuGroup.Playlist,
             icon: IconPlaylistAdd,
             Action: async () => {
-                const playlistid = await SelectPlaylist.AskUser()
+                const playlistid = await SelectPlaylist()
                 if (!playlistid) {
                     return
                 }

@@ -11,7 +11,7 @@ function UpdateMediaMetadata(song: Song) {
         artist: song.displayArtists,
         album: song.displaySingers,
         artwork: [
-            { src: song.GetArtwork() },
+            { src: song.GetArtwork() ?? "/no-song.png" },
         ]
     })
 }
