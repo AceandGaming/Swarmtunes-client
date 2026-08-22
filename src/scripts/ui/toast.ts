@@ -137,7 +137,7 @@ export class ToastUI extends HTMLElement {
             this.icon.src = ""
         }
         else {
-            this.icon.src = `src/assets/icons/${this.#type}.svg`
+            this.icon.src = `/icons/${this.#type}.svg`
         }
 
 

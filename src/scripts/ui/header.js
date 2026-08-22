@@ -1,6 +1,5 @@
 import { LoadSVG } from "@ts/misc"
 import { MediaView } from "@ts/ui/content/media-view"
-import LoginPopup from "@ts/ui/popups/login.svelte"
 import { ShowLogin } from "@ts/ui/popup.svelte.ts"
 
 let currentTheme = Number(localStorage.getItem("theme") ?? 0)

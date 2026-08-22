@@ -1,6 +1,7 @@
 <script lang="ts">
     import ItemList from "@ts/ui/item-list.svelte"
     import { Search } from "@ts/api/song"
+    import  PlaybackState from "@ts/playback.svelte.ts"
 
     let query: string = $state("")
     let debouncedQuery = $state('');
@@ -24,7 +25,7 @@
         {#await Search(debouncedQuery)}
             <div class="loading-text"></div>
         {:then songs}
-            <ItemList items={songs} />
+            <ItemList items={songs} onItemClick={(song) => PlaybackState.Play({song, songs})}/>
         {/await}
     {/if}
 </div>

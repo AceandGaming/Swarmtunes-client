@@ -11,7 +11,7 @@
         <ItemCards items={PlaylistStore.GetAll()} grid={true} />
     {:else}
         <div class="error-screen">
-            <span>Login Required</span>
+            <h1>Login Required</h1>
             <button onclick={() => ShowLogin()}>Login</button>
         </div>
     {/if}
@@ -25,6 +25,17 @@
         width: 140px;
         margin-bottom: 20px;
     }
+    .error-screen {
+        position: absolute;
+        inset: 0;
+    
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
     @media (max-width: 600px) {
         #playlists-tab {
             padding: 10px;
