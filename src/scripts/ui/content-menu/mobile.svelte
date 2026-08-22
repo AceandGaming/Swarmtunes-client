@@ -37,11 +37,10 @@
     bind:this={menu}
 >
     {#each currentOptions as option, i}
-        {#if i > 0 && option.group !== currentOptions[i - 1].group}
-            <hr />
-        {/if}
-        
         {#if option.visible !== false}
+            {#if i > 0 && option.group !== currentOptions[i - 1].group}
+                <hr />
+            {/if}
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <li 
                 role="menuitem"

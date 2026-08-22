@@ -6,6 +6,7 @@ import { ContextMenuGroup, type ContextMenuOption } from "@ts/context-menu.svelt
 import { IconPlus, IconShare3, IconPlaylistAdd, IconFileExport } from "@tabler/icons-svelte-runes"
 import type { Song } from "@ts/models/song"
 import { SelectPlaylist, CopyToClipboard } from "@ts/ui/popup.svelte.ts"
+import { auth } from "@ts/login.svelte"
 
 export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
     return [
@@ -32,7 +33,8 @@ export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
                     ToastManager.Toast("Failed to add songs to playlist", "error")
                     console.error(e)
                 }
-            }
+            },
+            visible: auth.loggedIn
         },
         {
             label: "Share",

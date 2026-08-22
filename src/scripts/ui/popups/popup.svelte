@@ -80,14 +80,18 @@
     }
 
     .content {
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: var(--gap);
-
+    }
+    .content > :global(p) {
+        
         text-align: center;
     }
     .content > :global(input) {
         height: 35px;
+        text-align: center;
     }
 
     .buttons {
@@ -104,5 +108,18 @@
         max-width: 100px;
         height: 35px;
         border-radius: 10px;
+    }
+
+    @media (max-width: 500px) {
+        .popup {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+
+            background-color: color-mix(in srgb, var(--background-colour) 90%, transparent);
+
+            border-radius: 0;
+            box-shadow: none;
+        }
     }
 </style>
