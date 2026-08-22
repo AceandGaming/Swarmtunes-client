@@ -2,7 +2,7 @@
     import { IconX, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
 
     import type { Song } from "@ts/models/song"
-    import SongList from "@ts/ui/song-list.svelte"
+    import SongList from "@ts/ui/item-list.svelte"
     import Cover from "@ts/ui/cover.svelte"
     import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
     import PlaybackController from "@ts/playback"
@@ -93,7 +93,7 @@
         {#if loading}
             <div class="loading-text"></div>
         {:else}
-            <SongList songs={currentSongs} catagory={catagory} onClick={OnItemClick}/>
+            <SongList items={currentSongs} onItemClick={OnItemClick}/>
         {/if}
     </div>
 </div>

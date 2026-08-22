@@ -85,7 +85,6 @@ function OnTabClick(event) {
         tabs[i].classList.remove("selected")
     }
     tab.classList.add("selected")
-    ResizeAllGridDisplays()
 }
 
 function OnLoginButtonClick() {

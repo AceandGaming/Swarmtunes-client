@@ -36,11 +36,11 @@ export function MobileHold(element: HTMLElement, onHold: (e: TouchEvent) => void
     element.addEventListener("touchstart", TouchStart)
     element.addEventListener("touchend", (e) => {
         if (active) {
-            e.stopPropagation()
+            e.stopImmediatePropagation()
             e.preventDefault()
         }
         Clear()
-    })
+    }, { passive: false, capture: true })
     element.addEventListener("touchcancel", Clear)
     element.addEventListener("touchmove", TouchMove)
 

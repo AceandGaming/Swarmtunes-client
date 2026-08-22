@@ -16,10 +16,13 @@
                 return
             }
 
+            if (MenuState.visible) {
+                event.stopImmediatePropagation()
+            }
             MenuState.visible = false
         }
 
-        document.addEventListener("touchstart", OnClick)
+        document.addEventListener("touchstart", OnClick, { capture: true, passive: false })
 
         return () => {
             document.removeEventListener("touchstart", OnClick)

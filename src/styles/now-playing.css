@@ -38,20 +38,14 @@
     scale: -1 1;
 }
 
-#now-playing > .song-list {
+#now-playing > .item-list {
     padding-left: 5px;
     height: calc(100dvh - 161px);
     margin: 0;
     overflow-y: auto;
     box-sizing: border-box;
-}
 
-#now-playing .song-list-item > .title-artist :nth-child(1) {
-    font-size: 14px;
-}
-
-#now-playing .song-list-item > .title-artist :nth-child(2) {
-    font-size: 11px;
+    --font-size: 14px;
 }
 
 

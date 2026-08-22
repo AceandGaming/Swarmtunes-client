@@ -1,6 +1,7 @@
 import { Search } from "@ts/api/song"
 import { LoadingText } from "@ts/ui/loading"
-import { SongList } from "@ts/ui/song-list"
+import SongList from "@ts/ui/item-list.svelte"
+import { mount } from "svelte"
 
 let searchTimeout: number | null
 
@@ -13,10 +14,10 @@ export async function PopulateSearch(searchTerm: string, maxResults = 10) {
     LoadingText.Attach(resultsEl)
     const songs = await Search(searchTerm, maxResults)
 
-    const songlist = new SongList(songs)
-    const element = songlist.CreateElement(true)
-    element.id = "search-results"
-    resultsEl.replaceWith(element)
+    resultsEl.innerHTML = ""
+    mount(SongList, { target: resultsEl, props: { items: songs } })
+
+    LoadingText.Detach(resultsEl)
 }
 function OnSearchValueChange(event: any) {
     if (searchTimeout) {

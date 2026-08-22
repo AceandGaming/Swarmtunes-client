@@ -202,13 +202,12 @@ button:active:not(.icon-button) {
 @media (hover: hover) {
     .icon-button:hover {
         color: var(--icon-hover);
-        transform: scale(1.1);
     }
 }
 
 .icon-button:active {
     color: var(--icon-active);
-    transform: scale(1);
+    transform: scale(0.9);
 }
 
 svg {
