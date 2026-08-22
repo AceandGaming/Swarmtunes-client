@@ -107,7 +107,7 @@
         display: flex;
         flex-direction: column;
 
-        background-color: var(--colour, --cover-background);
+        background-color: var(--colour, var(--cover-background));
 
         border-radius: 10px;
         transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
@@ -116,7 +116,7 @@
     }
     .card:hover {
         transform: rotate(2deg) scale(1.05);
-        background-color: color-mix(in srgb, var(--colour, --cover-background) 90%, white);
+        background-color: color-mix(in srgb, var(--colour, var(--cover-background)) 90%, white);
     }
     .card .art-container {
         position: relative;

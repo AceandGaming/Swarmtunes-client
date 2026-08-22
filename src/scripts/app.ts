@@ -1,7 +1,5 @@
 import PlaybackController from "@ts/playback"
-import { PopulateDiscover, ShowErrorScreen } from "@ts/ui/content/discover"
 import { MediaView } from "@ts/ui/content/media-view"
-import PlaylistTab from "@ts/ui/content/playlist-tab"
 import SongFullscreen from "@ts/ui/content/fullscreen.svelte"
 import ContextMenu from "@ts/ui/content-menu/index.svelte"
 import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
@@ -17,7 +15,10 @@ import { mount } from "svelte"
 import { Logout, OnLogin as AddLoginCallback } from "@ts/login.svelte.ts"
 import SongProvider from "@ts/song-provider"
 import { GetPlaylists } from "@ts/api/playlist"
-import PlaylistStore from "@ts/playlist-store"
+import PlaylistStore from "@ts/playlist-store.svelte.ts"
+import Search from "@ts/ui/content/search.svelte"
+import PlaylistTab from "@ts/ui/content/playlists-tab.svelte"
+import Discover from "@ts/ui/content/discover.svelte"
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 
@@ -52,8 +53,6 @@ if (window.isMobile) {
 
 InitMediaSession()
 
-PlaylistTab.ShowLoggedOutScreen()
-
 function OnLogin(isAdmin: boolean) {
     const loginButton = document.getElementById("header-login-button") as HTMLButtonElement
     loginButton.textContent = "Log Out"
@@ -68,7 +67,6 @@ function OnLogin(isAdmin: boolean) {
     }
     GetPlaylists().then(playlists => {
         PlaylistStore.Init(playlists)
-        PlaylistTab.Populate()
     })
 
     const authElements = Array.from(
@@ -97,6 +95,12 @@ AddLoginCallback((user) => {
 function CreateUI() {
     ToastManager.Create()
 
+    const contentTabs = document.getElementById("content-tabs")!
+    mount(Search, { target: contentTabs })
+    mount(PlaylistTab, { target: contentTabs })
+    mount(Discover, { target: contentTabs })
+
+
     mount(CurrentSongBar, { target: document.querySelector("footer")! })
     if (window.innerWidth > 600) {
         CreateButton()
@@ -112,10 +116,6 @@ function CreateUI() {
 
     new CreatePlaylistPopup()
     new RenamePlaylistPopup()
-    PopulateDiscover().catch((e: any) => {
-        ShowErrorScreen()
-        console.error(e)
-    })
 
     ShowContentWindow(document.getElementById("discover"))
     UpdateTheme()

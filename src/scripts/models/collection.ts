@@ -77,6 +77,10 @@ export class Collection {
             )
         }
 
+        if (!art) {
+            return
+        }
+
         return GetCoverUrl(art, size)
     }
 

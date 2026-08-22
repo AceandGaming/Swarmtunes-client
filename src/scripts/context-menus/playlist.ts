@@ -6,7 +6,6 @@ import { RenamePlaylistPopup } from "@ts/ui/popups/rename-playlist"
 import SelectPlaylist from "@ts/ui/popups/select-playlist"
 import ToastManager from "@ts/ui/toast-manager"
 import PlaylistProvider from "@ts/playlist-provider"
-import PlaylistTab from "@ts/ui/content/playlist-tab"
 import { ContextMenuGroup, type ContextMenuOption } from "@ts/context-menu.svelte"
 import type { Playlist } from "@ts/models/playlist"
 import { IconPlus, IconPlaylistAdd, IconTrash, IconEdit, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
@@ -34,7 +33,6 @@ export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption
                     return
                 }
                 await PlaylistProvider.DeletePlaylist(playlist.id)
-                PlaylistTab.Populate()
                 ToastManager.Toast("Playlist Deleted!")
             }
         },

@@ -1,7 +1,8 @@
 import type { Playlist } from "@ts/models/playlist"
-
+import { SvelteMap } from "svelte/reactivity"
 class PlaylistStore {
-    private playlists = new Map<string, Playlist>()
+    private playlists = new SvelteMap<string, Playlist>()
+    private playlistArray = $derived(Array.from(this.playlists.values()))
 
     public Init(playlists: Playlist[]) {
         for (const playlist of playlists) {
@@ -13,7 +14,7 @@ class PlaylistStore {
         return this.playlists.get(id)
     }
     public GetAll() {
-        return Array.from(this.playlists.values())
+        return this.playlistArray
     }
 
     public Set(id: id, playlist: Playlist) {

@@ -2,7 +2,6 @@ import { ReplaceEmotesOfString } from "@ts/emote"
 import { ListenForInputSubmit } from "@ts/misc"
 import { Playlist } from "@ts/models/playlist"
 import PlaylistProvider from "@ts/playlist-provider"
-import PlaylistTab from "@ts/ui/content/playlist-tab"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
 
@@ -53,8 +52,6 @@ export class CreatePlaylistPopup extends PopupWindow {
         const cor = PlaylistProvider.CreatePlaylist(name)
         cor.catch((e) => { this.SetBusy(false); this.error.textContent = e.message })
         cor.then(() => {
-            //PlaylistManager.AddPlaylist(response)
-            PlaylistTab.Populate()
             this.Hide()
             ToastManager.Toast(`Created playlist <b>${ReplaceEmotesOfString(name)}</b>`, "none", 3, true)
         })
@@ -65,8 +62,3 @@ export class CreatePlaylistPopup extends PopupWindow {
         this.error.textContent = ""
     }
 }
-
-function OnCreatePlaylistButtonClick() {
-    CreatePlaylistPopup.instance.Show()
-}
-document.getElementById("new-playlist-button")?.addEventListener("click", OnCreatePlaylistButtonClick)

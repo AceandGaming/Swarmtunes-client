@@ -118,6 +118,10 @@ export class Song {
             || artworks["plush"]
         )
 
+        if (!art) {
+            return
+        }
+
         return GetCoverUrl(art, size)
     }
 }

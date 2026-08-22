@@ -1,7 +1,6 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import { ListenForInputSubmit } from "@ts/misc"
 import type { Playlist } from "@ts/models/playlist"
-import PlaylistTab from "@ts/ui/content/playlist-tab"
 import { ValidatePlaylistName } from "@ts/ui/popups/create-playlist"
 import PopupWindow from "@ts/ui/popups/popup"
 import ToastManager from "@ts/ui/toast-manager"
@@ -55,9 +54,7 @@ export class RenamePlaylistPopup extends PopupWindow {
         }
         this.Hide()
 
-        PlaylistProvider.RenamePlaylist(this.playlist.id, name).then(() => {
-            PlaylistTab.Populate()
-        })
+        PlaylistProvider.RenamePlaylist(this.playlist.id, name)
         ToastManager.Toast(`Renamed <b>${ReplaceEmotesOfString(oldName)}</b> to <b>${ReplaceEmotesOfString(name)}</b>`, "none", 3, true)
     }
     // @ts-ignore

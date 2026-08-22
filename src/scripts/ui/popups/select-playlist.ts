@@ -1,7 +1,7 @@
 import { ReplaceEmotesOfString } from "@ts/emote"
 import type { Playlist } from "@ts/models/playlist"
 import PopupWindow from "@ts/ui/popups/popup"
-import PlaylistStore from "@ts/playlist-store"
+import PlaylistStore from "@ts/playlist-store.svelte.ts"
 
 function CreatePlaylistListItemElement(playlist: Playlist, onClickEvent: (event: any) => void) {
     const element = document.createElement("li")

@@ -4,7 +4,7 @@
     import { untrack, onMount } from 'svelte';
 
     interface WithCover {
-        GetArtwork(size: "small" | "medium" | "large"): string
+        GetArtwork(size: "small" | "medium" | "large"): string | undefined
     }
 
     let { item, lazy = true, colour = $bindable(), loading = $bindable(true), resolution = "auto", class: className = "cover"}: {item?: WithCover, lazy?: boolean, colour?: Color, loading?: boolean, resolution?: "auto" | "small" | "medium" | "large", class?: string} = $props()
@@ -49,6 +49,10 @@
         }
         
         const src = item.GetArtwork(res)
+        if (!src) {
+            return
+        }
+
         if (src == untrack(() => imageSrc)) {
             return
         }
