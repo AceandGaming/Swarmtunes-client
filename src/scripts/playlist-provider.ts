@@ -1,7 +1,7 @@
 import { GetPlaylist } from "@ts/api/playlist"
 import { Playlist } from "@ts/models/playlist"
 import PlaylistStore from "@ts/playlist-store.svelte.ts"
-import { AddSongsToPlaylist, RemoveSongsFromPlaylist, RenamePlaylist, DeletePlaylist, CreatePlaylist } from "@ts/api/playlist"
+import { AddSongsToPlaylist, RemoveSongsFromPlaylist, RenamePlaylist, DeletePlaylist, CreatePlaylist, GetPlaylists } from "@ts/api/playlist"
 
 export default class PlaylistProvider {
     public static async Get(id: id): Promise<Playlist> {

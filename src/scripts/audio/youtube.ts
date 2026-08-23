@@ -1,6 +1,7 @@
 import AudioPlayer from "@ts/audio/audio"
 import type { Song } from "@ts/models/song"
 import PlaybackController from "@ts/playback"
+import "@ts/ytapi"
 
 export default class YoutubePlayer extends AudioPlayer {
     public get played(): number {

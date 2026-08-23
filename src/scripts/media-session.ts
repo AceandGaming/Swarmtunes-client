@@ -6,6 +6,8 @@ function UpdateMediaMetadata(song: Song) {
         return
     }
 
+    document.title = `${song.title} - Swarmtunes`
+
     navigator.mediaSession.metadata = new MediaMetadata({
         title: song.title,
         artist: song.displayArtists,

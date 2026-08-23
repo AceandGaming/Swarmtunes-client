@@ -2,7 +2,7 @@
     import { Collection, Playlist, Song } from "@ts/models"
     import Cover from "@ts/ui/cover.svelte"
     import type { Color } from "colorthief"
-    import { MediaView } from "@ts/ui/content/media-view"
+    import MediaView  from "@ts/ui/content/media-view.svelte.ts"
     import { IconDisc, IconPlaylist } from "@tabler/icons-svelte-runes"
     import IconNote from "@assets/note.svelte"
     import ContextMenu from "@ts/context-menu.svelte.ts"
@@ -14,7 +14,7 @@
     let { items, grid = false}: {items: Song[] | Collection[] | Playlist[], grid?: boolean} = $props()
 
     function OnCardClick(item: item) {
-        MediaView.Update(item)
+        MediaView.Show(item)
     }
     function ShowContextMenu(event: MouseEvent|TouchEvent, item: item) {
         let menu
@@ -74,12 +74,6 @@
 </div>
 
 <style>
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
     .item-cards {
         display: flex;
         gap: 10px;

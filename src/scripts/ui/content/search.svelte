@@ -33,6 +33,7 @@
 <style>
     #search {
         padding: 0 max(5px, 8vw);
+        overflow-y: auto;
     }
     input {
         flex: 0 1 auto;

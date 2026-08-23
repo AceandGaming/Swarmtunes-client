@@ -42,104 +42,10 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
 
-  <style>
-    #loading-screen {
-      position: absolute;
-      background-color: #171717;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 100;
-
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-
-      transition: opacity 0.5s ease;
-      opacity: 1;
-    }
-
-    #loading-screen.hide {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #loading-screen img {
-      width: 200px;
-      height: auto;
-    }
-
-    #loading-screen .loading-text {
-      font-size: 35px;
-    }
-
-    #loading-screen .disclaimer {
-      position: absolute;
-      bottom: 25px;
-      max-width: 90vw;
-      font-size: 15px;
-      text-align: center;
-      white-space: pre-wrap;
-      color: grey;
-    }
-
-
-    @media (max-width: 500px) {
-      #loading-screen {
-        flex-direction: column;
-      }
-    }
-  </style>
-
-  <link rel="stylesheet" href="src/styles/styles.css" />
-  <link rel="stylesheet" href="src/styles/header.css" />
-  <link rel="stylesheet" href="src/styles/now-playing.css" />
-  <link rel="stylesheet" href="src/styles/error-screen.css" />
-  <link rel="stylesheet" href="src/styles/select-playlist.css" />
-  <link rel="stylesheet" href="src/styles/tabs.css" />
-  <link rel="stylesheet" href="src/styles/toast-manager.css" />
   <script defer type="module" src="src/main.ts"></script>
 </head>
 
-<body>
-
-  <div id="loading-screen" data-nosnippet>
-    <img src="/icon.png">
-    <div class="loading-text"></div>
-  </div>
-
-
-  <main>
-    <div id="now-playing">
-      <div class="title">
-        <img src="/emotes/evil-cheer.webp">
-        <span>Now Playing</span>
-        <img src="/emotes/neuro-cheer.webp">
-      </div>
-    </div>
-    <div id="content-container">
-      <header id="header">
-        <div id="header-buttons">
-          <a href="/about" style="color: #aaa; text-decoration: none">About</a>
-          <button title="Change Theme" id="change-theme-button">
-            <img src="/icons/moon.svg" />
-          </button>
-          <button id="header-login-button">Log In</button>
-        </div>
-      </header>
-
-      <div id="content">
-        <div id="content-tabs">
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer id="footer"></footer>
-  <script src="https://www.youtube.com/iframe_api"></script>
+<body style="background-color: #131313;">
 </body>
 
 </html>

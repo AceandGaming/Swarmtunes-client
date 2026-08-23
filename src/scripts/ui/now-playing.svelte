@@ -1,0 +1,63 @@
+<script lang="ts">
+    import PlaybackState from "@ts/playback.svelte"
+    import ItemList from "@ts/ui/item-list.svelte"
+</script>
+
+<div id="now-playing">
+    <div class="title">
+        <img src="/emotes/evil-cheer.webp" alt="">
+        <h1>Now Playing</h1>
+        <img src="/emotes/neuro-cheer.webp" alt="">
+    </div>
+    <div class="scroll">
+        <ItemList items={PlaybackState.queue.slice(0, 20)} extraInfo={false} contextMenuButton={false} --font-size="0.9rem" />
+    </div>
+</div>
+
+<style>
+    #now-playing {
+        width: 250px;
+
+        display: flex;
+        flex-direction: column;
+
+        padding: 10px;
+        padding-bottom: 0;
+        gap: 10px;
+        background-color: var(--background-colour);
+    }
+    .title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        gap: 5px;
+        padding-bottom: 5px;
+
+        border-bottom: solid 1px var(--subtext-colour);
+    }
+    .title :first-child {
+        transform: scaleX(-1);
+    }
+    .title img {
+        height: 32px;
+        width: auto;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+    .scroll {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    @media (max-width: 800px) {
+        #now-playing {
+            width: 180px;
+        }
+        img {
+            display: none;
+        }
+    }
+</style>

@@ -35,11 +35,8 @@
 </div>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
     .current-song-bar {
-        --background-colour: var(--current-song-bar);
+        background-color: var(--current-song-bar);
 
         grid-template-columns: auto max-content;
         grid-template-rows: calc(100% - 4px) 4px;

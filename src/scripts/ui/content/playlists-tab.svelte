@@ -3,12 +3,18 @@
     import ItemCards from "@ts/ui/item-cards.svelte"
     import { auth } from "@ts/login.svelte.ts"
     import { ShowLogin, CreatePlaylist } from "@ts/ui/popup.svelte.ts"
+    import { session } from "@ts/session.svelte";
+
 </script>
 
 <div id="playlists-tab">
     {#if auth.loggedIn}
-        <button onclick={() => CreatePlaylist()}>Create Playlist</button>
-        <ItemCards items={PlaylistStore.GetAll()} grid={true} />
+        {#if session.loading}
+            <div class="loading-text"></div>
+        {:else}
+            <button onclick={() => CreatePlaylist()}>Create Playlist</button>
+            <ItemCards items={PlaylistStore.GetAll()} grid={true} />
+        {/if}
     {:else}
         <div class="error-screen">
             <h1>Login Required</h1>
@@ -18,10 +24,14 @@
 </div>
 
 <style>
+    #playlists-tab {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
     button {
-        border-radius: 999px;
-        font-size: medium;
-        padding: 3px 8px;
         width: 140px;
         margin-bottom: 20px;
     }
@@ -34,6 +44,13 @@
         justify-content: center;
         align-items: center;
         gap: 20px;
+    }
+    .error-screen h1 {
+        font-size: 2rem;
+    }
+
+    .loading-text {
+        margin: 20px auto;
     }
 
     @media (max-width: 600px) {

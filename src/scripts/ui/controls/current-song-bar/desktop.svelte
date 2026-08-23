@@ -37,11 +37,8 @@
 </div>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
     .current-song-bar {
-        --background-colour: var(--current-song-bar);
+        background-color: var(--current-song-bar);
 
         display: grid;
         grid-template-columns: repeat(3, 1fr);

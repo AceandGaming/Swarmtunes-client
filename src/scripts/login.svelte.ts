@@ -22,20 +22,16 @@ export const auth = {
 export async function Login(username: string, password: string) {
     user = await NetLogin(username, password)
 
-    Trigger()
     return user
 }
 export async function Signup(username: string, password: string) {
     user = await NetSignup(username, password)
 
-    Trigger()
     return user
 }
 export async function Logout() {
     await NetLogout()
     user = undefined
-
-    Trigger()
 }
 
 export async function Initialize() {
@@ -52,17 +48,4 @@ export async function Initialize() {
     }
 
     initialized = true
-
-    Trigger()
-}
-
-const callbacks: ((user: User | undefined) => void)[] = []
-
-/** @deprecated Use Svelte **/
-export function OnLogin(callback: (user: User | undefined) => void) {
-    callbacks.push(callback)
-}
-
-function Trigger() {
-    callbacks.forEach(callback => callback(user))
 }

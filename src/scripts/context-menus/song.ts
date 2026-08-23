@@ -1,4 +1,3 @@
-import ToastManager from "@ts/ui/toast-manager"
 import PlaybackController from "@ts/playback"
 import PlaylistProvider from "@ts/playlist-provider"
 import { ShareSongV1, ExportSong } from "@ts/api/song"
@@ -28,9 +27,7 @@ export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
 
                 try {
                     await PlaylistProvider.AddSongsToPlaylist(playlist.id, [song.id])
-                    ToastManager.Toast(`Added song to playlist`, "none", 3, true)
                 } catch (e) {
-                    ToastManager.Toast("Failed to add songs to playlist", "error")
                     console.error(e)
                 }
             },
@@ -44,7 +41,6 @@ export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
                 const url = "https://share.swarmtunes.com/?s=" + (await ShareSongV1(song.id))
                 try {
                     CopyToClipboard(url)
-                    ToastManager.Toast("Copied link to clipboard!")
                 }
                 catch {
                     console.error("Failed to copy link to clipboard")

@@ -8,14 +8,7 @@ import type { MediaView } from "@ts/ui/content/media-view"
 
 declare global {
     interface Window {
-        Network: typeof Network
-        Login: typeof Login
-        SongRequester: typeof SongRequester
-        MediaView: MediaView
-
         isMobile: boolean
-        isTablet: boolean
-        isNewSession: boolean
     }
     type id = string
 

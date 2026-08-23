@@ -1,6 +1,4 @@
-import { ReplaceEmotesOfString } from "@ts/emote"
 import PlaybackController from "@ts/playback"
-import ToastManager from "@ts/ui/toast-manager"
 import PlaylistProvider from "@ts/playlist-provider"
 import { ContextMenuGroup, type ContextMenuOption } from "@ts/context-menu.svelte"
 import type { Playlist } from "@ts/models/playlist"
@@ -30,7 +28,6 @@ export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption
                     return
                 }
                 await PlaylistProvider.DeletePlaylist(playlist.id)
-                ToastManager.Toast("Playlist Deleted!")
             }
         },
         {
@@ -46,10 +43,8 @@ export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption
 
                 try {
                     await PlaylistProvider.AddSongsToPlaylist(otherPlaylist.id, songIds)
-                    ToastManager.Toast(`Added ${songIds.length} songs to ${ReplaceEmotesOfString(otherPlaylist.title)}`, "none", 3, true)
                 }
                 catch (e) {
-                    ToastManager.Toast("Failed to add songs to playlist", "error")
                     console.error(e)
                 }
             }

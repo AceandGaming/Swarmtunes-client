@@ -28,7 +28,6 @@
     import Popup from "@ts/ui/popups/popup.svelte"
     import { Login, Signup } from "@ts/login.svelte.ts"
     import { HttpError } from "@ts/api/network"
-    import ToastManager from "@ts/ui/toast-manager"
 
     let usernameError = $state(false)
     let passwordError = $state(false)
@@ -47,8 +46,6 @@
             busy = true
             const user = await func(username, password)
             visible = false
-
-            ToastManager.Toast(`Logged in as ${user.username}`)
         }
         catch (e) {
             console.error(e)

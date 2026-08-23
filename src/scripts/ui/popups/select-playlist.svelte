@@ -21,7 +21,9 @@
 
     $effect(() => {
         visible;
-        resolve(undefined)
+        if (!visible) {
+            resolve(undefined)
+        }
     })
 
 </script>

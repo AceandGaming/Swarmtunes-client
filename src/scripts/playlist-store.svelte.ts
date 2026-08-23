@@ -1,5 +1,7 @@
 import type { Playlist } from "@ts/models/playlist"
 import { SvelteMap } from "svelte/reactivity"
+import "@ts/session.svelte"
+
 class PlaylistStore {
     private playlists = new SvelteMap<string, Playlist>()
     private playlistArray = $derived(Array.from(this.playlists.values()))
@@ -8,6 +10,9 @@ class PlaylistStore {
         for (const playlist of playlists) {
             this.playlists.set(playlist.id, playlist)
         }
+    }
+    public Clear() {
+        this.playlists.clear()
     }
 
     public Get(id: id) {
@@ -50,10 +55,6 @@ class PlaylistStore {
             playlist.RemoveSong(songId)
         }
         this.Set(id, playlist)
-    }
-
-    public Clear() {
-        this.playlists.clear()
     }
 }
 

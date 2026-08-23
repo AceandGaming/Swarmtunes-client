@@ -53,6 +53,12 @@
         margin: auto;
     }
 
+    #discover {
+        padding-left: 20px;
+        padding-top: 20px;
+        overflow-y: auto;
+    }
+
     #swarmfm-button {
         width: 50px;
         height: auto;
@@ -62,7 +68,7 @@
         background-size: 45px;
         background-repeat: no-repeat;
         background-position: center;
-        }
+    }
 
     #discover h1 {
         font-family: Neuro, system-ui, sans-serif;
@@ -77,7 +83,6 @@
     }
 
     #discover > :global(.item-cards) {
-        flex: 0 0 auto;
         margin-bottom: 40px;
     }
 </style>

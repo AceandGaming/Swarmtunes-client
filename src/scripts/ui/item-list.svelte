@@ -4,7 +4,7 @@
     import { flipNoScale } from "@ts/misc"
     import { IconDotsVertical } from "@tabler/icons-svelte-runes"
     import { CreateSongContextMenu, CreatePlaylistContextMenu } from "@ts/context-menus"
-    import ContextMenu from "@ts/context-menu.svelte.ts"
+    import ContextMenu, { type ContextMenuOption } from "@ts/context-menu.svelte.ts"
     import { MobileHoldSvelte } from "@ts/mobile-hold"
 
     type Item = Playlist | Song
@@ -13,6 +13,7 @@
         animate?: boolean
         extraInfo?: boolean
         contextMenuButton?: boolean
+        contextMenu?: (item: T) => ContextMenuOption[]
         onItemClick?: (item: T) => void
     }
 
@@ -21,23 +22,21 @@
         animate = false,
         extraInfo = true,
         contextMenuButton = true,
+        contextMenu,
         onItemClick
     }: Props<T> = $props();
-
-
-    /** @deprecated This function is for legacy usage and should be avoided*/
-    export function Update(newItems: T[]) {
-        items = newItems
-    }
-
 
     let toggledFlip = $derived(animate ? flipNoScale : () => ({ duration: 0 }))
 
     function OpenContextMenu(event: MouseEvent | TouchEvent, item: T) {
         let menu
-        if (item instanceof Song) {
+        if (contextMenu) {
+            menu = contextMenu(item)
+        }
+        else if (item instanceof Song) {
             menu = CreateSongContextMenu(item)
-        } else if (item instanceof Playlist) {
+        } 
+        else if (item instanceof Playlist) {
             menu = CreatePlaylistContextMenu(item)
         }
         else {
@@ -56,6 +55,7 @@
         <li 
             animate:toggledFlip={{ duration: 300}}
             onclick={() => onItemClick?.(item)}
+            class:unavailable={"playable" in item && !item.audioInfo.playable}
             
             oncontextmenu={(e) => OpenContextMenu(e, item)} 
             {@attach MobileHoldSvelte((e) => OpenContextMenu(e, item))}
@@ -83,12 +83,6 @@
 </ul>
 
 <style>
-    * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
     li {
         height: 55px;
 
@@ -102,9 +96,15 @@
         border-radius: 10px;
 
         transition: background-color 0.1s ease;
+        cursor: pointer;
     }
     li:hover {
         background-color: var(--song-item-hover);
+    }
+    li.unavailable {
+        filter: grayscale(1);
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 
     li :global(.cover) {

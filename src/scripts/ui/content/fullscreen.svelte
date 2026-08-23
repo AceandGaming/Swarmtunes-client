@@ -144,9 +144,6 @@
 </div>
 
 <style>
-    #fullscreen * {
-        box-sizing: border-box;
-    }
     #fullscreen :global(*) {
         color: white !important;
     }

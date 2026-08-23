@@ -1,52 +1,40 @@
 <script lang="ts">
     import { IconX, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
-
-    import type { Song } from "@ts/models/song"
+    import { Song } from "@ts/models/song"
     import SongList from "@ts/ui/item-list.svelte"
     import Cover from "@ts/ui/cover.svelte"
-    import { HideContentTabs, ShowContentTabs } from "@ts/ui/header"
     import PlaybackController from "@ts/playback"
+    import MediaView from "./media-view.svelte.ts"
+    import { CreateSongContextMenu } from "@ts/context-menus"
+    import { ContextMenuGroup } from "@ts/context-menu.svelte.ts"
+    import PlaylistProvider from "@ts/playlist-provider"
+    import { Playlist } from "@ts/models/playlist.ts"
 
-    let title = $state("Title")
-    let subtitle = $state("")
-    let artworkUrl = $state("")
-    let songs: Song[] = $state([])
     let loading = $state(true)
-    let visable = $state(false)
-    let catagory = $state("song")
 
-    export function UpdateMeta(newTitle: string, newSubtitle: string, newArtworkUrl: string, isPlaylist: boolean = false) {
-        title = newTitle
-        subtitle = newSubtitle
-        artworkUrl = newArtworkUrl
-
-        if (isPlaylist) {
-            catagory = "playlist-item"
-        }
-        else {
-            catagory = "song"
-        }
-    }
-    export function UpdateSongs(newSongs: Song[]) {
-        songs = newSongs
-    }
-    export function SetLoading(state: boolean) {
-        loading = state
-    }
-
-    export function Show() {
-        visable = true
-        HideContentTabs()
-    }
-    export function Hide() {
-        visable = false
-        ShowContentTabs()
-    }
+    let songs: Song[] = $state([])
+    let media = $derived(MediaView.media)
 
     let search: string = $state("")
     let currentSongs: Song[] = $derived(
         songs.filter(song => song.title.toLowerCase().includes(search.toLowerCase()))
     )
+
+    $effect(() => {
+        if (!MediaView.media) {
+            return
+        }
+        loading = true
+        if (MediaView.media instanceof Song) {
+            songs = [MediaView.media]
+            loading = false
+            return
+        }
+        MediaView.media.GetSongs().then(s => {
+            loading = false
+            songs = s
+        })
+    })
 
     function OnItemClick(song: Song) {
         PlaybackController.Play({song, songs})
@@ -58,57 +46,73 @@
         PlaybackController.Play({songs})
     }
 
+    function FormatDuration(seconds: number) {
+        if (seconds > 3600) {
+            const hours = Math.floor(seconds / 3600)
+            const minutes = Math.floor((seconds % 3600) / 60)
+            return `${hours}h ${minutes}m`
+        }
+        return `${Math.floor(seconds / 60)}m ${seconds % 60}s`
+    }
+    function CreatePlaylistItemContextMenu(song: Song) {
+        const menu = CreateSongContextMenu(song)
+        menu.push({
+            label: "Remove from playlist",
+            group: ContextMenuGroup.Playlist,
+            icon: IconX,
+            Action: () => {
+                if (!media) {
+                    return
+                }
+                const id = media.id
+                PlaylistProvider.RemoveSongsFromPlaylist(media.id, [song.id]).then(() => {
+                    if (id !== media.id) {
+                        return
+                    }
+                    songs = songs.filter(s => s.id !== song.id)
+                })
+            }
+        })
+        return menu
+    }
+
 </script>
 
 <div 
     id="media-view"
-    class:loading
-    class:visable
 
-    style={`--artwork-url: url(${artworkUrl})`}
+    style:--artwork-url = {MediaView.media?.GetArtwork() ? `url("${MediaView.media.GetArtwork()}")` : undefined}
 >
     <header>
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
-        
         <div class="cover" onclick={OnCoverClick} role="button" tabindex="0">
-            <Cover item={{GetArtwork: () => artworkUrl}} class="cover-image"/>
+            <Cover item={MediaView.media} class="cover-image"/>
             <div class="overlay"><IconPlayerPlayFilled size="unset" /></div>
         </div>
         <div class="text-container">
-            <h1>{title}</h1>
-            <h2>{subtitle}</h2>
-            {#if loading}
-                <h3>Loading...</h3>
-            {:else}
-                <h3>{songs.length} Songs</h3>
-            {/if}
+            <h1>{media?.displayTitle}</h1>
+            <h2>{media?.displayDate}</h2>
+            <h3>{media instanceof Song ? 1 : media?.songCount} Songs - {FormatDuration(media?.seconds ?? 0)}</h3>
         </div>
         <nav>
             <button class="icon-button play-button" onclick={OnCoverClick}><IconPlayerPlayFilled size="unset" /></button>
             <input class="search" bind:value={search} placeholder="Search" type="text">
         </nav>
-        <button class="close icon-button" onclick={() => Hide()}><IconX size="unset" /></button>
+        <button class="close icon-button" onclick={() => MediaView.Hide()}><IconX size="unset" /></button>
     </header>
     <div class="content">
         {#if loading}
             <div class="loading-text"></div>
         {:else}
-            <SongList items={currentSongs} onItemClick={OnItemClick}/>
+            <SongList items={currentSongs} onItemClick={OnItemClick} contextMenu={media instanceof Playlist ? CreatePlaylistItemContextMenu : undefined }/>
         {/if}
     </div>
 </div>
 
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
     #media-view {
-        display: none;
+        display: block;
         overflow-y: auto;
-    }
-    #media-view.visable {
-        display: block
     }
 
     button.close {
@@ -147,10 +151,10 @@
         max-width: 100%;
         margin: auto;
         cursor: pointer;
+        height: 100%;
     }
     header :global(.cover-image) {
         width: 100%;
-        height: 100%;
         transition: filter 0.1s ease-in-out;
     }
     @media (hover: hover) {

@@ -1,5 +1,3 @@
-// import SelectPlaylist from "@ts/ui/popups/select-playlist"
-import ToastManager from "@ts/ui/toast-manager"
 import PlaybackController from "@ts/playback"
 import PlaylistProvider from "@ts/playlist-provider"
 import type { Collection } from "@ts/models/collection"
@@ -30,9 +28,7 @@ export function CreateCollectionContextMenu(collection: Collection): ContextMenu
 
                 try {
                     await PlaylistProvider.AddSongsToPlaylist(playlist.id, songIds)
-                    ToastManager.Toast(`Added ${songIds.length} songs to playlist`, "none", 3, true)
                 } catch (e) {
-                    ToastManager.Toast("Failed to add songs to playlist", "error")
                     console.error(e)
                 }
             },
