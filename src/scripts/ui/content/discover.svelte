@@ -3,6 +3,7 @@
     import type { Song, Collection } from "@ts/models"
     import { onMount } from "svelte"
     import ItemCards from "@ts/ui/item-cards.svelte"
+    import PlaybackState from "@ts/playback.svelte"
 
     let loading = $state(true)
 
@@ -30,7 +31,7 @@
 </script>
 
 <div id="discover">
-    <button id="swarmfm-button" title="Play SwarmFM!" data-rightclickcategory="swarmfm"></button>
+    <button id="swarmfm-button" title="Play SwarmFM!" onclick={() => PlaybackState.Play({ swarmfm: true})}></button>
     {#if loading}
         <div class="loading-text"></div>
     {:else}

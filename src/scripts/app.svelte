@@ -24,8 +24,6 @@
 
 
 <script lang="ts">
-    import "@css/themes.css"
-    import "@css/styles.css"
     import { GetKeys } from "@ts/misc";
     import NowPlaying from "@ts/ui/now-playing.svelte"
     import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
