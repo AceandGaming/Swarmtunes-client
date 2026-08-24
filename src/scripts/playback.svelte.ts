@@ -72,7 +72,9 @@ function CreatePlaybackState() {
         SeekPercent: (percent: number) => Controller.SeekPercent(percent),
 
         ToggleShuffle: () => Controller.ToggleShuffle(),
-        ToggleRepeat: () => Controller.ToggleRepeat()
+        ToggleRepeat: () => Controller.ToggleRepeat(),
+
+        SkipTo: (song: Song) => Controller.SkipTo(song),
     }
 }
 

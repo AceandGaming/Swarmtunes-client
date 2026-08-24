@@ -27,7 +27,7 @@
     .popup-background {
         position: fixed;
         inset: 0;
-        z-index: 3;
+        z-index: 20;
 
         display: flex;
         justify-content: center;

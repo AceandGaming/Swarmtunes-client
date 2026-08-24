@@ -7,6 +7,8 @@
     import fullscreen from "./fullscreen.svelte.ts"
     import { onMount } from "svelte";
     import type { Color } from "colorthief"
+    import PlaylistProvider from "@ts/playlist-provider.ts"
+    import { SelectPlaylist } from "@ts/ui/popup.svelte.ts"
     
     let fullscreenElement: HTMLDivElement
     let colour: Color | undefined = $state()
@@ -107,6 +109,23 @@
         }
     })
 
+    async function OnAddToPlaylistClick(e: MouseEvent) {
+        if (!Playback.currentSong) {
+            return
+        }
+
+        const playlist = await SelectPlaylist()
+        if (!playlist) {
+            return
+        }
+
+        try {
+            await PlaylistProvider.AddSongsToPlaylist(playlist.id, [Playback.currentSong.id])
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -134,7 +153,7 @@
             <span class="title">{Playback.currentSong?.title ?? "Title"}</span>
             <span class="artists sub-text">{Playback.currentSong?.displayArtists ?? "Artists"}</span>   
         </div>
-        <button class="add-to-playlist icon-button"><IconPlaylistAdd size="unset"/></button>
+        <button class="add-to-playlist icon-button" onclick={OnAddToPlaylistClick}><IconPlaylistAdd size="unset"/></button>
     </div>
     <Seek thinkness={10} />
     <MediaControls iconSize={40} />

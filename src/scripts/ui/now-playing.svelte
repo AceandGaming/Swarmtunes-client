@@ -10,7 +10,16 @@
         <img src="/emotes/neuro-cheer.webp" alt="">
     </div>
     <div class="scroll">
-        <ItemList items={PlaybackState.queue.slice(0, 20)} extraInfo={false} contextMenuButton={false} --font-size="0.9rem" />
+        <ItemList 
+            items={PlaybackState.queue.slice(0, 20)} 
+            extraInfo={false} 
+            contextMenuButton={false} 
+            animate={true} 
+
+            onItemClick={(song) => PlaybackState.SkipTo(song)}
+            
+            --font-size="0.9rem" 
+        />
     </div>
 </div>
 
@@ -50,6 +59,7 @@
     .scroll {
         overflow-y: auto;
         overflow-x: hidden;
+        height: 100%;
     }
 
     @media (max-width: 800px) {
