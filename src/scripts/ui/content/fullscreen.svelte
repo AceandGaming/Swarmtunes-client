@@ -5,7 +5,6 @@
     import MediaControls from "@ts/ui/controls/media-controls.svelte";
     import Playback from "@ts/playback.svelte"
     import fullscreen from "./fullscreen.svelte.ts"
-    import { onMount } from "svelte";
     import type { Color } from "colorthief"
     import PlaylistProvider from "@ts/playlist-provider.ts"
     import { SelectPlaylist } from "@ts/ui/popup.svelte.ts"
@@ -66,48 +65,32 @@
     let offset = $state(0)
     let startOffset = 0
 
-    onMount(() => {
-        function TouchStart(e: TouchEvent) {
-            offset = 0
-            startOffset = e.touches[0].clientY
-        }
-        function TouchMove(e: TouchEvent) {
-            const y = e.touches[0].clientY
-            const diff = y - startOffset
+    function OnTouchStart(e: TouchEvent) {
+        offset = 0
+        startOffset = e.touches[0].clientY
+    }
+    function OnTouchMove(e: TouchEvent) {
+        const y = e.touches[0].clientY
+        const diff = y - startOffset
 
-            if (diff > 20 || offset > 0) {
-                offset = diff
-            }
-            else {
-                offset = 0
-            }
+        if (diff > 20 || offset > 0) {
+            offset = diff
         }
-        function TouchEnd() {
-            if (offset > window.innerHeight * 0.1) {
-                fullscreen.Hide()
-            }
+        else {
             offset = 0
         }
-        function FullscreenChange() {
-            if (document.fullscreenElement != fullscreenElement) {
-                fullscreen.Hide()
-            }
+    }
+    function OnTouchEnd() {
+        if (offset > window.innerHeight * 0.1) {
+            fullscreen.Hide()
         }
-
-        document.addEventListener("fullscreenchange", FullscreenChange)
-        document.addEventListener("visibilitychange", UpdateWakeLock)
-        window.addEventListener("touchstart", TouchStart)
-        window.addEventListener("touchmove", TouchMove)
-        window.addEventListener("touchend", TouchEnd)
-
-        return () => {
-            document.removeEventListener("fullscreenchange", FullscreenChange)
-            document.removeEventListener("visibilitychange", UpdateWakeLock)
-            window.removeEventListener("touchstart", TouchStart)
-            window.removeEventListener("touchmove", TouchMove)
-            window.removeEventListener("touchend", TouchEnd)
+        offset = 0
+    }
+    function OnFullscreenChange() {
+        if (document.fullscreenElement != fullscreenElement) {
+            fullscreen.Hide()
         }
-    })
+    }
 
     async function OnAddToPlaylistClick(e: MouseEvent) {
         if (!Playback.currentSong) {
@@ -128,6 +111,8 @@
 
 </script>
 
+<svelte:document onfullscreenchange={OnFullscreenChange} onvisibilitychange={UpdateWakeLock}></svelte:document>
+
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div 
     id="fullscreen"
@@ -138,6 +123,10 @@
     style:--tc={topColour}
     style:--bc={bottomColour}
     style:--offset={`${offset}px`}
+
+    ontouchstart={OnTouchStart}
+    ontouchmove={OnTouchMove}
+    ontouchend={OnTouchEnd}
 
     bind:this={fullscreenElement}
 >
@@ -215,7 +204,7 @@
 
         background: linear-gradient(to bottom right, var(--tc), var(--bc));
 
-        transform: translateY(100vh);
+        transform: translateY(100%);
         transition: --tc 1s ease, --bc 1s ease, transform 0.2s ease;
         
         grid-template-rows: auto 2fr auto 1fr;

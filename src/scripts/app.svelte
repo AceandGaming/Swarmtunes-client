@@ -69,7 +69,7 @@
 {/snippet}
 {#snippet headerButtons()}
     <div class="buttons">
-        <a style="font-size: 1rem" class="sub-text" href="about">About</a>
+        <a style="font-size: 1rem" class="sub-text about" href="about">About</a>
         <button style="height: 30px" class="icon-button" title="Change Theme" onclick={() => Theme.Cycle()}><img src={Theme.current.icon} alt=""></button>
         <button onclick={OnLoginButtonClick}>{auth.loggedIn ? "Logout" : "Login"}</button>
     </div>
@@ -250,6 +250,10 @@
         header .buttons {
             padding: 4px;
             gap: 15px;
+        }
+        header .about {
+            position: absolute;
+            left: 10px;
         }
     }
 </style>

@@ -52,6 +52,10 @@ export async function ShareSongV1(id: id) {
 }
 
 export async function Search(query: string, limit = 10): Promise<Song[]> {
+    if (!query) {
+        return []
+    }
+
     const params = new URLSearchParams({
         q: query,
         limit: String(limit)

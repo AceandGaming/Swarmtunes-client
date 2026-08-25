@@ -74,7 +74,7 @@
                 </div>
             {/if}
             {#if contextMenuButton}
-                <button class="context-menu-button icon-button" onclick={(e) => OpenContextMenu(e, item)}>
+                <button class="context-menu-button icon-button" onclick={(e) => {e.stopPropagation(); OpenContextMenu(e, item)}}>
                     <IconDotsVertical size="100%" />
                 </button>
             {/if}
