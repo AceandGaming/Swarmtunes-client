@@ -4,18 +4,18 @@
         playlists: {
             icon: IconLayoutGrid,
             import: () => import("@ts/ui/content/playlists-tab.svelte"),
-            label: "Playlists"
+            label: "Libary"
         },
         discover: {
             icon: IconWorld,
             import: () => import("@ts/ui/content/discover.svelte"),
             label: "Discover"
         },
-        search: {
-            icon: IconSearch,
-            import: () => import("@ts/ui/content/search.svelte"),
-            label: "Search"
-        }
+        // search: {
+        //     icon: IconSearch,
+        //     import: () => import("@ts/ui/content/search.svelte"),
+        //     label: "Search"
+        // }
     }
     function GetPage(page: keyof typeof pages) {
         return pages[page]
