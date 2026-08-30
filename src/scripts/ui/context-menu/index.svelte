@@ -1,19 +1,12 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { MediaQuery } from "svelte/reactivity"
     import Desktop from "./desktop.svelte"
     import Mobile from "./mobile.svelte"
 
-    let mobileLayout = $state(window.isMobile)
-    
-    onMount(() => {
-        mobileLayout = window.innerWidth < 600
-        window.addEventListener("resize", () => {
-            mobileLayout = window.innerWidth < 600
-        })
-    })
+    let mobileLayout = new MediaQuery("max-width: 600px")
 </script>
 
-{#if mobileLayout}
+{#if mobileLayout.current}
     <Mobile />
 {:else}
     <Desktop />

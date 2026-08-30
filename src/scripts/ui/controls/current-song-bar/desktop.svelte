@@ -30,7 +30,9 @@
     <div class="right">
         <div class="controls">
             <MediaControls />
-            <VolumeButton />
+            {#if !window.isMobile}
+                <VolumeButton />
+            {/if}
         </div>
         <button class="icon-button fullscreen" onclick={() => SongFullscreen.Show()}><IconMaximize /></button>
     </div>

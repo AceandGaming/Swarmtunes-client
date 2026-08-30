@@ -25,3 +25,6 @@ dist-ssr
 
 # linux
 .directory
+
+@other
+todo.md
