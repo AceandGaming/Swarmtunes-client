@@ -20,3 +20,10 @@
         <button onclick={Submit}>Copy</button>
     {/snippet}
 </Popup>
+
+<style>
+    input {
+        width: 100%;
+        min-width: min(400px, 80vw);
+    }
+</style>

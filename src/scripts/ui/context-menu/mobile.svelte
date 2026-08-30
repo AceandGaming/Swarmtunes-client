@@ -73,7 +73,7 @@
         position: fixed;
         bottom: 0;
 
-        z-index: 5;
+        z-index: 100;
 
         display: block;
         width: 100vw;

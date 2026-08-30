@@ -12,6 +12,7 @@ function CreatePlaybackState() {
     let duration: number = $state(0)
 
     let currentSong: Song | undefined = $state(Controller.currentSong)
+    let iframe: HTMLIFrameElement | undefined = $state()
     let queue: Song[] = $state([])
 
 
@@ -23,7 +24,10 @@ function CreatePlaybackState() {
         played = newPlayed
         duration = newDuration
     })
-    Controller.AddCallback("loadedSong", v => currentSong = v)
+    Controller.AddCallback("loadedSong", (song, frame) => {
+        currentSong = song
+        iframe = frame
+    })
     Controller.AddCallback("queueChange", (newQueue: Song[]) => {
         queue = newQueue
     })
@@ -38,6 +42,7 @@ function CreatePlaybackState() {
         get played() { return played },
         get duration() { return duration },
         get currentSong() { return currentSong },
+        get iframe() { return iframe },
         get queue() { return queue },
 
         set playing(val) {

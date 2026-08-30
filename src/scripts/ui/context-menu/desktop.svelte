@@ -96,7 +96,7 @@
         display: none;
         min-width: 150px;
 
-        z-index: 5;
+        z-index: 100;
 
         background-color: var(--button-colour);
         border-radius: 10px;

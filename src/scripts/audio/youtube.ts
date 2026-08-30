@@ -28,7 +28,7 @@ export default class YoutubePlayer extends AudioPlayer {
     }
 
     public CreatePlayer() {
-        this.iframe.src = "https://www.youtube-nocookie.com/embed/?enablejsapi=1&playsinline=1"
+        this.iframe.src = "https://www.youtube-nocookie.com/embed/?enablejsapi=1&playsinline=1&controls=0&cc_load_policy=0"
         const api = window.YT
         if (!api) {
             throw new Error("Youtube API not found")
@@ -64,16 +64,8 @@ export default class YoutubePlayer extends AudioPlayer {
         const iframe = document.createElement("iframe")
         iframe.id = "youtube-player"
         iframe.allow = "autoplay; encrypted-media"
-        iframe.width = "1"
-        iframe.height = "1"
         iframe.setAttribute("playsinline", "1")
         iframe.sandbox = "allow-scripts allow-same-origin"
-        iframe.style = `
-            position: absolute;
-            top: 0;
-            z-index: -100;
-            pointer-events: none;
-        `
 
         document.body.append(iframe)
         this.iframe = iframe

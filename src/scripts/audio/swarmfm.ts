@@ -19,6 +19,10 @@ export default class SwarmFMRadio extends AudioPlayer {
     private iframe: HTMLIFrameElement
     private api: SwarmFMApi
 
+    public GetIframe() {
+        return this.iframe
+    }
+
     constructor(onPlay: () => void, onPause: () => void, onUpdate: () => void, onEnded: () => void, onMetadata: (song: Song) => void) {
         super(onPlay, onPause, onUpdate, onEnded)
 
@@ -84,12 +88,6 @@ export default class SwarmFMRadio extends AudioPlayer {
         })
 
         document.body.append(this.iframe)
-        this.iframe.style = `
-            position: absolute;
-            top: 0;
-            z-index: -100;
-            pointer-events: none;
-        `
     }
 
     public async Load(song: Song): Promise<void> {

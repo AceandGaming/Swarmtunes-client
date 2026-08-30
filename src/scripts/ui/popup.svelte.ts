@@ -55,7 +55,8 @@ export async function CopyToClipboard(link: string) {
             currentPopup = {
                 component: CopyLinkPopup,
                 props: {
-                    resolve
+                    resolve,
+                    link
                 }
             }
         })

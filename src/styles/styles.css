@@ -15,6 +15,16 @@ body {
     font-size: 1rem;
 }
 
+body > iframe {
+    position: fixed;
+    top: 0;
+    z-index: -100;
+    pointer-events: none;
+    border: none;
+    pointer-events: none !important;
+    border-radius: 10px;
+}
+
 .loading-text {
     width: fit-content;
     font-weight: bold;
