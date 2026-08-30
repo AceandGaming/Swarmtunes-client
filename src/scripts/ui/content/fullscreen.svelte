@@ -380,6 +380,7 @@
     .art .iframe-anchor {
         aspect-ratio: 16/9;
         width: auto;
+        max-width: 90vw;
         height: 65vh;
         background-color: var(--cover-background);
         border-radius: 10px;
@@ -472,8 +473,12 @@
             display: block;
         }
 
-        .art-container > :global(.cover){
+        .art > :global(.cover){
             width: min(45vh, 90vw);
+        }
+
+        .video-button {
+            display: none;
         }
     }
 </style>
