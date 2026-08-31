@@ -12,8 +12,10 @@
     import { CopyToClipboard } from "@ts/ui/popup.svelte.ts"
     import ContextMenu from "@ts/context-menu.svelte.ts"
     import { ShareSongV1 } from "@ts/api/song.ts"
+    import { GetSongColour } from "@ts/misc.ts";
     
     let fullscreenElement: HTMLDivElement
+
     let colour: Color | undefined = $state()
 
     let topColour = $state("var(--background)");
@@ -24,8 +26,15 @@
     let showVideo: boolean = $state(false)
 
     $effect(() => {
-        Playback.currentSong;
-        showVideo = false
+        if (!Playback.iframe || !fullscreen.visible) {
+            showVideo = false
+        }
+    })
+    $effect(() => {
+        if (!Playback.currentSong) {
+            return
+        }
+        GetSongColour(Playback.currentSong).then(c => colour = c)
     })
 
     $effect(() => {
@@ -202,11 +211,11 @@
     <div class="art-container">
         <div class="art">
             {#if !showVideo}
-                <Cover item={Playback.currentSong} bind:colour />
+                <Cover item={Playback.currentSong} />
             {:else}
                 <div class="iframe-anchor" bind:this={fullscreenAnchor}></div>
             {/if}
-            {#if !window.isMobile && Playback.iframe}
+            {#if Playback.iframe}
                 <button class="video-button icon-button" onclick={() => showVideo = !showVideo}><IconVideo size="40" /></button>
             {/if}
         </div>
@@ -381,7 +390,7 @@
         aspect-ratio: 16/9;
         width: auto;
         max-width: 90vw;
-        height: 65vh;
+        height: 60vh;
         background-color: var(--cover-background);
         border-radius: 10px;
     }
@@ -452,7 +461,6 @@
 
     @media (aspect-ratio < 0.9) {
         #fullscreen {
-
             background: linear-gradient(to bottom, var(--tc), var(--bc));
 
             justify-content: center;
@@ -466,19 +474,18 @@
             "seek"
             "controls";
         }
-        .info-container .info {
-            text-align: left;
+        #fullscreen:not(.video) {
+            .add-to-playlist {
+                display: block;
+            }
+            .info-container .info {
+                text-align: left;
+            }
         }
-        .add-to-playlist {
-            display: block;
-        }
+            
 
         .art > :global(.cover){
             width: min(45vh, 90vw);
-        }
-
-        .video-button {
-            display: none;
         }
     }
 </style>
