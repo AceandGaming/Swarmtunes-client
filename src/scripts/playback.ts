@@ -155,6 +155,9 @@ class PlaybackController {
             this.queue.PopulateQueue(songs, this.shuffle)
         }
         if (song) {
+            if (!songs) {
+                this.queue.PopulateQueue([song], this.shuffle)
+            }
             this.queue.SkipTo(song)
         }
         if (song || songs) {
