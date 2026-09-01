@@ -4,10 +4,20 @@
     import { CreateSongContextMenu } from "@ts/context-menus";
     import type { Song } from "@ts/models"
     import { ContextMenuGroup } from "@ts/context-menu.svelte"
+    import { IconX } from "@tabler/icons-svelte-runes"
 
     function ContextMenu(song: Song) {
         let menu = CreateSongContextMenu(song)
         menu = menu.filter(m => m.group !== ContextMenuGroup.Queue)
+
+        menu.push({
+            label: "Remove from Queue",
+            group: ContextMenuGroup.Queue,
+            icon: IconX,
+            Action: () => {
+                PlaybackState.RemoveFromQueue(song)
+            }
+        })
         
         return menu
     }

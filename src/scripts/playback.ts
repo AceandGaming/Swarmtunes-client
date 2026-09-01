@@ -261,6 +261,7 @@ class PlaybackController {
 
         this.PlaySong(nextSong)
     }
+
     public SkipTo(song: Song) {
         this.queue.SkipTo(song)
         this.TriggerQueue()
@@ -269,6 +270,15 @@ class PlaybackController {
     }
     public AddToQueue(song: Song) {
         this.queue.Add(song)
+        this.TriggerQueue()
+    }
+    public RemoveFromQueue(song: Song) {
+        const previousSong = this.queue.currentSong
+        this.queue.Remove(song)
+        if (this.currentSong !== previousSong && this.currentSong) {
+            this.PlaySong(this.currentSong)
+        }
+
         this.TriggerQueue()
     }
 

@@ -80,6 +80,8 @@ function CreatePlaybackState() {
         ToggleRepeat: () => Controller.ToggleRepeat(),
 
         SkipTo: (song: Song) => Controller.SkipTo(song),
+        AddToQueue: (song: Song) => Controller.AddToQueue(song),
+        RemoveFromQueue: (song: Song) => Controller.RemoveFromQueue(song),
     }
 }
 

@@ -37,9 +37,20 @@ export default class SongQueue {
         this.LoadSongs(songs)
         this.UpdateQueue(shuffle)
     }
+
     public Add(song: Song) {
         this.songs.splice(this.queuePointer + 1, 0, song)
     }
+    public Remove(song: Song) {
+        const index = this.songs.findIndex((s) => s.id == song.id)
+        if (index == -1) {
+            console.error("Song not found in queue")
+            return
+        }
+        this.songs.splice(index, 1)
+    }
+
+
     public ReShuffle(shuffle: boolean = true) {
         const song = this.currentSong
         this.UpdateQueue(shuffle)
