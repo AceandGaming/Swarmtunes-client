@@ -9,6 +9,8 @@
         --s: var(--size, 25px);
         --g: calc(var(--s) / 6);
 
+        container-type: inline-size;
+
         position: relative;
         height: var(--s);
         aspect-ratio: 2/1;
@@ -28,7 +30,6 @@
         content: "";
 
         position: absolute;
-        left: 0;
 
         margin: calc(var(--g) / 2);
 
@@ -44,7 +45,6 @@
         transition: left 0.2s ease, transform 0.2s ease;
     }
     .toggle.active::after {
-        left: calc(100% - var(--g));
-        transform: translateX(-100%);
+        transform: translateX(calc(100cqw - 100% - var(--g)));
     }
 </style>
