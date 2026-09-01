@@ -1,6 +1,5 @@
-import type ShoppingBagDiscount from "@tabler/icons-svelte-runes/icons/shopping-bag-discount"
-import { GetCoverUrl, GetSong } from "@ts/api/song"
-import SongCache from "@ts/song-cache"
+import { GetCoverUrl } from "@ts/api/song"
+import Settings from "@ts/settings.svelte"
 
 interface Artist {
     name: string,
@@ -32,6 +31,9 @@ type SongDict = {
 
 export class Song {
     public get displayTitle() {
+        if (Settings.useOriginalLanguage) {
+            return this.titleOriginal ?? this.title
+        }
         return this.title
     }
     public get displayArtists() {

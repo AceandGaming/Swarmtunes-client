@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import { IconLayoutGrid, IconWorld, IconSearch } from "@tabler/icons-svelte-runes";
+    import { IconLayoutGrid, IconWorld, IconSettings } from "@tabler/icons-svelte-runes";
     const pages = {
         playlists: {
             icon: IconLayoutGrid,
@@ -11,11 +11,11 @@
             import: () => import("@ts/ui/content/discover.svelte"),
             label: "Discover"
         },
-        // search: {
-        //     icon: IconSearch,
-        //     import: () => import("@ts/ui/content/search.svelte"),
-        //     label: "Search"
-        // }
+        search: {
+            icon: IconSettings,
+            import: () => import("@ts/ui/content/settings.svelte"),
+            label: "Settings"
+        }
     }
     function GetPage(page: keyof typeof pages) {
         return pages[page]
@@ -27,7 +27,6 @@
     import { GetKeys } from "@ts/misc";
     import NowPlaying from "@ts/ui/now-playing.svelte"
     import CurrentSongBar from "@ts/ui/controls/current-song-bar/index.svelte"
-    import Theme from "@ts/theme.svelte.ts"
     import Fullscreen from "@ts/ui/content/fullscreen.svelte"
     import { GetPopup } from "@ts/ui/popup.svelte.ts"
     import { MediaQuery } from "svelte/reactivity";
@@ -70,7 +69,6 @@
 {#snippet headerButtons()}
     <div class="buttons">
         <a style="font-size: 1rem" class="sub-text about" href="about">About</a>
-        <button style="height: 30px" class="icon-button" title="Change Theme" onclick={() => Theme.Cycle()}><img src={Theme.current.icon} alt=""></button>
         <button onclick={OnLoginButtonClick}>{auth.loggedIn ? "Logout" : "Login"}</button>
     </div>
 {/snippet}
@@ -78,9 +76,6 @@
 
 <main id="app">
     {#if mobile.current}
-        <header>
-            {@render headerButtons()}
-        </header>
         <footer>
             <CurrentSongBar />
             {@render tabs()}

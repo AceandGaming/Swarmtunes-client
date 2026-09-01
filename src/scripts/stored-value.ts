@@ -1,3 +1,5 @@
+
+
 export default class StoredValue<T> {
     private value: T
 

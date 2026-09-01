@@ -1,14 +1,14 @@
 const themes = [
-    { name: "dark", icon: "/icons/moon.svg" },
-    { name: "neuro", icon: "/icons/newero.avif" },
-    { name: "evil", icon: "/icons/newliv.avif" }
+    { name: "Dark", id: "dark", icon: "/icons/moon.svg" },
+    { name: "Neuro", id: "neuro", icon: "/icons/newero.avif" },
+    { name: "Evil", id: "evil", icon: "/icons/newliv.avif" }
 ] as const
 
 let currentTheme = $state(0)
 
 $effect.root(() => {
     $effect(() => {
-        document.documentElement.dataset.theme = themes[currentTheme].name
+        document.documentElement.dataset.theme = themes[currentTheme].id
 
         try {
             localStorage.setItem("theme", currentTheme.toString())
@@ -33,7 +33,13 @@ export default {
     get current() {
         return themes[currentTheme]
     },
+    get themes() {
+        return themes
+    },
     Cycle() {
         currentTheme = (currentTheme + 1) % themes.length
+    },
+    SetTheme(id: string) {
+        currentTheme = themes.findIndex(theme => theme.id === id)
     }
 }
