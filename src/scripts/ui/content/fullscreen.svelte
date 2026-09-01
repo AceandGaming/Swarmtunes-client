@@ -227,7 +227,7 @@
     
     <div class="info-container">
         <div class="info">
-            <span class="title">{Playback.currentSong?.title ?? "Title"}</span>
+            <span class="title">{Playback.currentSong?.displayTitle ?? "Title"}</span>
             <span class="artists sub-text">{Playback.currentSong?.displayArtists ?? "Artists"}</span>   
         </div>
         <button class="add-to-playlist icon-button" onclick={OnAddToPlaylistClick}><IconPlaylistAdd size="unset"/></button>
