@@ -3,7 +3,16 @@ import path from 'node:path'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 export default defineConfig({
-    plugins: [svelte()],
+    plugins: [svelte({
+        onwarn: (warning, handler) => {
+            //silence accessibility warnings (will fix later)
+            if (warning.code.startsWith('a11y_')) {
+                return
+            }
+
+            handler(warning)
+        }
+    })],
     resolve: {
         alias: {
             '@ts': path.resolve(__dirname, 'src/scripts'),
