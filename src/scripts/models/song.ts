@@ -106,6 +106,24 @@ export class Song {
             dict.drmProtected
         )
     }
+    public static From(song: Song) {
+        return new Song(
+            song.id,
+            song.title,
+            song.titleOriginal,
+            song.artists,
+            song.singers,
+            song.artworks,
+            song.dateReleased,
+            song.type,
+            song.seconds,
+            song.playable,
+            song.audioType,
+            song.audioId,
+            song.drmProtected
+        )
+    }
+
     public GetArtwork(size: "small" | "medium" | "large" = "medium") {
         if (this.artworkOverride) {
             return this.artworkOverride

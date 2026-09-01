@@ -6,6 +6,7 @@
     import { CreateSongContextMenu, CreatePlaylistContextMenu } from "@ts/context-menus"
     import ContextMenu, { type ContextMenuOption } from "@ts/context-menu.svelte.ts"
     import { MobileHoldSvelte } from "@ts/mobile-hold"
+    import { GetDownloads } from "@ts/song-downloads"
 
     type Item = Playlist | Song
     type Props<T extends Item> = {
@@ -77,6 +78,9 @@
                 <button class="context-menu-button icon-button" onclick={(e) => {e.stopPropagation(); OpenContextMenu(e, item)}}>
                     <IconDotsVertical size="100%" />
                 </button>
+            {/if}
+            {#if GetDownloads().has(item.id)}
+                <p>downloaded</p>
             {/if}
         </li>
     {/each}

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { IconX, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
+    import { IconX, IconPlayerPlayFilled, IconDownload } from "@tabler/icons-svelte-runes"
     import { Song } from "@ts/models/song"
     import SongList from "@ts/ui/item-list.svelte"
     import Cover from "@ts/ui/cover.svelte"
@@ -9,6 +9,7 @@
     import { ContextMenuGroup } from "@ts/context-menu.svelte.ts"
     import PlaylistProvider from "@ts/playlist-provider"
     import { Playlist } from "@ts/models/playlist.ts"
+    import { Download as DownloadSongs } from "@ts/song-downloads.ts"
 
     let loading = $state(true)
 
@@ -94,8 +95,11 @@
             <h3>{media instanceof Song ? 1 : media?.songCount} Songs - {FormatDuration(media?.seconds ?? 0)}</h3>
         </div>
         <nav>
-            <button class="icon-button play-button" onclick={OnCoverClick}><IconPlayerPlayFilled size="unset" /></button>
+            <button class="icon-button play-button" onclick={OnCoverClick}><IconPlayerPlayFilled size=40 /></button>
             <input class="search" bind:value={search} placeholder="Search" type="text">
+            {#if media instanceof Playlist}
+                <button class="icon-button download" onclick={async () => await DownloadSongs(await media.GetSongs())}><IconDownload size=40 /></button>
+            {/if}
         </nav>
         <button class="close icon-button" onclick={() => MediaView.Hide()}><IconX size="unset" /></button>
     </header>
@@ -233,8 +237,6 @@
     }
     header > nav .play-button {
         display: none;
-
-        width: 40px;
     }
 
     .content {

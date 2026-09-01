@@ -1,6 +1,7 @@
 import { GetSongs, GetSong, GetSongAudioUrl } from "@ts/api/song"
 import { Song } from "@ts/models/song"
 import SongCache from "@ts/song-cache"
+import * as SongDatabase from "@ts/song-downloads"
 
 export default class SongProvider {
     public static async GetMany(ids: id[], retainOrder = false): Promise<Song[]> {
@@ -9,7 +10,9 @@ export default class SongProvider {
         }
 
         const songs = []
-        const missing = []
+        let missing = []
+        let inDatabase: id[] = []
+
         for (const id of ids) {
             const song = SongCache.Get(id)
             if (song) {
@@ -20,16 +23,30 @@ export default class SongProvider {
         }
 
         if (missing.length > 0) {
+            inDatabase = await SongDatabase.GetExists(missing)
+            if (inDatabase.length > 0) {
+                const newSongs = await SongDatabase.GetMany(inDatabase)
+                for (const song of newSongs) {
+                    SongCache.Set(song.id, song)
+                    songs.push(song)
+                }
+            }
+
+            missing = missing.filter(id => !inDatabase.includes(id))
+        }
+
+        if (missing.length > 0) {
             const newSongs = await GetSongs(missing)
+
             for (const song of newSongs) {
                 SongCache.Set(song.id, song)
                 songs.push(song)
             }
         }
 
-        console.log(`Loaded ${songs.length}/${ids.length}, Fetched ${missing.length}, Cached ${ids.length - missing.length}`)
+        console.log(`Loaded ${songs.length}/${ids.length}, Fetched ${missing.length}, Cached ${ids.length - missing.length - inDatabase.length}, In Database ${inDatabase.length ?? 0}`)
 
-        if (!retainOrder) {
+        if (retainOrder) {
             return songs.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
         }
 
@@ -40,6 +57,10 @@ export default class SongProvider {
     }
 
     public static async GetAudioUrl(id: id): Promise<string> {
+        const url = await SongDatabase.GetSongAudioUrl(id)
+        if (url) {
+            return url
+        }
         return GetSongAudioUrl(id)
     }
 }
