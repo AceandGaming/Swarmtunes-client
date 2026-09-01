@@ -22,7 +22,7 @@
         <Cover item={PlaybackState.currentSong} />
         
         <div class="info">
-            <span>{PlaybackState.currentSong?.title || "Title"}</span>
+            <span>{PlaybackState.currentSong?.displayTitle || "Title"}</span>
             <span class="sub-text">{PlaybackState.currentSong?.displayArtists || "Artists"}</span>
         </div>
     </div>
