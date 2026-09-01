@@ -22,6 +22,7 @@ export function CreatePlaylistContextMenu(playlist: Playlist): ContextMenuOption
             label: "Delete",
             group: ContextMenuGroup.Edit,
             icon: IconTrash,
+            visible: playlist.type === "user",
             Action: async () => {
                 const confirmation = await Popups.ConfirmAction(`You are about to delete\n${playlist.title}`)
                 if (!confirmation) {

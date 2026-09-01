@@ -1,6 +1,17 @@
 <script lang="ts">
     import PlaybackState from "@ts/playback.svelte"
     import ItemList from "@ts/ui/item-list.svelte"
+    import { CreateSongContextMenu } from "@ts/context-menus";
+    import type { Song } from "@ts/models"
+    import { ContextMenuGroup } from "@ts/context-menu.svelte"
+
+    function ContextMenu(song: Song) {
+        let menu = CreateSongContextMenu(song)
+        menu = menu.filter(m => m.group !== ContextMenuGroup.Queue)
+        
+        return menu
+    }
+
 </script>
 
 <div id="now-playing">
@@ -17,6 +28,7 @@
             animate={true} 
 
             onItemClick={(song) => PlaybackState.SkipTo(song)}
+            contextMenu={ContextMenu}
             
             --font-size="0.9rem" 
         />

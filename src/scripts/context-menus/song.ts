@@ -8,6 +8,10 @@ import { SelectPlaylist, CopyToClipboard } from "@ts/ui/popup.svelte.ts"
 import { auth } from "@ts/login.svelte"
 
 export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
+    if (song.id == "swarmfm") {
+        return []
+    }
+
     return [
         {
             label: "Add to Queue",
