@@ -59,6 +59,16 @@ body > iframe {
     font-size: 0.8rem;
 }
 
+.spinner {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 button {
     cursor: pointer;
     border: none;

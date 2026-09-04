@@ -54,14 +54,22 @@ export async function GetExists(ids: id[]): Promise<string[]> {
     return exist
 }
 
-export async function Download(songs: Song[]) {
+async function Download(songs: Song[]) {
     await db.WaitForOpen()
 
     const exist = await db.Exists(songs.map(song => song.id))
     const missing = songs.filter(song => !exist.includes(song.id))
 
+    if (missing.length == 0) {
+        return
+    }
+
+    console.log("Downloading", missing.length, "songs")
+
     async function download(song: Song) {
-        const response = await fetch(NetworkAudioUrl(song.id))
+        const response = await fetch(NetworkAudioUrl(song.id), {
+            priority: "low"
+        })
 
         if (!response.ok) {
             throw new Error(
@@ -79,4 +87,28 @@ export async function Download(songs: Song[]) {
     }
 
     await Promise.allSettled(missing.map(download))
+}
+async function RemoveSongs(ids: id[]) {
+    await db.WaitForOpen()
+
+    await db.Delete(...ids)
+
+    for (const id of ids) {
+        downloadedSongs.delete(id)
+    }
+}
+
+export async function Sync(songs: Song[]) {
+    console.log("Syncing", songs.length, "songs")
+    const ids = songs.map(song => song.id)
+
+    const existing = await db.GetAllIds()
+    console.log("Existing", existing.length)
+    await Download(songs)
+
+    const toRemove = existing.filter(id => !ids.includes(id))
+    console.log("Removing", toRemove.length)
+    if (toRemove.length > 0) {
+        await RemoveSongs(toRemove)
+    }
 }

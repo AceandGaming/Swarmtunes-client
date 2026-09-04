@@ -18,9 +18,13 @@ class PlaylistStore {
     public Get(id: id) {
         return this.playlists.get(id)
     }
+    public GetMany(ids: id[]) {
+        return ids.map(id => this.Get(id)).filter(playlist => playlist !== undefined)
+    }
     public GetAll() {
         return this.playlistArray
     }
+
 
     public Set(id: id, playlist: Playlist) {
         this.playlists.set(id, playlist)

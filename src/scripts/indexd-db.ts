@@ -109,6 +109,9 @@ export class Database<T extends { id: string }> {
 
         return exist
     }
+    public async Has(id: string): Promise<boolean> {
+        return (await this.Exists([id])).length > 0
+    }
 
     public async Put(...items: T[]) {
         if (!this.db) {

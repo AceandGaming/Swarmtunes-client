@@ -2,7 +2,7 @@
     import { Playlist, Song } from "@ts/models"
     import Cover from "@ts/ui/cover.svelte"
     import { flipNoScale } from "@ts/misc"
-    import { IconDotsVertical } from "@tabler/icons-svelte-runes"
+    import { IconDotsVertical, IconCircleArrowDownFilled as IconDown } from "@tabler/icons-svelte-runes"
     import { CreateSongContextMenu, CreatePlaylistContextMenu } from "@ts/context-menus"
     import ContextMenu, { type ContextMenuOption } from "@ts/context-menu.svelte.ts"
     import { MobileHoldSvelte } from "@ts/mobile-hold"
@@ -61,9 +61,16 @@
             oncontextmenu={(e) => OpenContextMenu(e, item)} 
             {@attach MobileHoldSvelte((e) => OpenContextMenu(e, item))}
         >
-            <Cover {item} />
+            <div class="cover-wrapper">
+                <Cover {item} />
+                {#if item instanceof Song && GetDownloads().has(item.id)}
+                    <IconDown size="unset" />
+                {/if}
+            </div>
             <div class="info">
-                <h1>{item.displayTitle}</h1>
+                <h1>
+                    {item.displayTitle}
+                </h1>
                 <h2 class="sub-text">{item instanceof Song ? (item.displayArtists) : `${item.songCount} songs`}</h2>
             </div>
             {#if extraInfo}
@@ -79,9 +86,7 @@
                     <IconDotsVertical size="100%" />
                 </button>
             {/if}
-            {#if GetDownloads().has(item.id)}
-                <p>downloaded</p>
-            {/if}
+
         </li>
     {/each}
 </ul>
@@ -111,9 +116,22 @@
         cursor: not-allowed;
     }
 
-    li :global(.cover) {
+    li .cover-wrapper {
+        position: relative;
         height: 100%;
     }
+    .cover-wrapper > :global(.cover) {
+        height: 100%;
+        width: 100%;
+    }
+    .cover-wrapper > :global(svg) {
+        position: absolute;
+        right: 1px;
+        bottom: 1px;
+        height: 12px;
+        aspect-ratio: 1;
+    }
+
     li > button {
         height: 50%;
         aspect-ratio: 1;
@@ -154,6 +172,10 @@
     }
     li h1 {
         font-size: var(--font-size, 1rem);
+    }
+    h1 > :global(svg) {
+        display: inline-block;
+        vertical-align: middle;
     }
     li h2 {
         font-size: calc(var(--font-size, 1rem) * 0.8);
