@@ -25,6 +25,7 @@ export default class OggPlayer extends AudioPlayer {
 
 
     private audio: HTMLAudioElement
+    private DisposeAudio?: () => void
 
     constructor(onPlay: () => void, onPause: () => void, onUpdate: () => void, onEnded: () => void) {
         super(onPlay, onPause, onUpdate, onEnded)
@@ -39,9 +40,12 @@ export default class OggPlayer extends AudioPlayer {
 
 
     public async Load(song: Song) {
-        const url = await SongProvider.GetAudioUrl(song.id)
+        this.DisposeAudio?.()
 
-        this.audio.src = url
+        const audio = await SongProvider.GetAudio(song.id)
+
+        this.audio.src = audio.url
+        this.DisposeAudio = audio.Dispose
     }
 
     public Play(): void {

@@ -3,6 +3,11 @@ import { Song } from "@ts/models/song"
 import SongCache from "@ts/song-cache"
 import * as SongDatabase from "@ts/song-downloads"
 
+type AudioSource = {
+    readonly url: string
+    Dispose(): void
+}
+
 export default class SongProvider {
     public static async GetMany(ids: id[], retainOrder = false): Promise<Song[]> {
         if (ids.length == 0) {
@@ -56,11 +61,20 @@ export default class SongProvider {
         return (await this.GetMany([id]))[0]
     }
 
-    public static async GetAudioUrl(id: id): Promise<string> {
-        const url = await SongDatabase.GetSongAudioUrl(id)
-        if (url) {
-            return url
+    public static async GetAudio(id: id): Promise<AudioSource> {
+        const audio = await SongDatabase.GetSongAudio(id)
+        if (audio) {
+            const url = URL.createObjectURL(audio)
+            return {
+                url,
+                Dispose: () => {
+                    URL.revokeObjectURL(url)
+                }
+            }
         }
-        return GetSongAudioUrl(id)
+        return {
+            url: GetSongAudioUrl(id),
+            Dispose: () => { }
+        }
     }
 }

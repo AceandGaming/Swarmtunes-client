@@ -32,14 +32,14 @@ export async function GetSong(id: id): Promise<Song | undefined> {
     }
     return Song.From(item.song)
 }
-export async function GetSongAudioUrl(id: id): Promise<string | undefined> {
+export async function GetSongAudio(id: id): Promise<Blob | undefined> {
     await db.WaitForOpen()
 
     const item = await db.Get(id)
     if (!item) {
         return
     }
-    return URL.createObjectURL(item.audio)
+    return item.audio
 }
 
 export async function GetMany(ids: id[]): Promise<Song[]> {
