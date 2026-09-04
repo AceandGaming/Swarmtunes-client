@@ -1,3 +1,18 @@
+import { auth } from "@ts/login.svelte.ts"
+
+const personalDBs: Database<any>[] = []
+
+$effect.root(() => {
+    $effect(() => {
+        if (auth.user || !auth.initialized) {
+            return
+        }
+
+        personalDBs.forEach(db => { db.DeleteDatabase() })
+        personalDBs.length = 0
+    })
+})
+
 export class Database<T extends { id: string }> {
     public get opened() {
         return !!this.db
@@ -9,10 +24,22 @@ export class Database<T extends { id: string }> {
     private callbacks: (() => void)[] = []
 
     constructor(
-        private readonly name: string
-    ) { }
+        private readonly name: string,
+        private readonly personal: boolean = false
+    ) {
+        if (personal) {
+            personalDBs.push(this)
+        }
+    }
 
     public async Open() {
+        if (this.db) {
+            return
+        }
+        if (this.personal && !auth.user && auth.initialized) {
+            throw new Error("Cannot open personal database when logged out")
+        }
+
         this.db = await new Promise((resolve, reject) => {
             const req = indexedDB.open(this.name, 1)
 
@@ -27,6 +54,13 @@ export class Database<T extends { id: string }> {
         this.callbacks.forEach(cb => cb())
         this.callbacks = []
     }
+    public Close() {
+        if (this.db) {
+            this.db.close()
+            this.db = undefined
+        }
+    }
+
     public WaitForOpen() {
         return new Promise<void>((resolve, reject) => {
             if (this.opened) {
@@ -147,5 +181,15 @@ export class Database<T extends { id: string }> {
         }
 
         await Promise.allSettled(ids.map(del))
+    }
+
+    public async DeleteDatabase() {
+        await new Promise<void>((resolve, reject) => {
+            const req = indexedDB.deleteDatabase(this.name)
+            req.onsuccess = () => resolve()
+            req.onerror = () => reject(req.error)
+        })
+
+        this.db = undefined
     }
 }

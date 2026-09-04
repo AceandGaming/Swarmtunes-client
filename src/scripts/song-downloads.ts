@@ -1,5 +1,5 @@
 import { Song } from "@ts/models/song"
-import { Database } from "@ts/indexd-db"
+import { Database } from "@ts/indexd-db.svelte"
 import { GetSongAudioUrl as NetworkAudioUrl } from "@ts/api/song"
 import { SvelteSet } from "svelte/reactivity"
 
@@ -10,7 +10,7 @@ type Item = {
 }
 
 
-const db = new Database<Item>("songs")
+const db = new Database<Item>("songs", true)
 const downloadedSongs = new SvelteSet<string>([])
 
 export function GetDownloads() {
