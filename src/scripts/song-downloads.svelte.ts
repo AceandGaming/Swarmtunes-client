@@ -2,6 +2,7 @@ import { Song } from "@ts/models/song"
 import { Database } from "@ts/indexd-db.svelte"
 import { GetSongAudioUrl as NetworkAudioUrl } from "@ts/api/song"
 import { SvelteSet } from "svelte/reactivity"
+import { auth } from "@ts/login.svelte"
 
 type Item = {
     id: string,
@@ -9,19 +10,38 @@ type Item = {
     audio: Blob
 }
 
+$effect.root(() => {
+    $effect(() => {
+        if (!auth.initialized) {
+            return
+        }
+
+        if (auth.user) {
+            async function update() {
+                await db.WaitForOpen()
+                const ids = await db.GetAllIds()
+                if (!auth.user) {
+                    return
+                }
+
+                downloadedSongs = new SvelteSet(ids)
+            }
+            update()
+        }
+        else {
+            downloadedSongs.clear()
+        }
+    })
+})
 
 const db = new Database<Item>("songs", true)
-const downloadedSongs = new SvelteSet<string>([])
+let downloadedSongs = new SvelteSet<string>([])
 
 export function GetDownloads() {
     return downloadedSongs
 }
 
 db.Open()
-db.WaitForOpen().then(async () => {
-    const ids = await db.GetAllIds()
-    ids.forEach(id => downloadedSongs.add(id))
-})
 
 export async function GetSong(id: id): Promise<Song | undefined> {
     await db.WaitForOpen()
@@ -99,6 +119,7 @@ async function RemoveSongs(ids: id[]) {
 }
 
 export async function Sync(songs: Song[]) {
+    await db.WaitForOpen()
     console.log("Syncing", songs.length, "songs")
     const ids = songs.map(song => song.id)
 

@@ -6,7 +6,7 @@
     import { CreateSongContextMenu, CreatePlaylistContextMenu } from "@ts/context-menus"
     import ContextMenu, { type ContextMenuOption } from "@ts/context-menu.svelte.ts"
     import { MobileHoldSvelte } from "@ts/mobile-hold"
-    import { GetDownloads } from "@ts/song-downloads"
+    import { GetDownloads } from "@ts/song-downloads.svelte"
 
     type Item = Playlist | Song
     type Props<T extends Item> = {
@@ -119,6 +119,8 @@
     li .cover-wrapper {
         position: relative;
         height: 100%;
+        width: auto;
+        aspect-ratio: 1;
     }
     .cover-wrapper > :global(.cover) {
         height: 100%;

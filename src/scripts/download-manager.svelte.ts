@@ -1,4 +1,4 @@
-import { Sync } from "@ts/song-downloads"
+import { Sync } from "@ts/song-downloads.svelte"
 import { GetDownloadedPlaylistIds, DownloadPlaylist as Download, RemovePlaylist as Remove, PlaylistDownloaded as Exists } from "@ts/playlist-downloads.ts"
 import SongProvider from "@ts/song-provider"
 import { GetItemsOfPlaylist } from "@ts/api/playlist"

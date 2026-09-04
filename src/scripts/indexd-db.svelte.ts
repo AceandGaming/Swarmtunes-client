@@ -8,8 +8,7 @@ $effect.root(() => {
             return
         }
 
-        personalDBs.forEach(db => { db.DeleteDatabase() })
-        personalDBs.length = 0
+        personalDBs.forEach(db => { db.ClearContents() })
     })
 })
 
@@ -35,9 +34,6 @@ export class Database<T extends { id: string }> {
     public async Open() {
         if (this.db) {
             return
-        }
-        if (this.personal && !auth.user && auth.initialized) {
-            throw new Error("Cannot open personal database when logged out")
         }
 
         this.db = await new Promise((resolve, reject) => {
@@ -183,13 +179,18 @@ export class Database<T extends { id: string }> {
         await Promise.allSettled(ids.map(del))
     }
 
-    public async DeleteDatabase() {
+    public async ClearContents() {
+        if (!this.db) {
+            throw new Error("Database not opened")
+        }
+
+        const tx = this.db.transaction([this.storeName], "readwrite")
+        const store = tx.objectStore(this.storeName)
+
         await new Promise<void>((resolve, reject) => {
-            const req = indexedDB.deleteDatabase(this.name)
+            const req = store.clear()
             req.onsuccess = () => resolve()
             req.onerror = () => reject(req.error)
         })
-
-        this.db = undefined
     }
 }

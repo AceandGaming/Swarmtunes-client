@@ -1,18 +1,22 @@
 import { defineConfig } from 'vite'
 import path from 'node:path'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig({
-    plugins: [svelte({
-        onwarn: (warning, handler) => {
-            //silence accessibility warnings (will fix later)
-            if (warning.code.startsWith('a11y_')) {
-                return
-            }
+    plugins: [
+        svelte({
+            onwarn: (warning, handler) => {
+                //silence accessibility warnings (will fix later)
+                if (warning.code.startsWith('a11y_')) {
+                    return
+                }
 
-            handler(warning)
-        }
-    })],
+                handler(warning)
+            }
+        }),
+        basicSsl(),
+    ],
     resolve: {
         alias: {
             '@ts': path.resolve(__dirname, 'src/scripts'),
