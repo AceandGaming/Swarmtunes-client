@@ -2,9 +2,19 @@ import { Sync } from "@ts/song-downloads.svelte"
 import { GetDownloadedPlaylistIds, DownloadPlaylist as Download, RemovePlaylist as Remove, PlaylistDownloaded as Exists } from "@ts/playlist-downloads.ts"
 import SongProvider from "@ts/song-provider"
 import { GetItemsOfPlaylist } from "@ts/api/playlist"
+import { auth } from "@ts/login.svelte"
+import { untrack } from "svelte"
 
 let syncPromise: Promise<void> | undefined = $state()
 const downloading = $derived(syncPromise !== undefined)
+
+$effect.root(() => {
+    $effect(() => {
+        if (auth.user) {
+            untrack(Update)
+        }
+    })
+})
 
 async function Update() {
     if (syncPromise) {

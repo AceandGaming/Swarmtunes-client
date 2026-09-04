@@ -63,7 +63,7 @@
         >
             <div class="cover-wrapper">
                 <Cover {item} />
-                {#if item instanceof Song && GetDownloads().has(item.id)}
+                {#if extraInfo && item instanceof Song && GetDownloads().has(item.id)}
                     <IconDown size="unset" />
                 {/if}
             </div>
