@@ -233,7 +233,7 @@
         }
 
         #app > :global(#now-playing) {
-            display: none;
+            display: none !important;
         }
 
 
