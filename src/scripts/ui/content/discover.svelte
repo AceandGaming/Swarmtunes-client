@@ -7,8 +7,7 @@
     import ItemList from "@ts/ui/item-list.svelte"
     import { IconX } from "@tabler/icons-svelte-runes"
     import { GetDiscover } from "./discover.svelte.ts"
-
-    let loading = $state(true)
+    import ErrorScreen from "@ts/ui/error-screen.svelte"
 
     let setlists: Collection[] = $state([])
     let discs: Collection[] = $state([])
@@ -16,20 +15,15 @@
     let mashups: Song[] = $state([])
 
     async function LoadDiscover() {
-        loading = true
-        let data = await GetDiscover()
+        const data = await GetDiscover()
 
-        setlists = data.setlists.toSorted((a, b) => b.date!.getTime() - a.date!.getTime())
-        discs = data.discs.toSorted((a, b) => b.disc! - a.disc!)
-        originals = data.originals.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
-        mashups = data.mashups.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
+        setlists = [...data.setlists].sort((a, b) => b.date!.getTime() - a.date!.getTime())
+        discs = [...data.discs].sort((a, b) => b.disc! - a.disc!)
+        originals = [...data.originals].sort((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
+        mashups = [...data.mashups].sort((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
 
-        loading = false
+        return [setlists, discs, originals, mashups]
     }
-
-    onMount(() => {
-        LoadDiscover()
-    })
 
     let query: string = $state("")
     let debouncedQuery = $state('');
@@ -66,9 +60,9 @@
             <ItemList items={songs} onItemClick={(song) => PlaybackState.Play({song, songs})}/>
         {/await}
     {:else}
-        {#if loading}
+        {#await LoadDiscover()}
             <div class="loading-text"></div>
-        {:else}
+        {:then [setlists, discs, originals, mashups]}
             <h1>Setlists</h1>
             <ItemCards items={setlists} />
 
@@ -80,7 +74,9 @@
 
             <h1>Discs</h1>
             <ItemCards items={discs} />
-        {/if}
+        {:catch error}
+            <ErrorScreen title="Error Loading Discover">{error}</ErrorScreen>
+        {/await}
     {/if}
 </div>
 
