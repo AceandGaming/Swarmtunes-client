@@ -5,6 +5,14 @@
     import Settings from "@ts/settings.svelte.ts"
 
     import Theme from "@ts/theme.svelte.ts"
+
+    async function OnDebugButtonClick() {
+        const { CreateDebugDump } = await import("@ts/debug.ts")
+        const { CopyToClipboard } = await import("@ts/ui/popup.svelte.ts")
+
+        const dump = await CreateDebugDump()
+        CopyToClipboard(dump)
+    }
 </script>
 
 {#snippet settingInfo(text: string, description?: string)}
@@ -41,10 +49,12 @@
             {/if}
         </footer>
     {/if}
+    <button class="debug-button" onclick={OnDebugButtonClick}>Debug</button>
 </div>
 
 <style>
     #settings {
+        position: relative;
         --gap: clamp(1rem, 2vw, 2rem);
 
         display: flex;
@@ -96,5 +106,11 @@
         p {
             font-size: 0.8rem;
         }
+    }
+
+    .debug-button {
+        position: absolute;
+        bottom: var(--gap);
+        left: var(--gap);
     }
 </style>
