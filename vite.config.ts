@@ -35,6 +35,9 @@ export default defineConfig({
         }
     },
     build: {
+        target: 'ios15',
+        cssTarget: 'ios15',
+
         sourcemap: true,
         rollupOptions: {
             input: {
