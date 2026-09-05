@@ -17,10 +17,10 @@
     async function LoadDiscover() {
         const data = await GetDiscover()
 
-        setlists = data.setlists.toSorted((a, b) => b.date!.getTime() - a.date!.getTime())
-        discs = data.discs.toSorted((a, b) => b.disc! - a.disc!)
-        originals = data.originals.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
-        mashups = data.mashups.toSorted((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
+        setlists = [...data.setlists].sort((a, b) => b.date!.getTime() - a.date!.getTime())
+        discs = [...data.discs].sort((a, b) => b.disc! - a.disc!)
+        originals = [...data.originals].sort((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
+        mashups = [...data.mashups].sort((a, b) => b.dateReleased.getTime() - a.dateReleased.getTime())
 
         return [setlists, discs, originals, mashups]
     }
