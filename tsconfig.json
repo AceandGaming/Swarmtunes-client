@@ -22,6 +22,7 @@
         "src/assets/*"
       ]
     },
+    "useDefineForClassFields": true,
     "allowJs": true,
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
