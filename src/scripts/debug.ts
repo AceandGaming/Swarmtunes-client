@@ -24,15 +24,19 @@ function CreateLog() {
 }
 function GetDebugInfo() {
     return {
+        userAgent: navigator.userAgent,
+
         sizes: {
             innerWidth: window.innerWidth,
             clientWidth: document.documentElement.clientWidth,
+            visualWidth: window.visualViewport?.width,
             innerHeight: window.innerHeight,
-            clientHeight: document.documentElement.clientHeight
+            clientHeight: document.documentElement.clientHeight,
+            visualHeight: window.visualViewport?.height,
         },
 
         dpr: window.devicePixelRatio,
-        userAgent: navigator.userAgent,
+        scale: window.visualViewport?.scale,
 
         isFullscreen: document.fullscreenElement != null,
         isMobile: window.isMobile,

@@ -4,6 +4,7 @@
     import { auth } from "@ts/login.svelte.ts"
     import { ShowLogin, CreatePlaylist } from "@ts/ui/popup.svelte.ts"
     import { session } from "@ts/session.svelte";
+    import ErrorScreen from "@ts/ui/error-screen.svelte"
 
 </script>
 
@@ -16,10 +17,9 @@
             <ItemCards items={PlaylistStore.GetAll()} grid={true} />
         {/if}
     {:else}
-        <div class="error-screen">
-            <h1>Login Required</h1>
+        <ErrorScreen title="Login Required" >
             <button onclick={() => ShowLogin()}>Login</button>
-        </div>
+        </ErrorScreen>
     {/if}
 </div>
 
@@ -34,19 +34,6 @@
     button {
         width: 140px;
         margin-bottom: 20px;
-    }
-    .error-screen {
-        position: absolute;
-        inset: 0;
-    
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-    }
-    .error-screen h1 {
-        font-size: 2rem;
     }
 
     .loading-text {
