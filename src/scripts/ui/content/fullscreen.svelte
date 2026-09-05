@@ -428,7 +428,7 @@
         display: none;
     }
 
-    @media (max-width: 500px) or (max-height: 500px) {
+    @media (max-width: 500px), (max-height: 500px) {
         #fullscreen {
             --gap: clamp(10px, 1dvh, 80px);
             padding: max(var(--gap), 4dvh) var(--gap);
@@ -445,7 +445,7 @@
         }
     }
 
-    @media (aspect-ratio < 1.4) {
+    @media (max-aspect-ratio: 7/5) {
         #fullscreen {
             --gap: clamp(30px, 8vmin, 80px);
 
@@ -459,7 +459,7 @@
         }
     }
 
-    @media (aspect-ratio < 0.9) {
+    @media (max-aspect-ratio: 9/10) {
         #fullscreen {
             background: linear-gradient(to bottom, var(--tc), var(--bc));
 
