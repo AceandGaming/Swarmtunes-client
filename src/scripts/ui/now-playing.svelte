@@ -5,7 +5,6 @@
     import type { Song } from "@ts/models"
     import { ContextMenuGroup } from "@ts/context-menu.svelte"
     import { IconX } from "@tabler/icons-svelte-runes"
-    import { untrack } from "svelte"
 
     function ContextMenu(song: Song) {
         let menu = CreateSongContextMenu(song)

@@ -48,7 +48,6 @@
             visible = false
         }
         catch (e) {
-            console.error(e)
             if (e instanceof HttpError) {
                 const error = GetFeildOfErrorCode(e.code)
                 if (error) {
@@ -68,6 +67,7 @@
                     return
                 }
             }
+            console.error(e)
             errorMessage = "An unknown error occurred"
         }
         finally {

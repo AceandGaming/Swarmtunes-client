@@ -2,7 +2,21 @@
     import { IconX } from "@tabler/icons-svelte-runes"
     import type { Snippet } from "svelte"
 
-    let { title = "", visible = $bindable(true), busy=$bindable(false), buttons, children }: {title?: string, visible?: boolean, busy?: boolean, buttons?: Snippet, children: Snippet} = $props()
+    type Props = {
+        title?: string
+        visible?: boolean
+        busy?: boolean
+        buttons?: Snippet
+        children: Snippet
+    }
+
+    let { 
+        title = "", 
+        visible = $bindable(true), 
+        busy=$bindable(false), 
+        buttons, 
+        children 
+    }: Props = $props()
 </script>
 
 

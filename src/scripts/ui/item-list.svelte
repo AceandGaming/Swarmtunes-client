@@ -33,8 +33,9 @@
         draggable = false
     }: Props<T> = $props();
 
-    let toggledFlip = $derived(animate ? flipNoScale : () => ({ duration: 0 }))
     let element: HTMLElement
+
+    let toggledFlip = $derived(animate ? flipNoScale : () => ({ duration: 0 }))
     let sortable: Sortable
 
     let itemLookup = $derived(new Map(items.map(item => [item.id, item])))

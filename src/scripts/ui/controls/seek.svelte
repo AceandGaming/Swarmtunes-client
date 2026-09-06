@@ -1,6 +1,5 @@
 <script lang="ts">
     import PlaybackState from "@ts/playback.svelte"
-    import { onMount } from "svelte";
 
     let { showText = true, thinkness = 8, class: className = "seek" } = $props()
 
@@ -37,25 +36,26 @@
         const secs = Math.floor(absSeconds % 60).toString().padStart(2, '0')
         return `${seconds < 0 ? "-" : ""}${minutes}:${secs}`
     }
-    onMount(() => {
-        document.addEventListener("mousemove", (event) => {
-            if (seeking) {
-                OnSeek(event)
-            }
-        })
-        document.addEventListener("touchmove", (event) => {
-            if (seeking) {
-                OnSeek(event)
-            }
-        })
-        document.addEventListener("mouseup", () => {
-            seeking = false
-        })
-        document.addEventListener("touchend", () => {
-            seeking = false
-        })
-    })
 </script>
+<svelte:document
+    onmousemove={(e) => {
+        if (seeking) {
+            OnSeek(e)
+        }
+    }}
+    onmouseup={() => {
+        seeking = false
+    }}
+
+    ontouchmove={(e) => {
+        if (seeking) {
+            OnSeek(e)
+        }
+    }}
+    ontouchend={() => {
+        seeking = false
+    }}
+></svelte:document>
 
 <div 
     class={className}

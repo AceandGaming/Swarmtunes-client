@@ -1,28 +1,18 @@
 <script lang="ts">
     import { IconVolume, IconVolume2, IconVolumeOff } from "@tabler/icons-svelte-runes";
     import PlaybackState from "@ts/playback.svelte"
-    import { onMount } from "svelte";
 
     let volumeButton: HTMLElement
     let showSlider = $state(false)
-
-    onMount(() => {
-        function OnClick(event: MouseEvent) {
-            if (volumeButton.contains(event.target as Node)) {
-                return
-            }
-
-            showSlider = false
-        }
-
-        document.addEventListener("mousedown", OnClick)
-
-        return () => {
-            document.removeEventListener("mousedown", OnClick)
-        }
-    })
-    
 </script>
+
+<svelte:document onmousedown={(e) => {
+    if (volumeButton.contains(e.target as Node)) {
+        return
+    }
+
+    showSlider = false
+}}></svelte:document>
 
 <div class="volume-button" bind:this={volumeButton} >
     <button class="icon-button" onclick={() => showSlider = !showSlider}>
@@ -58,6 +48,7 @@
         left: 50%;
 
         display: none;
+        z-index: 1;
 
         transform: translateX(-50%);
     }
