@@ -278,8 +278,19 @@ class PlaybackController {
     public RemoveFromQueue(song: Song) {
         const previousSong = this.queue.currentSong
         this.queue.Remove(song)
+
         if (this.currentSong !== previousSong && this.currentSong) {
             this.PlaySong(this.currentSong)
+        }
+
+        this.TriggerQueue()
+    }
+    public ReorderQueue(ids: id[]) {
+        const previousSong = this.currentSong
+        this.queue.Reorder(ids)
+
+        if (previousSong !== this.currentSong) {
+            this.PlaySong(this.currentSong!)
         }
 
         this.TriggerQueue()

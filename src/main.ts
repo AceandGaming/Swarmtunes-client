@@ -1,8 +1,6 @@
 import "@css/themes.css"
 import "@css/styles.css"
 
-import "@ts/debug.ts"
-
 import App from "@ts/app.svelte"
 import { mount } from "svelte"
 import { Initialize } from "@ts/login.svelte.ts"

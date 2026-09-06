@@ -82,6 +82,7 @@ function CreatePlaybackState() {
         SkipTo: (song: Song) => Controller.SkipTo(song),
         AddToQueue: (song: Song) => Controller.AddToQueue(song),
         RemoveFromQueue: (song: Song) => Controller.RemoveFromQueue(song),
+        ReorderQueue: (ids: id[]) => Controller.ReorderQueue(ids),
     }
 }
 

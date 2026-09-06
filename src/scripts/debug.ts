@@ -1,27 +1,10 @@
 const logs: string[] = []
 
-for (const method of ["log", "info", "warn", "error", "debug"]) {
-    // @ts-ignore
-    const original = console[method]
-
-    // @ts-ignore
-    console[method] = (...args: any[]) => {
-        logs.push(
-            `[${method}] ` +
-            args.map(x =>
-                typeof x === "object" ? JSON.stringify(x) : String(x)
-            ).join(" ")
-        )
-
-        original.apply(console, args)
-    }
-}
-
-function CreateLog() {
-    const log = logs.join("\n")
-    logs.length = 0
-    return log
-}
+// function CreateLog() {
+//     const log = logs.join("\n")
+//     logs.length = 0
+//     return log
+// }
 function GetDebugInfo() {
     return {
         userAgent: navigator.userAgent,
@@ -59,5 +42,5 @@ function GetDebugInfo() {
     }
 }
 export async function CreateDebugDump() {
-    return `---DEBUG INFO---\n${JSON.stringify(GetDebugInfo())}\n\n---LOGS---\n${CreateLog()}`.trim()
+    return `---DEBUG INFO---\n${JSON.stringify(GetDebugInfo())}}`.trim()
 }

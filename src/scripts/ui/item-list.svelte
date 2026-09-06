@@ -7,6 +7,8 @@
     import ContextMenu, { type ContextMenuOption } from "@ts/context-menu.svelte.ts"
     import { MobileHoldSvelte } from "@ts/mobile-hold"
     import { GetDownloads } from "@ts/song-downloads.svelte"
+    import Sortable from "sortablejs"
+    import { onMount } from "svelte"
 
     type Item = Playlist | Song
     type Props<T extends Item> = {
@@ -14,20 +16,28 @@
         animate?: boolean
         extraInfo?: boolean
         contextMenuButton?: boolean
+        draggable?: boolean
         contextMenu?: (item: T) => ContextMenuOption[]
         onItemClick?: (item: T) => void
+        onReorder?: (items: T[]) => void
     }
 
     let {
-        items,
+        items = $bindable(),
         animate = false,
         extraInfo = true,
         contextMenuButton = true,
         contextMenu,
-        onItemClick
+        onItemClick,
+        onReorder,
+        draggable = false
     }: Props<T> = $props();
 
     let toggledFlip = $derived(animate ? flipNoScale : () => ({ duration: 0 }))
+    let element: HTMLElement
+    let sortable: Sortable
+
+    let itemLookup = $derived(new Map(items.map(item => [item.id, item])))
 
     function OpenContextMenu(event: MouseEvent | TouchEvent, item: T) {
         let menu
@@ -49,14 +59,38 @@
 
         ContextMenu.Show({ options: menu, x: x, y: y })
     }
+
+    onMount(() => {
+        sortable = new Sortable(element, {
+            animation: animate ? 150 : 0,
+            disabled: !draggable,
+            onUpdate: (e) => {
+                // @ts-ignore
+                const ids: string[] = [...e.to.children].map((el: HTMLElement) => el.dataset.id)
+                items = ids.map(id => itemLookup.get(id)).filter(item => item !== undefined)
+
+                onReorder?.(items)
+            }
+        })
+
+        return () => {
+            sortable.destroy()
+        }
+    })
+    $effect(() => {
+        sortable.option("disabled", !draggable);
+    })
+
 </script>
 
-<ul class="item-list">
+<ul bind:this={element} class="item-list">
     {#each items as item (item.id)}
         <li 
             animate:toggledFlip={{ duration: 300}}
             onclick={() => onItemClick?.(item)}
             class:unavailable={"playable" in item && !item.audioInfo.playable}
+
+            data-id={item.id}
             
             oncontextmenu={(e) => OpenContextMenu(e, item)} 
             {@attach MobileHoldSvelte((e) => OpenContextMenu(e, item))}

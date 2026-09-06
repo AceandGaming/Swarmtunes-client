@@ -49,6 +49,9 @@ export default class SongQueue {
         }
         this.songs.splice(index, 1)
     }
+    public Reorder(ids: id[]) {
+        this.songs = this.songs.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
+    }
 
 
     public ReShuffle(shuffle: boolean = true) {
