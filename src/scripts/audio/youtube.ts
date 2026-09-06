@@ -2,6 +2,7 @@ import AudioPlayer from "@ts/audio/audio"
 import type { Song } from "@ts/models/song"
 import PlaybackController from "@ts/playback"
 import "@ts/ytapi"
+import Toasts from "@ts/toast.svelte"
 
 export default class YoutubePlayer extends AudioPlayer {
     public get played(): number {
@@ -117,7 +118,15 @@ export default class YoutubePlayer extends AudioPlayer {
 
 
     public async Load(song: Song) {
-        await this.WaitForReady()
+        const RemoveToast = Toasts.AddPersistent("Loading...")
+        try {
+            await this.WaitForReady()
+        }
+        catch (e) {
+            RemoveToast()
+            throw e
+        }
+
 
         const info = song.audioInfo
         if (info.type != "youtube") {
@@ -131,6 +140,8 @@ export default class YoutubePlayer extends AudioPlayer {
             startSeconds: 0
         })
         this.player.setPlaybackQuality('small')
+
+        RemoveToast()
     }
     public Play(): void {
         this.player.playVideo()

@@ -6,6 +6,7 @@ import { IconPlus, IconShare3, IconPlaylistAdd, IconFileExport } from "@tabler/i
 import type { Song } from "@ts/models/song"
 import { SelectPlaylist, CopyToClipboard } from "@ts/ui/popup.svelte.ts"
 import { auth } from "@ts/login.svelte"
+import Toasts from "@ts/toast.svelte.ts"
 
 export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
     if (song.id == "swarmfm") {
@@ -31,8 +32,10 @@ export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
 
                 try {
                     await PlaylistProvider.AddSongsToPlaylist(playlist.id, [song.id])
+                    Toasts.Add(`Added ${song.title} to ${playlist.title}`, "success")
                 } catch (e) {
                     console.error(e)
+                    Toasts.Add(`Failed to add ${song.title} to ${playlist.title}`, "failure")
                 }
             },
             visible: auth.loggedIn
@@ -43,19 +46,22 @@ export function CreateSongContextMenu(song: Song): ContextMenuOption[] {
             icon: IconShare3,
             Action: async () => {
                 const url = "https://share.swarmtunes.com/?s=" + (await ShareSongV1(song.id))
-                try {
-                    CopyToClipboard(url)
-                }
-                catch {
-                    console.error("Failed to copy link to clipboard")
-                }
+                CopyToClipboard(url)
             }
         },
         {
             label: "Export",
             group: ContextMenuGroup.Share,
             icon: IconFileExport,
-            Action: () => ExportSong(song.id)
+            Action: () => {
+                const RemoveToast = Toasts.AddPersistent("Exporting...")
+                try {
+                    ExportSong(song.id)
+                }
+                finally {
+                    RemoveToast()
+                }
+            }
         }
     ]
 }

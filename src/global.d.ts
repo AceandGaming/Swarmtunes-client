@@ -14,5 +14,4 @@ declare global {
 
     var YT: any
     var onYouTubeIframeAPIReady: () => void
-    var logs: string[]
 }

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Popup from "@ts/ui/popups/popup.svelte"
+    import Toasts from "@ts/toast.svelte.ts"
 
     const { link }: {link: string} = $props()
 
@@ -9,6 +10,7 @@
         navigator.clipboard.writeText(link)
         .then(() => {
             visible = false
+            Toasts.Add("Copied to clipboard", "success")
         })
         .catch(console.error)
     }

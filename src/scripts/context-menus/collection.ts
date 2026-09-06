@@ -4,6 +4,7 @@ import type { Collection } from "@ts/models/collection"
 import { ContextMenuGroup, type ContextMenuOption } from "@ts/context-menu.svelte"
 import { IconPlaylistAdd, IconPlayerPlayFilled } from "@tabler/icons-svelte-runes"
 import { auth } from "@ts/login.svelte"
+import Toasts from "@ts/toast.svelte.ts"
 
 export function CreateCollectionContextMenu(collection: Collection): ContextMenuOption[] {
     return [
@@ -18,7 +19,14 @@ export function CreateCollectionContextMenu(collection: Collection): ContextMenu
             icon: IconPlaylistAdd,
             Action: async () => {
                 await collection.LoadSongs()
-                PlaylistProvider.CreatePlaylist(collection.title, collection.GetSongIds())
+                try {
+                    await PlaylistProvider.CreatePlaylist(collection.title, collection.GetSongIds())
+                    Toasts.Add(`Added ${collection.title} to library`, "success")
+                }
+                catch (e) {
+                    console.error(e)
+                    Toasts.Add(`Failed to add ${collection.title} to library`, "failure")
+                }
             },
             visible: auth.loggedIn
         }

@@ -3,6 +3,7 @@ import { Database } from "@ts/indexd-db.svelte"
 import { GetSongAudioUrl as NetworkAudioUrl } from "@ts/api/song"
 import { SvelteSet } from "svelte/reactivity"
 import { auth } from "@ts/login.svelte"
+import Toasts from "@ts/toast.svelte"
 
 type Item = {
     id: string,
@@ -78,7 +79,7 @@ async function Download(songs: Song[]) {
     await db.WaitForOpen()
 
     const exist = await db.Exists(songs.map(song => song.id))
-    const missing = songs.filter(song => !exist.includes(song.id))
+    const missing = songs.filter(song => !exist.includes(song.id) && song.audioInfo.type !== "youtube")
 
     if (missing.length == 0) {
         return
@@ -107,6 +108,7 @@ async function Download(songs: Song[]) {
     }
 
     await Promise.allSettled(missing.map(download))
+    Toasts.Add("Download Complete", "success")
 }
 async function RemoveSongs(ids: id[]) {
     await db.WaitForOpen()

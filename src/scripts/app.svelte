@@ -35,6 +35,7 @@
     import { auth, Logout } from "@ts/login.svelte.ts"
     import { ConfirmAction, ShowLogin } from "@ts/ui/popup.svelte.ts";
     import ContextMenu from "@ts/ui/context-menu/index.svelte"
+    import Toast from "@ts/ui/toast.svelte"
 
 
     let currentPage: keyof typeof pages = $state("discover")
@@ -98,6 +99,7 @@
                 <page.default />
             {/await}
         {/if}
+        <Toast />
     </div>
 </main>
 <ContextMenu />
@@ -210,6 +212,8 @@
         margin-right: 2px;
     }
     .content {
+        position: relative;
+
         grid-area: content;
         min-height: 0;
         overflow: hidden;

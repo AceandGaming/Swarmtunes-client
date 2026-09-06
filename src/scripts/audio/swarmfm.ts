@@ -3,6 +3,7 @@ import type { SwarmFMMetadata } from '@aceandgaming/swarmfm-api'
 import AudioPlayer from '@ts/audio/audio'
 import { Song } from '@ts/models/song'
 import { GetCoverUrl } from '@ts/api/song'
+import Toasts from "@ts/toast.svelte.ts"
 
 export default class SwarmFMRadio extends AudioPlayer {
     public get played(): number {
@@ -91,7 +92,13 @@ export default class SwarmFMRadio extends AudioPlayer {
     }
 
     public async Load(song: Song): Promise<void> {
-        await this.api.WaitForReady()
+        const RemoveToast = Toasts.AddPersistent("Loading...")
+        try {
+            await this.api.WaitForReady()
+        }
+        finally {
+            RemoveToast()
+        }
     }
 
 

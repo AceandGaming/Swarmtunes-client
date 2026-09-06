@@ -8,6 +8,8 @@ import CopyLinkPopup from "@ts/ui/popups/copy-link.svelte"
 import CreatePlaylistPopup from "@ts/ui/popups/create-playlist.svelte"
 import RenamePlaylistPopup from "@ts/ui/popups/rename-playlist.svelte"
 
+import Toasts from "@ts/toast.svelte.ts"
+
 
 type PopupRequest = {
     component: Component<any>
@@ -49,6 +51,7 @@ export function SelectPlaylist(): Promise<Playlist | undefined> {
 export async function CopyToClipboard(link: string) {
     try {
         await navigator.clipboard.writeText(link)
+        Toasts.Add("Copied to clipboard", "success")
     }
     catch {
         await new Promise((resolve) => {

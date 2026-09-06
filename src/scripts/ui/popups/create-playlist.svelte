@@ -22,6 +22,9 @@
             console.error(e)
             errorMessage = "An unknown error occurred"
         }
+        finally {
+            busy = false
+        }
         
         visible = false
     }
