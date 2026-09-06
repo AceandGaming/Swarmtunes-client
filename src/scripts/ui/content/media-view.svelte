@@ -157,7 +157,7 @@
         padding: 20px;
         gap: 20px;
 
-        border-bottom: solid 2px var(--subtext-colour);
+        border-bottom: solid 2px var(--colour-text-muted);
     }
     header::before {
         content: "";
@@ -203,6 +203,7 @@
         transform: scale(0.4);
         
         transition: opacity 0.1s ease-in-out, transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        color: white;
     }
     header > .cover:hover .overlay {
         opacity: 1;

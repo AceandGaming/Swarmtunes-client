@@ -1,5 +1,7 @@
 import "@css/themes.css"
 import "@css/styles.css"
+import "@css/components.css"
+import "@css/custom.css"
 
 import App from "@ts/app.svelte"
 import { mount } from "svelte"
@@ -8,9 +10,6 @@ import { InitMediaSession } from "@ts/media-session.ts"
 import { ClearUrlBar, GetSongId } from "@ts/urlbar.ts"
 import PlaybackController from "@ts/playback"
 import SongProvider from "@ts/song-provider"
-
-
-
 
 document.cookie = "cookie=A cookie for Neuro-sama; max-age=260000; secure; samesite=none; path=/"
 

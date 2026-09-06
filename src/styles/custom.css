@@ -1,0 +1,39 @@
+.sub-text {
+    color: var(--colour-text-muted);
+    font-size: 0.8rem;
+}
+
+.neuro-text {
+    font-family: "Neuro", var(--font);
+    -webkit-text-stroke: 2px var(--colour-accent);
+}
+
+.spinner {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+.loading-text {
+    width: fit-content;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 25px;
+    clip-path: inset(0 3ch 0 0);
+    animation: l4 1s steps(4) infinite;
+}
+
+.loading-text:before {
+    content: "Loading...";
+}
+
+@keyframes l4 {
+    to {
+        clip-path: inset(0 -1ch 0 0);
+    }
+}

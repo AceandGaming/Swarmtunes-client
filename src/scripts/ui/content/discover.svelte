@@ -1,6 +1,5 @@
 <script lang="ts">
     import type { Song, Collection } from "@ts/models"
-    import { onMount } from "svelte"
     import ItemCards from "@ts/ui/item-cards.svelte"
     import PlaybackState from "@ts/playback.svelte"
     import { Search } from "@ts/api/song"
@@ -8,6 +7,7 @@
     import { IconX } from "@tabler/icons-svelte-runes"
     import { GetDiscover } from "./discover.svelte.ts"
     import ErrorScreen from "@ts/ui/error-screen.svelte"
+    import IconSwarmFM from "@assets/swarmfm.svelte"
 
     let setlists: Collection[] = $state([])
     let discs: Collection[] = $state([])
@@ -43,7 +43,7 @@
 <div id="discover">
     <div class="top">
         {#if !window.isMobile}
-            <button class="swarmfm-button" title="Play SwarmFM!" onclick={() => PlaybackState.Play({ swarmfm: true})}></button>
+            <button class="swarmfm-button" title="Play SwarmFM!" onclick={() => PlaybackState.Play({ swarmfm: true})}><IconSwarmFM /></button>
         {/if}
         <div class="search">
             <input type="search" bind:value={query} placeholder="search for a song!">
@@ -63,16 +63,16 @@
         {#await LoadDiscover()}
             <div class="loading-text"></div>
         {:then [setlists, discs, originals, mashups]}
-            <h1>Setlists</h1>
+            <h1 class="neuro-text">Setlists</h1>
             <ItemCards items={setlists} />
 
-            <h1>Originals</h1>
+            <h1 class="neuro-text">Originals</h1>
             <ItemCards items={originals} />
 
-            <h1>Mashups</h1>
+            <h1 class="neuro-text">Mashups</h1>
             <ItemCards items={mashups} />
 
-            <h1>Discs</h1>
+            <h1 class="neuro-text">Discs</h1>
             <ItemCards items={discs} />
         {:catch error}
             <ErrorScreen title="Error Loading Discover">{error}</ErrorScreen>
@@ -105,10 +105,12 @@
         height: auto;
         min-height: 50px;
         border-radius: 50%;
-        background-image: url(/icons/swarmfm.png);
-        background-size: 45px;
-        background-repeat: no-repeat;
-        background-position: center;
+        padding: 0;
+    }
+    .swarmfm-button > :global(svg) {
+        width: 80%;
+        height: auto;
+        margin: auto;
     }
 
     .search {
@@ -132,7 +134,6 @@
     }
 
     h1 {
-        font-family: Neuro, system-ui, sans-serif;
         margin: 0;
         font-size: 40px;
         font-weight: 700;

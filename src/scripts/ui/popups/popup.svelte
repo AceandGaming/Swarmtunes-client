@@ -69,7 +69,7 @@
     
         border-radius: 20px;
         color: var(--text-colour);
-        background-color: color-mix(in srgb, var(--background-colour) 70%, transparent);
+        background-color: color-mix(in srgb, var(--colour-surface) 70%, transparent);
 
         box-shadow: 0 5px 15px #00000080;
     }
@@ -130,7 +130,7 @@
             height: 100%;
             max-width: none;
 
-            background-color: color-mix(in srgb, var(--background-colour) 90%, transparent);
+            background-color: color-mix(in srgb, var(--colour-surface) 90%, transparent);
 
             border-radius: 0;
             box-shadow: none;

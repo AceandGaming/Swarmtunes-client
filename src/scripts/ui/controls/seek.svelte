@@ -109,10 +109,10 @@
 
         background: linear-gradient(
             to right,
-            var(--seek-bar-played) 0%,
-            var(--seek-bar-played) var(--played),
-            var(--seek-bar-background) var(--played),
-            var(--seek-bar-background) 100%
+            var(--colour-progress) 0%,
+            var(--colour-progress) var(--played),
+            #00000030 var(--played),
+            #00000030 100%
         );
         border-radius: 999px;
 

@@ -98,9 +98,9 @@
 
         z-index: 100;
 
-        background-color: var(--button-colour);
+        background-color: var(--colour-surface-alt);
         border-radius: 10px;
-        border: solid 1px var(--background-sub-colour);
+        border: solid 1px var(--colour-border);
         box-shadow: 0 2px 10px #00000080;
 
         opacity: 0;
@@ -143,7 +143,7 @@
         list-style: none;
     }
     li:hover {
-        background-color: var(--song-item-hover);
+        background-color: #ffffff20;
     }
     li > :global(svg) {
         height: 100%;
@@ -157,7 +157,7 @@
     hr {
         width: calc(100% - 10px);
         margin: 4px auto;
-        color: var(--subtext-colour);
+        color: var(--text-colour-muted);
     }
 
 </style>

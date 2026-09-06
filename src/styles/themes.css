@@ -1,79 +1,75 @@
 :root {
-    --background-colour: #171717;
-    --background: var(--background-colour);
-    --background-sub-colour: #111;
-    --text-colour: #ffffff;
-    --subtext-colour: #aaaaaa;
-    --cover-background: #202020;
-    --current-song-bar: #202020;
-    --seek-bar-background: #00000030;
-    --seek-bar-played: #ffffffdd;
-    --seek-bar-loaded: transparent;
-    --header-tab-default: #111;
-    --header-tab-active: var(--background-colour);
-    --header-colour: #1c1c1c;
-    --button-colour: #202020;
-    --textbox-fill: #252525;
-    --textbox-border: #404040;
-    --song-item-hover: #ffffff20;
-    --icon-default: #bbb;
-    --icon-hover: #eee;
-    --icon-active: #999;
-    --slider-default: #aaa;
-    --slider-border: #444;
-    --slider-track: #444;
-    --catagory-background: #0000002a;
-    --slider-thumb-colour: #aaa;
-    --slider-thumb-hover: #ffffff;
-    --slider-thumb-active: #666;
-    --slider-border: #444;
-    --slider-track: #444;
-    overflow: hidden;
+    --colour-background: #111;
+    --colour-surface: #171717;
+    --colour-surface-raised: #202020;
+    --colour-surface-alt: #252525;
+
+    --colour-text: #fff;
+    --colour-text-muted: #aaa;
+    --colour-text-link: #aaa;
+
+    --colour-border: #404040;
+    --colour-accent: #888;
+    --colour-progress: rgba(255, 255, 255, 0.9);
+    --colour-enabled: #0c0;
+    --colour-icon: #aaa;
+
+    --surface-image: none;
+}
+
+:root[data-theme="light"] {
+    --colour-background: #f2f2f2;
+    --colour-surface: #ffffff;
+    --colour-surface-raised: #fafafa;
+    --colour-surface-alt: #e8e8e8;
+
+    --colour-text: #171717;
+    --colour-text-muted: #666;
+    --colour-text-link: #555;
+
+    --colour-border: #d0d0d0;
+    --colour-accent: #666;
+    --colour-progress: rgba(0, 0, 0, 0.85);
+    --colour-enabled: #0e0;
+    --colour-icon: #666;
+
+    --surface-image: none;
 }
 
 :root[data-theme="neuro"] {
-    --background-colour: #ffa3ae;
-    --background: url("/neuro-bg.png");
-    --background-sub-colour: #df858f;
-    --header-colour: #ffb1bb;
-    --current-song-bar: #f9919f;
-    --text-colour: #ffffff;
-    --subtext-colour: #fff;
-    --seek-bar-background: #0000001a;
-    /* --seek-bar-loaded: #ffb1bbc0; */
-    --cover-background: #df858f;
-    --header-tab-default: #d37984;
-    --header-tab-active: #ffa3ae;
-    --button-colour: #e98591;
-    --textbox-fill: #ca6874;
-    --textbox-border: #965a61;
-    --slider-default: #fff;
-    --slider-border: #ffb9c1;
-    --slider-track: #ffb9c1;
-    --icon-default: #fff;
-    --icon-hover: #eee;
-    --icon-active: #ccc;
-    --catagory-background: #ffffff2a;
+    --colour-background: #df858f;
+    --colour-surface: #ffa3ae;
+    --colour-surface-raised: #f9919f;
+    --colour-surface-alt: #ff98a4;
+
+    --colour-text: #fff;
+    --colour-text-muted: #ffdddd;
+    --colour-text-link: #fff;
+
+    --colour-border: #ffb6bf;
+    --colour-accent: #f9919f;
+    --colour-progress: rgba(255, 255, 255, 0.9);
+    --colour-enabled: pink;
+    --colour-icon: #fff;
+
+    --surface-image: url("/neuro-bg.png");
 }
 
 :root[data-theme="evil"] {
-    --background-colour: #643134;
-    --background: url("/evil-bg.png");
-    --background-sub-colour: #52282b;
-    --header-colour: #763c40;
-    --current-song-bar: #5c292c;
-    --text-colour: #fff;
-    --subtext-colour: #ccc;
-    --cover-background: #52282b;
-    --header-tab-default: #50272a;
-    --header-tab-active: #643134;
-    --button-colour: #8b4147;
-    --textbox-fill: #50272a;
-    --textbox-border: #965159;
-    --slider-default: #ce7680;
-    --slider-border: #965159;
-    --slider-track: #965159;
-    --icon-default: #e4999a;
-    --icon-hover: #bd6e6f;
-    --icon-active: #924a4e;
+    --colour-background: #52282b;
+    --colour-surface: #643134;
+    --colour-surface-raised: #5c292c;
+    --colour-surface-alt: #77343a;
+
+    --colour-text: #fff;
+    --colour-text-muted: #ccc;
+    --colour-text-link: #aaa;
+
+    --colour-border: #965159;
+    --colour-accent: #8b4147;
+    --colour-progress: rgba(255, 255, 255, 0.9);
+    --colour-enabled: #99161f;
+    --colour-icon: #e4999a;
+
+    --surface-image: url("/evil-bg.png");
 }

@@ -40,7 +40,7 @@
 
 <style>
     .current-song-bar {
-        background-color: var(--current-song-bar);
+        background-color: var(--colour-surface-raised);
 
         display: grid;
         grid-template-columns: repeat(3, 1fr);

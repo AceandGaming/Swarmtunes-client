@@ -84,7 +84,7 @@
         overflow-x: auto;
 
         padding: 10px;
-        background-color: var(--background-sub-colour);
+        background-color: var(--colour-background);
         
         border-radius: 20px;
     }
@@ -101,7 +101,7 @@
         display: flex;
         flex-direction: column;
 
-        background-color: var(--colour, var(--cover-background));
+        background-color: var(--colour, var(--colour-surface-alt));
 
         border-radius: 10px;
         transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
@@ -110,7 +110,7 @@
     }
     .card:hover {
         transform: rotate(2deg) scale(1.05);
-        background-color: color-mix(in srgb, var(--colour, var(--cover-background)) 90%, white);
+        background-color: color-mix(in srgb, var(--colour, var(--colour-surface-alt)) 90%, white);
     }
     .card .art-container {
         position: relative;
@@ -145,6 +145,7 @@
 
         z-index: 1;
 
+        color: white;
         background-color: #00000070;
         padding: 2px;
 

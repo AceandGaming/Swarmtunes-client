@@ -1,7 +1,8 @@
 const themes = [
-    { name: "Dark", id: "dark", icon: "/icons/moon.svg" },
-    { name: "Neuro", id: "neuro", icon: "/icons/newero.avif" },
-    { name: "Evil", id: "evil", icon: "/icons/newliv.avif" }
+    { name: "Dark", id: "dark" },
+    //{ name: "Light", id: "light" },
+    { name: "Neuro", id: "neuro" },
+    { name: "Evil", id: "evil" }
 ] as const
 
 let currentTheme = $state(0)

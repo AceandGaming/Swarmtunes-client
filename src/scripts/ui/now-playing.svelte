@@ -56,7 +56,7 @@
         padding: 10px;
         padding-bottom: 0;
         gap: 10px;
-        background-color: var(--background-colour);
+        background-color: var(--colour-surface);
     }
     .title {
         display: flex;
@@ -67,7 +67,7 @@
         gap: 5px;
         padding-bottom: 5px;
 
-        border-bottom: solid 1px var(--subtext-colour);
+        border-bottom: solid 1px var(--colour-text-muted);
     }
     .title :first-child {
         transform: scaleX(-1);

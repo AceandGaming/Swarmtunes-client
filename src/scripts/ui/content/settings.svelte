@@ -89,10 +89,6 @@
         }
     }
 
-    #settings > br {
-        margin: 1rem;
-    }
-
     .info {
         display: flex;
         flex-direction: column;

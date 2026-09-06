@@ -36,7 +36,7 @@
 
 <style>
     .current-song-bar {
-        background-color: var(--current-song-bar);
+        background-color: var(--colour-surface-raised);
 
         grid-template-columns: auto max-content;
         grid-template-rows: calc(100% - 4px) 4px;

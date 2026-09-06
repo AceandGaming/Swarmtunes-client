@@ -16,14 +16,14 @@
         aspect-ratio: 2/1;
 
         border-radius: 9999px;
-        background-color: var(--slider-default);
-        border: solid 1.5px var(--slider-border);
+        background-color: var(--colour-accent);
+        border: solid 1.5px var(--colour-border);
         cursor: pointer;
 
         transition: background-color 0.2s ease;
     }
     .toggle.active {
-        background-color: #0c0;
+        background-color: var(--colour-enabled);
     }
 
     .toggle::after {

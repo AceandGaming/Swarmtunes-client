@@ -98,7 +98,7 @@
     alt=""
 
     class:loading
-    style={backgroundColour ? `--cover-background: ${backgroundColour}` : ""}
+    style={backgroundColour ? `--colour: ${backgroundColour}` : ""}
 
     onload={OnLoad}
     onerror={OnError}
@@ -113,7 +113,7 @@
 
         display: block;
         border-radius: max(8px, 5%);
-        background-color: var(--cover-background);
+        background-color: var(--colour, var(--colour-surface-alt));
 
         object-fit: cover;
 
@@ -121,7 +121,7 @@
         height: var(--size, auto);
     }
     img.loading {
-        background: var(--cover-background) linear-gradient(-60deg, transparent 0%, transparent 20%, #FFFFFF20 50%, transparent 80%, transparent 100%);
+        background: var(--colour, var(--colour-surface-alt)) linear-gradient(-60deg, transparent 0%, transparent 20%, #FFFFFF20 50%, transparent 80%, transparent 100%);
         background-size: 1000% 100%;
         animation: move 2s linear infinite;
     }

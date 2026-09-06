@@ -68,7 +68,7 @@
 {/snippet}
 {#snippet headerButtons()}
     <div class="buttons">
-        <a style="font-size: 1rem" class="sub-text about" href="about">About</a>
+        <a style="font-size: 1rem" class="about" href="about">About</a>
         <button onclick={OnLoginButtonClick}>{auth.loggedIn ? "Logout" : "Login"}</button>
     </div>
 {/snippet}
@@ -118,7 +118,7 @@
 
         display: grid;
 
-        background-color: var(--background-sub-colour);
+        background-color: var(--colour-background);
 
         grid-template-columns: auto 1fr;
         grid-template-rows: auto 1fr auto;
@@ -136,12 +136,12 @@
 
         padding: 0 5px;
 
-        background: linear-gradient(var(--header-colour), var(--background-colour));
+        background: linear-gradient(var(--colour-surface-raised), var(--colour-surface));
         box-shadow: 0 5px 5px -3px #00000050;
     }
     footer {
         grid-area: footer;
-        background-color: var(--background-colour);
+        background-color: var(--colour-surface);
     }
     .tabs {
         display: flex;
@@ -172,10 +172,10 @@
         gap: 5px;
         font-weight: bold;
 
-        background-color: var(--header-tab-default);
+        background-color: var(--colour-background);
     }
     .tabs button.active {
-        background-color: var(--background-colour);
+        background-color: var(--colour-surface);
     }
 
     header .tabs button { 
@@ -190,11 +190,11 @@
         justify-content: center;
         flex-direction: column;
 
-        background-color: var(--background-colour);
+        background-color: var(--colour-surface);
         font-size: 0.6rem;
     }
     footer .tabs button.active {
-        background-color: var(--header-tab-default);
+        background-color: var(--colour-background);
     }
 
     header .buttons {
@@ -214,7 +214,7 @@
         min-height: 0;
         overflow: hidden;
 
-        background: var(--background)
+        background: var(--surface-image) var(--colour-surface)
     }
     .content > :global(*) {
         position: relative;

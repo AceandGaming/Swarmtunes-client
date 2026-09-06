@@ -37,11 +37,18 @@ export class Song {
         return this.title
     }
     public get displayArtists() {
+        if (Settings.useOriginalLanguage) {
+            return this.artists.map(a => a.nameOriginal ?? a.name).join(", ")
+        }
         return this.artists.map(a => a.name).join(", ")
     }
     public get displaySingers() {
+        if (Settings.useOriginalLanguage) {
+            return this.singers.map(a => a.nameOriginal ?? a.name).join(", ")
+        }
         return this.singers.map(a => a.name).join(", ")
     }
+
     public get displayCredits() {
         switch (this.type) {
             case "original":

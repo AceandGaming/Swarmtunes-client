@@ -18,8 +18,8 @@
 
     let colour: Color | undefined = $state()
 
-    let topColour = $state("var(--background)");
-    let bottomColour = $state("var(--background)");
+    let topColour = $state("var(--colour-surface)");
+    let bottomColour = $state("var(--colour-surface)");
 
     let wakeLock: any
 
@@ -385,13 +385,14 @@
     }
     .art {
         position: relative;
+        filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.3))
     }
     .art .iframe-anchor {
         aspect-ratio: 16/9;
         width: auto;
         max-width: 90vw;
         height: 60vh;
-        background-color: var(--cover-background);
+        background-color: var(--colour-surface-alt);
         border-radius: 10px;
     }
 

@@ -82,9 +82,9 @@
         padding-top: 5%;
 
         border-radius: 20px 20px 0 0;
-        background-color: color-mix(var(--button-colour), transparent 70%);
+        background-color: color-mix(var(--colour-surface-alt), transparent 70%);
         backdrop-filter: blur(6px);
-        border: solid 2px var(--background-sub-colour);
+        border: solid 2px var(--colour-border);
         border-bottom: none;
 
         overflow-y: scroll;
@@ -112,7 +112,7 @@
         list-style: none;
     }
     li:active {
-        background-color: var(--song-item-hover);
+        background-color: #ffffff20;
     }
     li > :global(svg) {
         height: 100%;
@@ -126,6 +126,6 @@
     hr {
         width: calc(100% - 10px);
         margin: 4px auto;
-        color: var(--subtext-colour);
+        color: var(--colour-text-muted);
     }
 </style>

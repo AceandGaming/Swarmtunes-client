@@ -143,7 +143,7 @@
         cursor: pointer;
     }
     li:hover {
-        background-color: var(--song-item-hover);
+        background-color: #ffffff20;
     }
     li.unavailable {
         filter: grayscale(1);
